@@ -1,0 +1,58 @@
+file[0] = Domain\Account.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace SuperSafeBank.Domain
+{
+    public partial class Account
+    {
+        public Account(Guid ownerId, Money balance)
+        {
+            OwnerId = ownerId;
+            Balance = balance;
+        }
+
+        public partial void Withdraw(Money amount)
+        {
+            // todo: Add Withdraw behaviour here
+        }
+
+        public partial void Deposit(Money amount)
+        {
+            // todo: Add Deposit behaviour here
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[1] = Domain\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace SuperSafeBank.Domain
+{
+    partial class Account : BaseAggregateRoot<Account, Guid>
+    {
+        public Guid OwnerId { get; private set; }
+
+        public Money Balance { get; private set; }
+
+        public partial void Withdraw(Money amount);
+
+        public partial void Deposit(Money amount);
+    }
+}
+

@@ -1,0 +1,36 @@
+{
+    "key": {
+        "fields": []
+    },
+    "fields": [
+        {
+            "name": "Field1"
+        }
+    ],
+    "indexes": [
+        {
+            "fields": [
+                {
+                    "name": "Field1"
+                }
+            ],
+            "name": "UXField1"
+        }
+    ],
+    "relationships": [
+        {
+            "principalModel": "Test",
+            "principalFields": [
+                "Field1"
+            ],
+            "principalType": "One",
+            "dependantModel": "OtherModel",
+            "dependantFields": [
+                "OtherField"
+            ],
+            "dependantType": "Many"
+        }
+    ],
+    "behaviours": [],
+    "name": "Test"
+}

@@ -1,0 +1,169 @@
+{
+    "company": "Mizrael",
+    "project": "SuperSafeBank",
+    "models": [
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "maxLength": 100,
+                    "name": "FirstName"
+                },
+                {
+                    "maxLength": 100,
+                    "name": "LastName"
+                },
+                {
+                    "maxLength": 100,
+                    "dataType": "Object",
+                    "dataTypeTypeName": "Email",
+                    "businessKey": true,
+                    "name": "Email"
+                }
+            ],
+            "indexes": [
+                {
+                    "fields": [
+                        {
+                            "name": "Email"
+                        }
+                    ],
+                    "name": "UKEmail"
+                }
+            ],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Customer"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "businessKey": true,
+                    "name": "OwnerId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "Money",
+                    "name": "Balance"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "Customer",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "Account",
+                    "dependantFields": [
+                        "OwnerId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [
+                {
+                    "fields": [
+                        {
+                            "dataType": "Object",
+                            "dataTypeTypeName": "Money",
+                            "name": "Amount"
+                        }
+                    ],
+                    "request": "Withdraw",
+                    "event": "Withdrawal",
+                    "name": "Withdraw"
+                },
+                {
+                    "fields": [
+                        {
+                            "dataType": "Object",
+                            "dataTypeTypeName": "Money",
+                            "name": "Amount"
+                        }
+                    ],
+                    "request": "Deposit",
+                    "event": "Deposit",
+                    "name": "Deposit"
+                }
+            ],
+            "name": "Account"
+        }
+    ],
+    "enumerations": [],
+    "requests": [
+        {
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "name": "CustomerId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "Currency",
+                    "name": "Currency"
+                }
+            ],
+            "name": "CreateAccountCommand"
+        },
+        {
+            "fields": [
+                {
+                    "name": "FirstName"
+                },
+                {
+                    "name": "LastName"
+                },
+                {
+                    "name": "Email"
+                }
+            ],
+            "name": "CreateCustomerCommand"
+        },
+        {
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "name": "AccountId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "Money",
+                    "name": "Amount"
+                }
+            ],
+            "name": "DepositCommand"
+        },
+        {
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "name": "AccountId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "Money",
+                    "name": "Amount"
+                }
+            ],
+            "name": "WithdrawCommand"
+        }
+    ]
+}

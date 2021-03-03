@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>DomainClass</RootNamespace>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\Generators\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Shared\Extensions.cs" Link="Extensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\OurPresence.Modeller.Core\OurPresence.Modeller.Core\OurPresence.Modeller.Core.csproj" />
+    <ProjectReference Include="..\Header.v1.0\Header.v1.0.csproj" />
+    <ProjectReference Include="..\OverwriteHeader.v1.0\OverrideHeader.v1.0.csproj" />
+    <ProjectReference Include="..\Property.v1.0\Property.v1.0.csproj" />
+  </ItemGroup>
+
+</Project>

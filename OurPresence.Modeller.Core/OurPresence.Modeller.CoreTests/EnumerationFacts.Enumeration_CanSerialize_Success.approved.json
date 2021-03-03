@@ -1,0 +1,33 @@
+{
+    "company": "Company",
+    "project": "Test",
+    "models": [],
+    "enumerations": [
+        {
+            "items": [
+                {
+                    "name": "Cash",
+                    "display": "Cash",
+                    "value": 0
+                },
+                {
+                    "name": "CreditCard",
+                    "display": "Credit Card",
+                    "value": 1
+                },
+                {
+                    "name": "Cheque",
+                    "display": "Cheque",
+                    "value": 2
+                },
+                {
+                    "name": "DirectDebit",
+                    "display": "Direct Debit",
+                    "value": 3
+                }
+            ],
+            "name": "PaymentType"
+        }
+    ],
+    "requests": []
+}

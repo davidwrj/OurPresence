@@ -1,0 +1,9 @@
+{
+    "fields": [
+        {
+            "sort": "Descending",
+            "name": "Field1"
+        }
+    ],
+    "name": "Test"
+}

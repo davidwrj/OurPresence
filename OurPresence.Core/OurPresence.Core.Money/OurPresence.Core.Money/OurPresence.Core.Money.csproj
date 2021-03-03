@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyTitle>OurPresence.Core.Money</AssemblyTitle>
+    <AssemblyName>OurPresence.Core.Money</AssemblyName>
+    <Description>OurPresence.Core.Money provides a library that treats Money as a first class citizen and handles all the ugly bits like currencies and formatting.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>OurPresence.Core.Money</PackageId>
+    <PackageTags>Money;Currency;ExchangeRate</PackageTags>
+      <Nullable>Enable</Nullable>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <Authors>Allan Nielsen</Authors>
+      <Company>Our Presence</Company>
+      <Product>OurPresence.Core.Money</Product>
+      <Copyright>Copyright © 2021  All rights reserved</Copyright>
+      <RepositoryType>Git</RepositoryType>
+      <NeutralLanguage>en</NeutralLanguage>
+      <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

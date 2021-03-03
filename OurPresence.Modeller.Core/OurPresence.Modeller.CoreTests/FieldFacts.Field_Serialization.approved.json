@@ -1,0 +1,6 @@
+{
+    "default": "MyValue",
+    "maxLength": 20,
+    "nullable": true,
+    "name": "Test"
+}

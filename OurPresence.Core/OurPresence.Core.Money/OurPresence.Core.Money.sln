@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30803.129
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C8E67273-184C-4A4E-8E06-8B8DBBD3AAAB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{240C6609-2509-48D7-A74D-3F9F1C34A24C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hs.Core.Money", "src\Hs.Core.Money\Hs.Core.Money.csproj", "{9BCA123B-F595-4BC4-9FBB-58592F0D3DAD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hs.Core.Money.Tests", "tests\Hs.Core.Money.Tests\Hs.Core.Money.Tests.csproj", "{273F0098-83A1-4679-BFB4-8F97A23CB0C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3B853E76-E234-49A1-B4E2-F9A33F2D9300}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BCA123B-F595-4BC4-9FBB-58592F0D3DAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BCA123B-F595-4BC4-9FBB-58592F0D3DAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BCA123B-F595-4BC4-9FBB-58592F0D3DAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BCA123B-F595-4BC4-9FBB-58592F0D3DAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{273F0098-83A1-4679-BFB4-8F97A23CB0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{273F0098-83A1-4679-BFB4-8F97A23CB0C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{273F0098-83A1-4679-BFB4-8F97A23CB0C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{273F0098-83A1-4679-BFB4-8F97A23CB0C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9BCA123B-F595-4BC4-9FBB-58592F0D3DAD} = {C8E67273-184C-4A4E-8E06-8B8DBBD3AAAB}
+		{273F0098-83A1-4679-BFB4-8F97A23CB0C4} = {240C6609-2509-48D7-A74D-3F9F1C34A24C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F652748A-A7FD-4B9E-BC26-93709059F7E1}
+	EndGlobalSection
+EndGlobal

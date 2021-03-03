@@ -1,0 +1,39 @@
+{
+    "company": "Company",
+    "project": "Test",
+    "models": [],
+    "enumerations": [
+        {
+            "flag": true,
+            "items": [
+                {
+                    "name": "None",
+                    "display": "None",
+                    "value": 0
+                },
+                {
+                    "name": "Cash",
+                    "display": "Cash",
+                    "value": 1
+                },
+                {
+                    "name": "CreditCard",
+                    "display": "Credit Card",
+                    "value": 2
+                },
+                {
+                    "name": "Cheque",
+                    "display": "Cheque",
+                    "value": 4
+                },
+                {
+                    "name": "DirectDebit",
+                    "display": "Direct Debit",
+                    "value": 8
+                }
+            ],
+            "name": "PaymentType"
+        }
+    ],
+    "requests": []
+}

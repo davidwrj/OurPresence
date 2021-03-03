@@ -1,0 +1,20 @@
+{
+    "company": "Company",
+    "project": "Test",
+    "models": [],
+    "enumerations": [],
+    "requests": [
+        {
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "TenantId"
+                },
+                {
+                    "name": "Line1"
+                }
+            ],
+            "name": "ChangeBillingAddressCommand"
+        }
+    ]
+}

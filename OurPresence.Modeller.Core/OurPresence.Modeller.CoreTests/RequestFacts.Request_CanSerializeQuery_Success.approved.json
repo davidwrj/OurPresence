@@ -1,0 +1,27 @@
+{
+    "company": "Company",
+    "project": "Test",
+    "models": [],
+    "enumerations": [],
+    "requests": [
+        {
+            "response": {
+                "fields": [
+                    {
+                        "name": "Tenant"
+                    },
+                    {
+                        "name": "Name"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "TenantId"
+                }
+            ],
+            "name": "DetailQuery"
+        }
+    ]
+}

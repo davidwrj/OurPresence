@@ -1,0 +1,146 @@
+file[0] = SuperSafeBank.Domain.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
+        <RootNamespace>SuperSafeBank.Domain</RootNamespace>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OurPresence.Core" Version="" />
+        <PackageReference Include="MediatR" Version="" />
+    </ItemGroup>
+
+</Project>
+
+file[1] = .filenesting.json
+{
+    "help": "https://go.microsoft.com/fwlink/?linkid=866610",
+    "root": false,
+
+    "dependentFileProviders": {
+        "add": { 
+            "allExtensions": {
+                "add": {
+                    ".*": [
+                        ".cs"
+                    ]
+                }
+            }
+        }
+    }
+}
+
+file[2] = Domain\Account.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace SuperSafeBank.Domain
+{
+    public partial class Account
+    {
+        public Account(Guid ownerId, Money balance)
+        {
+            OwnerId = ownerId;
+            Balance = balance;
+        }
+
+        public partial void Withdraw(Money amount)
+        {
+            // todo: Add Withdraw behaviour here
+        }
+
+        public partial void Deposit(Money amount)
+        {
+            // todo: Add Deposit behaviour here
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[3] = Domain\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace SuperSafeBank.Domain
+{
+    partial class Account : BaseAggregateRoot<Account, Guid>
+    {
+        public Guid OwnerId { get; private set; }
+
+        public Money Balance { get; private set; }
+
+        public partial void Withdraw(Money amount);
+
+        public partial void Deposit(Money amount);
+    }
+}
+
+file[4] = Domain\Customer.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace SuperSafeBank.Domain
+{
+    public partial class Customer
+    {
+        public Customer(string firstName, string lastName, string email)
+        {
+            if(string.IsNullOrWhiteSpace(firstName))
+                throw new ArgumentException("Must include a value for First Name");
+            if(string.IsNullOrWhiteSpace(lastName))
+                throw new ArgumentException("Must include a value for Last Name");
+            if(string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Must include a value for Email");
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[5] = Domain\Customer.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace SuperSafeBank.Domain
+{
+    partial class Customer : BaseAggregateRoot<Customer, Guid>
+    {
+        public string FirstName { get; private set; }
+
+        public string LastName { get; private set; }
+
+        public string Email { get; private set; }
+    }
+}
+
