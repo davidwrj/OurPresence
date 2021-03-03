@@ -28,7 +28,6 @@
                 .AddField("OwnerId").BusinessKey(true).DataType(Domain.DataTypes.UniqueIdentifier).Build
                 .AddField("Balance").DataType(Domain.DataTypes.Object).DataTypeTypeName("Money").Build
                 .AddBehaviour("Withdraw")
-                    .UsingRequest("Withdraw")
                     .Raising("Withdrawal")
                     .AddField("Amount")
                         .DataType(Domain.DataTypes.Object)

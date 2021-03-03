@@ -20,9 +20,6 @@ namespace OurPresence.Modeller.Domain
         public IList<Field> Fields { get; } = new List<Field>();
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string? Request { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? Event { get; set; }
     }
 }

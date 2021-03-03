@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
@@ -25,10 +26,28 @@ namespace DomainClass
             if (_model == null)
             {
                 foreach (var model in _module.Models)
+                {
                     AddModelFiles(files, model);
+                }
+                foreach (var request in _module.Requests)
+                {
+                    files.AddFile((IFile)new DomainCommand(Settings, _module, request));
+                }
             }
             else
+            {
                 AddModelFiles(files, _model);
+                if (_model.Behaviours.Any())
+                {
+                    foreach (var request in _module.Requests)
+                    {
+                        if (_model.Behaviours.Any(b => b.Name == request.Name))
+                        {
+                            files.AddFile((IFile)new DomainCommand(Settings, _module, request).Create());
+                        }
+                    }
+                }
+            }
             return files;
         }
 
@@ -36,6 +55,11 @@ namespace DomainClass
         {
             files.AddFile((IFile)new DomainUser(Settings, _module, model).Create());
             files.AddFile((IFile)new DomainGenerated(Settings, _module, model).Create());
+            var fg = (IFileGroup)new DomainEvent(Settings, _module, model).Create();
+            foreach (var file in fg.Files)
+            {
+                files.AddFile(file);
+            }
         }
     }
 }

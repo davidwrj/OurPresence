@@ -16,21 +16,10 @@ namespace OurPresence.Modeller.Domain
 
         void SetName(string name)
         {
-            if (name != null && name.Trim().Length > 0)
-            {
-                if (name.EndsWith("Command", StringComparison.InvariantCultureIgnoreCase))
-                    name = name.Substring(0, name.Length - 7);
-                if (name.EndsWith("Query", StringComparison.InvariantCultureIgnoreCase))
-                    name = name.Substring(0, name.Length - 5);
-                if (name.Trim().Length > 0)
-                    if (Response == null)
-                        name += "Command";
-                    else
-                        name += "Query";
-            }
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentException("Name must be passed", nameof(name));
-
+            }
             OverrideName(name);
         }
 
@@ -55,5 +44,4 @@ namespace OurPresence.Modeller.Domain
         [JsonProperty]
         public List<Field> Fields { get; } = new List<Field>();
     }
-
 }

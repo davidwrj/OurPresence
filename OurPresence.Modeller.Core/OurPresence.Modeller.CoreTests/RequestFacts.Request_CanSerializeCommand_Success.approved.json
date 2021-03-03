@@ -14,7 +14,7 @@
                     "name": "Line1"
                 }
             ],
-            "name": "ChangeBillingAddressCommand"
+            "name": "ChangeBillingAddress"
         }
     ]
 }

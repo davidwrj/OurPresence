@@ -21,7 +21,7 @@
                     "name": "TenantId"
                 }
             ],
-            "name": "DetailQuery"
+            "name": "Detail"
         }
     ]
 }

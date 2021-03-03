@@ -56,3 +56,105 @@ namespace SuperSafeBank.Domain
     }
 }
 
+file[2] = Events\Withdrawal.cs
+using System;
+using SuperSafeBank.Domain.Models;
+
+namespace SuperSafeBank.Domain.Events
+{
+    public class Withdrawal : BaseDomainEvent<Account, Guid>
+    {
+        /// <summary>
+        /// for deserialization
+        /// </summary>
+        private Withdrawal() { }
+
+        public Withdrawal(Account account) : base(account)
+        {
+            // todo: 
+        }
+    }
+}
+
+file[3] = Events\Deposit.cs
+using System;
+using SuperSafeBank.Domain.Models;
+
+namespace SuperSafeBank.Domain.Events
+{
+    public class Deposit : BaseDomainEvent<Account, Guid>
+    {
+        /// <summary>
+        /// for deserialization
+        /// </summary>
+        private Deposit() { }
+
+        public Deposit(Account account) : base(account)
+        {
+            // todo: 
+        }
+    }
+}
+
+file[4] = Commands\Deposit.cs
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+
+namespace SuperSafeBank.Domain.Commands
+{
+    public class Deposit : INotification
+    {
+        public Deposit(Guid accountId, Money amount)
+        {
+            AccountId = accountId;
+            Amount = amount;
+        }
+
+        public Guid AccountId { get;  set; }
+
+        public Money Amount { get;  set; }
+
+    }
+
+    public class DepositHandler : INotificationHandler<Deposit>
+    {
+        public async Task Handle(Deposit command, CancellationToken cancellationToken)
+        {
+            // todo: Add code to complete the command
+        }
+    }
+}
+
+file[5] = Commands\Withdraw.cs
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+
+namespace SuperSafeBank.Domain.Commands
+{
+    public class Withdraw : INotification
+    {
+        public Withdraw(Guid accountId, Money amount)
+        {
+            AccountId = accountId;
+            Amount = amount;
+        }
+
+        public Guid AccountId { get;  set; }
+
+        public Money Amount { get;  set; }
+
+    }
+
+    public class WithdrawHandler : INotificationHandler<Withdraw>
+    {
+        public async Task Handle(Withdraw command, CancellationToken cancellationToken)
+        {
+            // todo: Add code to complete the command
+        }
+    }
+}
+

@@ -12,28 +12,17 @@ namespace OurPresence.Modeller.CoreTests
     public class RequestFacts
     {
         [Theory]
-        [InlineData("ChangeBillingAddress", false, "ChangeBillingAddressCommand")]
-        [InlineData("ChangeBillingAddressQuery", false, "ChangeBillingAddressCommand")]
+        [InlineData("ChangeBillingAddress", false, "ChangeBillingAddress")]
+        [InlineData("ChangeBillingAddressQuery", false, "ChangeBillingAddressQuery")]
         [InlineData("ChangeBillingAddressCommand", false, "ChangeBillingAddressCommand")]
-        [InlineData("Detail", true, "DetailQuery")]
+        [InlineData("Detail", true, "Detail")]
         [InlineData("DetailQuery", true, "DetailQuery")]
-        [InlineData("DetailCommand", true, "DetailQuery")]
+        [InlineData("DetailCommand", true, "DetailCommand")]
         public static void Request_WithoutReponse_CreatesCommand(string request, bool includeResponse, string expected)
         {
             var sut = !includeResponse ? new Request(request) : new Request(request, new Response());
             sut.Name.ToString().Should().Be(expected);
             sut.Fields.Should().BeEmpty();
-        }
-
-        [Theory]
-        [InlineData("Command")]
-        [InlineData("Query")]
-        [InlineData("")]
-        [InlineData(null)]
-        public static void Request_SetInvalidName_ThrowsArgumentException(string actual)
-        {
-            Action action = () => new Request(actual);
-            action.Should().Throw<ArgumentException>();
         }
 
         [Fact]

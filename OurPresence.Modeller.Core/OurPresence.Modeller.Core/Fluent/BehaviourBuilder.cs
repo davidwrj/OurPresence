@@ -16,12 +16,6 @@ namespace OurPresence.Modeller.Fluent
 
         public Domain.Behaviour Instance { get; }
 
-        public BehaviourBuilder<T> UsingRequest(string request)
-        {
-            Instance.Request = request;
-            return this;
-        }
-
         public BehaviourBuilder<T> Raising(string @event)
         {
             Instance.Event = @event;

@@ -8,6 +8,7 @@ using System.Text;
 
 namespace DomainClass
 {
+
     public class DomainUser : IGenerator
     {
         private readonly Module _module;

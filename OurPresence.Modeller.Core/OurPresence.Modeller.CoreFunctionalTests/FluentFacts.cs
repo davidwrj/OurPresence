@@ -34,6 +34,11 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                     .AddField("FirstName").MaxLength(100).Build
                     .AddField("LastName").MaxLength(100).Build
                     .AddField("Email").DataType(DataTypes.Object).DataTypeTypeName("Email").BusinessKey(true).MaxLength(100).Build
+                    .AddBehaviour("CreateCustomer").Raising("CustomerCreated")
+                        .AddField("CustomerId").DataType(DataTypes.UniqueIdentifier).Build
+                        .AddField("AccountId").DataType(DataTypes.UniqueIdentifier).Build
+                        .AddField("Currency").DataType(DataTypes.Object).DataTypeTypeName("Currency").Build
+                        .Build
                     .AddIndex("UK_Email")
                         .AddField("Email").Sort(System.ComponentModel.ListSortDirection.Ascending).Build
                         .Build
@@ -43,10 +48,15 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                     .WithDefaultKey()
                     .AddField("OwnerId").BusinessKey(true).DataType(DataTypes.UniqueIdentifier).Build
                     .AddField("Balance").DataType(DataTypes.Object).DataTypeTypeName("Money").Build
-                    .AddBehaviour("Withdraw").UsingRequest("Withdraw").Raising("Withdrawal")
+                    .AddBehaviour("CreateAccount").Raising("AccountCreated")
+                        .AddField("FirstName").DataType(DataTypes.String).Build
+                        .AddField("LastName").DataType(DataTypes.String).Build
+                        .AddField("Email").DataType(DataTypes.String).Build
+                        .Build
+                    .AddBehaviour("Withdraw").Raising("Withdrawal")
                         .AddField("Amount").DataType(DataTypes.Object).DataTypeTypeName("Money").Build
                         .Build
-                    .AddBehaviour("Deposit").UsingRequest("Deposit").Raising("Deposit")
+                    .AddBehaviour("Deposit").Raising("Deposit")
                         .AddField("Amount").DataType(DataTypes.Object).DataTypeTypeName("Money").Build
                         .Build
                     .AddRelationship().Relate("Customer", new[] {"Id" },"Account", new[] {"OwnerId" }).Build
