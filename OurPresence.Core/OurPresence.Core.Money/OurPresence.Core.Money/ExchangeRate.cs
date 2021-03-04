@@ -17,7 +17,7 @@ namespace OurPresence.Core.Money
         public ExchangeRate(Currency baseCurrency, Currency quoteCurrency, decimal rate)
             : this()
         {
-            if (baseCurrency == default(Currency))
+            if (baseCurrency == default)
             {
                 throw new ArgumentNullException(nameof(baseCurrency));
             }
@@ -27,7 +27,7 @@ namespace OurPresence.Core.Money
                 throw new ArgumentOutOfRangeException(nameof(rate), "Rate must be greater than zero.");
             }
 
-            if (quoteCurrency == default(Currency))
+            if (quoteCurrency == default)
             {
                 throw new ArgumentNullException(nameof(quoteCurrency));
             }
@@ -46,17 +46,8 @@ namespace OurPresence.Core.Money
         /// <param name="baseCurrency">The base currency.</param>
         /// <param name="quoteCurrency">The quote currency.</param>
         /// <param name="rate">The rate of the exchange.</param>
-        public ExchangeRate(Currency baseCurrency, Currency quoteCurrency, double rate)
-            : this(baseCurrency, quoteCurrency, rate, 6)
-        {
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="ExchangeRate"/> struct.</summary>
-        /// <param name="baseCurrency">The base currency.</param>
-        /// <param name="quoteCurrency">The quote currency.</param>
-        /// <param name="rate">The rate of the exchange.</param>
         /// <param name="numberOfDecimals">The number of decimals to round the exchange rate to.</param>
-        public ExchangeRate(Currency baseCurrency, Currency quoteCurrency, double rate, int numberOfDecimals)
+        public ExchangeRate(Currency baseCurrency, Currency quoteCurrency, double rate, int numberOfDecimals = 6)
             : this(baseCurrency, quoteCurrency, Math.Round((decimal)rate, numberOfDecimals))
         {
         }
@@ -91,15 +82,15 @@ namespace OurPresence.Core.Money
 
         /// <summary>Gets the base currency.</summary>
         /// <value>The base currency.</value>
-        public Currency BaseCurrency { get; private set; }
+        public Currency BaseCurrency { get; private init; }
 
         /// <summary>Gets the quote currency.</summary>
         /// <value>The quote currency.</value>
-        public Currency QuoteCurrency { get; private set; }
+        public Currency QuoteCurrency { get; private init; }
 
         /// <summary>Gets the value of the exchange rate.</summary>
         /// <value>The value of the exchange rate.</value>
-        public decimal Value { get; private set; }
+        public decimal Value { get; private init; }
 
         /// <summary>Implements the operator ==.</summary>
         /// <param name="left">The left ExchangeRate.</param>
@@ -117,11 +108,11 @@ namespace OurPresence.Core.Money
         /// <param name="rate">The string representation of the exchange rate to convert.</param>
         /// <returns>The equivalent to the exchange rate contained in rate.</returns>
         /// <exception cref="FormatException">rate is not in the correct format.</exception>
-        public static ExchangeRate Parse(string rate)
+        public static ExchangeRate Parse(string? rate)
         {
-            return rate == null
-                ? throw new ArgumentNullException(nameof(rate))
-                : !TryParse(rate, out var fx)
+            if (rate is null)
+                throw new ArgumentNullException(nameof(rate));
+            return !TryParse(rate, out var fx)
                 ? throw new FormatException("Rate is not in the correct format. Currencies are the same or the rate is not a number.")
                 : fx;
         }

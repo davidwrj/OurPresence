@@ -19,8 +19,8 @@ namespace OurPresence.Modeller
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
     internal class Program
     {
-        private const string _appsettings = "appsettings.json";
-        private const string _hostsettings = "hostsettings.json";
+        private const string AppSettings = "appsettings.json";
+        private const string HostSettings = "hostsettings.json";
 
         internal static string GetVersion()
             => typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0";
@@ -34,13 +34,13 @@ namespace OurPresence.Modeller
                     .ConfigureHostConfiguration(configHost =>
                     {
                         configHost.SetBasePath(Directory.GetCurrentDirectory());
-                        configHost.AddJsonFile(_hostsettings, optional: true);
+                        configHost.AddJsonFile(HostSettings, true);
                     })
                     .ConfigureAppConfiguration((hostContext, configApp) =>
                     {
                         configApp.SetBasePath(Directory.GetCurrentDirectory());
-                        configApp.AddJsonFile(_appsettings, optional: true);
-                        configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true);
+                        configApp.AddJsonFile(AppSettings, true);
+                        configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", true);
                     })
                     .ConfigureLogging((context, builder) =>
                     {

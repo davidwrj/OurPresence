@@ -14,7 +14,7 @@ namespace OurPresence.Modeller.Fluent
         /// </returns>
         /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return base.Equals(obj);
         }

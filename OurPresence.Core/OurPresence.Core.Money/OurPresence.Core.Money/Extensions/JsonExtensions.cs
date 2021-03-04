@@ -25,7 +25,6 @@ namespace OurPresence.Core.Money.Extensions
         /// </summary>
         /// <typeparam name="T">Type of object to serialize</typeparam>
         /// <param name="obj">Object being serialized</param>
-        /// <param name="includeNull">Flag to determine if null properties will be serialized</param>
         /// <returns>Json string representation of the object</returns>
         public static string ToJson<T>(this T obj)            
         {

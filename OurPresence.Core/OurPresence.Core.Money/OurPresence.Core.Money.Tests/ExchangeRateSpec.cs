@@ -129,7 +129,7 @@ namespace OurPresence.Core.Money.Tests.ExchangeRateSpec
         public void WhenBaseCurrencyIsNull_ThenThrowException()
         {
             // Arrange, Act
-            Action action = () => new ExchangeRate(default(Currency), _dollar, 1.2591);
+            Action action = () => new ExchangeRate(default, _dollar, 1.2591);
 
             // Assert
             action.Should().Throw<ArgumentNullException>();
@@ -139,7 +139,7 @@ namespace OurPresence.Core.Money.Tests.ExchangeRateSpec
         public void WhenQuoteCurrencyIsNull_ThenThrowException()
         {
             // Arrange, Act
-            Action action = () => new ExchangeRate(_euro, default(Currency), 1.2591);
+            Action action = () => new ExchangeRate(_euro, default, 1.2591);
 
             // Assert
             action.Should().Throw<ArgumentNullException>();

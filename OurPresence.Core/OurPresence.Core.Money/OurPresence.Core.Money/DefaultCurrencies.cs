@@ -20,7 +20,7 @@ namespace OurPresence.Core.Money
         /// <summary>Used for indication that the number of decimal digits doesn't matter, for example for gold or silver.</summary>
         internal const double NotApplicable = -1;
 
-        private static readonly object _obj = new();
+        private static readonly object Obj = new();
         private static IList<Currency>? _currencies;
 
         internal static IEnumerable<Currency>? Currencies 
@@ -42,7 +42,7 @@ namespace OurPresence.Core.Money
 
         private static void InitCurrencyTable()
         {
-            lock (_obj)
+            lock (Obj)
             {
                 _currencies = new List<Currency>
                 {

@@ -41,10 +41,6 @@ namespace OurPresence.Modeller.Cli
                 _logger.LogError(LoggingEvents.ListError, ex, Resources.SettingsFailed);
                 return 1;
             }
-            finally
-            {
-
-            }
         }
     }
 }

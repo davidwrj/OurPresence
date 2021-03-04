@@ -28,7 +28,7 @@ internal static class Extensions
     }
 
     /// <summary>
-    /// Adds the line with a <see cref="Environment.NewLine"/> to the string builder instance
+    /// Adds the line with a <see cref="System.Environment.NewLine"/> to the string builder instance
     /// </summary>
     /// <param name="sb"></param>
     /// <param name="line">A string</param>

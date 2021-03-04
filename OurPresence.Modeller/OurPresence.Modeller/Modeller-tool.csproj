@@ -10,16 +10,19 @@
     <Authors>Allan Nielsen</Authors>
     <Company>Our Presence</Company>
     <Description>Code generator using model files and compiled template components</Description>
-    <Copyright>Copyright 2020</Copyright>
+    <Copyright>Copyright 2021 ©  all rights reserved</Copyright>
     <RepositoryType>git</RepositoryType>
     <PackageTags>code generator c#</PackageTags>
     <NeutralLanguage>en-AU</NeutralLanguage>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <RootNamespace>OurPresence.Modeller</RootNamespace>
     <PackageId>OurPresence.Modeller.Tool</PackageId>
     <Version>3.0.0</Version>
     <AssemblyName>model</AssemblyName>
+    <Nullable>enable</Nullable>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Title>Our Presence Modeller</Title>
   </PropertyGroup>
 
   <ItemGroup>

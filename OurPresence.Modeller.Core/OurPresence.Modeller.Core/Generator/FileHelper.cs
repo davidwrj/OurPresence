@@ -16,7 +16,8 @@ namespace OurPresence.Modeller.Generator
                 var v = string.Empty;
                 for (var i = 0; i < parts.Length; i++)
                 {
-                    if (parts[i].StartsWith("v", StringComparison.InvariantCultureIgnoreCase) && int.TryParse(parts[i].Substring(1), out var number1))
+                    if (parts[i].StartsWith("v", StringComparison.InvariantCultureIgnoreCase) &&
+                        int.TryParse(parts[i].Substring(1), out var number1))
                         v += number1.ToString() + ".";
                     else if (int.TryParse(parts[i], out var number2))
                         v += number2.ToString() + ".";
@@ -24,14 +25,18 @@ namespace OurPresence.Modeller.Generator
                         f += parts[i] + ".";
                 }
 
-                var fn = string.IsNullOrEmpty(f) ? string.Empty : f.Substring(0, f.Length-1);
-                var ve = string.IsNullOrEmpty(v) ? new GeneratorVersion() : new GeneratorVersion(v.Substring(0,v.Length-1));
+                var fn = string.IsNullOrEmpty(f) ? string.Empty : f.Substring(0, f.Length - 1);
+                var ve = string.IsNullOrEmpty(v)
+                    ? new GeneratorVersion()
+                    : new GeneratorVersion(v.Substring(0, v.Length - 1));
                 return (fn, ve);
             }
+
             return (filename, new GeneratorVersion());
         }
 
-        public static bool UpdateLocalGenerators(string serverFolder = null, string localFolder = null, bool overwrite = false, Action<string> output=null)
+        public static bool UpdateLocalGenerators(string? serverFolder = null, string? localFolder = null,
+            bool overwrite = false, Action<string>? output = null)
         {
             if (string.IsNullOrWhiteSpace(serverFolder))
                 return false;
@@ -48,10 +53,12 @@ namespace OurPresence.Modeller.Generator
             return true;
         }
 
-        private static void DirectoryCopy(DirectoryInfo sourceDirName, DirectoryInfo destDirName, bool copySubDirs, bool overwrite, Action<string> output)
+        private static void DirectoryCopy(DirectoryInfo sourceDirName, DirectoryInfo destDirName, bool copySubDirs,
+            bool overwrite, Action<string>? output)
         {
             if (!sourceDirName.Exists)
-                throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName);
+                throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " +
+                                                     sourceDirName);
 
             var dirs = sourceDirName.GetDirectories();
             // If the destination directory doesn't exist, create it.
@@ -65,26 +72,25 @@ namespace OurPresence.Modeller.Generator
             var files = sourceDirName.GetFiles();
             foreach (var file in files)
             {
-                var temppath = Path.Combine(destDirName.FullName, file.Name);
-                if (System.IO.File.Exists(temppath) && !overwrite)
+                var tempPath = Path.Combine(destDirName.FullName, file.Name);
+                if (System.IO.File.Exists(tempPath) && !overwrite)
                 {
                     continue;
                 }
 
                 output?.Invoke($"copying {file.Name} to {destDirName.Name}");
-                file.CopyTo(temppath, false);
+                file.CopyTo(tempPath, false);
             }
 
             // If copying subdirectories, copy them and their contents to new location.
             if (copySubDirs)
             {
-                foreach (var subdir in dirs)
+                foreach (var subDir in dirs)
                 {
-                    var temppath = new DirectoryInfo(Path.Combine(destDirName.FullName, subdir.Name));
-                    DirectoryCopy(subdir, temppath, copySubDirs, overwrite, output);
+                    var tempPath = new DirectoryInfo(Path.Combine(destDirName.FullName, subDir.Name));
+                    DirectoryCopy(subDir, tempPath, copySubDirs, overwrite, output);
                 }
             }
         }
-
     }
 }

@@ -100,26 +100,20 @@ namespace OurPresence.Modeller.Generator
             return s;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            if (obj == null)
+            return obj switch
             {
-                return false;
-            }
-            else if (obj is GeneratorVersion gv)
-            {
-                return CompareTo(gv) == _equal;
-            }
-            else if (obj is Version v)
-            {
-                return CompareTo(v) == _equal;
-            }
-            else return false;
+                null => false,
+                GeneratorVersion gv => CompareTo(gv) == _equal,
+                Version v => CompareTo(v) == _equal,
+                _ => false
+            };
         }
 
         public override int GetHashCode() => ToString().GetHashCode();
 
-        public bool Equals(Version other) => CompareTo(new GeneratorVersion(other)) == _equal;
+        public bool Equals(Version? other) => other is not null && CompareTo(new GeneratorVersion(other)) == _equal;
 
         private static int PreRelease(GeneratorVersion v) => v.IsAlphaRelease ? _alpha : v.IsBetaRelease ? _beta : _released;
 
@@ -133,12 +127,12 @@ namespace OurPresence.Modeller.Generator
 
         public static bool operator >=(GeneratorVersion v1, GeneratorVersion v2)
         {
-            return v1 is null ? false : v1.Equals(v2) || v1 > v2;
+            return v1.Equals(v2) || v1 > v2;
         }
 
         public static bool operator <=(GeneratorVersion v1, GeneratorVersion v2)
         {
-            return v1 is null ? false : v1.Equals(v2) || v1 < v2;
+            return v1.Equals(v2) || v1 < v2;
         }
 
         public int CompareTo(object obj)
@@ -153,15 +147,15 @@ namespace OurPresence.Modeller.Generator
                 throw new InvalidCastException($"Unable to cast {obj.GetType().FullName} to a {typeof(GeneratorVersion).FullName}");
         }
 
-        public int CompareTo(Version other)
+        public int CompareTo(Version? other)
         {
             var result = Version.CompareTo(other);
             return result == _equal && (IsAlphaRelease || IsBetaRelease) ? _lessThan : result;
         }
 
-        public int CompareTo(GeneratorVersion other)
+        public int CompareTo(GeneratorVersion? other)
         {
-            var result = Version.CompareTo(other.Version);
+            var result = Version.CompareTo(other?.Version);
             if (result != _equal) return result;
 
             var p1 = PreRelease(this);
@@ -169,5 +163,4 @@ namespace OurPresence.Modeller.Generator
             return p1 == p2 ? _equal : p1 > p2 ? _greaterThan : _lessThan;
         }
     }
-
 }

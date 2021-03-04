@@ -22,7 +22,7 @@ namespace OurPresence.Modeller
 
         [Option(Description = "Settings file to use when generating code. Settings in the file will override arguments on the command line")]
         [FileExists]
-        public string Settings { get; }
+        public string? Settings { get; }
 
         [Option(Description = "Target framework. Defaults to net5.0")]
         public string Target { get; } = Generator.Defaults.Target;
@@ -30,8 +30,7 @@ namespace OurPresence.Modeller
         [Option(ShortName = "")]
         public bool Overwrite { get; } = true;
 
-        [Option(ShortName = "")]
-        public bool Verbose { get; }
+        [Option(ShortName = "")] public bool Verbose { get; } = false;
 
         internal int OnExecute(IConsole console, CommandLineApplication app)
         {
