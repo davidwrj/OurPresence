@@ -5,7 +5,6 @@ using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
-using NStack;
 using System;
 using System.Collections;
 using System.Collections.Generic;

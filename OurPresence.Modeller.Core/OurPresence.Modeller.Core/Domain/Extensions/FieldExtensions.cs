@@ -1,6 +1,4 @@
-﻿using OurPresence.Modeller.Domain;
-
-namespace OurPresence.Modeller.Domain.Extensions
+﻿namespace OurPresence.Modeller.Domain.Extensions
 {
     public static class FieldExtensions
     {

@@ -1,9 +1,7 @@
 ﻿using OurPresence.Modeller.Generator;
-using OurPresence.Modeller.Generator.Exceptions;
 using OurPresence.Modeller.Interfaces;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using Xunit;
 using NSubstitute;
