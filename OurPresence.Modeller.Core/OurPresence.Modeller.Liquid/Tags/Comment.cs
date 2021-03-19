@@ -5,9 +5,12 @@ using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid.Tags
 {
-    public class Comment : OurPresence.Modeller.Liquid.Block
+    public class Comment : Modeller.Liquid.Block
     {
         private static readonly Regex ShortHandRegex = R.C(Liquid.CommentShorthand);
+
+        public Comment(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
 
         public static string FromShortHand(string @string)
         {

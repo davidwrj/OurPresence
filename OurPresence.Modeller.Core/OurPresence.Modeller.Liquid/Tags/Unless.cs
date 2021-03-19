@@ -10,6 +10,9 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class Unless : If
     {
+        public Unless(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+
         public override void Render(Context context, TextWriter result)
         {
             context.Stack(() =>
@@ -18,7 +21,7 @@ namespace OurPresence.Modeller.Liquid.Tags
                 Condition block = Blocks.First();
                 if (!block.Evaluate(context, result.FormatProvider))
                 {
-                    RenderAll(block.Attachment, context, result);
+                    RenderAll(new NodeList( block.Attachment), context, result);
                     return;
                 }
 
@@ -26,7 +29,7 @@ namespace OurPresence.Modeller.Liquid.Tags
                 foreach (Condition forEachBlock in Blocks.Skip(1))
                     if (forEachBlock.Evaluate(context, result.FormatProvider))
                     {
-                        RenderAll(forEachBlock.Attachment, context, result);
+                        RenderAll(new NodeList(forEachBlock.Attachment), context, result);
                         return;
                     }
             });

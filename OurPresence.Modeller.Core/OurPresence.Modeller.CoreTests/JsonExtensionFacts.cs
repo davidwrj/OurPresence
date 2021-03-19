@@ -28,7 +28,7 @@ namespace OurPresence.Modeller.CoreTests
             model.Fields.Add(new Field("IsActive") { DataType = DataTypes.Bool, Default = "true", Nullable = false });
             module.Models.Add(model);
 
-            var index = new Domain.Index("PK_ApplicationName") { IsUnique = true };
+            var index = new Index("PK_ApplicationName") { IsUnique = true };
             index.Fields.Add(new IndexField("Name"));
             model.Indexes.Add(index);
             var relationship = new Relationship()

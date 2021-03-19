@@ -7,6 +7,8 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     internal interface IRenderable
     {
+        Template Template { get; }
+
         void Render(Context context, TextWriter result);
     }
 }

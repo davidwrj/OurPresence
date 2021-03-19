@@ -352,7 +352,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestDictionaryHasKey()
         {
             var context = new Context(CultureInfo.InvariantCulture);
-            System.Collections.Generic.Dictionary<string, string> testDictionary = new System.Collections.Generic.Dictionary<string, string>
+            Dictionary<string, string> testDictionary = new Dictionary<string, string>
             {
                 { "dave", "0" },
                 { "bob", "4" }
@@ -367,7 +367,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestDictionaryHasValue()
         {
             var context = new Context(CultureInfo.InvariantCulture);
-            System.Collections.Generic.Dictionary<string, string> testDictionary = new System.Collections.Generic.Dictionary<string, string>
+            Dictionary<string, string> testDictionary = new Dictionary<string, string>
             {
                 { "dave", "0" },
                 { "bob", "4" }
@@ -410,15 +410,14 @@ namespace OurPresence.Modeller.Liquid.Tests
             var context = new Context(CultureInfo.InvariantCulture);
             try
             {
-                Condition.Operators["starts_with"] =
-                    (left, right) => Regex.IsMatch(left.ToString(), string.Format("^{0}", right.ToString()));
+                context.Condition.Operators.Add("starts_with", (left, right) => Regex.IsMatch(left.ToString(), string.Format("^{0}", right.ToString())));
 
                 AssertEvaluatesTrue(context,"'bob'", "starts_with", "'b'");
                 AssertEvaluatesFalse(context,"'bob'", "starts_with", "'o'");
             }
             finally
             {
-                Condition.Operators.Remove("starts_with");
+                context.Condition.Operators.Remove("starts_with");
             }
         }
 
@@ -428,7 +427,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             var context = new Context(CultureInfo.InvariantCulture);
             try
             {
-                Condition.Operators["IsMultipleOf"] = (left, right) => (int)left % (int)right == 0;
+                context.Condition.Operators.Add("IsMultipleOf", (left, right) => (int)left % (int)right == 0);
 
                 // exact match
                 AssertEvaluatesTrue(context,"16", "IsMultipleOf", "4");
@@ -457,7 +456,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             }
             finally
             {
-                Condition.Operators.Remove("IsMultipleOf");
+                context.Condition.Operators.Remove("IsMultipleOf");
             }
         }
 
@@ -467,8 +466,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             var context = new Context(CultureInfo.InvariantCulture);
             try
             {
-                Condition.Operators["IsMultipleOf"] =
-                    (left, right) => System.Convert.ToInt64(left) % System.Convert.ToInt64(right) == 0;
+                context.Condition.Operators.Add("IsMultipleOf", (left, right) => System.Convert.ToInt64(left) % System.Convert.ToInt64(right) == 0);
 
                 // exact match
                 AssertEvaluatesTrue(context,"16", "IsMultipleOf", "4");
@@ -497,7 +495,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             }
             finally
             {
-                Condition.Operators.Remove("IsMultipleOf");
+                context.Condition.Operators.Remove("IsMultipleOf");
             }
         }
 
@@ -514,8 +512,7 @@ namespace OurPresence.Modeller.Liquid.Tests
 
                 try
                 {
-                    Condition.Operators["DivisibleBy"] =
-                        (left, right) => (int)left % (int)right == 0;
+                    context.Condition.Operators.Add("DivisibleBy", (left, right) => (int)left % (int)right == 0);
 
                     // exact match
                     AssertEvaluatesTrue(context,"16", "DivisibleBy", "4");
@@ -543,7 +540,7 @@ namespace OurPresence.Modeller.Liquid.Tests
                 }
                 finally
                 {
-                    Condition.Operators.Remove("DivisibleBy");
+                    context.Condition.Operators.Remove("DivisibleBy");
                     Template.NamingConvention = oldconvention;
                 }
             }
@@ -563,8 +560,7 @@ namespace OurPresence.Modeller.Liquid.Tests
 
                 try
                 {
-                    Condition.Operators["DivisibleBy"] =
-                        (left, right) => System.Convert.ToInt64(left) % System.Convert.ToInt64(right) == 0;
+                    context.Condition.Operators.Add("DivisibleBy", (left, right) => System.Convert.ToInt64(left) % System.Convert.ToInt64(right) == 0);
 
                     // exact match
                     AssertEvaluatesTrue(context,"16", "DivisibleBy", "4");
@@ -592,7 +588,7 @@ namespace OurPresence.Modeller.Liquid.Tests
                 }
                 finally
                 {
-                    Condition.Operators.Remove("DivisibleBy");
+                    context.Condition.Operators.Remove("DivisibleBy");
                     Template.NamingConvention = oldconvention;
                 }
             }
@@ -612,7 +608,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestCompareBetweenDifferentTypes()
         {
-            var row = new System.Collections.Generic.Dictionary<string, object>();
+            var row = new Dictionary<string, object>();
 
             short id = 1;
             row.Add("MyID", id);
@@ -626,11 +622,10 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestShouldAllowCustomProcOperatorCapitalized()
         {
+            var context = new Context(CultureInfo.InvariantCulture);
             try
             {
-                var context = new Context(CultureInfo.InvariantCulture);
-                Condition.Operators["StartsWith"] =
-                    (left, right) => Regex.IsMatch(left.ToString(), string.Format("^{0}", right.ToString()));
+                context.Condition.Operators.Add("StartsWith",(left, right) => Regex.IsMatch(left.ToString(), string.Format("^{0}", right.ToString())));
 
                 Helper.AssertTemplateResult("", "{% if 'bob' StartsWith 'B' %} YES {% endif %}", null, new CSharpNamingConvention());
                 AssertEvaluatesTrue(context,"'bob'", "StartsWith", "'b'");
@@ -638,7 +633,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             }
             finally
             {
-                Condition.Operators.Remove("StartsWith");
+                context.Condition.Operators.Remove("StartsWith");
             }
         }
 

@@ -7,7 +7,7 @@ namespace OurPresence.Modeller.Fluent
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class FieldBuilder<T>
     {
-        public FieldBuilder(T builder, Domain.Field field)
+        public FieldBuilder(T builder, Field field)
         {
             Build = builder ;
             Instance = field ?? throw new ArgumentNullException(nameof(field));
@@ -15,7 +15,7 @@ namespace OurPresence.Modeller.Fluent
 
         public T Build { get; }
 
-        public Domain.Field Instance { get; }
+        public Field Instance { get; }
 
         public FieldBuilder<T> Default(string value)
         {

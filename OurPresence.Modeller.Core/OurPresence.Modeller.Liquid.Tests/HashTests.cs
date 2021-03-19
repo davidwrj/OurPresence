@@ -39,7 +39,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestMapperCacheShouldCacheSeperateNamespaces()
         {
-            var testClass1 = new OurPresence.Modeller.Liquid.Tests.Ns1.TestClass()
+            var testClass1 = new Ns1.TestClass()
             {
                 TestClassProp1 = "TestClassProp1Value"
             };
@@ -51,7 +51,7 @@ namespace OurPresence.Modeller.Liquid.Tests
                 value1[nameof(OurPresence.Modeller.Liquid.Tests.Ns1.TestClass.TestClassProp1)]);
 
             //Same type name but different namespace
-            var testClass2 = new OurPresence.Modeller.Liquid.Tests.Ns2.TestClass()
+            var testClass2 = new Ns2.TestClass()
             {
                 TestClassProp2 = "TestClassProp2Value"
             };

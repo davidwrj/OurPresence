@@ -111,7 +111,7 @@ namespace OurPresence.Modeller.Liquid.Util
         public static IEnumerable<T> Inclusive<T>(T start, T finish, Func<T, T> succ)
             where T : IComparable<T>
         {
-            return Inclusive<T>(start, finish, succ, Comp);
+            return Inclusive(start, finish, succ, Comp);
         }
 
         public static IEnumerable<DateTime> Inclusive(DateTime start, DateTime finish)

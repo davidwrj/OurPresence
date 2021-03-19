@@ -54,16 +54,20 @@ namespace OurPresence.Modeller.Liquid.Tags
     ///
     /// The current IFileSystem will be used to locate "base.html".
     /// </example>
-    public class Extends : OurPresence.Modeller.Liquid.Block
+    public class Extends : Modeller.Liquid.Block
     {
 
         private static readonly Regex Syntax = R.B(@"^({0})", Liquid.QuotedFragment);
 
         private string _templateName;
 
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public Extends(Template template, string tagName, string markup)
+            :base(template, tagName, markup)
+        { }
+
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            Match syntaxMatch = Syntax.Match(Markup);
 
             if (syntaxMatch.Success)
             {
@@ -72,17 +76,17 @@ namespace OurPresence.Modeller.Liquid.Tags
             else
                 throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagSyntaxException"));
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
 
-        internal override void AssertTagRulesViolation(List<object> rootNodeList)
+        internal override void AssertTagRulesViolation(NodeList rootNodeList)
         {
-            if (!(rootNodeList[0] is Extends))
+            if (!(rootNodeList.GetItems().First() is Extends))
             {
                 throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagMustBeFirstTagException"));
             }
 
-            NodeList.ForEach(n =>
+            NodeList.GetItems().ForEach(n =>
             {
                 if (!((n is string && ((string) n).IsNullOrWhiteSpace()) || n is Block || n is Comment || n is Extends))
                     throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagUnallowedTagsException"));

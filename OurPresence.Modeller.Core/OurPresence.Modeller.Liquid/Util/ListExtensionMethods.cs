@@ -1,7 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OurPresence.Modeller.Liquid.Util
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ListExtensionMethods
     {
         /// <summary>
@@ -55,11 +59,11 @@ namespace OurPresence.Modeller.Liquid.Util
         public static T Shift<T>(this List<T> list)
             where T : class
         {
-            if (list == null || list.Count == 0)
+            if (list == null || !list.Any())
                 return null;
 
-            T result = list[0];
-            list.RemoveAt(0);
+            T result = list.First();
+            list.Remove(result);
 
             return result;
         }
@@ -74,11 +78,11 @@ namespace OurPresence.Modeller.Liquid.Util
         public static T Pop<T>(this List<T> list)
             where T : class
         {
-            if (list == null || list.Count == 0)
+            if (list == null || !list.Any())
                 return null;
 
-            T result = list[list.Count - 1];
-            list.RemoveAt(list.Count - 1);
+            T result = list.Last();
+            list.Remove(result);
 
             return result;
         }

@@ -187,8 +187,8 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
         [Fact]
         public void TestIfWithCustomCondition()
         {
-            OurPresence.Modeller.Liquid.ConditionOperatorDelegate oldCondition = Condition.Operators["contains"];
-            Condition.Operators["contains"] = (left, right) => (left is IList) ? ((IList) left).Contains(right) : ((left is string) ? ((string) left).Contains((string) right) : false);
+            var oldCondition = Condition.Operators["contains"];
+            Condition.Operators.Add("contains", (left, right) => (left is IList) ? ((IList) left).Contains(right) : ((left is string) ? ((string) left).Contains((string) right) : false));
 
             try
             {

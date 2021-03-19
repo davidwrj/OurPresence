@@ -19,23 +19,37 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// Capture is useful for saving content for use later in your template, such as
     /// in a sidebar or footer.
     /// </summary>
-    public class Capture : OurPresence.Modeller.Liquid.Block
+    public class Capture : Modeller.Liquid.Block
     {
         private static readonly Regex Syntax = R.C(@"(\w+)");
-
         private string _to;
-
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
+        public Capture(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokens"></param>
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            Match syntaxMatch = Syntax.Match(Markup);
             if (syntaxMatch.Success)
                 _to = syntaxMatch.Groups[1].Value;
             else
                 throw new SyntaxException(Liquid.ResourceManager.GetString("CaptureTagSyntaxException"));
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="result"></param>
         public override void Render(Context context, TextWriter result)
         {
             using (TextWriter temp = new StringWriter(result.FormatProvider))

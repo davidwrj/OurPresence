@@ -2,8 +2,11 @@ using System.IO;
 
 namespace OurPresence.Modeller.Liquid.Tags
 {
-    public class IfChanged : OurPresence.Modeller.Liquid.Block
+    public class IfChanged : Modeller.Liquid.Block
     {
+        public IfChanged(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+
         public override void Render(Context context, TextWriter result)
         {
             context.Stack(() =>

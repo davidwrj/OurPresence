@@ -101,7 +101,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestTimeoutError()
         {
             var template = Template.Parse(" {% for i in (1..1000000) %} {{ i }} {% endfor %} ");
-            Assert.Throws<System.TimeoutException>(() =>
+            Assert.Throws<TimeoutException>(() =>
             {
                 template.Render(new RenderParameters(CultureInfo.InvariantCulture)
                 {
@@ -124,7 +124,7 @@ namespace OurPresence.Modeller.Liquid.Tests
                 formatProvider: CultureInfo.InvariantCulture,
                 cancellationToken: source.Token);
 
-            Assert.Throws<System.OperationCanceledException>(() =>
+            Assert.Throws<OperationCanceledException>(() =>
             {
                 template.Render(RenderParameters.FromContext(context, CultureInfo.InvariantCulture));
             });

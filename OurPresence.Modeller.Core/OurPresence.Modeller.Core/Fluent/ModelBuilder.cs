@@ -35,7 +35,7 @@ namespace OurPresence.Modeller.Fluent
 
         public ModelBuilder WithDefaultKey()
         {
-            Instance.Key.Fields.Add(new Domain.Field("Id") { DataType = DataTypes.UniqueIdentifier, Nullable = false });
+            Instance.Key.Fields.Add(new Field("Id") { DataType = DataTypes.UniqueIdentifier, Nullable = false });
             return this;
         }
 

@@ -40,7 +40,7 @@ namespace OurPresence.Modeller.CoreTests
             var sut = new Model("Test");
             sut.Fields.Add(new Field("Field1"));
 
-            var idx = new Domain.Index("UX_Field1");
+            var idx = new Index("UX_Field1");
             idx.Fields.Add(new IndexField("Field1"));
             sut.Indexes.Add(idx);
 

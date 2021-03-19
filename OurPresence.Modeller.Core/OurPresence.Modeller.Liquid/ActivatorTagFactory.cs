@@ -8,13 +8,7 @@ namespace OurPresence.Modeller.Liquid
     public class ActivatorTagFactory : ITagFactory
     {
         private readonly Type _tagType;
-
         private readonly string _tagName;
-
-        /// <summary>
-        /// Name of the tag
-        /// </summary>
-        public string TagName { get { return _tagName; } }
 
         /// <summary>
         /// Instanciates a new ActivatorTagFactory
@@ -28,12 +22,17 @@ namespace OurPresence.Modeller.Liquid
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public string TagName => _tagName;
+
+        /// <summary>
         /// Creates the tag
         /// </summary>
         /// <returns></returns>
-        public Tag Create()
-        {
-            return (Tag)Activator.CreateInstance(_tagType);
+        public Tag Create(Template template)
+        {            
+            return Activator.CreateInstance(_tagType, template, _tagName, _tagType) as Tag;
         }
     }
 }

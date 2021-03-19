@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.Util;
 
@@ -10,15 +11,18 @@ namespace OurPresence.Modeller.Liquid.Tags
     ///
     /// {% raw %}{% if user = 'tobi' %}hi{% endif %}{% endraw %}
     /// </summary>
-    public class Raw : OurPresence.Modeller.Liquid.Block
+    public class Raw : Modeller.Liquid.Block
     {
-        protected override void Parse(List<string> tokens)
+        public Raw(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+
+        protected override void Parse(IEnumerable<string> tokens)
         {
-            NodeList = NodeList ?? new List<object>();
             NodeList.Clear();
 
             string token;
-            while ((token = tokens.Shift()) != null)
+            var t = tokens as List<string>;
+            while ((token = t.Shift()) != null)
             {
                 Match fullTokenMatch = FullToken.Match(token);
                 if (fullTokenMatch.Success && BlockDelimiter == fullTokenMatch.Groups[1].Value)

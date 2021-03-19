@@ -49,9 +49,9 @@ namespace OurPresence.Modeller.Liquid.Util
                 return left;
 
             if (!NumericTypePromotions.ContainsKey(left))
-                throw new System.ArgumentException("Argument is not numeric", nameof(left));
+                throw new ArgumentException("Argument is not numeric", nameof(left));
             if (!NumericTypePromotions.ContainsKey(right))
-                throw new System.ArgumentException("Argument is not numeric", nameof(right));
+                throw new ArgumentException("Argument is not numeric", nameof(right));
 
             // Test left to right promotion
             if (NumericTypePromotions[right].Contains(left))
@@ -74,7 +74,7 @@ namespace OurPresence.Modeller.Liquid.Util
         /// <param name="body">Body factory</param>
         /// <param name="leftType"></param>
         /// <param name="rightType"></param>
-        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         /// <returns>Compiled function delegate</returns>
         public static Delegate CreateExpression
             (Func<Expression, Expression, BinaryExpression> body

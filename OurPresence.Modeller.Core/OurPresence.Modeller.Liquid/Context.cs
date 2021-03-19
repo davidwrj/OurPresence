@@ -27,65 +27,49 @@ namespace OurPresence.Modeller.Liquid
         private static readonly Regex VariableParserRegex = R.C(Liquid.VariableParser);
 
         private readonly ErrorsOutputMode _errorsOutputMode;
+        private readonly Condition _condition = new Condition();
+        private readonly int _maxIterations;
+        private Strainer _strainer;
+        private readonly List<Hash> _scopes = new();
+        private readonly List<Exception> _errors = new();
+        private readonly List<Hash> _environments = new();
 
         /// <summary>
         /// Liquid syntax flag used for backward compatibility
         /// </summary>
         public SyntaxCompatibility SyntaxCompatibilityLevel { get; set; }
 
-        private readonly int _maxIterations;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaxIterations=>_maxIterations; 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Condition Condition => _condition;
 
-        public int MaxIterations
-        {
-            get { return _maxIterations; }
-        }
-
-        private Strainer _strainer;
 
         /// <summary>
         /// Environments
         /// </summary>
-        public List<Hash> Environments { get; private set; }
+        public IEnumerable<Hash> Environments => _environments;
 
         /// <summary>
         /// Scopes
         /// </summary>
-        public List<Hash> Scopes { get; private set; }
+        public IEnumerable<Hash> Scopes => _scopes;
 
         /// <summary>
         /// Hash of user-defined, internally-available variables
         /// </summary>
         public Hash Registers { get; private set; }
 
+
         /// <summary>
         /// Exceptions that have been raised during rendering
         /// </summary>
-        public List<Exception> Errors { get; private set; }
-
-        /// <summary>
-        /// Creates a new rendering context
-        /// </summary>
-        /// <param name="environments"></param>
-        /// <param name="outerScope"></param>
-        /// <param name="registers"></param>
-        /// <param name="errorsOutputMode"></param>
-        /// <param name="maxIterations"></param>
-        /// <param name="timeout"></param>
-        /// <param name="formatProvider"></param>
-        [Obsolete("The method with timeout argument is deprecated. Please use the one with CancellationToken.")]
-        public Context
-            (List<Hash> environments
-             , Hash outerScope
-             , Hash registers
-             , ErrorsOutputMode errorsOutputMode
-             , int maxIterations
-             , int timeout
-             , IFormatProvider formatProvider)
-            : this(environments, outerScope, registers, errorsOutputMode, maxIterations, formatProvider, CancellationToken.None)
-        {
-            _timeout = timeout;
-            RestartTimeout();
-        }
+        public IEnumerable<Exception> Errors => _errors;
 
         /// <summary>
         /// Creates a new rendering context
@@ -97,24 +81,15 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="maxIterations"></param>
         /// <param name="formatProvider"></param>
         /// <param name="cancellationToken"></param>
-        public Context
-            (List<Hash> environments
-             , Hash outerScope
-             , Hash registers
-             , ErrorsOutputMode errorsOutputMode
-             , int maxIterations
-             , IFormatProvider formatProvider
-             , CancellationToken cancellationToken)
+        public Context(IEnumerable<Hash> environments, Hash outerScope, Hash registers, ErrorsOutputMode errorsOutputMode, int maxIterations, IFormatProvider formatProvider, CancellationToken cancellationToken)
         {
-            Environments = environments;
+            _environments.AddRange(environments);
 
-            Scopes = new List<Hash>();
-            if (outerScope != null)
-                Scopes.Add(outerScope);
+            if (outerScope is not null)
+                _scopes.Add(outerScope);
 
             Registers = registers;
 
-            Errors = new List<Exception>();
             _errorsOutputMode = errorsOutputMode;
             _maxIterations = maxIterations;
             _cancellationToken = cancellationToken;
@@ -128,7 +103,7 @@ namespace OurPresence.Modeller.Liquid
         /// Creates a new rendering context
         /// </summary>
         public Context(IFormatProvider formatProvider)
-            : this(new List<Hash>(), new Hash(), new Hash(), ErrorsOutputMode.Display, 0, 0, formatProvider )
+            : this(new List<Hash>(), new Hash(), new Hash(), ErrorsOutputMode.Display, 0, formatProvider, default)
         {
         }
 
@@ -137,7 +112,7 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         public Strainer Strainer
         {
-            get { return (_strainer = _strainer ?? Strainer.Create(this)); }
+            get { return _strainer ??= Strainer.Create(this); }
         }
 
         /// <summary>
@@ -199,7 +174,7 @@ namespace OurPresence.Modeller.Liquid
                 ExceptionDispatchInfo.Capture(ex).Throw();
             }
 
-            Errors.Add(ex);
+            _errors.Add(ex);
 
             if (_errorsOutputMode == ErrorsOutputMode.Suppress)
                 return string.Empty;
@@ -239,10 +214,12 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="newScope"></param>
         public void Push(Hash newScope)
         {
-            if (Scopes.Count > 80)
+            if (_scopes.Count > 80)
+            {
                 throw new StackLevelException(Liquid.ResourceManager.GetString("ContextStackException"));
+            }
 
-            Scopes.Insert(0, newScope);
+            _scopes.Insert(0, newScope);
         }
 
         /// <summary>
@@ -251,7 +228,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="newScopes"></param>
         public void Merge(Hash newScopes)
         {
-            Scopes[0].Merge(newScopes);
+            _scopes[0].Merge(newScopes);
         }
 
         /// <summary>
@@ -259,10 +236,13 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         public Hash Pop()
         {
-            if (Scopes.Count == 1)
+            if (_scopes.Count == 1)
+            {
                 throw new ContextException();
-            Hash result = Scopes[0];
-            Scopes.RemoveAt(0);
+            }
+
+            Hash result = _scopes[0];
+            _scopes.RemoveAt(0);
             return result;
         }
 
@@ -306,7 +286,7 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         public void ClearInstanceAssigns()
         {
-            Scopes[0].Clear();
+            _scopes[0].Clear();
         }
 
         /// <summary>
@@ -318,7 +298,7 @@ namespace OurPresence.Modeller.Liquid
         public object this[string key, bool notifyNotFound = true]
         {
             get { return Resolve(key, notifyNotFound); }
-            set { Scopes[0][key] = value; }
+            set { _scopes[0][key] = value; }
         }
 
         /// <summary>
@@ -474,7 +454,7 @@ namespace OurPresence.Modeller.Liquid
             if ((@object = FindVariable(firstPart)) == null)
             {
                 if (notifyNotFound)
-                    Errors.Add(new VariableNotFoundException(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), markup)));
+                    _errors.Add(new VariableNotFoundException(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), markup)));
                 return null;
             }
 
@@ -546,7 +526,7 @@ namespace OurPresence.Modeller.Liquid
                     // keywords either. The only thing we got left is to return nil
                     else
                     {
-                        Errors.Add(new VariableNotFoundException(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), markup)));
+                        _errors.Add(new VariableNotFoundException(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), markup)));
                         return null;
                     }
                 }

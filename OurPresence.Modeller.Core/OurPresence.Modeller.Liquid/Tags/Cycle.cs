@@ -29,15 +29,18 @@ namespace OurPresence.Modeller.Liquid.Tags
         private string[] _variables;
         private string _name;
 
+        public Cycle(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+
         /// <summary>
         /// Initializes the cycle tag
         /// </summary>
         /// <param name="tagName"></param>
         /// <param name="markup"></param>
         /// <param name="tokens"></param>
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match match = NamedSyntax.Match(markup);
+            Match match = NamedSyntax.Match(Markup);
             if (match.Success)
             {
                 _variables = VariablesFromString(match.Groups[2].Value);
@@ -45,10 +48,10 @@ namespace OurPresence.Modeller.Liquid.Tags
             }
             else
             {
-                match = SimpleSyntax.Match(markup);
+                match = SimpleSyntax.Match(Markup);
                 if (match.Success)
                 {
-                    _variables = VariablesFromString(markup);
+                    _variables = VariablesFromString(Markup);
                     _name = "'" + string.Join(string.Empty, _variables) + "'";
                 }
                 else
@@ -57,7 +60,7 @@ namespace OurPresence.Modeller.Liquid.Tags
                 }
             }
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
 
         private static string[] VariablesFromString(string markup)

@@ -26,19 +26,16 @@ namespace OurPresence.Modeller.Liquid.Tags
     // Keeps track of the render-time state of all Blocks for a given Context
     internal class BlockRenderState
     {
-        public Dictionary<Block, Block> Parents { get; private set; }
-
-        public Dictionary<Block, List<object>> NodeLists { get; private set; }
-
         public BlockRenderState()
-        {
-            Parents = new Dictionary<Block, Block>();
-            NodeLists = new Dictionary<Block, List<object>>();
-        }
+        { }
 
-        public List<object> GetNodeList(Block block)
+        public Dictionary<Block, Block> Parents { get; } = new Dictionary<Block, Block>();
+
+        public Dictionary<Block, NodeList> NodeLists { get; } = new Dictionary<Block, NodeList>();
+
+        public NodeList GetNodeList(Block block)
         {
-            if (!NodeLists.TryGetValue(block, out List<object> nodeList))
+            if (!NodeLists.TryGetValue(block, out NodeList nodeList))
                 nodeList = block.NodeList;
             return nodeList;
         }
@@ -61,29 +58,47 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// The Block tag is used in conjunction with the Extends tag to provide template inheritance.
     /// For an example please refer to the Extends tag.
     /// </summary>
-    public class Block : OurPresence.Modeller.Liquid.Block
+    public class Block : Modeller.Liquid.Block
     {
         private static readonly Regex Syntax = R.C(@"(\w+)");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
+        public Block(Template template, string tagName, string markup)
+            :base(template, tagName, markup)
+        { }
+
         internal string BlockName { get; set; }
 
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokens"></param>
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = Syntax.Match(Markup);
             if (syntaxMatch.Success)
-                BlockName = syntaxMatch.Groups[1].Value;
-            else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagSyntaxException"));
-
-            if (tokens != null)
             {
-                base.Initialize(tagName, markup, tokens);
+                BlockName = syntaxMatch.Groups[1].Value;
+            }
+            else
+            {
+                throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagSyntaxException"));
+            }
+
+            if (tokens is not null)
+            {
+                base.Initialize(tokens);
             }
         }
 
-        internal override void AssertTagRulesViolation(List<object> rootNodeList)
+        internal override void AssertTagRulesViolation(NodeList rootNodeList)
         {
-            rootNodeList.ForEach(n =>
+            rootNodeList.GetItems().ForEach(n =>
                 {
                     Block b1 = n as Block;
 
@@ -114,7 +129,7 @@ namespace OurPresence.Modeller.Liquid.Tags
         }
 
         // Gets the render-time node list from the node state
-        internal List<object> GetNodeList(BlockRenderState blockState)
+        internal NodeList GetNodeList(BlockRenderState blockState)
         {
             return blockState == null ? NodeList : blockState.GetNodeList(this);
         }
@@ -127,9 +142,8 @@ namespace OurPresence.Modeller.Liquid.Tags
             }
             else
             {
-                parent = new Block();
-                parent.Initialize(TagName, BlockName, null);
-                parent.NodeList = new List<object>(nodeList);
+                parent = new Block(Template, TagName, Markup);
+                parent.Initialize(null);
                 parents[this] = parent;
             }
         }
@@ -138,8 +152,8 @@ namespace OurPresence.Modeller.Liquid.Tags
         {
             BlockRenderState blockState = BlockRenderState.Find(context);
             if (blockState != null
-    && blockState.Parents.TryGetValue(this, out Block parent)
-    && parent != null)
+                && blockState.Parents.TryGetValue(this, out Block parent)
+                && parent != null)
             {
                 parent.Render(context, result);
             }

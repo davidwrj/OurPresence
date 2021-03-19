@@ -69,7 +69,7 @@ namespace OurPresence.Modeller.CoreTests
         {
             var model = new Model("Test");
 
-            var idx = new Domain.Index("FK_Test");
+            var idx = new Index("FK_Test");
             idx.Fields.Add(new IndexField("IDX_Field"));
             model.Indexes.Add(idx);
 

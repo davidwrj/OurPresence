@@ -10,12 +10,19 @@ namespace OurPresence.Modeller.Liquid
     public class Document : Block
     {
         /// <summary>
-        /// We don't need markup to open this block
+        /// 
         /// </summary>
         /// <param name="tagName"></param>
         /// <param name="markup"></param>
+        public Document(string tagName, string markup)
+            :base(tagName, markup)
+        { }
+
+        /// <summary>
+        /// We don't need markup to open this block
+        /// </summary>
         /// <param name="tokens"></param>
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public override void Initialize(IEnumerable<string> tokens)
         {
             Parse(tokens);
         }

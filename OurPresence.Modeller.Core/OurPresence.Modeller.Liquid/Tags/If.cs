@@ -17,7 +17,7 @@ namespace OurPresence.Modeller.Liquid.Tags
     ///
     ///  There are {% if count &lt; 5 %} less {% else %} more {% endif %} items than you need.
     /// </summary>
-    public class If : OurPresence.Modeller.Liquid.Block
+    public class If : Modeller.Liquid.Block
     {
         private string SyntaxHelp = Liquid.ResourceManager.GetString("IfTagSyntaxException");
         private string TooMuchConditionsHelp = Liquid.ResourceManager.GetString("IfTagTooMuchConditionsException");
@@ -28,14 +28,20 @@ namespace OurPresence.Modeller.Liquid.Tags
 
         protected List<Condition> Blocks { get; private set; }
 
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        protected If(Template template, string tagName, string markup)
+            :base(template, tagName, markup)
         {
-            Blocks = new List<Condition>();
-            PushBlock("if", markup);
-            base.Initialize(tagName, markup, tokens);
+
         }
 
-        public override void UnknownTag(string tag, string markup, List<string> tokens)
+        public override void Initialize(IEnumerable<string> tokens)
+        {
+            Blocks = new List<Condition>();
+            PushBlock("if", Markup);
+            base.Initialize(tokens);
+        }
+
+        public override void UnknownTag(string tag, string markup, IEnumerable<string> tokens)
         {
             // Ruby version did not include "elseif", but I've added that to make it more C#-friendly.
             if (tag == "elsif" || tag == "elseif" || tag == "else")
@@ -52,7 +58,7 @@ namespace OurPresence.Modeller.Liquid.Tags
                 {
                     if (block.Evaluate(context, result.FormatProvider))
                     {
-                        RenderAll(block.Attachment, context, result);
+                        RenderAll(new NodeList( block.Attachment), context, result);
                         return;
                     }
                 }
@@ -114,7 +120,6 @@ namespace OurPresence.Modeller.Liquid.Tags
             }
 
             Blocks.Add(block);
-            NodeList = block.Attach(new List<object>());
         }
     }
 }

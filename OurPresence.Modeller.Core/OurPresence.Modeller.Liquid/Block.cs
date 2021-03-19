@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.Exceptions;
 using OurPresence.Modeller.Liquid.Util;
@@ -20,16 +21,26 @@ namespace OurPresence.Modeller.Liquid
         internal static readonly Regex FullToken = R.B(@"^{0}\s*(\w+)\s*(.*)?{1}$", Liquid.TagStart, Liquid.TagEnd);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
+        protected Block(Template template, string tagName, string markup)
+            :base(template, tagName,markup)
+        { }
+
+        /// <summary>
         /// Parses a list of tokens
         /// </summary>
         /// <param name="tokens"></param>
-        protected override void Parse(List<string> tokens)
+        protected override void Parse(IEnumerable<string> tokens)
         {
-            NodeList = NodeList ?? new List<object>();
             NodeList.Clear();
 
+            var t = tokens.ToList();
             string token;
-            while ((token = tokens.Shift()) != null)
+            while ((token = t.Shift()) != null)
             {
                 Match isTagMatch = IsTag.Match(token);
                 if (isTagMatch.Success)
@@ -47,9 +58,11 @@ namespace OurPresence.Modeller.Liquid
 
                         // Fetch the tag from registered blocks
                         Tag tag;
-                        if ((tag = Template.CreateTag(fullTokenMatch.Groups[1].Value)) != null)
+                        if ((tag = Template.CreateTag(fullTokenMatch.Groups[1].Value)) is not null)
                         {
-                            tag.Initialize(fullTokenMatch.Groups[1].Value, fullTokenMatch.Groups[2].Value, tokens);
+                            //todo: Confirm this change still sets correct tag fields
+                            //tag.Initialize(fullTokenMatch.Groups[1].Value, fullTokenMatch.Groups[2].Value, tokens);
+                            tag.Initialize(tokens);
                             NodeList.Add(tag);
 
                             // If the tag has some rules (eg: it must occur once) then check for them
@@ -100,7 +113,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="tag"></param>
         /// <param name="markup"></param>
         /// <param name="tokens"></param>
-        public virtual void UnknownTag(string tag, string markup, List<string> tokens)
+        public virtual void UnknownTag(string tag, string markup, IEnumerable<string> tokens)
         {
             switch (tag)
             {
@@ -166,9 +179,9 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="list"></param>
         /// <param name="context"></param>
         /// <param name="result"></param>
-        protected void RenderAll(List<object> list, Context context, TextWriter result)
+        protected void RenderAll(NodeList list, Context context, TextWriter result)
         {
-            foreach (var token in list)
+            foreach (var token in list.GetItems())
             {
                 context.CheckTimeout();
 

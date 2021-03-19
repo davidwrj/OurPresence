@@ -31,24 +31,23 @@ namespace OurPresence.Modeller.Liquid.Tests
             }
         }
 
-
         public static void AssertTemplateResult(string expected, string template, object anonymousObject, INamingConvention namingConvention, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
         {
             LockTemplateStaticVars(namingConvention, () =>
             {
                 var localVariables = anonymousObject == null ? null : Hash.FromAnonymousObject(anonymousObject);
-                var parameters = new RenderParameters(System.Globalization.CultureInfo.CurrentCulture)
-                {
-                    LocalVariables = localVariables,
-                    SyntaxCompatibilityLevel = syntax
-                };
-                Assert.Equal(expected, Template.Parse(template).Render(parameters));
+                AssertTemplateResult(expected, template, localVariables, syntax);
             });
         }
 
         public static void AssertTemplateResult(string expected, string template, INamingConvention namingConvention)
         {
             AssertTemplateResult(expected: expected, template: template, anonymousObject: null, namingConvention: namingConvention);
+        }
+
+        public static void AssertTemplateResult(string expected, string template, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
+        {
+            AssertTemplateResult(expected: expected, template: template, localVariables: null, syntax: syntax);
         }
 
         public static void AssertTemplateResult(string expected, string template, Hash localVariables, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
@@ -61,12 +60,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             Assert.Equal(expected, Template.Parse(template).Render(parameters));
         }
 
-        public static void AssertTemplateResult(string expected, string template, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
-        {
-            AssertTemplateResult(expected: expected, template: template, localVariables: null, syntax: syntax);
-        }
-
-        [LiquidTypeAttribute("PropAllowed")]
+        [LiquidType("PropAllowed")]
         public class DataObject
         {
             public string PropAllowed { get; set; }

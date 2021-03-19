@@ -14,7 +14,7 @@ namespace OurPresence.Modeller.CoreTests
         [Fact]
         public static void Index_SetsDefaults_WhenCreated()
         {
-            var sut = new Domain.Index("Test");
+            var sut = new Index("Test");
             sut.Name.ToString().Should().Be("Test");
             sut.IsClustered.Should().BeFalse();
             sut.IsUnique.Should().BeTrue();
@@ -23,13 +23,13 @@ namespace OurPresence.Modeller.CoreTests
         [Fact]
         public static void Index_Serialization()
         {
-            var sut = new Domain.Index("Test");
+            var sut = new Index("Test");
             sut.Fields.Add(new IndexField("Field1") { Sort = ListSortDirection.Descending });
             var json = sut.ToJson();
 
             Approvals.VerifyJson(json);
 
-            var actual = json.FromJson<Domain.Index>();
+            var actual = json.FromJson<Index>();
             actual.Should().BeEquivalentTo(sut);
         }
     }

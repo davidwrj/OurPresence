@@ -51,7 +51,7 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// forloop.first:: Returns true if the item is the first item.
     /// forloop.last:: Returns true if the item is the last item.
     /// </summary>
-    public class For : OurPresence.Modeller.Liquid.Block
+    public class For : Modeller.Liquid.Block
     {
         private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)\s*(reversed)?"), Liquid.QuotedFragment);
         private static string ForTagMaxIterationsExceededException = Liquid.ResourceManager.GetString("ForTagMaximumIterationsExceededException");
@@ -60,15 +60,16 @@ namespace OurPresence.Modeller.Liquid.Tags
         private bool _reversed;
         private Dictionary<string, string> _attributes;
 
+        public For(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+
         /// <summary>
         /// Initializes the for tag
         /// </summary>
-        /// <param name="tagName">Name of the parsed tag</param>
-        /// <param name="markup">Markup of the parsed tag</param>
         /// <param name="tokens">Toeksn of the parsed tag</param>
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match match = Syntax.Match(markup);
+            Match match = Syntax.Match(Markup);
             if (match.Success)
             {
                 _variableName = match.Groups[1].Value;
@@ -76,7 +77,7 @@ namespace OurPresence.Modeller.Liquid.Tags
                 _name = string.Format("{0}-{1}", _variableName, _collectionName);
                 _reversed = (!string.IsNullOrEmpty(match.Groups[3].Value));
                 _attributes = new Dictionary<string, string>(Template.NamingConvention.StringComparer);
-                R.Scan(markup, Liquid.TagAttributes,
+                R.Scan(Markup, Liquid.TagAttributes,
                     (key, value) => _attributes[key] = value);
             }
             else
@@ -84,7 +85,7 @@ namespace OurPresence.Modeller.Liquid.Tags
                 throw new SyntaxException(Liquid.ResourceManager.GetString("ForTagSyntaxException"));
             }
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
 
         /// <summary>

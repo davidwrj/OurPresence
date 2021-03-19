@@ -96,7 +96,7 @@ namespace OurPresence.Modeller.Liquid
                 environments.Add(LocalVariables);
             if (template.IsThreadSafe)
             {
-                context = new Context(environments, new Hash(), new Hash(), ErrorsOutputMode, MaxIterations, Timeout, FormatProvider)
+                context = new Context(environments, new Hash(), new Hash(), ErrorsOutputMode, MaxIterations, FormatProvider, default)
                 {
                     SyntaxCompatibilityLevel = this.SyntaxCompatibilityLevel
                 };
@@ -104,7 +104,7 @@ namespace OurPresence.Modeller.Liquid
             else
             {
                 environments.Add(template.Assigns);
-                context = new Context(environments, template.InstanceAssigns, template.Registers, ErrorsOutputMode, MaxIterations, Timeout, FormatProvider)
+                context = new Context(environments, template.InstanceAssigns, template.Registers, ErrorsOutputMode, MaxIterations, FormatProvider, default)
                 {
                     SyntaxCompatibilityLevel = this.SyntaxCompatibilityLevel
                 };

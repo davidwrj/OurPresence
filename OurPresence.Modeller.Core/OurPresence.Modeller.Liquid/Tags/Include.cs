@@ -9,16 +9,19 @@ using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid.Tags
 {
-    public class Include : OurPresence.Modeller.Liquid.Block
+    public class Include : Modeller.Liquid.Block
     {
         private static readonly Regex Syntax = R.B(@"({0}+)(\s+(?:with|for)\s+({0}+))?", Liquid.QuotedFragment);
 
         private string _templateName, _variableName;
         private Dictionary<string, string> _attributes;
 
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public Include(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
+
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            Match syntaxMatch = Syntax.Match(Markup);
             if (syntaxMatch.Success)
             {
                 _templateName = syntaxMatch.Groups[1].Value;
@@ -26,15 +29,15 @@ namespace OurPresence.Modeller.Liquid.Tags
                 if (_variableName == string.Empty)
                     _variableName = null;
                 _attributes = new Dictionary<string, string>(Template.NamingConvention.StringComparer);
-                R.Scan(markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
+                R.Scan(Markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
                 throw new SyntaxException(Liquid.ResourceManager.GetString("IncludeTagSyntaxException"));
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
 
-        protected override void Parse(List<string> tokens)
+        protected override void Parse(IEnumerable<string> tokens)
         {
         }
 
@@ -50,7 +53,7 @@ namespace OurPresence.Modeller.Liquid.Tags
             if (partial == null)
             {
                 string source = fileSystem.ReadTemplateFile(context, _templateName);
-                partial = Template.Parse(source);
+                partial = Template.Parse(source, Template.NamingConvention, Template.FileSystem, Template.DefaultSyntaxCompatibilityLevel);
             }
 
             string shortenedTemplateName = _templateName.Substring(1, _templateName.Length - 2);

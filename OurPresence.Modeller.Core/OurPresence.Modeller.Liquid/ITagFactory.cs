@@ -5,7 +5,7 @@
     /// </summary>
     /// <remarks>Can be usefull when the tag needs a parameter and can't be created with parameterless constructor.</remarks>
     public interface ITagFactory
-    {
+    {        
         /// <summary>
         /// Name of the tag
         /// </summary>
@@ -15,6 +15,6 @@
         /// Creates the tag
         /// </summary>
         /// <returns></returns>
-        Tag Create();
+        Tag Create(Template template);
     }
 }

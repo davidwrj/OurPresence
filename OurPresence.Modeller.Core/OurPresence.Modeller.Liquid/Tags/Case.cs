@@ -6,30 +6,38 @@ using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid.Tags
 {
-    public class Case : OurPresence.Modeller.Liquid.Block
+    public class Case : Modeller.Liquid.Block
     {
         private static readonly Regex Syntax = R.B(@"({0})", Liquid.QuotedFragment);
         private static readonly Regex WhenSyntax = R.B(@"({0})(?:(?:\s+or\s+|\s*\,\s*)({0}.*))?", Liquid.QuotedFragment);
 
         private List<Condition> _blocks;
         private string _left;
+        public Case(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
 
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public override void Initialize(IEnumerable<string> tokens)
         {
             _blocks = new List<Condition>();
 
-            Match syntaxMatch = Syntax.Match(markup);
+            Match syntaxMatch = Syntax.Match(Markup);
             if (syntaxMatch.Success)
                 _left = syntaxMatch.Groups[1].Value;
             else
                 throw new SyntaxException(Liquid.ResourceManager.GetString("CaseTagSyntaxException"));
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
 
-        public override void UnknownTag(string tag, string markup, List<string> tokens)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="markup"></param>
+        /// <param name="tokens"></param>
+        public override void UnknownTag(string tag, string markup, IEnumerable<string> tokens)
         {
-            NodeList = new List<object>();
+            NodeList.Clear();
             switch (tag)
             {
                 case "when":
@@ -43,7 +51,11 @@ namespace OurPresence.Modeller.Liquid.Tags
                     break;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="result"></param>
         public override void Render(Context context, TextWriter result)
         {
             context.Stack(() =>
@@ -55,14 +67,14 @@ namespace OurPresence.Modeller.Liquid.Tags
                     {
                         if (executeElseBlock)
                         {
-                            RenderAll(block.Attachment, context, result);
+                            RenderAll(new NodeList(block.Attachment), context, result);
                             return;
                         }
                     }
                     else if (block.Evaluate(context, result.FormatProvider))
                     {
                         executeElseBlock = false;
-                        RenderAll(block.Attachment, context, result);
+                        RenderAll(new NodeList(block.Attachment), context, result);
                     }
                 });
             });

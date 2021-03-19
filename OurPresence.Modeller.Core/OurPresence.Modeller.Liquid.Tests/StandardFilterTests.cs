@@ -179,7 +179,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestSort_OnHashList_WithProperty_DoesNotFlattenList()
         {
-            var list = new System.Collections.Generic.List<Hash>();
+            var list = new List<Hash>();
             var hash1 = CreateHash("1", "Text1");
             var hash2 = CreateHash("2", "Text2");
             var hash3 = CreateHash("3", "Text3");
@@ -197,7 +197,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestSort_OnDictionaryWithPropertyOnlyInSomeElement_ReturnsSortedDictionary()
         {
-            var list = new System.Collections.Generic.List<Hash>();
+            var list = new List<Hash>();
             var hash1 = CreateHash("1", "Text1");
             var hash2 = CreateHash("2", "Text2");
             var hashWithNoSortByProperty = new Hash();

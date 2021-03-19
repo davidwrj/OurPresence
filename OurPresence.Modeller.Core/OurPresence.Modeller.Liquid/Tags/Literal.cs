@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.Util;
 
@@ -14,9 +15,12 @@ namespace OurPresence.Modeller.Liquid.Tags
     ///
     /// {{{ {% if user = 'tobi' %}hi{% endif %} }}}
     /// </summary>
-    public class Literal : OurPresence.Modeller.Liquid.Block
+    public class Literal : Modeller.Liquid.Block
     {
         private static readonly Regex LiteralRegex = R.C(Liquid.LiteralShorthand);
+
+        public Literal(Template template, string tagName, string markup) : base(template, tagName, markup)
+        { }
 
         /// <summary>
         /// Creates a literal from shorthand
@@ -36,13 +40,13 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// Parses the tag
         /// </summary>
         /// <param name="tokens"></param>
-        protected override void Parse(List<string> tokens)
+        protected override void Parse(IEnumerable<string> tokens)
         {
-            NodeList = NodeList ?? new List<object>();
             NodeList.Clear();
 
             string token;
-            while ((token = tokens.Shift()) != null)
+            var t = tokens.ToList();
+            while ((token = t.Shift()) != null)
             {
                 Match fullTokenMatch = FullToken.Match(token);
                 if (fullTokenMatch.Success && BlockDelimiter == fullTokenMatch.Groups[1].Value)

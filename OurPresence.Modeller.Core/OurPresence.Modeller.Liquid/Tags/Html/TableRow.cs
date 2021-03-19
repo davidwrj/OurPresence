@@ -19,7 +19,7 @@ namespace OurPresence.Modeller.Liquid.Tags.Html
     ///   {% endtablerow %}
     /// &lt;/table&gt;
     /// </example>
-    public class TableRow : OurPresence.Modeller.Liquid.Block
+    public class TableRow : Modeller.Liquid.Block
     {
         private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
 
