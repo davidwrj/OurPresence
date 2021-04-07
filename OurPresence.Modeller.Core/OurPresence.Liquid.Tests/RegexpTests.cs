@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class RegexpTests

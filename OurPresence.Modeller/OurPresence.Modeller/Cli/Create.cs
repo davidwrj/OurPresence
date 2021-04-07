@@ -1,5 +1,4 @@
-﻿using OurPresence.Modeller.Properties;
-using OurPresence.Modeller.Domain;
+﻿using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Domain.Extensions;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
@@ -9,7 +8,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Terminal.Gui;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnassignedGetOnlyAutoProperty
 
 namespace OurPresence.Modeller.Cli
 {
@@ -32,15 +34,15 @@ namespace OurPresence.Modeller.Cli
     }
 
     [Command(Name = "create", Description = "Create a new model file")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated via reflection")]
     internal class Create
     {
-        private readonly ILogger<Program> _logger;
+        private readonly ILogger<Create> _logger;
         private readonly IList _models = new List<ListViewItemModel>();
 
-        public Create(ILogger<Program> logger)
+        public Create(ILogger<Create> logger, IConfiguration configuration)
         {
             _logger = logger;
+            LocalFolder = configuration["LocalFolder"];
         }
 
         [Argument(1, Description = "The filename for the source model to use during code generation.")]
@@ -48,7 +50,7 @@ namespace OurPresence.Modeller.Cli
 
         [Option(Description = "Path to the locally cached generators")]
         [DirectoryExists]
-        public string LocalFolder { get; } = Defaults.LocalFolder;
+        public string LocalFolder { get; init; }
 
         [Option(Inherited = true, ShortName = "")]
         public bool Overwrite { get; }
@@ -72,7 +74,7 @@ namespace OurPresence.Modeller.Cli
                 if (!string.IsNullOrWhiteSpace(SourceModel))
                     config.SourceModel = SourceModel;
 
-                _logger.LogTrace(Resources.CreateOnExecture);
+                _logger.LogTrace("Create Command - OnExecute");
 
                 for (var i = 0; i < 15; i++)
                     _models.Add(new ListViewItemModel( new Model($"Model {i}")));
@@ -93,12 +95,12 @@ namespace OurPresence.Modeller.Cli
             }
             catch (Exception ex)
             {
-                _logger.LogError(LoggingEvents.BuildError, ex, Resources.BuildFailed);
+                _logger.LogError(LoggingEvents.BuildError, ex, "Build command failed");
                 return 1;
             }
             finally
             {
-                _logger.LogTrace(Resources.BuildComplete);
+                _logger.LogTrace("Generator Build Command - complete");
             }
         }
 
@@ -116,9 +118,9 @@ namespace OurPresence.Modeller.Cli
             var listModels = new ListView(_models) { X = 2, Y = 8, Width = Dim.Percent(95), Height = 10 };
 
             var ok = new Button("Ok", is_default: true);
-            ok.Clicked += () => Application.RequestStop();
+            ok.Clicked += Application.RequestStop;
             var cancel = new Button("Cancel");
-            cancel.Clicked += () => Application.RequestStop();
+            cancel.Clicked += Application.RequestStop;
 
             var addModel = new Button("Add Model")
             {

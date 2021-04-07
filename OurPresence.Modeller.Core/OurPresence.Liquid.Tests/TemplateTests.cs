@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class TemplateTests
@@ -352,12 +352,12 @@ namespace DotLiquid.Tests
             Assert.AreEqual("", output);
         }
 
-        public interface MyGenericInterface<T>
+        public interface IMyGenericInterface<T>
         {
             T Value { get; set; }
         }
 
-        public class MyGenericImpl<T> : MyGenericInterface<T>
+        public class MyGenericImpl<T> : IMyGenericInterface<T>
         {
             public T Value { get; set; }
         }
@@ -365,7 +365,7 @@ namespace DotLiquid.Tests
         [Test]
         public void TestRegisterGenericInterface()
         {
-            Template.RegisterSafeType(typeof(MyGenericInterface<>), new[] { "Value" });
+            Template.RegisterSafeType(typeof(IMyGenericInterface<>), new[] { "Value" });
             Template template = Template.Parse("{{context.Value}}");
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MyGenericImpl<string> { Value = "worked" } }));
@@ -405,19 +405,19 @@ namespace DotLiquid.Tests
                 var template = Template.Parse("{{ foo }}");
                 template.MakeThreadSafe();
 
-                // Template defaults to legacy DotLiquid 2.0 Handling
-                Assert.AreEqual(SyntaxCompatibility.DotLiquid20, Template.DefaultSyntaxCompatibilityLevel);
+                // Template defaults to legacy OurPresence.Liquid 2.0 Handling
+                Assert.AreEqual(SyntaxCompatibility.Liquid20, Template.DefaultSyntaxCompatibilityLevel);
 
-                // RenderParameters Applies Template Defaults 
-                Template.DefaultSyntaxCompatibilityLevel = SyntaxCompatibility.DotLiquid21;
-                var renderParamsDefault = new RenderParameters(CultureInfo.CurrentCulture); 
+                // RenderParameters Applies Template Defaults
+                Template.DefaultSyntaxCompatibilityLevel = SyntaxCompatibility.Liquid21;
+                var renderParamsDefault = new RenderParameters(CultureInfo.CurrentCulture);
                 Assert.AreEqual(Template.DefaultSyntaxCompatibilityLevel, renderParamsDefault.SyntaxCompatibilityLevel);
 
                 // Context Applies Template Defaults
                 var context = new Context(CultureInfo.CurrentCulture);
                 Assert.AreEqual(Template.DefaultSyntaxCompatibilityLevel, context.SyntaxCompatibilityLevel);
 
-                Template.DefaultSyntaxCompatibilityLevel = SyntaxCompatibility.DotLiquid20;
+                Template.DefaultSyntaxCompatibilityLevel = SyntaxCompatibility.Liquid20;
                 renderParamsDefault.Evaluate(template, out Context defaultContext, out Hash defaultRegisters, out System.Collections.Generic.IEnumerable<System.Type> defaultFilters);
                 // Context applies RenderParameters
                 Assert.AreEqual(renderParamsDefault.SyntaxCompatibilityLevel, defaultContext.SyntaxCompatibilityLevel);
@@ -427,8 +427,8 @@ namespace DotLiquid.Tests
                 Assert.AreEqual(Template.DefaultSyntaxCompatibilityLevel, new RenderParameters(CultureInfo.CurrentCulture).SyntaxCompatibilityLevel);
 
                 // RenderParameters overrides template defaults when specified
-                var renderParamsExplicit = new RenderParameters(CultureInfo.CurrentCulture) { SyntaxCompatibilityLevel = SyntaxCompatibility.DotLiquid21 };
-                Assert.AreEqual(SyntaxCompatibility.DotLiquid21, renderParamsExplicit.SyntaxCompatibilityLevel);
+                var renderParamsExplicit = new RenderParameters(CultureInfo.CurrentCulture) { SyntaxCompatibilityLevel = SyntaxCompatibility.Liquid21 };
+                Assert.AreEqual(SyntaxCompatibility.Liquid21, renderParamsExplicit.SyntaxCompatibilityLevel);
                 renderParamsExplicit.Evaluate(template, out Context explicitContext, out Hash explicitRegisters, out System.Collections.Generic.IEnumerable<System.Type> explicitFilters);
                 Assert.AreEqual(renderParamsExplicit.SyntaxCompatibilityLevel, explicitContext.SyntaxCompatibilityLevel);
             });

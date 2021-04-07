@@ -33,57 +33,57 @@ namespace DomainClass
             var relationships = _module.FindRelationshipsByModel(_model);
 
             var sb = new StringBuilder();
-            sb.al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
-            sb.al("using System;");
-            sb.al("using OurPresence.Core.Models;");
-            sb.b();
-            sb.al($"namespace {_module.Namespace}");
-            sb.al("{");
-            sb.i(1).al($"public partial class {_model.Name}");
-            sb.i(1).al("{");
-            sb.i(2).a($"public {_model.Name}(");
+            sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
+            sb.Al("using System;");
+            sb.Al("using OurPresence.Core.Models;");
+            sb.B();
+            sb.Al($"namespace {_module.Namespace}");
+            sb.Al("{");
+            sb.I(1).Al($"public partial class {_model.Name}");
+            sb.I(1).Al("{");
+            sb.I(2).A($"public {_model.Name}(");
             foreach (var field in _model.Fields)
             {
-                sb.a($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
+                sb.A($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
             }
             sb.TrimEnd(", ");
-            sb.al(")");
-            sb.i(2).al("{");
+            sb.Al(")");
+            sb.I(2).Al("{");
             foreach (var field in _model.Fields.Where(f => !f.Nullable && f.DataType == DataTypes.String))
             {
-                sb.i(3).al($"if(string.IsNullOrWhiteSpace({field.Name.Singular.LocalVariable}))");
-                sb.i(4).al($"throw new ArgumentException(\"Must include a value for {field.Name.Singular.Display}\");");
+                sb.I(3).Al($"if(string.IsNullOrWhiteSpace({field.Name.Singular.LocalVariable}))");
+                sb.I(4).Al($"throw new ArgumentException(\"Must include a value for {field.Name.Singular.Display}\");");
             }
 
             foreach (var field in _model.Fields)
             {
-                sb.i(3).al($"{field.Name.Value} = {field.Name.Singular.LocalVariable};");
+                sb.I(3).Al($"{field.Name.Value} = {field.Name.Singular.LocalVariable};");
             }
-            sb.i(2).al("}");
-            sb.b();
+            sb.I(2).Al("}");
+            sb.B();
 
             var p = "public partial ";
             foreach (var item in _model.Behaviours)
             {
-                sb.i(2).a($"{p}void {item.Name}(");
+                sb.I(2).A($"{p}void {item.Name}(");
                 foreach (var field in item.Fields)
                 {
-                    sb.a($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
+                    sb.A($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
                 }
                 sb.TrimEnd(", ");
-                sb.al(")");
-                sb.i(2).al("{");
-                sb.i(3).al($"// todo: Add {item.Name.Singular.Display} behaviour here");
-                sb.i(2).al("}");
-                sb.b();
+                sb.Al(")");
+                sb.I(2).Al("{");
+                sb.I(3).Al($"// todo: Add {item.Name.Singular.Display} behaviour here");
+                sb.I(2).Al("}");
+                sb.B();
             }
 
-            sb.i(2).al($"protected override void Apply(IDomainEvent<Guid> @event)");
-            sb.i(2).al("{");
-            sb.i(3).al($"// todo: Apply events");
-            sb.i(2).al("}");
-            sb.i(1).al("}");
-            sb.al("}");
+            sb.I(2).Al($"protected override void Apply(IDomainEvent<Guid> @event)");
+            sb.I(2).Al("{");
+            sb.I(3).Al($"// todo: Apply events");
+            sb.I(2).Al("}");
+            sb.I(1).Al("}");
+            sb.Al("}");
 
             return new File(_model.Name + ".cs", sb.ToString(), path: "Domain");
         }

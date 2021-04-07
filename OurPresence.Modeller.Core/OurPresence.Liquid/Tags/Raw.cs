@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// Raw
@@ -10,7 +9,7 @@ namespace DotLiquid.Tags
     ///
     /// {% raw %}{% if user = 'tobi' %}hi{% endif %}{% endraw %}
     /// </summary>
-    public class Raw : DotLiquid.Block
+    public class Raw : OurPresence.Liquid.Block
     {
         protected override void Parse(List<string> tokens)
         {
@@ -20,7 +19,7 @@ namespace DotLiquid.Tags
             string token;
             while ((token = tokens.Shift()) != null)
             {
-                Match fullTokenMatch = FullToken.Match(token);
+                var fullTokenMatch = FullToken.Match(token);
                 if (fullTokenMatch.Success && BlockDelimiter == fullTokenMatch.Groups[1].Value)
                 {
                     EndTag();

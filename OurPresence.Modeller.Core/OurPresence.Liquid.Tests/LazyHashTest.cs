@@ -1,24 +1,19 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class LazyHashTest
     {
-
-        public class LazyHash : Hash
+        private class LazyHash : Hash
         {
             #region Fields
 
-            private Lazy<Dictionary<string, PropertyInfo>> lazyProperties = null;
-            private Dictionary<string, PropertyInfo> PropertyInfos => lazyProperties.Value;
+            private Lazy<Dictionary<string, PropertyInfo>> _lazyProperties;
+            private Dictionary<string, PropertyInfo> PropertyInfos => _lazyProperties.Value;
 
 
             private object ObjectWithLazyProperty { get; set; }
@@ -26,16 +21,16 @@ namespace DotLiquid.Tests
             #endregion
 
             #region Constructors
-            
+
             public LazyHash(object bo)
             {
                 ObjectWithLazyProperty = bo;
                 Initialize(bo);
             }
-            
+
             private void Initialize(object bo)
             {
-                lazyProperties = new Lazy<Dictionary<string, PropertyInfo>>(delegate ()
+                _lazyProperties = new Lazy<Dictionary<string, PropertyInfo>>(delegate
                 {
                     var boProperties = new Dictionary<string, PropertyInfo>();
                     foreach (var pi in bo.GetType().GetProperties())
@@ -49,7 +44,7 @@ namespace DotLiquid.Tests
                 });
 
             }
-            
+
             #endregion
 
             protected override object GetValue(string key)
@@ -60,29 +55,28 @@ namespace DotLiquid.Tests
                 }
                 return base.GetValue(key);
             }
-            
+
             public override bool Contains(object key)
             {
                 var dicKey = key.ToString().ToLower();
-                if (PropertyInfos.ContainsKey(dicKey))
-                    return true;
-                return base.Contains(key);
+                return PropertyInfos.ContainsKey(dicKey) || base.Contains(key);
             }
         }
 
-
-
-        public class TestLazyObject {
+        public class TestLazyObject
+        {
             public Lazy<string> _lazyProperty1 => new Lazy<string>(() =>
             {
                 return "LAZY_PROPERTY_1";
             });
+
             public string LazyProperty1 => _lazyProperty1.Value;
 
             public Lazy<string> _lazyProperty2 => new Lazy<string>(() =>
             {
                 return "LAZY_PROPERTY_2";
             });
+
             public string LazyProperty2 => _lazyProperty2.Value;
 
             public string StaticProperty => "STATIC_PROPERTY";

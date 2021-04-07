@@ -1,9 +1,8 @@
 using System;
 using System.Globalization;
-using System.IO;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class OutputTests
@@ -66,7 +65,7 @@ namespace DotLiquid.Tests
 
             var renderParams = new RenderParameters(culture)
                                {
-                                   LocalVariables = _assigns 
+                                   LocalVariables = _assigns
                                };
             return Template.Parse("{{number}}").Render(renderParams);
         }
@@ -99,11 +98,11 @@ namespace DotLiquid.Tests
 
         private class ActionDisposable : IDisposable
         {
-            private readonly Action _Action;
+            private readonly Action _action;
 
-            public ActionDisposable(Action action) => _Action = action;
+            public ActionDisposable(Action action) => _action = action;
 
-            public void Dispose() => _Action();
+            public void Dispose() => _action();
         }
         IDisposable SetCulture(CultureInfo ci)
         {

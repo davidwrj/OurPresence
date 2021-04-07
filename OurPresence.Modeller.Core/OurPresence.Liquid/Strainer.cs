@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     static class DictionaryExtensions
     {
-        public static V TryAdd<K, V>(this IDictionary<K, V> dic, K key, Func<V> factory)
+        public static TV TryAdd<TK, TV>(this IDictionary<TK, TV> dic, TK key, Func<TV> factory)
         {
-            if (!dic.TryGetValue(key, out V found))
+            if (!dic.TryGetValue(key, out var found))
                 return dic[key] = factory();
             return found;
         }
@@ -25,31 +25,31 @@ namespace DotLiquid
     /// </summary>
     public class Strainer
     {
-        private static readonly Dictionary<string, Type> Filters = new Dictionary<string, Type>();
-        private static readonly Dictionary<string, Tuple<object, MethodInfo>> FilterFuncs = new Dictionary<string, Tuple<object, MethodInfo>>();
+        private static readonly Dictionary<string, Type> s_filters = new Dictionary<string, Type>();
+        private static readonly Dictionary<string, Tuple<object, MethodInfo>> s_filterFuncs = new Dictionary<string, Tuple<object, MethodInfo>>();
 
         public static void GlobalFilter(Type filter)
         {
-            Filters[filter.AssemblyQualifiedName] = filter;
+            s_filters[filter.AssemblyQualifiedName] = filter;
         }
 
         public static void GlobalFilter(string rawName, object target, MethodInfo methodInfo)
         {
             var name = Template.NamingConvention.GetMemberName(rawName);
 
-            FilterFuncs[name] = Tuple.Create(target, methodInfo);
+            s_filterFuncs[name] = Tuple.Create(target, methodInfo);
         }
 
         public static Strainer Create(Context context)
         {
-            Strainer strainer = new Strainer(context);
+            var strainer = new Strainer(context);
 
-            foreach (var keyValue in Filters)
+            foreach (var keyValue in s_filters)
                 strainer.Extend(keyValue.Value);
 
-            foreach (var keyValue in FilterFuncs)
+            foreach (var keyValue in s_filterFuncs)
                 strainer.AddMethodInfo(keyValue.Key, keyValue.Value.Item1, keyValue.Value.Item2);
-            
+
             return strainer;
         }
 
@@ -80,7 +80,7 @@ namespace DotLiquid
             foreach (var methodName in methodNames)
                 _methods.Remove(methodName);
 
-            foreach (MethodInfo methodInfo in methods)
+            foreach (var methodInfo in methods)
             {
                 AddMethodInfo(methodInfo.Name, null, methodInfo);
             } // foreach
@@ -116,7 +116,7 @@ namespace DotLiquid
         public object Invoke(string method, List<object> args)
         {
             // First, try to find a method with the same number of arguments minus context which we set automatically further down.
-            var methodInfo = _methods[method].FirstOrDefault(m => 
+            var methodInfo = _methods[method].FirstOrDefault(m =>
                 m.Item2.GetParameters().Count(p => p.ParameterType != typeof(Context)) == args.Count);
 
             // If we failed to do so, try one with max numbers of arguments, hoping
@@ -125,7 +125,7 @@ namespace DotLiquid
             if (methodInfo == null)
                 methodInfo = _methods[method].OrderByDescending(m => m.Item2.GetParameters().Length).First();
 
-            ParameterInfo[] parameterInfos = methodInfo.Item2.GetParameters();
+            var parameterInfos = methodInfo.Item2.GetParameters();
 
             // If first parameter is Context, send in actual context.
             if (parameterInfos.Length > 0 && parameterInfos[0].ParameterType == typeof(Context))
@@ -133,10 +133,10 @@ namespace DotLiquid
 
             // Add in any default parameters - .NET won't do this for us.
             if (parameterInfos.Length > args.Count)
-                for (int i = args.Count; i < parameterInfos.Length; ++i)
+                for (var i = args.Count; i < parameterInfos.Length; ++i)
                 {
                     if ((parameterInfos[i].Attributes & ParameterAttributes.HasDefault) != ParameterAttributes.HasDefault)
-                        throw new SyntaxException(Liquid.ResourceManager.GetString("StrainerFilterHasNoValueException"), method, parameterInfos[i].Name);
+                        throw new SyntaxException("Error - Filter '{0}' does not have a default value for '{1}' and no value was supplied", method, parameterInfos[i].Name);
                     args.Add(parameterInfos[i].DefaultValue);
                 }
 

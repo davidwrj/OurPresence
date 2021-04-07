@@ -40,8 +40,8 @@ namespace OurPresence.Modeller.Generator
         {
             if (string.IsNullOrWhiteSpace(serverFolder))
                 return false;
-            if (string.IsNullOrWhiteSpace(localFolder))
-                localFolder = Defaults.LocalFolder;
+            // if (string.IsNullOrWhiteSpace(localFolder))
+            //     localFolder = Defaults.LocalFolder;
 
             var server = new DirectoryInfo(serverFolder);
             var local = new DirectoryInfo(localFolder);

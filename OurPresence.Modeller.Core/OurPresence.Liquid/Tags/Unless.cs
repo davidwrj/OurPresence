@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// Unless is a conditional just like 'if' but works on the inverse logic.
@@ -15,7 +15,7 @@ namespace DotLiquid.Tags
             context.Stack(() =>
             {
                 // First condition is interpreted backwards (if not)
-                Condition block = Blocks.First();
+                var block = Blocks.First();
                 if (!block.Evaluate(context, result.FormatProvider))
                 {
                     RenderAll(block.Attachment, context, result);
@@ -23,7 +23,7 @@ namespace DotLiquid.Tags
                 }
 
                 // After the first condition unless works just like if
-                foreach (Condition forEachBlock in Blocks.Skip(1))
+                foreach (var forEachBlock in Blocks.Skip(1))
                     if (forEachBlock.Evaluate(context, result.FormatProvider))
                     {
                         RenderAll(forEachBlock.Attachment, context, result);

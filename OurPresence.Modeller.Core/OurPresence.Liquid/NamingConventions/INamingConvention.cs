@@ -1,4 +1,4 @@
-﻿namespace DotLiquid.NamingConventions
+﻿namespace OurPresence.Liquid.NamingConventions
 {
     public interface INamingConvention
     {

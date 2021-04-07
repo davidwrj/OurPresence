@@ -1,93 +1,95 @@
-﻿using OurPresence.Modeller.Generator;
-using OurPresence.Modeller.Generator.Outputs;
-using OurPresence.Modeller.Interfaces;
-using OurPresence.Modeller.Loaders;
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using DotNetConfig;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace OurPresence.Modeller
 {
     [Command(Name = "codegen", Description = "CodeGen tool is used to generate code via DLL plug-ins.")]
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
-    internal class Program
+    public class Program
     {
         private const string AppSettings = "appsettings.json";
         private const string HostSettings = "hostsettings.json";
 
         internal static string GetVersion()
-            => typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0";
+            => typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                ?.InformationalVersion ?? "0.0";
 
-        public static async Task<int> Main(string[] args)
+        public static int Main(string[] args)
         {
-            var hostBuilder = new HostBuilder();
+            DebugHelper.HandleDebugSwitch(ref args);
+            return new Program().Run(args);
+        }
+
+        internal int Run(params string[] args)
+        {
             try
             {
-                hostBuilder
-                    .ConfigureHostConfiguration(configHost =>
+                using var app = new CommandLineApplication<ModellerApp>();
+                app.Conventions.UseDefaultConventions();
+                app.OnExecuteAsync(async ct =>
+                {
+                    // NOTE: this isn't very elegant, but moving this logic
+                    // down to the CommandLineUtils level proved quite challenging
+                    // and potentially not that useful.
+                    var config = Config.Build(app.Model.Settings).GetSection("serve");
+
+                    ReadConfig(config, app.Model);
+                    if (app.Model.SaveOptions)
                     {
-                        configHost.SetBasePath(Directory.GetCurrentDirectory());
-                        configHost.AddJsonFile(HostSettings, true);
-                    })
-                    .ConfigureAppConfiguration((hostContext, configApp) =>
-                    {
-                        configApp.SetBasePath(Directory.GetCurrentDirectory());
-                        configApp.AddJsonFile(AppSettings, true);
-                        configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", true);
-                    })
-                    .ConfigureLogging((context, builder) =>
-                    {
-                        Log.Logger = new LoggerConfiguration()
-                            .WriteTo.File("codegen.log")
-                            .WriteTo.Console(outputTemplate: "{Message:lj}{NewLine}{Exception}")
-                            .CreateLogger();
-                    })
-                    .ConfigureServices((context, services) =>
-                    {
-                        services.AddLogging(configure => configure.AddSerilog());
-
-                        services.AddSingleton<ISettings, Settings>();
-                        services.AddSingleton<IGeneratorConfiguration, GeneratorConfiguration>();
-                        services.AddSingleton<IContext, Context>();
-
-                        services.AddScoped<ILoader<ISettings>, JsonSettingsLoader>();
-                        services.AddScoped<ILoader<IEnumerable<INamedElement>>, JsonModuleLoader>();
-                        services.AddScoped<ILoader<IEnumerable<IGeneratorItem>>, GeneratorLoader>();
-                        services.AddScoped<ICodeGenerator, CodeGenerator>();
-                        services.AddScoped<IPresenter, Presenter>();
-                        services.AddScoped<IBuilder, Builder>();
-                        services.AddScoped<IUpdater, Updater>();
-                        services.AddScoped<IPackageService, PackageService>();
-                        services.AddScoped<ILoader<IEnumerable<IPackage>>, PackageFileLoader>();
-
-                        services.AddTransient<IFileWriter, FileWriter>();
-
-                        services.AddScoped<IOutputStrategy, OutputStrategy>();
-                        services.AddScoped<IFileCreator, CreateFile>();
-                        services.AddScoped<IFileCreator, CreateSnippet>();
-                        services.AddScoped<IFileCreator, CreateProject>();
-                        services.AddScoped<IFileCreator, CreateSolution>();
-                        services.AddScoped<IFileCreator, FileCopier>();
-                        services.AddScoped<IFileCreator, FolderCopier>();
-                        services.AddScoped<IFileCreator, CreateFileGroup>();
-                    });
-
-                return await hostBuilder.RunCommandLineApplicationAsync<ModellerApp>(args).ConfigureAwait(false);
+                        WriteConfig(config, app.Model);
+                    }
+                    return await OnRunAsync(app.Model, ct);
+                });
+                app.OnValidationError(r => Error(r.ErrorMessage));
+                return app.Execute(args);
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
             {
-                Log.Fatal(ex, "CodeGen program.cs caught an issue");
-                return 1;
+                Error("CodeGen program.cs caught an issue" + ex);
+                return 2;
             }
-#pragma warning restore CA1031 // Do not catch general exception types
+        }
+
+        private readonly List<string> _errors = new();
+        public IEnumerable<string> Errors { get { return _errors; } }
+        private void Error(string? message)
+        {
+            if (message is null) return;
+            _errors.Add(message);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        protected virtual Task<int> OnRunAsync(ModellerApp options, CancellationToken ct)
+        {
+            // var server = new SimpleServer(options, PhysicalConsole.Singleton, Directory.GetCurrentDirectory());
+            // return server.RunAsync(ct);
+
+            return Task.FromResult(0);
+        }
+
+        private static void ReadConfig(ConfigSection config, ModellerApp model)
+        {
+            // model.Port ??= (int?)config.GetNumber("port");
+            // model.Directory ??= config.GetString("directory");
+        }
+
+        private static void WriteConfig(ConfigSection config, ModellerApp model)
+        {
+            // if (model.Port != null)
+            // {
+            //     config.SetNumber("port", model.Port.GetValueOrDefault());
+            // }
+            // if (model.Directory != null)
+            // {
+            //     config.SetString("directory", model.Directory);
+            // }
         }
     }
 }

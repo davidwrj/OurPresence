@@ -11,17 +11,16 @@ using System.Threading.Tasks;
 using System.Net;
 using OurPresence.Core.Money.Extensions;
 
-namespace OurPresence.Core.Money.Tests.CurrencySpec
+namespace OurPresence.Core.Money.Tests
 {
     public class GivenIWantToKnowAllCurrencies
     {
         [Fact]
         public void WhenAskingForIt_ThenAllCurrenciesShouldBeReturned()
         {
-            var currencies = Currency.GetAllCurrencies();
-
+            var currencies = Currency.GetAllCurrencies().ToList();
             currencies.Should().NotBeEmpty();
-            currencies.Count().Should().BeGreaterThan(100);
+            currencies.Should().HaveCountGreaterThan(100);
         }
 
         [Fact(Skip = "For debugging.")]
@@ -68,7 +67,7 @@ namespace OurPresence.Core.Money.Tests.CurrencySpec
         public void WriteAllCurrencySymbolsToFile()
         {
             var cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
-            var symbolLookup = new Dictionary<String, String>();
+            var symbolLookup = new Dictionary<string, string>();
 
             using var stream = File.Open(@"..\..\ISOSymbols.txt", FileMode.Create);
             using var writer = new StreamWriter(stream);
@@ -268,7 +267,7 @@ namespace OurPresence.Core.Money.Tests.CurrencySpec
 
         private readonly Currency _mga = Currency.FromCode("MGA"); // Malagasy ariary
 
-        private readonly Currency _xau = Currency.FromCode("XAU"); // Gold            
+        private readonly Currency _xau = Currency.FromCode("XAU"); // Gold
 
         [Fact]
         public void WhenAskingForEuro_ThenMinorUnitShouldBeOneCent()

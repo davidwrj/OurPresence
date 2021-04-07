@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     public static class EnumerableExtensionMethods
     {
@@ -26,8 +26,8 @@ namespace DotLiquid.Util
 
         public static void EachWithIndex(this IEnumerable<object> array, Action<object, int> callback)
         {
-            int index = 0;
-            foreach (object item in array)
+            var index = 0;
+            foreach (var item in array)
             {
                 callback(item, index);
                 ++index;

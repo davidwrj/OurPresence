@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Globalization;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     internal static class CultureHelper
     {
         public static IDisposable SetCulture(string name)
         {
             var scope = new CultureScope(CultureInfo.CurrentCulture);
-            
+
 #if CORE
             CultureInfo.CurrentCulture = new CultureInfo(name);
 #else
@@ -19,11 +19,11 @@ namespace DotLiquid
 
         private class CultureScope : IDisposable
         {
-            private readonly CultureInfo culture;
+            private readonly CultureInfo _culture;
 
             public CultureScope(CultureInfo culture)
             {
-                this.culture = culture;
+                this._culture = culture;
             }
 
             public void Dispose()
@@ -31,7 +31,7 @@ namespace DotLiquid
 #if CORE
                 CultureInfo.CurrentCulture = this.culture;
 #else
-                System.Threading.Thread.CurrentThread.CurrentCulture =  this.culture;
+                System.Threading.Thread.CurrentThread.CurrentCulture =  this._culture;
 #endif
             }
         }

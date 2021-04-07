@@ -1,4 +1,4 @@
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Strict Liquid Syntax Compatibility Flag
@@ -6,13 +6,13 @@ namespace DotLiquid
     public enum SyntaxCompatibility
     {
         /// <summary>
-        /// Behavior as of DotLiquid 2.0
+        /// Behavior as of Liquid 2.0
         /// </summary>
-        DotLiquid20 = 200,
+        Liquid20 = 200,
 
         /// <summary>
-        /// Behavior as of DotLiquid 2.1
+        /// Behavior as of Liquid 2.1
         /// </summary>
-        DotLiquid21 = 210,
+        Liquid21 = 210,
     }
 }

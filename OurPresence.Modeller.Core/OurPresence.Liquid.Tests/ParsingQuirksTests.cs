@@ -1,7 +1,7 @@
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class ParsingQuirksTests

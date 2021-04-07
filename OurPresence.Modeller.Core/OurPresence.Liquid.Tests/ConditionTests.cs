@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.NamingConventions;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.NamingConventions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class ConditionTests
@@ -78,7 +78,7 @@ namespace DotLiquid.Tests
             Helper.AssertTemplateResult(expected: "FALSE", template: "{% if false != false %}TRUE{% else %}FALSE{% endif %}");
             Helper.AssertTemplateResult(expected: "TRUE", template: "{% if false != true %}TRUE{% else %}FALSE{% endif %}");
 
-            // NOTE(David Burg): disabled test due to https://github.com/dotliquid/dotliquid/issues/394
+            // NOTE(David Burg): disabled test due to https://github.com/OurPresence.Liquid/OurPresence.Liquid/issues/394
             ////Helper.AssertTemplateResult(expected: "This text will always appear if \"name\" is defined.", template: "{% assign name = 'Tobi' %}{% if name == true %}This text will always appear if \"name\" is defined.{% endif %}");
         }
 
@@ -127,7 +127,7 @@ namespace DotLiquid.Tests
         [Test]
         public void TestContainsWorksOnIntArrays()
         {
-            // NOTE(daviburg): DotLiquid is in violation of explicit non-support of arrays for contains operators, quote:
+            // NOTE(daviburg): OurPresence.Liquid is in violation of explicit non-support of arrays for contains operators, quote:
             // "contains can only search strings. You cannot use it to check for an object in an array of objects."
             // https://shopify.github.io/liquid/basics/operators/
             // This is a rather harmless violation as all it does in generate useful output for a request which would fail
@@ -169,10 +169,10 @@ namespace DotLiquid.Tests
         public void TestStringArrays()
         {
             _context = new Context(CultureInfo.InvariantCulture);
-            var _array = new List<string>() { "Apple", "Orange", null, "Banana" };
-            _context["array"] = _array.ToArray();
-            _context["first"] = _array.First();
-            _context["last"] = _array.Last();
+            var array = new List<string>() { "Apple", "Orange", null, "Banana" };
+            _context["array"] = array.ToArray();
+            _context["first"] = array.First();
+            _context["last"] = array.Last();
 
             AssertEvaluatesTrue(left: "array", op: "contains", right: "'Apple'");
             AssertEvaluatesTrue(left: "array", op: "startsWith", right: "first");
@@ -191,10 +191,10 @@ namespace DotLiquid.Tests
         public void TestClassArrays()
         {
             _context = new Context(CultureInfo.InvariantCulture);
-            var _array = new List<Car>() { new Car() { Make = "Honda", Model = "Accord" }, new Car() { Make = "Ford", Model = "Explorer" } };
-            _context["array"] = _array.ToArray();
-            _context["first"] = _array.First();
-            _context["last"] = _array.Last();
+            var array = new List<Car>() { new Car() { Make = "Honda", Model = "Accord" }, new Car() { Make = "Ford", Model = "Explorer" } };
+            _context["array"] = array.ToArray();
+            _context["first"] = array.First();
+            _context["last"] = array.Last();
             _context["clone"] = new Car() { Make = "Honda", Model = "Accord" };
             _context["camry"] = new Car() { Make = "Toyota", Model = "Camry" };
 
@@ -211,9 +211,9 @@ namespace DotLiquid.Tests
         public void TestTruthyArray()
         {
             _context = new Context(CultureInfo.InvariantCulture);
-            var _array = new List<bool>() { true };
-            _context["array"] = _array.ToArray();
-            _context["first"] = _array.First();
+            var array = new List<bool>() { true };
+            _context["array"] = array.ToArray();
+            _context["first"] = array.First();
 
             AssertEvaluatesTrue(left: "array", op: "contains", right: "first");
             AssertEvaluatesTrue(left: "array", op: "startsWith", right: "first");
@@ -227,10 +227,10 @@ namespace DotLiquid.Tests
         public void TestCharArrays()
         {
             _context = new Context(CultureInfo.InvariantCulture);
-            var _array = new List<char> { 'A', 'B', 'C' };
-            _context["array"] = _array.ToArray();
-            _context["first"] = _array.First();
-            _context["last"] = _array.Last();
+            var array = new List<char> { 'A', 'B', 'C' };
+            _context["array"] = array.ToArray();
+            _context["first"] = array.First();
+            _context["last"] = array.Last();
 
             AssertEvaluatesTrue(left: "array", op: "contains", right: "'A'");
             AssertEvaluatesTrue(left: "array", op: "contains", right: "first");
@@ -247,10 +247,10 @@ namespace DotLiquid.Tests
         public void TestByteArrays()
         {
             _context = new Context(CultureInfo.InvariantCulture);
-            var _array = new List<byte> { 0x01, 0x02, 0x03, 0x30 };
-            _context["array"] = _array.ToArray();
-            _context["first"] = _array.First();
-            _context["last"] = _array.Last();
+            var array = new List<byte> { 0x01, 0x02, 0x03, 0x30 };
+            _context["array"] = array.ToArray();
+            _context["first"] = array.First();
+            _context["last"] = array.Last();
 
             AssertEvaluatesFalse(left: "array", op: "contains", right: "0");
             AssertEvaluatesFalse(left: "array", op: "contains", right: "'0'");
@@ -610,7 +610,7 @@ namespace DotLiquid.Tests
             row.Add("MyID", id);
 
             var current = "MyID is {% if MyID == 1 %}1{%endif%}";
-            var parse = DotLiquid.Template.Parse(current);
+            var parse = OurPresence.Liquid.Template.Parse(current);
             var parsedOutput = parse.Render(new RenderParameters(CultureInfo.InvariantCulture) { LocalVariables = Hash.FromDictionary(row) });
             Assert.AreEqual("MyID is 1", parsedOutput);
         }

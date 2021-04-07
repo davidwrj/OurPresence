@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     public class BlockDrop : Drop
     {
@@ -38,7 +38,7 @@ namespace DotLiquid.Tags
 
         public List<object> GetNodeList(Block block)
         {
-            if (!NodeLists.TryGetValue(block, out List<object> nodeList))
+            if (!NodeLists.TryGetValue(block, out var nodeList))
                 nodeList = block.NodeList;
             return nodeList;
         }
@@ -46,9 +46,9 @@ namespace DotLiquid.Tags
         // Searches up the scopes for the inner-most BlockRenderState (though there should be only one)
         public static BlockRenderState Find(Context context)
         {
-            foreach (Hash scope in context.Scopes)
+            foreach (var scope in context.Scopes)
             {
-                if (scope.TryGetValue("blockstate", out object blockState))
+                if (scope.TryGetValue("blockstate", out var blockState))
                 {
                     return blockState as BlockRenderState;
                 }
@@ -61,19 +61,19 @@ namespace DotLiquid.Tags
     /// The Block tag is used in conjunction with the Extends tag to provide template inheritance.
     /// For an example please refer to the Extends tag.
     /// </summary>
-    public class Block : DotLiquid.Block
+    public class Block : OurPresence.Liquid.Block
     {
-        private static readonly Regex Syntax = R.C(@"(\w+)");
+        private static readonly Regex s_syntax = R.C(@"(\w+)");
 
         internal string BlockName { get; set; }
 
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = s_syntax.Match(markup);
             if (syntaxMatch.Success)
                 BlockName = syntaxMatch.Groups[1].Value;
             else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'block' tag - Valid syntax: block [name]");
 
             if (tokens != null)
             {
@@ -85,19 +85,19 @@ namespace DotLiquid.Tags
         {
             rootNodeList.ForEach(n =>
                 {
-                    Block b1 = n as Block;
+                    var b1 = n as Block;
 
                     if (b1 != null)
                     {
-                        List<object> found = rootNodeList.FindAll(o =>
+                        var found = rootNodeList.FindAll(o =>
                             {
-                                Block b2 = o as Block;
+                                var b2 = o as Block;
                                 return b2 != null && b1.BlockName == b2.BlockName;
                             });
 
                         if (found != null && found.Count > 1)
                         {
-                            throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagAlreadyDefinedException"), b1.BlockName);
+                            throw new SyntaxException("Liquid Error - Block '{0}' already defined", b1.BlockName);
                         }
                     }
                 });
@@ -105,7 +105,7 @@ namespace DotLiquid.Tags
 
         public override void Render(Context context, TextWriter result)
         {
-            BlockRenderState blockState = BlockRenderState.Find(context);
+            var blockState = BlockRenderState.Find(context);
             context.Stack(() =>
                 {
                     context["block"] = new BlockDrop(this, result);
@@ -121,7 +121,7 @@ namespace DotLiquid.Tags
 
         public void AddParent(Dictionary<Block, Block> parents, List<object> nodeList)
         {
-            if (parents.TryGetValue(this, out Block parent))
+            if (parents.TryGetValue(this, out var parent))
             {
                 parent.AddParent(parents, nodeList);
             }
@@ -136,9 +136,9 @@ namespace DotLiquid.Tags
 
         public void CallSuper(Context context, TextWriter result)
         {
-            BlockRenderState blockState = BlockRenderState.Find(context);
+            var blockState = BlockRenderState.Find(context);
             if (blockState != null
-    && blockState.Parents.TryGetValue(this, out Block parent)
+    && blockState.Parents.TryGetValue(this, out var parent)
     && parent != null)
             {
                 parent.Render(context, result);

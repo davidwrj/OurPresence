@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Tags.Html
+namespace OurPresence.Liquid.Tests.Tags.Html
 {
     [TestFixture]
     public class TableRowTests

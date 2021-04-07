@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class ContextTests
@@ -137,13 +137,13 @@ namespace DotLiquid.Tests
 
         private class IndexableLiquidizable : IIndexable, ILiquidizable
         {
-            private const string theKey = "thekey";
+            private const string TheKey = "thekey";
 
-            public object this[object key] => key as string == theKey ? new LiquidizableList() : null;
+            public object this[object key] => key as string == TheKey ? new LiquidizableList() : null;
 
             public bool ContainsKey(object key)
             {
-                return key as string == theKey;
+                return key as string == TheKey;
             }
 
             public object ToLiquid()
@@ -231,24 +231,24 @@ namespace DotLiquid.Tests
         {
             Template template = Template.Parse("{{ does_not_exist }}");
             string rendered = template.Render();
- 
+
             Assert.AreEqual("", rendered);
             Assert.AreEqual(1, template.Errors.Count);
-            Assert.AreEqual(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "does_not_exist"), template.Errors[0].Message);
+            Assert.AreEqual(string.Format("Error - Variable '{0}' could not be found", "does_not_exist"), template.Errors[0].Message);
         }
- 
+
         [Test]
         public void TestVariableNotFoundFromAnonymousObject()
         {
             Template template = Template.Parse("{{ first.test }}{{ second.test }}");
             string rendered = template.Render(Hash.FromAnonymousObject(new { second = new { foo = "hi!" } }));
- 
+
             Assert.AreEqual("", rendered);
             Assert.AreEqual(2, template.Errors.Count);
-            Assert.AreEqual(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "first.test"), template.Errors[0].Message);
-            Assert.AreEqual(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "second.test"), template.Errors[1].Message);
+            Assert.AreEqual(string.Format("Error - Variable '{0}' could not be found", "first.test"), template.Errors[0].Message);
+            Assert.AreEqual(string.Format("Error - Variable '{0}' could not be found", "second.test"), template.Errors[1].Message);
         }
- 
+
         [Test]
         public void TestVariableNotFoundException()
         {
@@ -682,12 +682,12 @@ namespace DotLiquid.Tests
                 localVariables: Hash.FromAnonymousObject(new { context = TimeSpan.FromDays(1) }));
 
             Helper.AssertTemplateResult(
-                expected: "1/1/0001 12:00:00 AM",
+                expected: "1/01/0001 12:00:00 AM",
                 template: "{{context}}",
                 localVariables: Hash.FromAnonymousObject(new { context = DateTime.MinValue }));
 
             Helper.AssertTemplateResult(
-                expected: "9/10/2013 12:10:32 AM +01:00",
+                expected: "10/09/2013 12:10:32 AM +01:00",
                 template: "{{context}}",
                 localVariables: Hash.FromAnonymousObject(new { context = new DateTimeOffset(2013, 9, 10, 0, 10, 32, new TimeSpan(1, 0, 0)) }));
 

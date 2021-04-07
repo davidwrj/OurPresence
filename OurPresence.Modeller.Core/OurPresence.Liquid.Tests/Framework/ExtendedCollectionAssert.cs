@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Framework
+namespace OurPresence.Liquid.Tests.Framework
 {
     public static class ExtendedCollectionAssert
     {

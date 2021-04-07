@@ -1,8 +1,8 @@
 using System.IO;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
-    public class IfChanged : DotLiquid.Block
+    public class IfChanged : OurPresence.Liquid.Block
     {
         public override void Render(Context context, TextWriter result)
         {

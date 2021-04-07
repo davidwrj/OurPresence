@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Holds variables. Variables are only loaded "just in time"
@@ -22,11 +22,11 @@ namespace DotLiquid
     /// </summary>
     public class Variable : IRenderable
     {
-        private static readonly Regex FilterParserRegex = R.B(R.Q(@"(?:{0}|(?:\s*(?!(?:{0}))(?:{1}|\S+)\s*)+)"), Liquid.FilterSeparator, Liquid.QuotedFragment);
-        private static readonly Regex FilterArgRegex = R.B(R.Q(@"(?:{0}|{1})\s*({2})"), Liquid.FilterArgumentSeparator, Liquid.ArgumentSeparator, Liquid.QuotedFragment);
-        private static readonly Regex QuotedAssignFragmentRegex = R.B(R.Q(@"\s*({0})(.*)"), Liquid.QuotedAssignFragment);
-        private static readonly Regex FilterSeparatorRegex = R.B(R.Q(@"{0}\s*(.*)"), Liquid.FilterSeparator);
-        private static readonly Regex FilterNameRegex = R.B(R.Q(@"\s*(\w+)"));
+        private static readonly Regex s_filterParserRegex = R.B(R.Q(@"(?:{0}|(?:\s*(?!(?:{0}))(?:{1}|\S+)\s*)+)"), Liquid.FilterSeparator, Liquid.QuotedFragment);
+        private static readonly Regex s_filterArgRegex = R.B(R.Q(@"(?:{0}|{1})\s*({2})"), Liquid.FilterArgumentSeparator, Liquid.ArgumentSeparator, Liquid.QuotedFragment);
+        private static readonly Regex s_quotedAssignFragmentRegex = R.B(R.Q(@"\s*({0})(.*)"), Liquid.QuotedAssignFragment);
+        private static readonly Regex s_filterSeparatorRegex = R.B(R.Q(@"{0}\s*(.*)"), Liquid.FilterSeparator);
+        private static readonly Regex s_filterNameRegex = R.B(R.Q(@"\s*(\w+)"));
 
         public List<Filter> Filters { get; set; }
         public string Name { get; set; }
@@ -40,20 +40,20 @@ namespace DotLiquid
             Name = null;
             Filters = new List<Filter>();
 
-            Match match = QuotedAssignFragmentRegex.Match(markup);
+            var match = s_quotedAssignFragmentRegex.Match(markup);
             if (match.Success)
             {
                 Name = match.Groups[1].Value;
-                Match filterMatch = FilterSeparatorRegex.Match(match.Groups[2].Value);
+                var filterMatch = s_filterSeparatorRegex.Match(match.Groups[2].Value);
                 if (filterMatch.Success)
                 {
-                    foreach (string f in R.Scan(filterMatch.Value, FilterParserRegex))
+                    foreach (var f in R.Scan(filterMatch.Value, s_filterParserRegex))
                     {
-                        Match filterNameMatch = FilterNameRegex.Match(f);
+                        var filterNameMatch = s_filterNameRegex.Match(f);
                         if (filterNameMatch.Success)
                         {
-                            string filterName = filterNameMatch.Groups[1].Value;
-                            List<string> filterArgs = R.Scan(f, FilterArgRegex);
+                            var filterName = filterNameMatch.Groups[1].Value;
+                            var filterArgs = R.Scan(f, s_filterArgRegex);
                             Filters.Add(new Filter(filterName, filterArgs.ToArray()));
                         }
                     }
@@ -75,7 +75,7 @@ namespace DotLiquid
                         ? ifo.ToString(format: null, formatProvider: formatProvider)
                         : (obj?.ToString() ?? "");
 
-            object output = RenderInternal(context);
+            var output = RenderInternal(context);
 
             if (output is ILiquidizable)
                 output = null;
@@ -107,11 +107,11 @@ namespace DotLiquid
             if (Name == null)
                 return null;
 
-            object output = context[Name];
+            var output = context[Name];
 
             foreach (var filter in Filters.ToList())
             {
-                List<object> filterArgs = filter.Arguments.Select(a => context[a]).ToList();
+                var filterArgs = filter.Arguments.Select(a => context[a]).ToList();
                 try
                 {
                     filterArgs.Insert(0, output);
@@ -119,12 +119,12 @@ namespace DotLiquid
                 }
                 catch (FilterNotFoundException ex)
                 {
-                    throw new FilterNotFoundException(string.Format(Liquid.ResourceManager.GetString("VariableFilterNotFoundException"), filter.Name, _markup.Trim()), ex);
+                    throw new FilterNotFoundException(string.Format("Variable Filter {0} Not Found. {1}", filter.Name, _markup.Trim()), ex);
                 }
             };
 
             if (output is IValueTypeConvertible valueTypeConvertibleOutput)
-            { 
+            {
                 output = valueTypeConvertibleOutput.ConvertToValueType();
             }
 

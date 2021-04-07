@@ -9,8 +9,8 @@ file[0] = SuperSafeBank.Domain.csproj
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OurPresence.Core" Version="" />
-        <PackageReference Include="MediatR" Version="" />
+        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
+        <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
 </Project>

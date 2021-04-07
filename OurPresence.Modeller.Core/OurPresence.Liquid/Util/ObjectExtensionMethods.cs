@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     public static class ObjectExtensionMethods
     {
@@ -17,13 +17,13 @@ namespace DotLiquid.Util
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            Type type = value.GetType();
+            var type = value.GetType();
 
-            MethodInfo methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
+            var methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
             if (methodInfo != null && (!ensureNoParameters || !methodInfo.GetParameters().Any()))
                 return true;
 
-            PropertyInfo propertyInfo = type.GetRuntimeProperty(member);
+            var propertyInfo = type.GetRuntimeProperty(member);
             if (propertyInfo != null && propertyInfo.CanRead)
                 return true;
 
@@ -35,13 +35,13 @@ namespace DotLiquid.Util
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            Type type = value.GetType();
+            var type = value.GetType();
 
-            MethodInfo methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
+            var methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
             if (methodInfo != null)
                 return methodInfo.Invoke(value, parameters);
 
-            PropertyInfo propertyInfo = type.GetRuntimeProperty(member);
+            var propertyInfo = type.GetRuntimeProperty(member);
             if (propertyInfo != null)
                 return propertyInfo.GetValue(value, null);
 

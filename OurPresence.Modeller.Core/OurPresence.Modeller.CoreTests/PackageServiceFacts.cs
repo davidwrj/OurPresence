@@ -19,7 +19,7 @@ namespace OurPresence.Modeller.CoreTests
 
             var logger = Substitute.For<ILogger<IPackageService>>();
             var context = Substitute.For<IContext>();
-            context.Settings.Target.Returns(Defaults.Target);
+            context.Settings.Target.Returns("net5.0");
             context.Settings.LocalFolder.Returns(System.IO.Path.GetTempPath());
 
             var loader = Substitute.For<ILoader<IEnumerable<IPackage>>>();
@@ -41,7 +41,7 @@ namespace OurPresence.Modeller.CoreTests
 
             var logger = Substitute.For<ILogger<IPackageService>>();
             var context = Substitute.For<IContext>();
-            context.Settings.Target.Returns(Defaults.Target);
+            context.Settings.Target.Returns("net5.0");
             context.Settings.LocalFolder.Returns(System.IO.Path.GetTempPath());
 
             var loader = Substitute.For<ILoader<IEnumerable<IPackage>>>();

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// If is the conditional block
@@ -17,14 +17,14 @@ namespace DotLiquid.Tags
     ///
     ///  There are {% if count &lt; 5 %} less {% else %} more {% endif %} items than you need.
     /// </summary>
-    public class If : DotLiquid.Block
+    public class If : OurPresence.Liquid.Block
     {
-        private string SyntaxHelp = Liquid.ResourceManager.GetString("IfTagSyntaxException");
-        private string TooMuchConditionsHelp = Liquid.ResourceManager.GetString("IfTagTooMuchConditionsException");
-        private static readonly Regex Syntax = R.B(R.Q(@"({0})\s*([=!<>a-zA-Z_]+)?\s*({0})?"), Liquid.QuotedFragment);
+        private string SyntaxHelp = "Syntax Error in 'if' tag - Valid syntax: if [expression]";
+        private string TooMuchConditionsHelp = "Syntax Error in 'if' tag - max 500 conditions are allowed";
+        private static readonly Regex s_syntax = R.B(R.Q(@"({0})\s*([=!<>a-zA-Z_]+)?\s*({0})?"), Liquid.QuotedFragment);
 
-        private static readonly string ExpressionsAndOperators = string.Format(R.Q(@"(?:\b(?:\s?and\s?|\s?or\s?)\b|(?:\s*(?!\b(?:\s?and\s?|\s?or\s?)\b)(?:{0}|\S+)\s*)+)"), Liquid.QuotedFragment);
-        private static readonly Regex ExpressionsAndOperatorsRegex = R.C(ExpressionsAndOperators);
+        private static readonly string s_expressionsAndOperators = string.Format(R.Q(@"(?:\b(?:\s?and\s?|\s?or\s?)\b|(?:\s*(?!\b(?:\s?and\s?|\s?or\s?)\b)(?:{0}|\S+)\s*)+)"), Liquid.QuotedFragment);
+        private static readonly Regex s_expressionsAndOperatorsRegex = R.C(s_expressionsAndOperators);
 
         protected List<Condition> Blocks { get; private set; }
 
@@ -48,7 +48,7 @@ namespace DotLiquid.Tags
         {
             context.Stack(() =>
             {
-                foreach (Condition block in Blocks)
+                foreach (var block in Blocks)
                 {
                     if (block.Evaluate(context, result.FormatProvider))
                     {
@@ -68,27 +68,27 @@ namespace DotLiquid.Tags
             }
             else
             {
-                List<string> expressions = R.Scan(markup, ExpressionsAndOperatorsRegex);
+                var expressions = R.Scan(markup, s_expressionsAndOperatorsRegex);
 
                 // last item in list
-                string syntax = expressions.TryGetAtIndexReverse(0);
+                var syntax = expressions.TryGetAtIndexReverse(0);
 
                 if (string.IsNullOrEmpty(syntax))
                     throw new SyntaxException(SyntaxHelp);
-                Match syntaxMatch = Syntax.Match(syntax);
+                var syntaxMatch = s_syntax.Match(syntax);
                 if (!syntaxMatch.Success)
                     throw new SyntaxException(SyntaxHelp);
 
-                Condition condition = new Condition(syntaxMatch.Groups[1].Value,
+                var condition = new Condition(syntaxMatch.Groups[1].Value,
                     syntaxMatch.Groups[2].Value, syntaxMatch.Groups[3].Value);
 
                 var conditionCount = 1;
                 // continue to process remaining items in the list backwards, in pairs
-                for (int i = 1; i < expressions.Count; i = i + 2)
+                for (var i = 1; i < expressions.Count; i = i + 2)
                 {
-                    string @operator = expressions.TryGetAtIndexReverse(i).Trim();
+                    var @operator = expressions.TryGetAtIndexReverse(i).Trim();
 
-                    Match expressionMatch = Syntax.Match(expressions.TryGetAtIndexReverse(i + 1));
+                    var expressionMatch = s_syntax.Match(expressions.TryGetAtIndexReverse(i + 1));
                     if (!expressionMatch.Success)
                         throw new SyntaxException(SyntaxHelp);
 
@@ -97,7 +97,7 @@ namespace DotLiquid.Tags
                         throw new SyntaxException(TooMuchConditionsHelp);
                     }
 
-                    Condition newCondition = new Condition(expressionMatch.Groups[1].Value,
+                    var newCondition = new Condition(expressionMatch.Groups[1].Value,
                         expressionMatch.Groups[2].Value, expressionMatch.Groups[3].Value);
                     switch (@operator)
                     {

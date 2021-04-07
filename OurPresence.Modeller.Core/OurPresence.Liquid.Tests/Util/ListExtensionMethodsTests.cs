@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Util
+namespace OurPresence.Liquid.Tests.Util
 {
     [TestFixture]
     public class ListExtensionMethodsTests

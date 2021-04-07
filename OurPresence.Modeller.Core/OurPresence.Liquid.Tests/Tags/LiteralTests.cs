@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using DotLiquid.Exceptions;
 using NUnit.Framework;
-using DotLiquid.Tags;
+using OurPresence.Liquid.Tags;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class LiteralTests

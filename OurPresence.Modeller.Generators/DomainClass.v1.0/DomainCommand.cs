@@ -25,44 +25,44 @@ namespace DomainClass
         {
             var sb = new StringBuilder();
 
-            sb.al("using System;");
-            sb.al("using System.Threading;");
-            sb.al("using System.Threading.Tasks;");
-            sb.al("using MediatR;");
-            sb.b();
-            sb.al($"namespace {_module.Namespace}.Commands");
-            sb.al("{");
-            sb.i(1).al($"public class {_request.Name} : INotification");
-            sb.i(1).al("{");
-            sb.i(2).a($"public {_request.Name}(");
+            sb.Al("using System;");
+            sb.Al("using System.Threading;");
+            sb.Al("using System.Threading.Tasks;");
+            sb.Al("using MediatR;");
+            sb.B();
+            sb.Al($"namespace {_module.Namespace}.Commands");
+            sb.Al("{");
+            sb.I(1).Al($"public class {_request.Name} : INotification");
+            sb.I(1).Al("{");
+            sb.I(2).A($"public {_request.Name}(");
             foreach (var field in _request.Fields)
             {
-                sb.a($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
+                sb.A($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
             }
             sb.TrimEnd(", ");
-            sb.al(")");
-            sb.i(2).al("{");
+            sb.Al(")");
+            sb.I(2).Al("{");
             foreach (var field in _request.Fields)
             {
-                sb.i(3).al($"{field.Name.Value} = {field.Name.Singular.LocalVariable};");
+                sb.I(3).Al($"{field.Name.Value} = {field.Name.Singular.LocalVariable};");
             }
-            sb.i(2).al("}");
-            sb.b();
+            sb.I(2).Al("}");
+            sb.B();
             foreach (var item in _request.Fields)
             {
-                var property = (ISnippet)new Property.Generator(item, setScope: Property.PropertyScope.notAvalable).Create();
-                sb.al(property.Content);
+                var property = (ISnippet)new Property.Generator(item, setScope: Property.PropertyScope.NotAvailable).Create();
+                sb.Al(property.Content);
             }
-            sb.i(1).al("}");
-            sb.b();
-            sb.i(1).al($"public class {_request.Name}Handler : INotificationHandler<{_request.Name}>");
-            sb.i(1).al("{");
-            sb.i(2).al($"public async Task Handle({_request.Name} command, CancellationToken cancellationToken)");
-            sb.i(2).al("{");
-            sb.i(3).al("// todo: Add code to complete the command");
-            sb.i(2).al("}");
-            sb.i(1).al("}");
-            sb.al("}");
+            sb.I(1).Al("}");
+            sb.B();
+            sb.I(1).Al($"public class {_request.Name}Handler : INotificationHandler<{_request.Name}>");
+            sb.I(1).Al("{");
+            sb.I(2).Al($"public async Task Handle({_request.Name} command, CancellationToken cancellationToken)");
+            sb.I(2).Al("{");
+            sb.I(3).Al("// todo: Add code to complete the command");
+            sb.I(2).Al("}");
+            sb.I(1).Al("}");
+            sb.Al("}");
 
             return new File(_request.Name + ".cs", sb.ToString(), path: "Commands");
         }

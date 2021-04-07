@@ -2,10 +2,10 @@
 {
     public enum PropertyScope
     {
-        @public,
-        @protected,
-        @internal,
-        @private,
-        notAvalable
+        Public,
+        Protected,
+        Internal,
+        Private,
+        NotAvailable
     }
 }

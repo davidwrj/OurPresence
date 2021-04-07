@@ -1,15 +1,13 @@
-﻿using System.Resources;
-using DotLiquid.Util;
+﻿using OurPresence.Liquid.Util;
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OurPresence.Liquid.Tests")]
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Utiliy containing regexes for Liquid syntax and registering default tags and blocks
     /// </summary>
     public static class Liquid
     {
-        internal static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Properties.Resources));
-
         public static readonly string FilterSeparator = R.Q(@"\|");
         public static readonly string ArgumentSeparator = R.Q(@",");
         public static readonly string FilterArgumentSeparator = R.Q(@":");

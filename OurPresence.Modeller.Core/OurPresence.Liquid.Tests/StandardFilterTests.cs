@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class StandardFilterTests
@@ -18,11 +18,11 @@ namespace DotLiquid.Tests
         {
             _contextV20 = new Context(CultureInfo.InvariantCulture)
             {
-                SyntaxCompatibilityLevel = SyntaxCompatibility.DotLiquid20
+                SyntaxCompatibilityLevel = SyntaxCompatibility.Liquid20
             };
             _contextV21 = new Context(CultureInfo.InvariantCulture)
             {
-                SyntaxCompatibilityLevel = SyntaxCompatibility.DotLiquid21
+                SyntaxCompatibilityLevel = SyntaxCompatibility.Liquid21
             };
         }
 
@@ -152,7 +152,7 @@ namespace DotLiquid.Tests
             Assert.AreEqual("a", StandardFilters.Slice("abc", -4, 2));
             Assert.AreEqual("", StandardFilters.Slice("abcdefg", -10, 1));
         }
-        
+
         [Test]
         public void TestJoin()
         {
@@ -371,9 +371,11 @@ namespace DotLiquid.Tests
 
         private class Package : IIndexable, ILiquidizable
         {
+#pragma warning disable IDE1006 // Naming Styles
             private readonly int numberOfPiecesPerPackage;
 
             private readonly string test;
+#pragma warning restore IDE1006 // Naming Styles
 
             public Package(int numberOfPiecesPerPackage, string test)
             {
@@ -579,11 +581,11 @@ namespace DotLiquid.Tests
             Helper.LockTemplateStaticVars(Template.NamingConvention, () =>
             {
                 var context = _contextV20;
-                // Legacy parser doesn't except Unix Epoch https://github.com/dotliquid/dotliquid/issues/322
+                // Legacy parser doesn't except Unix Epoch https://github.com/OurPresence.Liquid/OurPresence.Liquid/issues/322
                 Assert.AreEqual("0", StandardFilters.Date(context: context, input: 0, format: null));
                 Assert.AreEqual("2147483648", StandardFilters.Date(context: context, input: 2147483648, format: null)); // Beyond Int32 boundary
 
-                // Legacy parser loses specified offset https://github.com/dotliquid/dotliquid/issues/149
+                // Legacy parser loses specified offset https://github.com/OurPresence.Liquid/OurPresence.Liquid/issues/149
                 var testDate = new DateTime(2006, 8, 4, 10, 0, 0);
                 Assert.AreEqual(new DateTimeOffset(testDate).ToString("zzz"), StandardFilters.Date(context: context, input: new DateTimeOffset(testDate, TimeSpan.FromHours(-14)), format: "zzz"));
 
@@ -902,7 +904,7 @@ namespace DotLiquid.Tests
                 Helper.AssertTemplateResult(expected: "5.5", template: "{{ 3.5 | plus:2 }}", syntax: context.SyntaxCompatibilityLevel);
 
                 // Test that decimals are not introducing rounding-precision issues
-                Helper.AssertTemplateResult(expected: "148397.77", template: "{{ 148387.77 | plus:10 }}", syntax: context.SyntaxCompatibilityLevel); 
+                Helper.AssertTemplateResult(expected: "148397.77", template: "{{ 148387.77 | plus:10 }}", syntax: context.SyntaxCompatibilityLevel);
 
                 Helper.AssertTemplateResult(
                     expected: "2147483648",
@@ -1198,12 +1200,12 @@ namespace DotLiquid.Tests
         [Test]
         public void TestUrlencode()
         {
-            Assert.AreEqual("http%3A%2F%2Fdotliquidmarkup.org%2F", StandardFilters.UrlEncode("http://dotliquidmarkup.org/"));
+            Assert.AreEqual("http%3A%2F%2FOurPresence.Liquidmarkup.org%2F", StandardFilters.UrlEncode("http://OurPresence.Liquidmarkup.org/"));
             Assert.AreEqual("Tetsuro+Takara", StandardFilters.UrlEncode("Tetsuro Takara"));
             Assert.AreEqual("john%40liquid.com", StandardFilters.UrlEncode("john@liquid.com"));
             Assert.AreEqual(null, StandardFilters.UrlEncode(null));
         }
-        
+
         [Test]
         public void TestUrldecode()
         {
@@ -1309,7 +1311,7 @@ namespace DotLiquid.Tests
                 expected: "4",
                 template: "{{ 4 | at_least: 3 }}");
         }
-        
+
         [Test]
         public void TestAtMost()
         {
@@ -1332,7 +1334,7 @@ namespace DotLiquid.Tests
                 expected: "3",
                 template: "{{ 4 | at_most: 3 }}");
         }
-        
+
         [Test]
         public void TestCompact()
         {
@@ -1360,15 +1362,7 @@ namespace DotLiquid.Tests
             };
 
             Helper.AssertTemplateResult(
-                expected: @"
-- business
-- celebrities
-- 
-- lifestyle
-- sports
-- 
-- technology
-",
+                expected: "\r\n- business\r\n- celebrities\r\n- \r\n- lifestyle\r\n- sports\r\n- \r\n- technology\r\n",
                 template: @"{% assign site_categories = site.pages | map: 'category' %}
 {% for category in site_categories %}- {{ category }}
 {% endfor %}",

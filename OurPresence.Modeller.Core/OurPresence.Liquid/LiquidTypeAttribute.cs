@@ -1,9 +1,9 @@
 using System;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
-    /// Specifies the type is safe to be rendered by DotLiquid.
+    /// Specifies the type is safe to be rendered by OurPresence.Liquid.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class LiquidTypeAttribute : Attribute

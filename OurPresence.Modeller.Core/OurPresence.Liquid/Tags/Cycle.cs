@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// Cycle is usually used within a loop to alternate between values, like colors or DOM classes.
@@ -22,9 +22,9 @@ namespace DotLiquid.Tags
     /// </summary>
     public class Cycle : Tag
     {
-        private static readonly Regex SimpleSyntax = R.B(R.Q(@"^{0}+"), Liquid.QuotedFragment);
-        private static readonly Regex NamedSyntax = R.B(R.Q(@"^({0})\s*\:\s*(.*)"), Liquid.QuotedFragment);
-        private static readonly Regex QuotedFragmentRegex = R.B(R.Q(@"\s*({0})\s*"), Liquid.QuotedFragment);
+        private static readonly Regex s_simpleSyntax = R.B(R.Q(@"^{0}+"), Liquid.QuotedFragment);
+        private static readonly Regex s_namedSyntax = R.B(R.Q(@"^({0})\s*\:\s*(.*)"), Liquid.QuotedFragment);
+        private static readonly Regex s_quotedFragmentRegex = R.B(R.Q(@"\s*({0})\s*"), Liquid.QuotedFragment);
 
         private string[] _variables;
         private string _name;
@@ -37,7 +37,7 @@ namespace DotLiquid.Tags
         /// <param name="tokens"></param>
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match match = NamedSyntax.Match(markup);
+            var match = s_namedSyntax.Match(markup);
             if (match.Success)
             {
                 _variables = VariablesFromString(match.Groups[2].Value);
@@ -45,7 +45,7 @@ namespace DotLiquid.Tags
             }
             else
             {
-                match = SimpleSyntax.Match(markup);
+                match = s_simpleSyntax.Match(markup);
                 if (match.Success)
                 {
                     _variables = VariablesFromString(markup);
@@ -53,7 +53,7 @@ namespace DotLiquid.Tags
                 }
                 else
                 {
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("CycleTagSyntaxException"));
+                    throw new SyntaxException("Syntax Error in 'cycle' tag - Valid syntax: cycle [name :] var [, var2, var3 ...]");
                 }
             }
 
@@ -64,7 +64,7 @@ namespace DotLiquid.Tags
         {
             return markup.Split(',').Select(var =>
             {
-                Match match = QuotedFragmentRegex.Match(var);
+                var match = s_quotedFragmentRegex.Match(var);
                 return (match.Success && !string.IsNullOrEmpty(match.Groups[1].Value))
                     ? match.Groups[1].Value
                     : null;
@@ -82,8 +82,8 @@ namespace DotLiquid.Tags
 
             context.Stack(() =>
             {
-                string key = context[_name].ToString();
-                int iteration = (int) (((Hash) context.Registers["cycle"])[key] ?? 0);
+                var key = context[_name].ToString();
+                var iteration = (int) (((Hash) context.Registers["cycle"])[key] ?? 0);
                 result.Write(context[_variables[iteration]].ToString());
                 ++iteration;
                 if (iteration >= _variables.Length)

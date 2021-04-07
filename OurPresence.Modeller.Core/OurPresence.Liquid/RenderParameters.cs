@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Rendering parameters
@@ -38,7 +37,7 @@ namespace DotLiquid
             get { return (ErrorsOutputMode == ErrorsOutputMode.Rethrow); }
             set { ErrorsOutputMode = (value ? ErrorsOutputMode.Rethrow : ErrorsOutputMode.Display); }
         }
-        
+
         private ErrorsOutputMode _erorsOutputMode = ErrorsOutputMode.Display;
 
         /// <summary>
@@ -102,7 +101,7 @@ namespace DotLiquid
                 return;
             }
 
-            List<Hash> environments = new List<Hash>();
+            var environments = new List<Hash>();
             if (LocalVariables != null)
                 environments.Add(LocalVariables);
             if (template.IsThreadSafe)

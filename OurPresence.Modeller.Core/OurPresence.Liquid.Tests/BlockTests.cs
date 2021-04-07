@@ -1,9 +1,9 @@
 using System;
-using DotLiquid.Tags;
-using DotLiquid.Tests.Framework;
+using OurPresence.Liquid.Tags;
+using OurPresence.Liquid.Tests.Framework;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class BlockTests

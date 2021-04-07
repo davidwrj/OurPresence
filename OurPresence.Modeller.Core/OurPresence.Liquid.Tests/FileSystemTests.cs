@@ -1,9 +1,9 @@
 using System.Globalization;
-using DotLiquid.Exceptions;
-using DotLiquid.FileSystems;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.FileSystems;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     using System.Reflection;
 
@@ -15,7 +15,7 @@ namespace DotLiquid.Tests
         {
             Assert.Throws<FileSystemException>(() => new BlankFileSystem().ReadTemplateFile(new Context(CultureInfo.InvariantCulture), "dummy"));
         }
-        
+
 
         [Test]
         [Category("windows")]
@@ -39,15 +39,15 @@ namespace DotLiquid.Tests
             Assert.AreEqual(@"D:\Some (thing)\Path\_mypartial.liquid", fileSystem.FullPath("mypartial"));
             Assert.AreEqual(@"D:\Some (thing)\Path\dir\_mypartial.liquid", fileSystem.FullPath("dir/mypartial"));
         }
-        
+
 
         [Test]
         public void TestEmbeddedResource()
         {
             var assembly = typeof(FileSystemTests).GetTypeInfo().Assembly;
-            EmbeddedFileSystem fileSystem = new EmbeddedFileSystem(assembly, "DotLiquid.Tests.Embedded");
-            Assert.AreEqual(@"DotLiquid.Tests.Embedded._mypartial.liquid", fileSystem.FullPath("mypartial"));
-            Assert.AreEqual(@"DotLiquid.Tests.Embedded.dir._mypartial.liquid", fileSystem.FullPath("dir/mypartial"));
+            EmbeddedFileSystem fileSystem = new EmbeddedFileSystem(assembly, "OurPresence.Liquid.Tests.Embedded");
+            Assert.AreEqual(@"OurPresence.Liquid.Tests.Embedded._mypartial.liquid", fileSystem.FullPath("mypartial"));
+            Assert.AreEqual(@"OurPresence.Liquid.Tests.Embedded.dir._mypartial.liquid", fileSystem.FullPath("dir/mypartial"));
 
             Assert.Throws<FileSystemException>(() => fileSystem.FullPath("../dir/mypartial"));
             Assert.Throws<FileSystemException>(() => fileSystem.FullPath("/dir/../../dir/mypartial"));

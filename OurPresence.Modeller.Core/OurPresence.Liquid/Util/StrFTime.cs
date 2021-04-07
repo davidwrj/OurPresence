@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     public static class StrFTime
     {
         private delegate string DateTimeDelegate(DateTime dateTime);
         private delegate string DateTimeOffsetDelegate(DateTimeOffset dateTimeOffset);
 
-        private static readonly Dictionary<string, DateTimeDelegate> Formats = new Dictionary<string, DateTimeDelegate>
+        private static readonly Dictionary<string, DateTimeDelegate> s_formats = new Dictionary<string, DateTimeDelegate>
         {
             { "a", (dateTime) => dateTime.ToString("ddd", CultureInfo.CurrentCulture) },
             { "A", (dateTime) => dateTime.ToString("dddd", CultureInfo.CurrentCulture) },
@@ -43,7 +43,7 @@ namespace DotLiquid.Util
             { "%", (dateTime) => "%" }
         };
 
-        private static readonly Dictionary<string, DateTimeOffsetDelegate> OffsetFormats = new Dictionary<string, DateTimeOffsetDelegate>
+        private static readonly Dictionary<string, DateTimeOffsetDelegate> s_offsetFormats = new Dictionary<string, DateTimeOffsetDelegate>
         {
             { "s", (dateTimeOffset) => ((long)(dateTimeOffset - new DateTimeOffset(1970, 1, 1, 0,0,0, TimeSpan.Zero)).TotalSeconds).ToString() },
             { "Z", (dateTimeOffset) => dateTimeOffset.ToString("zzz", CultureInfo.CurrentCulture) },
@@ -51,19 +51,19 @@ namespace DotLiquid.Util
 
         public static string ToStrFTime(this DateTime dateTime, string pattern)
         {
-            string output = "";
+            var output = "";
 
-            int n = 0;
+            var n = 0;
 
             while (n < pattern.Length)
             {
-                string s = pattern.Substring(n, 1);
+                var s = pattern.Substring(n, 1);
 
                 if (n + 1 >= pattern.Length)
                     output += s;
                 else
                     output += s == "%"
-                        ? Formats.ContainsKey(pattern.Substring(++n, 1)) ? Formats[pattern.Substring(n, 1)].Invoke(dateTime) : "%" + pattern.Substring(n, 1)
+                        ? s_formats.ContainsKey(pattern.Substring(++n, 1)) ? s_formats[pattern.Substring(n, 1)].Invoke(dateTime) : "%" + pattern.Substring(n, 1)
                         : s;
                 n++;
             }
@@ -81,15 +81,15 @@ namespace DotLiquid.Util
         {
             var output = new System.Text.StringBuilder();
 
-            for (int n = 0; n < pattern.Length; n++)
+            for (var n = 0; n < pattern.Length; n++)
             {
-                string s = pattern.Substring(n, 1);
+                var s = pattern.Substring(n, 1);
 
                 if (s == "%" && pattern.Length > ++n)
-                    if (OffsetFormats.ContainsKey(pattern.Substring(n, 1)))
-                        output.Append(OffsetFormats[pattern.Substring(n, 1)].Invoke(dateTime));
-                    else if (Formats.ContainsKey(pattern.Substring(n, 1)))
-                        output.Append(Formats[pattern.Substring(n, 1)].Invoke(dateTime.DateTime));
+                    if (s_offsetFormats.ContainsKey(pattern.Substring(n, 1)))
+                        output.Append(s_offsetFormats[pattern.Substring(n, 1)].Invoke(dateTime));
+                    else if (s_formats.ContainsKey(pattern.Substring(n, 1)))
+                        output.Append(s_formats[pattern.Substring(n, 1)].Invoke(dateTime.DateTime));
                     else
                         output.Append("%" + pattern.Substring(n, 1));
                 else

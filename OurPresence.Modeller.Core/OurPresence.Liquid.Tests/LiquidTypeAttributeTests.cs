@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     internal class LiquidTypeAttributeTests

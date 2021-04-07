@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     /// <summary>
     /// Taken from code at http://www.pluralsight-training.net/community/blogs/dbox/archive/2005/04/24/7690.aspx.
@@ -62,8 +62,8 @@ namespace DotLiquid.Util
 
         internal static string Succ(string val)
         {
-            int lastAlphaNumeric = -1;
-            for (int i = val.Length - 1; i >= 0 && lastAlphaNumeric == -1; i--)
+            var lastAlphaNumeric = -1;
+            for (var i = val.Length - 1; i >= 0 && lastAlphaNumeric == -1; i--)
             {
                 if (char.IsLetterOrDigit(val[i]))
                     lastAlphaNumeric = i;
@@ -75,7 +75,7 @@ namespace DotLiquid.Util
 
         internal static string Succ(string val, int length)
         {
-            char lastChar = val[length - 1];
+            var lastChar = val[length - 1];
             switch (lastChar)
             {
                 case '9':
@@ -93,7 +93,7 @@ namespace DotLiquid.Util
 
         public static IEnumerable<T> Inclusive<T>(T start, T finish, Func<T, T> succ, Comparison<T> comp)
         {
-            T value = start;
+            var value = start;
             while (comp(value, finish) <= 0)
             {
                 yield return value;

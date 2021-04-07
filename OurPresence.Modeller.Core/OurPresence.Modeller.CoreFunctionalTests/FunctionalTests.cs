@@ -2,6 +2,7 @@ using ApprovalTests;
 using OurPresence.Modeller.Interfaces;
 using NSubstitute;
 using System.Linq;
+using OurPresence.Modeller.Generator;
 using Xunit;
 
 namespace OurPresence.Modeller.CoreFunctionalTests
@@ -36,8 +37,11 @@ namespace OurPresence.Modeller.CoreFunctionalTests
         [Fact]
         public void GivenDomainProjectGenerator_WhenGenerating_ThenProjectCreated()
         {
+            var packageService = Substitute.For<IPackageService>();
             var settings = Substitute.For<ISettings>();
-            settings.SupportRegen = true;
+            settings.SupportRegen.Returns(true);
+            var packages = new Packages(packageService, settings);
+            settings.Packages.Returns(packages);
             var module = ModuleBuilders.CreateProject();
 
             var c = new DomainProject.Generator(settings, module);

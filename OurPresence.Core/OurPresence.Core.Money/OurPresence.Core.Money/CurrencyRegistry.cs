@@ -8,8 +8,8 @@ namespace OurPresence.Core.Money
     /// <summary>Represent the central thread-safe registry for currencies.</summary>
     internal class CurrencyRegistry
     {
-        private static readonly ConcurrentDictionary<string, byte> Namespaces = new ConcurrentDictionary<string, byte> { ["ISO-4217"] = default, ["ISO-4217-HISTORIC"] = default };
-        private static readonly ConcurrentDictionary<string, Currency> Currencies = new ConcurrentDictionary<string, Currency>((DefaultCurrencies.Currencies ?? new List<Currency>()).ToDictionary(k => k.Namespace + "::" + k.Code));
+        private static readonly ConcurrentDictionary<string, byte> s_namespaces = new ConcurrentDictionary<string, byte> { ["ISO-4217"] = default, ["ISO-4217-HISTORIC"] = default };
+        private static readonly ConcurrentDictionary<string, Currency> s_currencies = new ConcurrentDictionary<string, Currency>((DefaultCurrencies.Currencies ?? new List<Currency>()).ToDictionary(k => k.Namespace + "::" + k.Code));
 
         static CurrencyRegistry()
         {
@@ -28,12 +28,12 @@ namespace OurPresence.Core.Money
                 throw new ArgumentNullException(nameof(code));
             }
 
-            _ = Namespaces.Keys.Select(ns => Currencies.TryGetValue(ns + "::" + code, out var c));
+            _ = s_namespaces.Keys.Select(ns => s_currencies.TryGetValue(ns + "::" + code, out _));
             var found = new List<Currency>();
-            foreach (var ns in Namespaces.Keys)
+            foreach (var ns in s_namespaces.Keys)
             {
                 // don't use string.Format(), string concat much faster in this case!
-                if (Currencies.TryGetValue(ns + "::" + code, out var c))
+                if (s_currencies.TryGetValue(ns + "::" + code, out var c))
                 {
                     found.Add(c);
                 }
@@ -61,7 +61,7 @@ namespace OurPresence.Core.Money
                 throw new ArgumentNullException(nameof(@namespace));
             }
 
-            return Currencies.TryGetValue(@namespace + "::" + code, out currency); // don't use string.Format(), string concat much faster in this case!
+            return s_currencies.TryGetValue(@namespace + "::" + code, out currency); // don't use string.Format(), string concat much faster in this case!
         }
 
         /// <summary>Attempts to add the <see cref="Currency"/> of the given code and namespace.</summary>
@@ -82,10 +82,10 @@ namespace OurPresence.Core.Money
                 throw new ArgumentNullException(nameof(@namespace));
             }
 
-            Namespaces[@namespace] = default;
+            s_namespaces[@namespace] = default;
             var key = @namespace + "::" + code;
 
-            return Currencies.ContainsKey(key) ? false : Currencies.TryAdd(key, currency);
+            return !s_currencies.ContainsKey(key) && s_currencies.TryAdd(key, currency);
         }
 
         /// <summary>Attempts to remove the <see cref="Currency"/> of the given code and namespace.</summary>
@@ -107,15 +107,16 @@ namespace OurPresence.Core.Money
             }
 
             var key = @namespace + "::" + code;
-            if(Currencies.TryRemove(key, out currency))
+            if (!s_currencies.TryRemove(key, out currency))
             {
-                if (!Currencies.Any(c => c.Value.Namespace == @namespace))
-                {
-                    Namespaces.TryRemove(@namespace, out var item);
-                }
-                return true;
+                return false;
             }
-            return false;
+
+            if (s_currencies.All(c => c.Value.Namespace != @namespace))
+            {
+                s_namespaces.TryRemove(@namespace, out _);
+            }
+            return true;
         }
 
         /// <summary>Get all registered currencies.</summary>

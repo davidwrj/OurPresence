@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// Assign sets a variable in your template.
@@ -18,14 +18,14 @@ namespace DotLiquid.Tags
     /// </summary>
     public class Assign : Tag
     {
-        private static readonly Regex Syntax = R.B(R.Q(@"({0}+)\s*=\s*(.*)\s*"), Liquid.VariableSignature);
+        private static readonly Regex s_syntax = R.B(R.Q(@"({0}+)\s*=\s*(.*)\s*"), Liquid.VariableSignature);
 
         private string _to;
         private Variable _from;
 
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = s_syntax.Match(markup);
             if (syntaxMatch.Success)
             {
                 _to = syntaxMatch.Groups[1].Value;
@@ -33,7 +33,7 @@ namespace DotLiquid.Tags
             }
             else
             {
-                throw new SyntaxException(Liquid.ResourceManager.GetString("AssignTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'assign' tag - Valid syntax: assign [var] = [source]");
             }
 
             base.Initialize(tagName, markup, tokens);

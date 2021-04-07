@@ -7,9 +7,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Reflection;
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Standard Liquid filters
@@ -47,7 +47,7 @@ namespace DotLiquid
                 return null;
 
             if (start < 0)
-            { 
+            {
                 start += input.Length;
                 if (start < 0)
                 {
@@ -56,7 +56,7 @@ namespace DotLiquid
                 }
             }
             if (start + len > input.Length)
-            { 
+            {
                 len = input.Length - start;
             }
             return input.Substring(Convert.ToInt32(start), Convert.ToInt32(len));
@@ -95,7 +95,7 @@ namespace DotLiquid
                 ? input
                 : System.Net.WebUtility.UrlEncode(input);
         }
-        
+
         /// <summary>
         /// convert a input string to URLDECODE
         /// </summary>
@@ -119,7 +119,7 @@ namespace DotLiquid
             if (input.IsNullOrWhiteSpace())
                 return input;
 
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21)
+            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
             {
                 var trimmed = input.TrimStart();
                 return input.Substring(0, input.Length - trimmed.Length) + char.ToUpper(trimmed[0]) + trimmed.Substring(1);
@@ -280,7 +280,7 @@ namespace DotLiquid
         public static string Currency(object input, string cultureInfo = null)
         {
 
-            if (decimal.TryParse(input.ToString(), out decimal amount))
+            if (decimal.TryParse(input.ToString(), out var amount))
             {
                 if (cultureInfo.IsNullOrWhiteSpace())
                 {
@@ -318,7 +318,7 @@ namespace DotLiquid
             if (input == null)
                 return null;
 
-            IEnumerable<object> castInput = input.Cast<object>();
+            var castInput = input.Cast<object>();
 
             return string.Join(glue, castInput);
         }
@@ -341,7 +341,7 @@ namespace DotLiquid
             else if (input is IEnumerable enumerableInput)
                 ary = enumerableInput.Flatten().Cast<object>().ToList();
             else
-            { 
+            {
                 ary = new List<object>(new[] { input });
             }
 
@@ -349,15 +349,15 @@ namespace DotLiquid
                 return ary;
 
             if (string.IsNullOrEmpty(property))
-            { 
+            {
                 ary.Sort();
             }
             else if ((ary.All(o => o is IDictionary)) && (ary.Any(o => ((IDictionary)o).Contains(property))))
-            { 
+            {
                 ary.Sort((a, b) => Comparer<object>.Default.Compare(((IDictionary)a)[property], ((IDictionary)b)[property]));
             }
             else if (ary.All(o => o.RespondTo(property)))
-            { 
+            {
                 ary.Sort((a, b) => Comparer<object>.Default.Compare(a.Send(property), b.Send(property)));
             }
 
@@ -376,7 +376,7 @@ namespace DotLiquid
                 return null;
 
             // Enumerate to a list so we can repeatedly parse through the collection.
-            List<object> listedInput = enumerableInput.Cast<object>().ToList();
+            var listedInput = enumerableInput.Cast<object>().ToList();
 
             // If the list happens to be empty we are done already.
             if (!listedInput.Any())
@@ -435,7 +435,7 @@ namespace DotLiquid
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(@string))
                 return input;
 
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21)
+            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
                 return input.Replace(@string, replacement);
 
             return Regex.Replace(input, @string, replacement, RegexOptions.None, Template.RegexTimeOut);
@@ -454,13 +454,13 @@ namespace DotLiquid
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(@string))
                 return input;
 
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21)
+            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
             {
-                int position = input.IndexOf(@string);
+                var position = input.IndexOf(@string);
                 return position < 0 ? input : input.Remove(position, @string.Length).Insert(position, replacement);
             }
 
-            bool doneReplacement = false;
+            var doneReplacement = false;
             return Regex.Replace(input, @string, m =>
             {
                 if (doneReplacement)
@@ -554,11 +554,11 @@ namespace DotLiquid
                     return date.ToString();
 
                 return Liquid.UseRubyDateFormat
-                    ? context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21 ? new DateTimeOffset(date).ToStrFTime(format) : date.ToStrFTime(format)
+                    ? context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21 ? new DateTimeOffset(date).ToStrFTime(format) : date.ToStrFTime(format)
                     : date.ToString(format);
             }
 
-            if (context.SyntaxCompatibilityLevel == SyntaxCompatibility.DotLiquid20)
+            if (context.SyntaxCompatibilityLevel == SyntaxCompatibility.Liquid20)
                 return DateLegacyParsing(input.ToString(), format);
 
             if (format.IsNullOrWhiteSpace())
@@ -579,7 +579,7 @@ namespace DotLiquid
             }
             else
             {
-                string value = input.ToString();
+                var value = input.ToString();
 
                 if (string.Equals(value, "now", StringComparison.OrdinalIgnoreCase) || string.Equals(value, "today", StringComparison.OrdinalIgnoreCase))
                 {
@@ -612,7 +612,7 @@ namespace DotLiquid
 
             if (format.IsNullOrWhiteSpace())
                 return value;
-            
+
             return Liquid.UseRubyDateFormat ? date.ToStrFTime(format) : date.ToString(format);
         }
 
@@ -657,7 +657,7 @@ namespace DotLiquid
         /// <returns></returns>
         public static object Plus(Context context, object input, object operand)
         {
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21)
+            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
                 return DoMathsOperation(context, input, operand, Expression.AddChecked);
 
             return input is string
@@ -686,7 +686,7 @@ namespace DotLiquid
         /// <returns></returns>
         public static object Times(Context context, object input, object operand)
         {
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21)
+            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
                 return DoMathsOperation(context, input, operand, Expression.MultiplyChecked);
 
             return input is string && (operand is int || operand is long)
@@ -715,26 +715,26 @@ namespace DotLiquid
         }
 
         /// <summary>
-        /// Rounds a decimal value up to the next integer, unless already the integer value, removing all decimal places 
+        /// Rounds a decimal value up to the next integer, unless already the integer value, removing all decimal places
         /// </summary>
         /// <param name="input"></param>
         /// <returns>The rounded value; null if an exception have occured</returns>
         public static object Ceil(object input)
         {
-            if (decimal.TryParse(input.ToString(), out decimal d))
+            if (decimal.TryParse(input.ToString(), out var d))
                 return Math.Ceiling(d);
             else
                 return null;
         }
 
         /// <summary>
-        /// Rounds a decimal value down to an integer, removing all decimal places 
+        /// Rounds a decimal value down to an integer, removing all decimal places
         /// </summary>
         /// <param name="input"></param>
         /// <returns>The rounded value; null if an exception have occured</returns>
         public static object Floor(object input)
         {
-            if (decimal.TryParse(input.ToString(), out decimal d))
+            if (decimal.TryParse(input.ToString(), out var d))
                 return Math.Floor(d);
             else
                 return null;
@@ -786,7 +786,7 @@ namespace DotLiquid
             // This avoids rounding errors in financial arithmetics.
             // E.g.: 0.1 | Plus 10 | Minus 10 to remain 0.1, not 0.0999999999999996
             // Otherwise revert to maximum range (possible precision loss).
-            var shouldConvertStrings = context.SyntaxCompatibilityLevel >= SyntaxCompatibility.DotLiquid21 && ((input is string) || (operand is string));
+            var shouldConvertStrings = context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21 && ((input is string) || (operand is string));
             if (IsReal(input) || IsReal(operand) || shouldConvertStrings)
             {
                 try
@@ -823,7 +823,7 @@ namespace DotLiquid
                 throw;
             }
         }
-        
+
         /// <summary>
         /// Removes any duplicate elements in an array.
         /// </summary>
@@ -838,7 +838,7 @@ namespace DotLiquid
             if (input is IEnumerable)
                 ary = ((IEnumerable) input).Flatten().Cast<object>().ToList();
             else
-            { 
+            {
                 ary = new List<object>(new[] { input });
             }
 
@@ -847,7 +847,7 @@ namespace DotLiquid
 
             return ary.Distinct().ToList();
         }
-        
+
         /// <summary>
         /// Returns the absolute value of a number.
         /// </summary>
@@ -906,7 +906,7 @@ namespace DotLiquid
                 return input;
             }
         }
-        
+
         /// <summary>
         /// Removes any nil values from an array.
         /// </summary>

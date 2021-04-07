@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags.Html
+namespace OurPresence.Liquid.Tags.Html
 {
     /// <summary>
     /// TablerRow tag
@@ -19,9 +19,9 @@ namespace DotLiquid.Tags.Html
     ///   {% endtablerow %}
     /// &lt;/table&gt;
     /// </example>
-    public class TableRow : DotLiquid.Block
+    public class TableRow : OurPresence.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
+        private static readonly Regex s_syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
 
         private string _variableName, _collectionName;
         private Dictionary<string, string> _attributes;
@@ -34,7 +34,7 @@ namespace DotLiquid.Tags.Html
         /// <param name="tokens">Toeksn of the parsed tag</param>
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = s_syntax.Match(markup);
             if (syntaxMatch.Success)
             {
                 _variableName = syntaxMatch.Groups[1].Value;
@@ -43,7 +43,7 @@ namespace DotLiquid.Tags.Html
                 R.Scan(markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("TableRowTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'tablerow' tag - Valid syntax: tablerow [item] in [collection] cols=[number]");
 
             base.Initialize(tagName, markup, tokens);
         }
@@ -55,31 +55,31 @@ namespace DotLiquid.Tags.Html
         /// <param name="result"></param>
         public override void Render(Context context, TextWriter result)
         {
-            object coll = context[_collectionName];
+            var coll = context[_collectionName];
 
             if (!(coll is IEnumerable))
                 return;
-            IEnumerable<object> collection = ((IEnumerable) coll).Cast<object>();
+            var collection = ((IEnumerable) coll).Cast<object>();
 
             if (_attributes.ContainsKey("offset"))
             {
-                int offset = Convert.ToInt32(_attributes["offset"]);
+                var offset = Convert.ToInt32(_attributes["offset"]);
                 collection = collection.Skip(offset);
             }
 
             if (_attributes.ContainsKey("limit"))
             {
-                int limit = Convert.ToInt32(_attributes["limit"]);
+                var limit = Convert.ToInt32(_attributes["limit"]);
                 collection = collection.Take(limit);
             }
 
             collection = collection.ToList();
-            int length = collection.Count();
+            var length = collection.Count();
 
-            int cols = Convert.ToInt32(context[_attributes["cols"]]);
+            var cols = Convert.ToInt32(context[_attributes["cols"]]);
 
-            int row = 1;
-            int col = 0;
+            var row = 1;
+            var col = 0;
 
             result.WriteLine("<tr class=\"row1\">");
             context.Stack(() => collection.EachWithIndex((item, index) =>

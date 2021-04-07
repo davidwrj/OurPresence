@@ -1,4 +1,4 @@
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     public interface IIndexable
     {

@@ -3,7 +3,7 @@
 namespace OurPresence.Core.Money
 {
     /// <summary>Represents Money, an amount defined in a specific Currency.</summary>
-    public partial struct Amount: IEquatable<Amount>
+    public partial struct Amount
     {
         /// <summary>Initializes a new instance of the <see cref="Amount"/> structure in euro's.</summary>
         /// <param name="amount">The Amount of money in euro.</param>

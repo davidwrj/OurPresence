@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     public static class R
     {
@@ -18,7 +18,7 @@ namespace DotLiquid.Util
         }
 
         /// <summary>
-        /// All regexes in DotLiquid use fixed known patterns and are used repeatedly, many times repeatedly within a single template.
+        /// All regexes in OurPresence.Liquid use fixed known patterns and are used repeatedly, many times repeatedly within a single template.
         /// Compiled regexes should be used in these cases to avoid calling the Regex constructor needlessly.
         /// The .NET Regex constructor contains a static cache lookup that requires acquisition of a lock, so in a multithreaded system
         /// under high load, there will be severe lock contention if regexes are constantly being constructed by different threads.

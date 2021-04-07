@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Globalization;
-using DotLiquid.Exceptions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class FilterTests

@@ -1,5 +1,4 @@
 ﻿using OurPresence.Modeller.Interfaces;
-using System.Collections.Generic;
 
 namespace OurPresence.Modeller.Generator
 {
@@ -7,15 +6,15 @@ namespace OurPresence.Modeller.Generator
     {        
         public string SourceModel { get; set; }
 
-        public string OutputPath { get; set; } = Defaults.OutputFolder;
+        public string OutputPath { get; set; } 
 
-        public string Target { get; set; } = Defaults.Target;
+        public string Target { get; set; } 
 
-        public string GeneratorName { get; set; } = string.Empty;
+        public string GeneratorName { get; set; } 
 
         public IGeneratorVersion Version { get; set; } = GeneratorVersion.Empty;
 
-        public string LocalFolder { get; set; } = Defaults.LocalFolder;
+        public string LocalFolder { get; set; } 
 
         public string ServerFolder { get; set; }
 
@@ -26,7 +25,5 @@ namespace OurPresence.Modeller.Generator
         public string SettingsFile { get; set; }
 
         public bool Overwrite { get; set; }
-
-        public IList<IPackage> Packages { get; set; } = new List<IPackage>();
     }
 }

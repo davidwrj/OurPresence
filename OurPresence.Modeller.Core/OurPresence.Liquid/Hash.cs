@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     public class Hash : IDictionary<string, object>, IDictionary
     {
@@ -25,14 +25,14 @@ namespace DotLiquid
         #region Static construction methods
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="anonymousObject"></param>
         /// <param name="includeBaseClassProperties">If this is set to true, method will map base class' properties too. </param>
         /// <returns></returns>
         public static Hash FromAnonymousObject(object anonymousObject, bool includeBaseClassProperties = false)
         {
-            Hash result = new Hash();
+            var result = new Hash();
             if (anonymousObject != null)
             {
                 FromAnonymousObject(anonymousObject, result, includeBaseClassProperties);
@@ -42,15 +42,15 @@ namespace DotLiquid
 
         private static void FromAnonymousObject(object anonymousObject, Hash hash, bool includeBaseClassProperties)
         {
-            Action<object, Hash> mapper = GetObjToDictionaryMapper(anonymousObject.GetType(), includeBaseClassProperties);
-            mapper.Invoke(anonymousObject, hash);                
+            var mapper = GetObjToDictionaryMapper(anonymousObject.GetType(), includeBaseClassProperties);
+            mapper.Invoke(anonymousObject, hash);
         }
 
         private static Action<object, Hash> GetObjToDictionaryMapper(Type type, bool includeBaseClassProperties)
         {
             var cacheKey = type.FullName + "_" + (includeBaseClassProperties ? "WithBaseProperties" : "WithoutBaseProperties");
 
-            if (!mapperCache.TryGetValue(cacheKey, out Action<object, Hash> mapper))
+            if (!mapperCache.TryGetValue(cacheKey, out var mapper))
             {
                 /* Bogdan Mart: Note regarding concurrency:
                  * This is concurrent dictionary, but if this will be called from two threads
@@ -58,14 +58,14 @@ namespace DotLiquid
                  * But I have no idea on what I can lock here, first thought was to use lock(type),
                  * but that could cause deadlock, if some outside code will lock Type.
                  * Only correct solution would be to use ConcurrentDictionary<Type, Action<object, Hash>>
-                 * with some CAS race, and then locking, or Semaphore, but first will add complexity, 
+                 * with some CAS race, and then locking, or Semaphore, but first will add complexity,
                  * second would add overhead in locking on Kernel-level named object.
-                 * 
-                 * So I assume tradeoff in not using locks here is better, 
-                 * we at most will waste some CPU cycles on code generation, 
+                 *
+                 * So I assume tradeoff in not using locks here is better,
+                 * we at most will waste some CPU cycles on code generation,
                  * but RAM would be collected, due to http://stackoverflow.com/questions/5340201/
-                 * 
-                 * If someone have conserns, than one can lock(mapperCache) but that would 
+                 *
+                 * If someone have conserns, than one can lock(mapperCache) but that would
                  * create bottleneck, as only one mapper could be generated at a time.
                  */
                 mapper = GenerateMapper(type, includeBaseClassProperties);
@@ -82,12 +82,12 @@ namespace DotLiquid
 
         private static Action<object, Hash> GenerateMapper(Type type, bool includeBaseClassProperties)
         {
-            ParameterExpression objParam = Expression.Parameter(typeof(object), "objParam");
-            ParameterExpression hashParam = Expression.Parameter(typeof(Hash), "hashParam");
-            List<Expression> bodyInstructions = new List<Expression>();
+            var objParam = Expression.Parameter(typeof(object), "objParam");
+            var hashParam = Expression.Parameter(typeof(Hash), "hashParam");
+            var bodyInstructions = new List<Expression>();
 
             var castedObj = Expression.Variable(type,"castedObj");
-            
+
             bodyInstructions.Add(
                 Expression.Assign(castedObj,Expression.Convert(objParam,type))
             );
@@ -95,11 +95,11 @@ namespace DotLiquid
             //Add properties
             var propertyList = type.GetTypeInfo().DeclaredProperties
                 .Where(p => p.CanRead && p.GetMethod.IsPublic && !p.GetMethod.IsStatic).ToList();
-            
-            //Add properties from base class 
+
+            //Add properties from base class
             if (includeBaseClassProperties) AddBaseClassProperties(type, propertyList);
 
-            foreach (PropertyInfo property in propertyList)
+            foreach (var property in propertyList)
             {
                 bodyInstructions.Add(
                     Expression.Assign(
@@ -125,7 +125,7 @@ namespace DotLiquid
 
         public static Hash FromDictionary(IDictionary<string, object> dictionary)
         {
-            Hash result = new Hash();
+            var result = new Hash();
 
             foreach (var keyValue in dictionary)
             {
@@ -138,7 +138,7 @@ namespace DotLiquid
                         result.Add(keyValue);
                     }
             }
-                
+
             return result;
         }
 
@@ -167,7 +167,7 @@ namespace DotLiquid
 
         public void Merge(IDictionary<string, object> otherValues)
         {
-            foreach (string key in otherValues.Keys)
+            foreach (var key in otherValues.Keys)
                 _nestedDictionary[key] = otherValues[key];
         }
 

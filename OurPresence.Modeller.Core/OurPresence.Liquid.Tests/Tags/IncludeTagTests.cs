@@ -1,11 +1,10 @@
-using System;
-using DotLiquid.Exceptions;
-using DotLiquid.FileSystems;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.FileSystems;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class IncludeTagTests

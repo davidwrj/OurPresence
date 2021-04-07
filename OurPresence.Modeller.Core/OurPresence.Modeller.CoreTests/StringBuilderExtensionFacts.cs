@@ -1,7 +1,6 @@
 ﻿using OurPresence.Modeller.Domain.Extensions;
 using Xunit;
 using FluentAssertions;
-using System;
 using System.Text;
 
 namespace OurPresence.Modeller.CoreTests

@@ -1,13 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.FileSystems;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.FileSystems;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// The Extends tag is used in conjunction with the Block tag to provide template inheritance.
@@ -57,23 +56,23 @@ namespace DotLiquid.Tags
     ///
     /// The current IFileSystem will be used to locate "base.html".
     /// </example>
-    public class Extends : DotLiquid.Block
+    public class Extends : OurPresence.Liquid.Block
     {
 
-        private static readonly Regex Syntax = R.B(@"^({0})", Liquid.QuotedFragment);
+        private static readonly Regex s_syntax = R.B(@"^({0})", Liquid.QuotedFragment);
 
         private string _templateName;
 
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = s_syntax.Match(markup);
 
             if (syntaxMatch.Success)
             {
                 _templateName = syntaxMatch.Groups[1].Value;
             }
             else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'extends' tag - Valid syntax: extends [template]");
 
             base.Initialize(tagName, markup, tokens);
         }
@@ -82,18 +81,18 @@ namespace DotLiquid.Tags
         {
             if (!(rootNodeList[0] is Extends))
             {
-                throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagMustBeFirstTagException"));
+                throw new SyntaxException("Liquid Error - 'extends' must be the first tag in an extending template");
             }
 
             NodeList.ForEach(n =>
             {
                 if (!((n is string && ((string) n).IsNullOrWhiteSpace()) || n is Block || n is Comment || n is Extends))
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagUnallowedTagsException"));
+                    throw new SyntaxException("Liquid Error - Only 'comment' and 'block' tags are allowed in an extending template");
             });
 
             if (NodeList.Count(o => o is Extends) > 0)
             {
-                throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagCanBeUsedOneException"));
+                throw new SyntaxException("Liquid Error - 'extends' tag can be used only once");
             }
         }
 
@@ -104,8 +103,8 @@ namespace DotLiquid.Tags
         public override void Render(Context context, TextWriter result)
         {
             // Get the template or template content and then either copy it (since it will be modified) or parse it
-            IFileSystem fileSystem = context.Registers["file_system"] as IFileSystem ?? Template.FileSystem;
-            ITemplateFileSystem templateFileSystem = fileSystem as ITemplateFileSystem;
+            var fileSystem = context.Registers["file_system"] as IFileSystem ?? Template.FileSystem;
+            var templateFileSystem = fileSystem as ITemplateFileSystem;
             Template template = null;
             if (templateFileSystem != null)
             {
@@ -113,25 +112,25 @@ namespace DotLiquid.Tags
             }
             if (template == null)
             {
-                string source = fileSystem.ReadTemplateFile(context, _templateName);
+                var source = fileSystem.ReadTemplateFile(context, _templateName);
                 template = Template.Parse(source);
             }
 
-            List<Block> parentBlocks = FindBlocks(template.Root, null);
-            List<Block> orphanedBlocks = ((List<Block>)context.Scopes[0]["extends"]) ?? new List<Block>();
-            BlockRenderState blockState = BlockRenderState.Find(context) ?? new BlockRenderState();
+            var parentBlocks = FindBlocks(template.Root, null);
+            var orphanedBlocks = ((List<Block>)context.Scopes[0]["extends"]) ?? new List<Block>();
+            var blockState = BlockRenderState.Find(context) ?? new BlockRenderState();
 
             context.Stack(() =>
             {
                 context["blockstate"] = blockState;         // Set or copy the block state down to this scope
                 context["extends"] = new List<Block>();     // Holds Blocks that were not found in the parent
-                foreach (Block block in NodeList.OfType<Block>().Concat(orphanedBlocks))
+                foreach (var block in NodeList.OfType<Block>().Concat(orphanedBlocks))
                 {
-                    Block pb = parentBlocks.Find(b => b.BlockName == block.BlockName);
+                    var pb = parentBlocks.Find(b => b.BlockName == block.BlockName);
 
                     if (pb != null)
                     {
-                        if (blockState.Parents.TryGetValue(block, out Block parent))
+                        if (blockState.Parents.TryGetValue(block, out var parent))
                             blockState.Parents[pb] = parent;
                         pb.AddParent(blockState.Parents, pb.GetNodeList(blockState));
                         blockState.NodeLists[pb] = block.GetNodeList(blockState);
@@ -156,13 +155,13 @@ namespace DotLiquid.Tags
 
             if (node.RespondTo("NodeList"))
             {
-                List<object> nodeList = (List<object>) node.Send("NodeList");
+                var nodeList = (List<object>) node.Send("NodeList");
 
                 if (nodeList != null)
                 {
                     nodeList.ForEach(n =>
                     {
-                        Block block = n as Block;
+                        var block = n as Block;
 
                         if (block != null)
                         {

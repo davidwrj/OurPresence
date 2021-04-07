@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DotLiquid.Tests.Util
+namespace OurPresence.Liquid.Tests.Util
 {
     [TestFixture]
     public class ExpressionUtilityTest
     {
-        private Dictionary<Type, (double, double)> typeLimits;
+        private Dictionary<Type, (double, double)> _typeLimits;
         [SetUp]
         public void Setup()
         {
-            typeLimits = new Dictionary<Type, (double, double)>()
+            _typeLimits = new Dictionary<Type, (double, double)>()
             {
                 { typeof(decimal), (Convert.ToDouble(decimal.MaxValue), Convert.ToDouble(decimal.MinValue) ) },
                 { typeof(double), (double.MaxValue, double.MinValue ) },
@@ -48,13 +48,13 @@ namespace DotLiquid.Tests.Util
         {
             var t1 = types.Item1;
             var t2 = types.Item2;
-            var result = DotLiquid.Util.ExpressionUtility.BinaryNumericResultType(t1, t2);
+            var result = OurPresence.Liquid.Util.ExpressionUtility.BinaryNumericResultType(t1, t2);
             Assert.IsNotNull(result);
-            Assert.AreEqual(result, DotLiquid.Util.ExpressionUtility.BinaryNumericResultType(t2, t1));
-            Assert.IsTrue(typeLimits[result].Item1 >= typeLimits[t1].Item1);
-            Assert.IsTrue(typeLimits[result].Item1 >= typeLimits[t2].Item1);
-            Assert.IsTrue(typeLimits[result].Item2 <= typeLimits[t1].Item2);
-            Assert.IsTrue(typeLimits[result].Item2 <= typeLimits[t1].Item2);
+            Assert.AreEqual(result, OurPresence.Liquid.Util.ExpressionUtility.BinaryNumericResultType(t2, t1));
+            Assert.IsTrue(_typeLimits[result].Item1 >= _typeLimits[t1].Item1);
+            Assert.IsTrue(_typeLimits[result].Item1 >= _typeLimits[t2].Item1);
+            Assert.IsTrue(_typeLimits[result].Item2 <= _typeLimits[t1].Item2);
+            Assert.IsTrue(_typeLimits[result].Item2 <= _typeLimits[t1].Item2);
         }
     }
 }

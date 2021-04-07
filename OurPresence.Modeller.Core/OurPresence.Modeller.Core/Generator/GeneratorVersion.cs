@@ -6,12 +6,12 @@ namespace OurPresence.Modeller.Generator
     public class GeneratorVersion : IEquatable<Version>, IComparable, IComparable<Version>, IComparable<GeneratorVersion>, IGeneratorVersion
     {
         private int _preRelease;
-        private const int _released = 100;
-        private const int _lessThan = -1;
-        private const int _greaterThan = 1;
-        private const int _equal = 0;
-        private const int _alpha = 1;
-        private const int _beta = 2;
+        private const int Released = 100;
+        private const int LessThan = -1;
+        private const int GreaterThan = 1;
+        private const int Equal = 0;
+        private const int Alpha = 1;
+        private const int Beta = 2;
 
         public GeneratorVersion()
             : this("")
@@ -36,7 +36,7 @@ namespace OurPresence.Modeller.Generator
                 return;
             }
 
-            var sep = vers.IndexOf("-");
+            var sep = vers.IndexOf("-", StringComparison.InvariantCulture);
             if (sep > -1)
             {
                 if (vers.EndsWith("-alpha"))
@@ -45,7 +45,7 @@ namespace OurPresence.Modeller.Generator
                     IsBetaRelease = true;
                 else
                 {
-                    throw new FormatException("Version was not the correct format. Use: major.minor.revision.build[-aplha|-beta]");
+                    throw new FormatException("Version was not the correct format. Use: major.minor.revision.build[-alpha|-beta]");
                 }
                 vers = vers.Remove(sep);
             }
@@ -55,36 +55,36 @@ namespace OurPresence.Modeller.Generator
             }
             else
             {
-                throw new FormatException("Version was not the correct format. Use: major.minor.revision.build[-aplha|-beta]");
+                throw new FormatException("Version was not the correct format. Use: major.minor.revision.build[-alpha|-beta]");
             }
         }
 
         public bool IsRelease
         {
-            get => _preRelease == _released || _preRelease == 0;
+            get => _preRelease == Released || _preRelease == 0;
             set
             {
                 if (value)
-                    _preRelease = _released;
+                    _preRelease = Released;
             }
         }
         public bool IsAlphaRelease
         {
-            get => _preRelease == _alpha;
+            get => _preRelease == Alpha;
             set
             {
                 if (value)
-                    _preRelease = _alpha;
+                    _preRelease = Alpha;
             }
         }
 
         public bool IsBetaRelease
         {
-            get => _preRelease == _beta;
+            get => _preRelease == Beta;
             set
             {
                 if (value)
-                    _preRelease = _beta;
+                    _preRelease = Beta;
             }
         }
 
@@ -105,25 +105,25 @@ namespace OurPresence.Modeller.Generator
             return obj switch
             {
                 null => false,
-                GeneratorVersion gv => CompareTo(gv) == _equal,
-                Version v => CompareTo(v) == _equal,
+                GeneratorVersion gv => CompareTo(gv) == Equal,
+                Version v => CompareTo(v) == Equal,
                 _ => false
             };
         }
 
         public override int GetHashCode() => ToString().GetHashCode();
 
-        public bool Equals(Version? other) => other is not null && CompareTo(new GeneratorVersion(other)) == _equal;
+        public bool Equals(Version? other) => other is not null && CompareTo(new GeneratorVersion(other)) == Equal;
 
-        private static int PreRelease(GeneratorVersion v) => v.IsAlphaRelease ? _alpha : v.IsBetaRelease ? _beta : _released;
+        private static int PreRelease(GeneratorVersion v) => v.IsAlphaRelease ? Alpha : v.IsBetaRelease ? Beta : Released;
 
         public static bool operator ==(GeneratorVersion v1, GeneratorVersion v2) => v1.Equals(v2);
 
         public static bool operator !=(GeneratorVersion v1, GeneratorVersion v2) => !v1.Equals(v2);
 
-        public static bool operator >(GeneratorVersion v1, GeneratorVersion v2) => v1.CompareTo(v2) == _greaterThan;
+        public static bool operator >(GeneratorVersion v1, GeneratorVersion v2) => v1.CompareTo(v2) == GreaterThan;
 
-        public static bool operator <(GeneratorVersion v1, GeneratorVersion v2) => v1.CompareTo(v2) == _lessThan;
+        public static bool operator <(GeneratorVersion v1, GeneratorVersion v2) => v1.CompareTo(v2) == LessThan;
 
         public static bool operator >=(GeneratorVersion v1, GeneratorVersion v2)
         {
@@ -135,32 +135,32 @@ namespace OurPresence.Modeller.Generator
             return v1.Equals(v2) || v1 < v2;
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(object? obj)
         {
-            if (obj is Version v)
-                return CompareTo(v);
-            else if (obj is GeneratorVersion gv)
-                return CompareTo(gv);
-            else if (obj is string s)
-                return CompareTo(new GeneratorVersion(s));
-            else
-                throw new InvalidCastException($"Unable to cast {obj.GetType().FullName} to a {typeof(GeneratorVersion).FullName}");
+            return obj switch
+            {
+                Version v => CompareTo(v),
+                GeneratorVersion gv => CompareTo(gv),
+                string s => CompareTo(new GeneratorVersion(s)),
+                _ => throw new InvalidCastException(
+                    $"Unable to cast {obj.GetType().FullName} to a {typeof(GeneratorVersion).FullName}")
+            };
         }
 
         public int CompareTo(Version? other)
         {
             var result = Version.CompareTo(other);
-            return result == _equal && (IsAlphaRelease || IsBetaRelease) ? _lessThan : result;
+            return result == Equal && (IsAlphaRelease || IsBetaRelease) ? LessThan : result;
         }
 
         public int CompareTo(GeneratorVersion? other)
         {
             var result = Version.CompareTo(other?.Version);
-            if (result != _equal) return result;
+            if (result != Equal) return result;
 
             var p1 = PreRelease(this);
             var p2 = PreRelease(other);
-            return p1 == p2 ? _equal : p1 > p2 ? _greaterThan : _lessThan;
+            return p1 == p2 ? Equal : p1 > p2 ? GreaterThan : LessThan;
         }
     }
 }

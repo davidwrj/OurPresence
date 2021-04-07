@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotLiquid.NamingConventions
+namespace OurPresence.Liquid.NamingConventions
 {
     public class CSharpNamingConvention : INamingConvention
     {

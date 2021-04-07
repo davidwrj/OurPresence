@@ -9,9 +9,9 @@ namespace OurPresence.Modeller.Generator.Outputs
         private readonly IContext _context;
         private readonly ICodeGenerator _codeGenerator;
         private readonly IOutputStrategy _outputStrategy;
-        private readonly ILogger<IBuilder> _logger;
+        private readonly ILogger<Builder> _logger;
 
-        public Builder(IContext context, ICodeGenerator codeGenerator, IOutputStrategy outputStrategy, ILogger<IBuilder> logger)
+        public Builder(IContext context, ICodeGenerator codeGenerator, IOutputStrategy outputStrategy, ILogger<Builder> logger)
         {
             _context = context;
             _codeGenerator = codeGenerator;
@@ -19,30 +19,27 @@ namespace OurPresence.Modeller.Generator.Outputs
             _logger = logger;
         }
 
-        public void Create(IGeneratorConfiguration configuration)
+        public void Create()
         {
-            _logger.LogInformation($"Generation started: {DateTime.Now.ToShortTimeString()}");
+            _logger.LogInformation("Generation started: {Started}",DateTime.Now.ToShortTimeString());
 
-            var result = _context.ValidateConfiguration(configuration);
+            var result = _context.ValidateConfiguration();
             if (!result.IsValid)
             {
-                _logger.LogInformation($"Generation failed: {DateTime.Now.ToShortTimeString()}");
+                _logger.LogInformation("Generation failed: {Failed}",DateTime.Now.ToShortTimeString());
                 return;
             }
 
             var output = _codeGenerator.Create(_context);
-            if (output != null && _context.Settings != null)
+            try
             {
-                try
-                {
-                    _outputStrategy.Create(output, _context.Settings.OutputPath, _context.Settings.SupportRegen == true);
-                    _logger.LogInformation($"Generation complete: {DateTime.Now.ToShortTimeString()}");
+                _outputStrategy.Create(output, _context.Settings.OutputPath, _context.Settings.SupportRegen);
+                _logger.LogInformation("Generation complete: {Complete}",DateTime.Now.ToShortTimeString());
 
-                }
-                catch (InvalidOperationException ex)
-                {
-                    _logger.LogError(ex, $"Generation skipped for Module '{_context.Module?.Name+string.Empty}' as there was no defined output strategy.");
-                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogError(ex, "Generation skipped for Module '{Module}' as there was no defined output strategy",_context.Module?.Name+string.Empty);
             }
         }
     }

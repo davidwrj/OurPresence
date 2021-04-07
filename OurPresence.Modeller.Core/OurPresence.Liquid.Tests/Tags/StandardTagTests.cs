@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Globalization;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class StandardTagTests
@@ -74,7 +74,7 @@ namespace DotLiquid.Tests.Tags
         public void TestForWithNestedDictionary()
         {
             var dictionary = new Dictionary<string, object> { {
-            "People", 
+            "People",
             new Dictionary<string, object> {
                     { "ID1", new Dictionary<string, object>{ { "First", "Jane" }, { "Last", "Green" } } },
                     { "ID2", new Dictionary<string, object>{ { "First", "Mike" }, { "Last", "Doe" } } }

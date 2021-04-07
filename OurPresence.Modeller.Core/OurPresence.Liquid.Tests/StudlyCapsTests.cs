@@ -1,8 +1,8 @@
 using NUnit.Framework;
-using DotLiquid.Exceptions;
-using DotLiquid.NamingConventions;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.NamingConventions;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class StudlyCapsTests

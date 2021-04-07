@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Represents a block in liquid:
@@ -13,9 +13,9 @@ namespace DotLiquid
     /// </summary>
     public class Block : Tag
     {
-        private static readonly Regex IsTag = R.B(@"^{0}", Liquid.TagStart);
-        private static readonly Regex IsVariable = R.B(@"^{0}", Liquid.VariableStart);
-        private static readonly Regex ContentOfVariable = R.B(@"^{0}(.*){1}$", Liquid.VariableStart, Liquid.VariableEnd);
+        private static readonly Regex s_isTag = R.B(@"^{0}", Liquid.TagStart);
+        private static readonly Regex s_isVariable = R.B(@"^{0}", Liquid.VariableStart);
+        private static readonly Regex s_contentOfVariable = R.B(@"^{0}(.*){1}$", Liquid.VariableStart, Liquid.VariableEnd);
 
         internal static readonly Regex FullToken = R.B(@"^{0}\s*(\w+)\s*(.*)?{1}$", Liquid.TagStart, Liquid.TagEnd);
 
@@ -31,10 +31,10 @@ namespace DotLiquid
             string token;
             while ((token = tokens.Shift()) != null)
             {
-                Match isTagMatch = IsTag.Match(token);
+                var isTagMatch = s_isTag.Match(token);
                 if (isTagMatch.Success)
                 {
-                    Match fullTokenMatch = FullToken.Match(token);
+                    var fullTokenMatch = FullToken.Match(token);
                     if (fullTokenMatch.Success)
                     {
                         // If we found the proper block delimitor just end parsing here and let the outer block
@@ -64,10 +64,10 @@ namespace DotLiquid
                     }
                     else
                     {
-                        throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNotTerminatedException"), token, Liquid.TagEnd);
+                        throw new SyntaxException("Tag '{0}' was not properly terminated with regexp: {1}", token, Liquid.TagEnd);
                     }
                 }
-                else if (IsVariable.Match(token).Success)
+                else if (s_isVariable.Match(token).Success)
                 {
                     NodeList.Add(CreateVariable(token));
                 }
@@ -105,11 +105,11 @@ namespace DotLiquid
             switch (tag)
             {
                 case "else":
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNoElseException"), BlockName);
+                    throw new SyntaxException("{0} tag does not expect else tag", BlockName);
                 case "end":
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNoEndException"), BlockName, BlockDelimiter);
+                    throw new SyntaxException("'end' is not a valid delimiter for {0} tags. Use {1}", BlockName, BlockDelimiter);
                 default:
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("BlockUnknownTagException"), tag);
+                    throw new SyntaxException("Unknown tag '{0}'", tag);
             }
         }
 
@@ -129,17 +129,17 @@ namespace DotLiquid
 
         /// <summary>
         /// Creates a variable from a token:
-        /// 
+        ///
         /// {{ variable }}
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         public Variable CreateVariable(string token)
         {
-            Match match = ContentOfVariable.Match(token);
+            var match = s_contentOfVariable.Match(token);
             if (match.Success)
                 return new Variable(match.Groups[1].Value);
-            throw new SyntaxException(Liquid.ResourceManager.GetString("BlockVariableNotTerminatedException"), token, Liquid.VariableEnd);
+            throw new SyntaxException("Variable '{0}' was not properly terminated with regexp: {1}", token, Liquid.VariableEnd);
         }
 
         /// <summary>
@@ -155,9 +155,10 @@ namespace DotLiquid
         /// <summary>
         /// Throw an exception if the block isn't closed
         /// </summary>
+        /// <exception cref="SyntaxException"></exception>
         protected virtual void AssertMissingDelimitation()
         {
-            throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNotClosedException"), BlockName);
+            throw new SyntaxException("{0} tag was never closed", BlockName);
         }
 
         /// <summary>

@@ -7,28 +7,27 @@ namespace OurPresence.Modeller.Generator
 {
     public class CodeGenerator : ICodeGenerator
     {
-        private readonly ILogger<ICodeGenerator> _logger;
+        private readonly ILogger<CodeGenerator> _logger;
 
-        public CodeGenerator(ILogger<ICodeGenerator> logger)
+        public CodeGenerator(ILogger<CodeGenerator> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public IOutput Create(IContext context)
         {
-            if (!context.IsValid())
-                return new EmptyOutput();
+            var result = context.ValidateConfiguration();
+            if (!result.IsValid) return new EmptyOutput();
 
-            _logger.LogInformation(context.ToString());
+            _logger.LogInformation("Context", context.ToString());
 
             var type = context.Generator?.Metadata.EntryPoint;
-            if (type == null)
-                return new EmptyOutput();
+            if (type == null) return new EmptyOutput();
 
             var cis = type.GetConstructors();
             if (cis.Length != 1)
             {
-                _logger.LogError("Modeller only supports single public constructors for a generator.");
+                _logger.LogError("Modeller only supports single public constructors for a generator");
                 return new EmptyOutput();
             }
             var ci = cis[0];
@@ -44,7 +43,7 @@ namespace OurPresence.Modeller.Generator
                     args.Add(context.Model);
                 else
                 {
-                    _logger.LogError($"{p.ParameterType.ToString()} is not a supported argument type on Generator constructors.");
+                    _logger.LogError("{Type} is not a supported argument type on Generator constructors",p.ParameterType.ToString());
                     return new EmptyOutput();
                 }
             }

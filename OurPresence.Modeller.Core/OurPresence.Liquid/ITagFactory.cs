@@ -1,4 +1,4 @@
-﻿namespace DotLiquid
+﻿namespace OurPresence.Liquid
 {
     /// <summary>
     /// Interface for tag factory.

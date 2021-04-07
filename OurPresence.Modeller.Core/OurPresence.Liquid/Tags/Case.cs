@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
-    public class Case : DotLiquid.Block
+    public class Case : OurPresence.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(@"({0})", Liquid.QuotedFragment);
-        private static readonly Regex WhenSyntax = R.B(@"({0})(?:(?:\s+or\s+|\s*\,\s*)({0}.*))?", Liquid.QuotedFragment);
+        private static readonly Regex s_syntax = R.B(@"({0})", Liquid.QuotedFragment);
+        private static readonly Regex s_whenSyntax = R.B(@"({0})(?:(?:\s+or\s+|\s*\,\s*)({0}.*))?", Liquid.QuotedFragment);
 
         private List<Condition> _blocks;
         private string _left;
@@ -18,11 +18,11 @@ namespace DotLiquid.Tags
         {
             _blocks = new List<Condition>();
 
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = s_syntax.Match(markup);
             if (syntaxMatch.Success)
                 _left = syntaxMatch.Groups[1].Value;
             else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("CaseTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'case' tag - Valid syntax: case [condition]");
 
             base.Initialize(tagName, markup, tokens);
         }
@@ -48,7 +48,7 @@ namespace DotLiquid.Tags
         {
             context.Stack(() =>
             {
-                bool executeElseBlock = true;
+                var executeElseBlock = true;
                 _blocks.ForEach(block =>
                 {
                     if (block.IsElse)
@@ -73,15 +73,15 @@ namespace DotLiquid.Tags
             while (markup != null)
             {
                 // Create a new nodelist and assign it to the new block
-                Match whenSyntaxMatch = WhenSyntax.Match(markup);
+                var whenSyntaxMatch = s_whenSyntax.Match(markup);
                 if (!whenSyntaxMatch.Success)
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("CaseTagWhenSyntaxException"));
+                    throw new SyntaxException("Syntax Error in 'case' tag - Valid when condition: {{% when [condition] [or condition2...] %}}");
 
                 markup = whenSyntaxMatch.Groups[2].Value;
                 if (string.IsNullOrEmpty(markup))
                     markup = null;
 
-                Condition block = new Condition(_left, "==", whenSyntaxMatch.Groups[1].Value);
+                var block = new Condition(_left, "==", whenSyntaxMatch.Groups[1].Value);
                 block.Attach(NodeList);
                 _blocks.Add(block);
             }
@@ -90,9 +90,9 @@ namespace DotLiquid.Tags
         private void RecordElseCondition(string markup)
         {
             if (markup.Trim() != string.Empty)
-                throw new SyntaxException(Liquid.ResourceManager.GetString("CaseTagElseSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'case' tag - Valid else condition: {{% else %}} (no parameters)");
 
-            ElseCondition block = new ElseCondition();
+            var block = new ElseCondition();
             block.Attach(NodeList);
             _blocks.Add(block);
         }

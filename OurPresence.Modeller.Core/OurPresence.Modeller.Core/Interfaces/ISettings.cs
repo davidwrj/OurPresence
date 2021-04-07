@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using OurPresence.Modeller.Generator;
 
 namespace OurPresence.Modeller.Interfaces
 {
@@ -22,16 +22,6 @@ namespace OurPresence.Modeller.Interfaces
 
         string Version { get; set; }
 
-        string GetPackageVersion(string name, string fallbackVersion);
-
-        void RegisterPackage(IPackage package);
-
-        void RegisterPackage(string name, string version);
-
-        void RegisterPackages(IEnumerable<IPackage> packages);
-
-        bool PackagesInitialised();
-
-        IReadOnlyCollection<IPackage> Packages { get; }
+        Packages Packages { get; }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     internal class Symbol
     {

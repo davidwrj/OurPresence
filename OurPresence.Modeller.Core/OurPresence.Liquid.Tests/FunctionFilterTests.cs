@@ -1,8 +1,7 @@
-using System;
 using System.Globalization;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     public class FunctionFilterTests
     {
@@ -33,7 +32,7 @@ namespace DotLiquid.Tests
             _context.AddFilter<int, string>("AddTwo", i => (x=(i + x)).ToString(CultureInfo.InvariantCulture));
             Assert.That(new Variable("var | add_two").Render(_context), Is.EqualTo("4"));
 
-            //this is done, to forbid JITC to inline x 
+            //this is done, to forbid JITC to inline x
             Assert.That(x, Is.EqualTo(4));
         }
 

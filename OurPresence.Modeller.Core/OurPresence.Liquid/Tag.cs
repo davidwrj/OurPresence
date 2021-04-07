@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Represents a tag in Liquid:

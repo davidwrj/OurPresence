@@ -17,22 +17,22 @@ namespace DomainProject
         public IOutput Create()
         {
             var sb = new StringBuilder();
-            sb.al("{");
-            sb.i(1).al($"\"help\": \"https://go.microsoft.com/fwlink/?linkid=866610\",");
-            sb.i(1).al($"\"root\": false,");
-            sb.b();
-            sb.i(1).al($"\"dependentFileProviders\": {{");
-            sb.i(2).al($"\"add\": {{ ");
-            sb.i(3).al($"\"allExtensions\": {{");
-            sb.i(4).al($"\"add\": {{");
-            sb.i(5).al($"\".*\": [");
-            sb.i(6).al($"\".cs\"");
-            sb.i(5).al("]");
-            sb.i(4).al("}");
-            sb.i(3).al("}");
-            sb.i(2).al("}");
-            sb.i(1).al("}");
-            sb.al("}");
+            sb.Al("{");
+            sb.I(1).Al($"\"help\": \"https://go.microsoft.com/fwlink/?linkid=866610\",");
+            sb.I(1).Al($"\"root\": false,");
+            sb.B();
+            sb.I(1).Al($"\"dependentFileProviders\": {{");
+            sb.I(2).Al($"\"add\": {{ ");
+            sb.I(3).Al($"\"allExtensions\": {{");
+            sb.I(4).Al($"\"add\": {{");
+            sb.I(5).Al($"\".*\": [");
+            sb.I(6).Al($"\".cs\"");
+            sb.I(5).Al("]");
+            sb.I(4).Al("}");
+            sb.I(3).Al("}");
+            sb.I(2).Al("}");
+            sb.I(1).Al("}");
+            sb.Al("}");
 
             return new File(".filenesting.json", sb.ToString());
         }

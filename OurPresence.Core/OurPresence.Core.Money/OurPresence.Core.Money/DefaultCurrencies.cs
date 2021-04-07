@@ -6,7 +6,7 @@ namespace OurPresence.Core.Money
     /// <summary>
     /// Static list of default currencies.
     /// </summary>
-    internal static class DefaultCurrencies 
+    internal static class DefaultCurrencies
     {
         /// <summary>
         /// The Malagasy ariary and the Mauritanian ouguiya are technically divided into five subunits (the iraimbilanja and
@@ -20,21 +20,21 @@ namespace OurPresence.Core.Money
         /// <summary>Used for indication that the number of decimal digits doesn't matter, for example for gold or silver.</summary>
         internal const double NotApplicable = -1;
 
-        private static readonly object Obj = new();
-        private static IList<Currency>? _currencies;
+        private static readonly object s_obj = new();
+        private static IList<Currency>? s_currencies;
 
-        internal static IEnumerable<Currency>? Currencies 
+        internal static IEnumerable<Currency>? Currencies
         {
-            get 
+            get
             {
                 EnsureCurrencyTable();
-                return _currencies;
-            }        
+                return s_currencies;
+            }
         }
 
         internal static void EnsureCurrencyTable()
         {
-            if (_currencies is null)
+            if (s_currencies is null)
             {
                 InitCurrencyTable();
             }
@@ -42,9 +42,9 @@ namespace OurPresence.Core.Money
 
         private static void InitCurrencyTable()
         {
-            lock (Obj)
+            lock (s_obj)
             {
-                _currencies = new List<Currency>
+                s_currencies = new List<Currency>
                 {
                     // ISO-4217 currencies (list one)
                     new Currency("AED", "784", 2, "United Arab Emirates dirham", "د.إ"),

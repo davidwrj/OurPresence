@@ -19,7 +19,7 @@ namespace OurPresence.Core.Money.Tests.Helpers
         /// <summary>Replaces the culture and UI culture of the current thread with <paramref name="culture" /></summary>
         /// <param name="culture">The name of the culture.</param>
         /// <remarks>
-        /// <para>This constructor overload uses <paramref name="culture" /> for both <see cref="Culture" /> and <see cref="UICulture" />.</para>
+        /// <para>This constructor overload uses <paramref name="culture" /> for both <see cref="Culture" /> and <see cref="UiCulture" />.</para>
         /// </remarks>
         public UseCultureAttribute(string culture)
             : this(culture, culture)
@@ -32,14 +32,14 @@ namespace OurPresence.Core.Money.Tests.Helpers
         public UseCultureAttribute(string culture, string uiCulture)
         {
             Culture = new CultureInfo(culture, false);
-            UICulture = new CultureInfo(uiCulture, false);
+            UiCulture = new CultureInfo(uiCulture, false);
         }
 
         /// <summary>Gets the culture.</summary>
         public CultureInfo Culture { get; }
 
         /// <summary>Gets the UI culture.</summary>
-        public CultureInfo UICulture { get; }
+        public CultureInfo UiCulture { get; }
 
         /// <summary>Stores the current <see cref="Thread.CurrentPrincipal" />
         /// <see cref="CultureInfo.CurrentCulture" /> and <see cref="CultureInfo.CurrentUICulture" />
@@ -52,7 +52,7 @@ namespace OurPresence.Core.Money.Tests.Helpers
             _originalUiCulture = Thread.CurrentThread.CurrentUICulture;
 
             Thread.CurrentThread.CurrentCulture = Culture;
-            Thread.CurrentThread.CurrentUICulture = UICulture;
+            Thread.CurrentThread.CurrentUICulture = UiCulture;
 
             CultureInfo.CurrentCulture.ClearCachedData();
             CultureInfo.CurrentUICulture.ClearCachedData();

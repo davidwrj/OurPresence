@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     internal static class TypeUtility
     {
@@ -10,7 +10,7 @@ namespace DotLiquid.Util
 
         public static bool IsAnonymousType(Type t)
         {
-            
+
             return t.GetTypeInfo().GetCustomAttribute<CompilerGeneratedAttribute>() != null
                 && t.GetTypeInfo().IsGenericType
                     && (t.Name.Contains("AnonymousType") || t.Name.Contains("AnonType"))

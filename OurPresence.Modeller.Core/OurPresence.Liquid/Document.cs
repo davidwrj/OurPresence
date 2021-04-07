@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Represents the Liquid template

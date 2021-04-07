@@ -29,9 +29,6 @@ namespace OurPresence.Modeller.Loaders
 
         private IEnumerable<IGeneratorItem> Process(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
-                filePath = Defaults.LocalFolder;
-
             var local = new System.IO.DirectoryInfo(filePath);
             var list = new List<IGeneratorItem>();
             if (!local.Exists)

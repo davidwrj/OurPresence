@@ -1,4 +1,4 @@
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// See here for motivation: <see cref="http://wiki.github.com/tobi/liquid/using-liquid-without-rails"/>.

@@ -14,5 +14,4 @@
         IGeneratorVersion Version { get; set; }
         bool Overwrite { get; set; }
     }
-
 }

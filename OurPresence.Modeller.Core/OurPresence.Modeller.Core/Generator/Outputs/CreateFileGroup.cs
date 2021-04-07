@@ -14,19 +14,27 @@ namespace OurPresence.Modeller.Generator.Outputs
 
         public Type SupportedType => typeof(IFileGroup);
 
-        public void Create(IOutput output, string path = null, bool overwrite = false)
+        public void Create(IOutput output, string? path = null, bool overwrite = false)
         {
             if (!(output is IFileGroup fileGroup))
+            {
                 throw new NotSupportedException($"{nameof(CreateFileGroup)} only supports {SupportedType.FullName} output types.");
+            }
 
             if (string.IsNullOrWhiteSpace(output.Name) && !string.IsNullOrWhiteSpace(path))
+            {
                 fileGroup.SetPath(path);
+            }
             else if (!System.IO.Path.IsPathRooted(output.Name))
             {
                 if (!string.IsNullOrWhiteSpace(path))
+                {
                     fileGroup.SetPath(System.IO.Path.Combine(path, output.Name));
+                }
                 else
+                {
                     fileGroup.SetPath(output.Name);
+                }
             }
             foreach (var file in fileGroup.Files)
             {

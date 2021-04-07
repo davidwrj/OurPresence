@@ -1,5 +1,4 @@
 ﻿using OurPresence.Modeller.Domain.Extensions;
-using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using System.IO;
 
@@ -21,7 +20,7 @@ namespace OurPresence.Modeller.Loaders
             return Load(filePath) ;
         }
 
-        bool ILoader<ISettings>.TryLoad(string filePath, out ISettings instances)
+        bool ILoader<ISettings>.TryLoad(string filePath, out ISettings? instances)
         {
             if (!string.IsNullOrWhiteSpace(filePath))
             {
@@ -32,7 +31,7 @@ namespace OurPresence.Modeller.Loaders
                 }
                 catch { }
             }
-            instances = new Settings();
+            instances = null;
             return false;
         }
     }

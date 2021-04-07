@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class CustomIndexableTests
@@ -12,32 +12,32 @@ namespace DotLiquid.Tests
         {
             internal VirtualList(params object[] items)
             {
-                this.items = items;
+                this._items = items;
             }
 
-            private readonly object[] items;
+            private readonly object[] _items;
 
             public object this[object key]
             {
                 get
                 {
                     int? index = key as int?;
-                    if (!index.HasValue || index.Value < 0 || index.Value >= items.Length) {
+                    if (!index.HasValue || index.Value < 0 || index.Value >= _items.Length) {
                         throw new KeyNotFoundException();
                     }
-                    return items[index.Value];
+                    return _items[index.Value];
                 }
             }
 
             public bool ContainsKey(object key)
             {
                 int? index = key as int?;
-                return index.HasValue && index.Value >= 0 && index.Value < items.Length;
+                return index.HasValue && index.Value >= 0 && index.Value < _items.Length;
             }
 
             public IEnumerator GetEnumerator()
             {
-                return items.GetEnumerator();
+                return _items.GetEnumerator();
             }
         }
 
@@ -45,33 +45,33 @@ namespace DotLiquid.Tests
         {
             internal VirtualLongList(params object[] items)
             {
-                this.items = items;
+                this._items = items;
             }
 
-            private readonly object[] items;
+            private readonly object[] _items;
 
             public object this[object key]
             {
                 get
                 {
                     var index = key != null ? (long?)System.Convert.ToInt64(key) : null;
-                    if (!index.HasValue || index.Value < 0L || index.Value >= items.Length)
+                    if (!index.HasValue || index.Value < 0L || index.Value >= _items.Length)
                     {
                         throw new KeyNotFoundException();
                     }
-                    return items[index.Value];
+                    return _items[index.Value];
                 }
             }
 
             public bool ContainsKey(object key)
             {
                 var index = key != null ? (long?)System.Convert.ToInt64(key) : null;
-                return index.HasValue && index.Value >= 0L && index.Value < items.Length;
+                return index.HasValue && index.Value >= 0L && index.Value < _items.Length;
             }
 
             public IEnumerator GetEnumerator()
             {
-                return items.GetEnumerator();
+                return _items.GetEnumerator();
             }
         }
 
@@ -159,7 +159,7 @@ namespace DotLiquid.Tests
         public void TestOnlyIndexableRender()
         {
             Assert.AreEqual(
-                expected: "Liquid syntax error: Object 'DotLiquid.Tests.CustomIndexableTests+OnlyIndexable' is invalid because it is neither a built-in type nor implements ILiquidizable",
+                expected: "Liquid syntax error: Object 'OurPresence.Liquid.Tests.CustomIndexableTests+OnlyIndexable' is invalid because it is neither a built-in type nor implements ILiquidizable",
                 actual: Template
                     .Parse("{{container}}")
                     .Render(Hash.FromAnonymousObject(new { container = new OnlyIndexable() })));

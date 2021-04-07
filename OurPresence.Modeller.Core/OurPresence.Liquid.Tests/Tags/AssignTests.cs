@@ -1,8 +1,7 @@
 using System.Globalization;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class AssignTests

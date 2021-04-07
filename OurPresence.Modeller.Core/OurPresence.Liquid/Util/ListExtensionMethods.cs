@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     public static class ListExtensionMethods
     {
@@ -47,7 +47,7 @@ namespace DotLiquid.Util
         /// <summary>
         /// Removes the first element from the list and returns it,
         /// or null if the list is empty.
-        /// WARNING: The RemoveAt() operation is O(N). 
+        /// WARNING: The RemoveAt() operation is O(N).
         /// If the element does not actually need to be removed from the list, use TryGetAtIndex() instead.
         /// </summary>
         /// <param name="list"></param>
@@ -58,7 +58,7 @@ namespace DotLiquid.Util
             if (list == null || list.Count == 0)
                 return null;
 
-            T result = list[0];
+            var result = list[0];
             list.RemoveAt(0);
 
             return result;
@@ -77,7 +77,7 @@ namespace DotLiquid.Util
             if (list == null || list.Count == 0)
                 return null;
 
-            T result = list[list.Count - 1];
+            var result = list[list.Count - 1];
             list.RemoveAt(list.Count - 1);
 
             return result;

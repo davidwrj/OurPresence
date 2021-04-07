@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Object that can render itslef

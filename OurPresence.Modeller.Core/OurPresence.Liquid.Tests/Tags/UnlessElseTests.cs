@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class UnlessElseTests

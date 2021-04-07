@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DotLiquid.NamingConventions;
-using DotLiquid.Util;
+using OurPresence.Liquid.NamingConventions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     ///     Configurable typing metadata collection
@@ -118,11 +118,11 @@ namespace DotLiquid
         internal static class TypeResolutionCache
     {
         [ThreadStatic]
-        private static WeakTable<Type, TypeResolution> _cache;
+        private static WeakTable<Type, TypeResolution> s_cache;
 
         public static WeakTable<Type, TypeResolution> Instance
         {
-            get { return _cache ?? (_cache = new WeakTable<Type, TypeResolution>(32)); }
+            get { return s_cache ?? (s_cache = new WeakTable<Type, TypeResolution>(32)); }
         }
     }
 
@@ -150,9 +150,9 @@ namespace DotLiquid
         {
             get
             {
-                Type dropType = GetObject().GetType();
-                if (!TypeResolutionCache.Instance.TryGetValue(dropType, out TypeResolution resolution))
-                { 
+                var dropType = GetObject().GetType();
+                if (!TypeResolutionCache.Instance.TryGetValue(dropType, out var resolution))
+                {
                     TypeResolutionCache.Instance[dropType] = resolution = CreateTypeResolution(dropType);
                 }
                 return resolution;
@@ -202,11 +202,11 @@ namespace DotLiquid
             // if we were using Ruby-style names.
             if (Template.NamingConvention is RubyNamingConvention)
             {
-                string rubyMethod = Template.NamingConvention.GetMemberName(method);
+                var rubyMethod = Template.NamingConvention.GetMemberName(method);
 
-                if (TypeResolution.CachedMethods.TryGetValue(rubyMethod, out MethodInfo mi) || TypeResolution.CachedProperties.TryGetValue(rubyMethod, out PropertyInfo pi))
+                if (TypeResolution.CachedMethods.TryGetValue(rubyMethod, out var mi) || TypeResolution.CachedProperties.TryGetValue(rubyMethod, out var pi))
                 {
-                    return string.Format(Liquid.ResourceManager.GetString("DropWrongNamingConventionMessage"), rubyMethod);
+                    return string.Format("Missing property. Did you mean '{0}'?", rubyMethod);
                 }
             }
             return null;
@@ -218,11 +218,11 @@ namespace DotLiquid
         /// <param name="name"></param>
         public object InvokeDrop(object name)
         {
-            string method = (string)name;
+            var method = (string)name;
 
-            if (TypeResolution.CachedMethods.TryGetValue(method, out MethodInfo mi))
+            if (TypeResolution.CachedMethods.TryGetValue(method, out var mi))
                 return mi.Invoke(GetObject(), null);
-            if (TypeResolution.CachedProperties.TryGetValue(method, out PropertyInfo pi))
+            if (TypeResolution.CachedProperties.TryGetValue(method, out var pi))
                 return pi.GetValue(GetObject(), null);
             return BeforeMethod(method);
         }

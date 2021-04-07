@@ -1,8 +1,8 @@
 using System.Collections;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class IfElseTests
@@ -185,7 +185,7 @@ namespace DotLiquid.Tests.Tags
         [Test]
         public void TestIfWithCustomCondition()
         {
-            DotLiquid.ConditionOperatorDelegate oldCondition = Condition.Operators["contains"];
+            OurPresence.Liquid.ConditionOperatorDelegate oldCondition = Condition.Operators["contains"];
             Condition.Operators["contains"] = (left, right) => (left is IList) ? ((IList) left).Contains(right) : ((left is string) ? ((string) left).Contains((string) right) : false);
 
             try

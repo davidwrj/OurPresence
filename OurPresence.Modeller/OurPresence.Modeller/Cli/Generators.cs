@@ -1,10 +1,9 @@
-﻿using OurPresence.Modeller.Generator;
-using OurPresence.Modeller.Interfaces;
-using OurPresence.Modeller.Properties;
+﻿using OurPresence.Modeller.Interfaces;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
+// ReSharper disable MemberCanBePrivate.Local
 
 namespace OurPresence.Modeller.Cli
 {
@@ -13,12 +12,7 @@ namespace OurPresence.Modeller.Cli
     [Subcommand(typeof(Update))]
     public class Generators
     {
-        public Generators()
-        {
-        }
-
         [Command(Description = "List available generators"), HelpOption]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated via reflection")]
         private class List
         {
             private readonly IPresenter _presenter;
@@ -28,24 +22,28 @@ namespace OurPresence.Modeller.Cli
             {
                 _presenter = presenter ?? throw new ArgumentNullException(nameof(presenter));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+                LocalFolder = _presenter.GeneratorConfiguration.LocalFolder;
+                Target = _presenter.GeneratorConfiguration.Target;
+                Verbose = _presenter.GeneratorConfiguration.Verbose;
             }
 
             [Option(Description = "Path to the locally cached generators")]
             [DirectoryExists]
-            public string LocalFolder { get; } = Defaults.LocalFolder;
+            public string LocalFolder { get; } 
 
             [Option(Description = "Target framework. Defaults to netstandard2.0", Inherited = true)]
-            public string Target { get; } = Defaults.Target;
+            public string Target { get; } 
 
             [Option]
             public bool Verbose { get; }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Top level unexpected catch all")]
+            // ReSharper disable once UnusedMember.Local
             internal int OnExecute()
             {
                 try
                 {
-                    _logger.LogTrace(Resources.ListOnExecute);
+                    _logger.LogTrace("Generator List Command - OnExecute");
 
                     _presenter.GeneratorConfiguration.LocalFolder = LocalFolder;
                     _presenter.GeneratorConfiguration.Target = Target;
@@ -56,18 +54,17 @@ namespace OurPresence.Modeller.Cli
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(LoggingEvents.ListError, ex, Resources.ListFailed);
+                    _logger.LogError(LoggingEvents.ListError, ex, "List command failed");
                     return 1;
                 }
                 finally
                 {
-                    _logger.LogTrace(Resources.ListComplete);
+                    _logger.LogTrace("Generator List Command - complete");
                 }
             }
         }
 
         [Command(Description = "Update generators"), HelpOption]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated via reflection")]
         private class Update
         {
             private readonly IUpdater _updater;
@@ -77,11 +74,17 @@ namespace OurPresence.Modeller.Cli
             {
                 _updater = updater ?? throw new ArgumentNullException(nameof(updater));
                 _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+                LocalFolder = _updater.GeneratorConfiguration.LocalFolder;
+                Overwrite = _updater.GeneratorConfiguration.Overwrite;
+                ServerFolder = _updater.GeneratorConfiguration.ServerFolder;
+                Target = _updater.GeneratorConfiguration.Target;
+                Verbose = _updater.GeneratorConfiguration.Verbose;
             }
 
             [Option(Description = "Path to the locally cached generators")]
             [DirectoryExists]
-            public string LocalFolder { get; } = Defaults.LocalFolder;
+            public string LocalFolder { get; } 
 
             [Option(Inherited = true, ShortName = "")]
             public bool Overwrite { get; }
@@ -92,15 +95,15 @@ namespace OurPresence.Modeller.Cli
             public string ServerFolder { get; }
 
             [Option(Description = "Target framework. Defaults to netstandard2.0", Inherited = true)]
-            public string Target { get; } = Defaults.Target;
+            public string Target { get; } 
 
             [Option]
-            public bool Verbose { get; } = false;
+            public bool Verbose { get; } 
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Top level unexpected catch all")]
+            // ReSharper disable once UnusedMember.Local
             internal int OnExecute()
             {
-                _logger.LogTrace(Resources.UpdateOnExecute);
+                _logger.LogTrace("Generator Update Command - OnExecute");
                 try
                 {
                     _updater.GeneratorConfiguration.LocalFolder = LocalFolder;
@@ -114,20 +117,21 @@ namespace OurPresence.Modeller.Cli
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(LoggingEvents.UpdateError, ex, Resources.UpdateFailed);
+                    _logger.LogError(LoggingEvents.UpdateError, ex, "Update command failed");
                     return 1;
                 }
                 finally
                 {
-                    _logger.LogTrace(Resources.UpdateComplete);
+                    _logger.LogTrace("Generator Update Command - complete");
                 }
             }
         }
 
+        // ReSharper disable once UnusedMember.Global
         internal int OnExecute(IConsole console, CommandLineApplication app)
         {
             console.WriteLine();
-            console.WriteLine(Resources.SpecifyCommand);
+            console.WriteLine("You need to specify a command");
             console.WriteLine();
 
             app.ShowHelp();

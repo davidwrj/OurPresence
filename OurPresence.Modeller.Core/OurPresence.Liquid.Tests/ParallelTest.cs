@@ -1,11 +1,7 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DotLiquid.Tests {
+namespace OurPresence.Liquid.Tests {
     [TestFixture]
     public class ParallelTest {
         [Test]

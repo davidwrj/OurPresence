@@ -1,10 +1,9 @@
 using System;
 using System.Globalization;
-using System.Threading;
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Util
+namespace OurPresence.Liquid.Tests.Util
 {
     [Description("See https://help.shopify.com/themes/liquid/filters/additional-filters#date")]
     [TestFixture]

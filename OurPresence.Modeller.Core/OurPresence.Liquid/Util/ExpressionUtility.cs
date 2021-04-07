@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     /// <summary>
     /// Some of this code was taken from http://www.yoda.arachsys.com/csharp/miscutil/usage/genericoperators.html.
@@ -11,13 +11,13 @@ namespace DotLiquid.Util
     /// </summary>
     public static class ExpressionUtility
     {
-        private static readonly Dictionary<Type, Type[]> NumericTypePromotions;
+        private static readonly Dictionary<Type, Type[]> s_numericTypePromotions;
 
         static ExpressionUtility()
         {
-            NumericTypePromotions = new Dictionary<Type, Type[]>();
+            s_numericTypePromotions = new Dictionary<Type, Type[]>();
 
-            void Add(Type key, params Type[] types) => NumericTypePromotions[key] = types;
+            void Add(Type key, params Type[] types) => s_numericTypePromotions[key] = types;
             // Using the promotion table at
             // https://docs.microsoft.com/en-us/dotnet/standard/base-types/conversion-tables
 
@@ -48,17 +48,17 @@ namespace DotLiquid.Util
             if (left == right)
                 return left;
 
-            if (!NumericTypePromotions.ContainsKey(left))
+            if (!s_numericTypePromotions.ContainsKey(left))
                 throw new System.ArgumentException("Argument is not numeric", nameof(left));
-            if (!NumericTypePromotions.ContainsKey(right))
+            if (!s_numericTypePromotions.ContainsKey(right))
                 throw new System.ArgumentException("Argument is not numeric", nameof(right));
 
             // Test left to right promotion
-            if (NumericTypePromotions[right].Contains(left))
+            if (s_numericTypePromotions[right].Contains(left))
                 return left;
-            if (NumericTypePromotions[left].Contains(right))
+            if (s_numericTypePromotions[left].Contains(right))
                 return right;
-            return NumericTypePromotions[right].First(p => NumericTypePromotions[left].Contains(p));
+            return s_numericTypePromotions[right].First(p => s_numericTypePromotions[left].Contains(p));
         }
 
         private static (Expression left, Expression right) Cast(Expression lhs, Expression rhs,Type leftType, Type rightType, Type resultType)
@@ -109,7 +109,7 @@ namespace DotLiquid.Util
             }
             catch (Exception ex)
             {
-                string msg = ex.Message; // avoid capture of ex itself
+                var msg = ex.Message; // avoid capture of ex itself
                 return Expression.Lambda(Expression.Throw(Expression.Constant(new InvalidOperationException(msg))), lhs, rhs).Compile();
             }
         }

@@ -29,24 +29,24 @@ namespace DomainClass
                 {
                     var sb = new StringBuilder();
 
-                    sb.al("using System;");
-                    sb.al($"using {_module.Namespace}.Models;");
-                    sb.al("");
-                    sb.al($"namespace {_module.Namespace}.Events");
-                    sb.al("{");
-                    sb.i(1).al($"public class {behaviour.Event} : BaseDomainEvent<{_model.Name}, Guid>");
-                    sb.i(1).al("{");
-                    sb.i(2).al("/// <summary>");
-                    sb.i(2).al("/// for deserialization");
-                    sb.i(2).al("/// </summary>");
-                    sb.i(2).al($"private {behaviour.Event}() {{ }}");
-                    sb.b();
-                    sb.i(2).al($"public {behaviour.Event}({_model.Name} {_model.Name.Singular.LocalVariable}) : base({_model.Name.Singular.LocalVariable})");
-                    sb.i(2).al("{");
-                    sb.i(3).al("// todo: ");
-                    sb.i(2).al("}");
-                    sb.i(1).al("}");
-                    sb.al("}");
+                    sb.Al("using System;");
+                    sb.Al($"using {_module.Namespace}.Models;");
+                    sb.Al("");
+                    sb.Al($"namespace {_module.Namespace}.Events");
+                    sb.Al("{");
+                    sb.I(1).Al($"public class {behaviour.Event} : BaseDomainEvent<{_model.Name}, Guid>");
+                    sb.I(1).Al("{");
+                    sb.I(2).Al("/// <summary>");
+                    sb.I(2).Al("/// for deserialization");
+                    sb.I(2).Al("/// </summary>");
+                    sb.I(2).Al($"private {behaviour.Event}() {{ }}");
+                    sb.B();
+                    sb.I(2).Al($"public {behaviour.Event}({_model.Name} {_model.Name.Singular.LocalVariable}) : base({_model.Name.Singular.LocalVariable})");
+                    sb.I(2).Al("{");
+                    sb.I(3).Al("// todo: ");
+                    sb.I(2).Al("}");
+                    sb.I(1).Al("}");
+                    sb.Al("}");
 
                     fileGroup.AddFile(new File(behaviour.Event + ".cs", sb.ToString(), path: "Events"));
                 }

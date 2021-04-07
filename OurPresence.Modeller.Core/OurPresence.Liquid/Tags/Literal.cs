@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// Literal
@@ -14,9 +14,9 @@ namespace DotLiquid.Tags
     ///
     /// {{{ {% if user = 'tobi' %}hi{% endif %} }}}
     /// </summary>
-    public class Literal : DotLiquid.Block
+    public class Literal : OurPresence.Liquid.Block
     {
-        private static readonly Regex LiteralRegex = R.C(Liquid.LiteralShorthand);
+        private static readonly Regex s_literalRegex = R.C(Liquid.LiteralShorthand);
 
         /// <summary>
         /// Creates a literal from shorthand
@@ -28,7 +28,7 @@ namespace DotLiquid.Tags
             if (@string == null)
                 return @string;
 
-            Match match = LiteralRegex.Match(@string);
+            var match = s_literalRegex.Match(@string);
             return match.Success ? string.Format(@"{{% literal %}}{0}{{% endliteral %}}", match.Groups[1].Value) : @string;
         }
 
@@ -44,7 +44,7 @@ namespace DotLiquid.Tags
             string token;
             while ((token = tokens.Shift()) != null)
             {
-                Match fullTokenMatch = FullToken.Match(token);
+                var fullTokenMatch = FullToken.Match(token);
                 if (fullTokenMatch.Success && BlockDelimiter == fullTokenMatch.Groups[1].Value)
                 {
                     EndTag();

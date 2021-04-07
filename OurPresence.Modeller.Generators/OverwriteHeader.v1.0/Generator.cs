@@ -19,11 +19,11 @@ namespace OverwriteHeader
         public IOutput Create()
         {
             var sb = new System.Text.StringBuilder();
-            sb.al($"// Auto-generated using OurPresence.Modeller template '{_metadata.Name}' version {_metadata.Version}");
-            sb.b();
-            sb.al($"// {new string('-', 80)}");
-            sb.al("// WARNING: This file will be overwritten if re-generation is triggered.");
-            sb.al($"// {new string('-', 80)}");
+            sb.Al($"// Auto-generated using OurPresence.Modeller template '{_metadata.Name}' version {_metadata.Version}");
+            sb.B();
+            sb.Al($"// {new string('-', 80)}");
+            sb.Al("// WARNING: This file will be overwritten if re-generation is triggered.");
+            sb.Al($"// {new string('-', 80)}");
             return new Snippet(sb.ToString());
         }
     }

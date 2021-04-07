@@ -11,7 +11,7 @@ namespace OurPresence.Core
     {
         private readonly IEnumerable<Assembly> _assemblies;
 
-        private static readonly Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings()
+        private static readonly Newtonsoft.Json.JsonSerializerSettings s_jsonSerializerSettings = new()
         {
             ConstructorHandling = Newtonsoft.Json.ConstructorHandling.AllowNonPublicDefaultConstructor,
             ContractResolver = new PrivateSetterContractResolver()
@@ -24,7 +24,7 @@ namespace OurPresence.Core
 
         public IDomainEvent<TKey> Deserialize<TKey>(string type, byte[] data)
         {
-            var jsonData = System.Text.Encoding.UTF8.GetString(data);
+            var jsonData = Encoding.UTF8.GetString(data);
             return this.Deserialize<TKey>(type, jsonData);
         }
 
@@ -40,7 +40,7 @@ namespace OurPresence.Core
             // https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-how-to
             // apparently it's being worked on: https://github.com/dotnet/runtime/issues/29895
 
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject(data, eventType, JsonSerializerSettings);
+            var result = Newtonsoft.Json.JsonConvert.DeserializeObject(data, eventType, s_jsonSerializerSettings);
 
             return (IDomainEvent<TKey>)result;
         }

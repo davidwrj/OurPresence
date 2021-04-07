@@ -9,7 +9,16 @@ namespace OurPresence.Modeller.Generator
     {
         private readonly IList<IPackage> _packages = new List<IPackage>();
 
-        string GetVersion(string name, string fallbackVersion)
+        public Packages(IPackageService packageService, ISettings settings)
+        {
+            packageService.Refresh(System.IO.Path.Combine(settings.LocalFolder, settings.Target,
+                settings.Target + ".json"));
+            Register(packageService.Items);
+        }
+        
+        public int Count => _packages.Count;
+        
+        public string GetVersion(string name, string fallbackVersion)
         {
             var found = _packages.SingleOrDefault(p => string.Equals(p.Name, name, StringComparison.InvariantCultureIgnoreCase));
             return found == null ? fallbackVersion : found.Version;
@@ -17,7 +26,7 @@ namespace OurPresence.Modeller.Generator
 
         public void Register(string name, string version) => Register(new Package(name, version));
 
-        public void Register(IEnumerable<IPackage> packages)
+        private void Register(IEnumerable<IPackage> packages)
         {
             foreach (var package in packages)
             {
@@ -25,7 +34,7 @@ namespace OurPresence.Modeller.Generator
             }
         }
         
-        public void Register(IPackage? package)
+        private void Register(IPackage? package)
         {
             if (package is null || string.IsNullOrWhiteSpace(package.Name) || string.IsNullOrWhiteSpace(package.Version)) return;  
 

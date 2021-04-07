@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using DotLiquid.NamingConventions;
+using OurPresence.Liquid.NamingConventions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class DropTests
@@ -152,7 +152,7 @@ namespace DotLiquid.Tests
 
         internal class CamelCaseDrop : Drop
         {
-            public int ProductID
+            public int ProductId
             {
                 get { return 1; }
             }

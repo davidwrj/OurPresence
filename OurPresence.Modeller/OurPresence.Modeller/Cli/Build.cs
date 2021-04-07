@@ -1,23 +1,30 @@
-﻿using OurPresence.Modeller.Properties;
-using OurPresence.Modeller.Generator;
+﻿using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.Extensions.Configuration;
+
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace OurPresence.Modeller.Cli
 {
     [Command(Name = "build", Description = "Use DLL components to generate code")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated via reflection")]
     internal class Build
     {
         private readonly IBuilder _builder;
-        private readonly ILogger<Program> _logger;
+        private readonly ILogger<Build> _logger;
 
-        public Build(IBuilder builder, ILogger<Program> logger)
+        public Build(IBuilder builder, IConfiguration configuration, ILogger<Build> logger)
         {
             _builder = builder;
             _logger = logger;
+            
+            Target = configuration.GetValue<string>("Target");
+            Output = configuration.GetValue<string>("Output");
+            LocalFolder = configuration.GetValue<string>("LocalFolder");
+            Settings = Environment.CurrentDirectory;
         }
 
         [Argument(0, Description = "The generator to use.")]
@@ -29,23 +36,23 @@ namespace OurPresence.Modeller.Cli
 
         [Option(Description = "Path to the locally cached generators")]
         [DirectoryExists]
-        public string LocalFolder { get; } = Defaults.LocalFolder;
+        public string LocalFolder { get; } 
 
         [Option(Description = "Model name. If included then the output will be limited to the specified model")]
-        public string Model { get; }
+        public string? Model { get; }
 
         [Option(Description = "Output folder")]
-        public string Output { get; } = Defaults.OutputFolder;
+        public string Output { get; } 
 
         [Option(Inherited = true, ShortName = "")]
         public bool Overwrite { get; }
 
         [Option(Description = "Target framework. Defaults to netstandard2.0", Inherited = true)]
-        public string Target { get; } = Defaults.Target;
+        public string Target { get; } 
 
         [Option(Description = "Settings file to use when generating code. Settings in the file will override arguments on the command line", ShortName = "s", Inherited = true)]
         [FileExists]
-        public string Settings { get; }
+        public string? Settings { get; }
 
         [Option(Description = "Specific version to use for the generator", ShortName = "")]
         public string Version { get; } = "1.0.0";
@@ -65,7 +72,7 @@ namespace OurPresence.Modeller.Cli
                 };
 
                 if (!string.IsNullOrWhiteSpace(Generator))
-                    config.GeneratorName = Generator ?? string.Empty;
+                    config.GeneratorName = Generator;
                 if (!string.IsNullOrWhiteSpace(LocalFolder))
                     config.LocalFolder = LocalFolder;
                 if (!string.IsNullOrWhiteSpace(Output))
@@ -82,20 +89,20 @@ namespace OurPresence.Modeller.Cli
                 if (!string.IsNullOrWhiteSpace(SourceModel))
                     config.SourceModel = SourceModel;
 
-                _logger.LogTrace(Resources.BuildOnExecute);
+                _logger.LogTrace("Generator Build Command - OnExecute");
 
-                _builder.Create(config);
+                _builder.Create();
 
                 return 0;
             }
             catch (Exception ex)
             {
-                _logger.LogError(LoggingEvents.BuildError, ex, Resources.BuildFailed);
+                _logger.LogError(LoggingEvents.BuildError, ex, "Build command failed");
                 return 1;
             }
             finally
             {
-                _logger.LogTrace(Resources.BuildComplete);
+                _logger.LogTrace("Generator Build Command - complete");
             }
         }
     }

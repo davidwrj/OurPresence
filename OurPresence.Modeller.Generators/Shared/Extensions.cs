@@ -9,9 +9,9 @@ internal static class Extensions
     /// <param name="value">Indentation level</param>
     /// <param name="spaces">Size of an indent (default: 4 spaces)</param>
     /// <returns></returns>
-    internal static StringBuilder i(this StringBuilder sb, int value, int spaces = 4)
+    internal static StringBuilder I(this StringBuilder sb, int value, int spaces = 4)
     {
-        a(sb,new string(' ', value * spaces));
+        A(sb,new string(' ', value * spaces));
         return sb;
     }
 
@@ -21,7 +21,7 @@ internal static class Extensions
     /// <param name="sb"></param>
     /// <param name="line"></param>
     /// <returns></returns>
-    internal static StringBuilder a(this StringBuilder sb, string line)
+    internal static StringBuilder A(this StringBuilder sb, string line)
     {
         sb.Append(line);
         return sb;
@@ -33,7 +33,7 @@ internal static class Extensions
     /// <param name="sb"></param>
     /// <param name="line">A string</param>
     /// <returns><see cref="StringBuilder"/></returns>
-    internal static StringBuilder al(this StringBuilder sb, string line)
+    internal static StringBuilder Al(this StringBuilder sb, string line)
     {
         sb.AppendLine(line);
         return sb;
@@ -44,7 +44,7 @@ internal static class Extensions
     /// </summary>
     /// <param name="sb"></param>
     /// <returns><see cref="StringBuilder"/></returns>
-    internal static StringBuilder b(this StringBuilder sb)
+    internal static StringBuilder B(this StringBuilder sb)
     {
         sb.AppendLine();
         return sb;

@@ -5,18 +5,18 @@ namespace OurPresence.Modeller
 {
     public class InvalidSettingsFileException:Exception
     {
-        const string msg = "{0} is not a valid settings file.";
-        
+        const string Msg = "{0} is not a valid settings file.";
+
         public InvalidSettingsFileException(string filename)
-            : base(string.Format(msg, filename))
+            : base(string.Format(Msg, filename))
         { }
 
         public InvalidSettingsFileException(string filename, string? message)
-            : base(string.Format(msg, filename) + " " + message)
+            : base(string.Format(Msg, filename) + " " + message)
         { }
 
-        public InvalidSettingsFileException(string filename, string? message, Exception? innerException) 
-            : base(string.Format(msg, filename) + " " + message, innerException)
+        public InvalidSettingsFileException(string filename, string? message, Exception? innerException)
+            : base(string.Format(Msg, filename) + " " + message, innerException)
         {
         }
 
@@ -26,18 +26,18 @@ namespace OurPresence.Modeller
 
     public class InvalidModuleFileException : Exception
     {
-        const string msg = "{0} is not a valid module file.";
+        const string Msg = "{0} is not a valid module file.";
 
         public InvalidModuleFileException(string filename)
-            : base(string.Format(msg, filename))
+            : base(string.Format(Msg, filename))
         { }
 
         public InvalidModuleFileException(string filename, string? message)
-            : base(string.Format(msg, filename) + " " + message)
+            : base(string.Format(Msg, filename) + " " + message)
         { }
 
         public InvalidModuleFileException(string filename, string? message, Exception? innerException)
-            : base(string.Format(msg, filename) + " " + message, innerException)
+            : base(string.Format(Msg, filename) + " " + message, innerException)
         {
         }
 

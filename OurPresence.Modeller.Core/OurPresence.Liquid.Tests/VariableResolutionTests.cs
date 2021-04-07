@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class VariableResolutionTests

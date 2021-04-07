@@ -1,7 +1,7 @@
 using System.IO;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     public class Break : Tag
     {

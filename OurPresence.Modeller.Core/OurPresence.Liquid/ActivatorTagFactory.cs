@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Tag factory using System.Activator to instanciate the tag.
@@ -20,7 +20,7 @@ namespace DotLiquid
         /// Instanciates a new ActivatorTagFactory
         /// </summary>
         /// <param name="tagType">Name of the tag</param>
-        /// <param name="tagName">Type of the tag. must inherit from DotLiquid.Tag.</param>
+        /// <param name="tagName">Type of the tag. must inherit from OurPresence.Liquid.Tag.</param>
         public ActivatorTagFactory(Type tagType, string tagName)
         {
             _tagType = tagType;

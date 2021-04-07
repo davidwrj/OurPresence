@@ -1,6 +1,6 @@
 using System;
 
-namespace DotLiquid.Util
+namespace OurPresence.Liquid.Util
 {
     internal class WeakTable<TKey, TValue> where TValue : class
     {
@@ -21,13 +21,13 @@ namespace DotLiquid.Util
         {
             get
             {
-                if (!TryGetValue(key, out TValue ret))
-                    throw new ArgumentException(Liquid.ResourceManager.GetString("WeakTableKeyNotFoundException"));
+                if (!TryGetValue(key, out var ret))
+                    throw new ArgumentException("Weak Table Key Not Found");
                 return ret;
             }
             set
             {
-                int i = Math.Abs(key.GetHashCode()) % _buckets.Length;
+                var i = Math.Abs(key.GetHashCode()) % _buckets.Length;
                 _buckets[i].Key = key;
                 _buckets[i].Value = new WeakReference(value);
             }
@@ -35,7 +35,7 @@ namespace DotLiquid.Util
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            int i = Math.Abs(key.GetHashCode()) % _buckets.Length;
+            var i = Math.Abs(key.GetHashCode()) % _buckets.Length;
             WeakReference wr;
             if ((wr = _buckets[i].Value) == null || !_buckets[i].Key.Equals(key))
             {
@@ -48,7 +48,7 @@ namespace DotLiquid.Util
 
         public void Remove(TKey key)
         {
-            int i = Math.Abs(key.GetHashCode()) % _buckets.Length;
+            var i = Math.Abs(key.GetHashCode()) % _buckets.Length;
             if (_buckets[i].Key.Equals(key))
                 _buckets[i].Value = null;
         }

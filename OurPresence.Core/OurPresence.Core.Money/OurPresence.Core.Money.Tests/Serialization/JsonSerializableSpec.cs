@@ -5,11 +5,11 @@ using OurPresence.Core.Money.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace OurPresence.Core.Money.Serialization.Tests
+namespace OurPresence.Core.Money.Tests.Serialization
 {
     public static class JsonSerializableSpec
     {
-        public class GivenIWantToSerializeAmounWithJsonSerializer
+        public class GivenIWantToSerializeAmountWithJsonSerializer
         {
             public static IEnumerable<object[]> TestData => new[]
             {
@@ -30,12 +30,12 @@ namespace OurPresence.Core.Money.Serialization.Tests
 
         public class GivenIWantToDeserializeAmountWithJsonSerializer
         {
-            private static readonly string _currentCultureCode = new RegionInfo(CultureInfo.CurrentCulture.LCID).ISOCurrencySymbol;
+            private static readonly string s_currentCultureCode = new RegionInfo(CultureInfo.CurrentCulture.LCID).ISOCurrencySymbol;
 
             public static IEnumerable<object[]> ValidJsonData => new[]
             {
-                new object[] { $"{{ \"value\": 200, \"currency\": \"{_currentCultureCode}\" }}" },
-                new object[] { $"{{ \"currency\": \"{_currentCultureCode}\", \"value\": 200 }}" },
+                new object[] { $"{{ \"value\": 200, \"currency\": \"{s_currentCultureCode}\" }}" },
+                new object[] { $"{{ \"currency\": \"{s_currentCultureCode}\", \"value\": 200 }}" },
             };
 
             public static IEnumerable<object[]> InvalidJsonData => new[]
@@ -46,18 +46,18 @@ namespace OurPresence.Core.Money.Serialization.Tests
 
             public static IEnumerable<object[]> ValidNestedJsonData => new[]
             {
-                new object[] { $"{{ cash: {{ value: '200', currency: '{_currentCultureCode}' }} }}", },
-                new object[] { $"{{ cash: {{ value: 200, currency: '{_currentCultureCode}' }} }}" },
-                new object[] { $"{{ cash: {{ currency: '{_currentCultureCode}', value: 200 }} }}" },
-                new object[] { $"{{ cash: {{ currency: '{_currentCultureCode}', value: '200' }} }}" }
+                new object[] { $"{{ cash: {{ value: '200', currency: '{s_currentCultureCode}' }} }}", },
+                new object[] { $"{{ cash: {{ value: 200, currency: '{s_currentCultureCode}' }} }}" },
+                new object[] { $"{{ cash: {{ currency: '{s_currentCultureCode}', value: 200 }} }}" },
+                new object[] { $"{{ cash: {{ currency: '{s_currentCultureCode}', value: '200' }} }}" }
             };
 
             public static IEnumerable<object[]> ValidNestedNullableJsonData => new[]
             {
-                new object[] { $"{{ cash: {{ value: '200', currency: '{_currentCultureCode}' }} }}", },
-                new object[] { $"{{ cash: {{ value: 200, currency: '{_currentCultureCode}' }} }}" },
-                new object[] { $"{{ cash: {{ currency: '{_currentCultureCode}', value: 200 }} }}" },
-                new object[] { $"{{ cash: {{ currency: '{_currentCultureCode}', value: '200' }} }}" },
+                new object[] { $"{{ cash: {{ value: '200', currency: '{s_currentCultureCode}' }} }}", },
+                new object[] { $"{{ cash: {{ value: 200, currency: '{s_currentCultureCode}' }} }}" },
+                new object[] { $"{{ cash: {{ currency: '{s_currentCultureCode}', value: 200 }} }}" },
+                new object[] { $"{{ cash: {{ currency: '{s_currentCultureCode}', value: '200' }} }}" },
                 new object[] { $"{{ cash: null }}" },
             };
 
@@ -65,7 +65,7 @@ namespace OurPresence.Core.Money.Serialization.Tests
             [MemberData(nameof(ValidJsonData))]
             public void WhenDeserializingWithValidJson_ThenThisShouldSucceed(string json)
             {
-                var money = new Amount(200, Currency.FromCode(_currentCultureCode));
+                var money = new Amount(200, Currency.FromCode(s_currentCultureCode));
 
                 var clone = json.FromJson<Amount>();
 
@@ -80,7 +80,7 @@ namespace OurPresence.Core.Money.Serialization.Tests
                 a.Should().Throw<ArgumentNullException>();
             }
 
-            private class TypeWithMoneyProperty
+            public class TypeWithMoneyProperty
             {
                 public Amount Cash { get; set; }
             }
@@ -89,14 +89,14 @@ namespace OurPresence.Core.Money.Serialization.Tests
             [MemberData(nameof(ValidNestedJsonData))]
             public void WhenDeserializingWithNested_ThenThisShouldSucceed(string json)
             {
-                var money = new Amount(200, Currency.FromCode(_currentCultureCode));
+                var money = new Amount(200, Currency.FromCode(s_currentCultureCode));
 
                 var clone = json.FromJson<TypeWithMoneyProperty>();
 
                 clone.Cash.Should().Be(money);
             }
 
-            private class TypeWithNullableMoneyProperty
+            public class TypeWithNullableMoneyProperty
             {
                 public Amount? Cash { get; set; }
             }
@@ -105,7 +105,7 @@ namespace OurPresence.Core.Money.Serialization.Tests
             [MemberData(nameof(ValidNestedNullableJsonData))]
             public void WhenDeserializingWithNestedNullable_ThenThisShouldSucceed(string json)
             {
-                var money = new Amount(200, Currency.FromCode(_currentCultureCode));
+                var money = new Amount(200, Currency.FromCode(s_currentCultureCode));
 
                 var clone = json.FromJson<TypeWithNullableMoneyProperty>();
 

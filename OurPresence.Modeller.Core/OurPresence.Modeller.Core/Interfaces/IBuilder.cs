@@ -2,6 +2,6 @@
 {
     public interface IBuilder
     {
-        void Create(IGeneratorConfiguration configuration);
+        void Create();
     }
 }

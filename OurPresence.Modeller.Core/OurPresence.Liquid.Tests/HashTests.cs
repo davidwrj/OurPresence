@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Ns1
+namespace OurPresence.Liquid.Tests.Ns1
 {
     public class TestClass
     {
@@ -8,7 +8,7 @@ namespace DotLiquid.Tests.Ns1
     }
 }
 
-namespace DotLiquid.Tests.Ns2
+namespace OurPresence.Liquid.Tests.Ns2
 {
     public class TestClass
     {
@@ -17,7 +17,7 @@ namespace DotLiquid.Tests.Ns2
 }
 
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class HashTests
@@ -40,7 +40,7 @@ namespace DotLiquid.Tests
         [Test]
         public void TestMapperCacheShouldCacheSeperateNamespaces()
         {
-            var testClass1 = new DotLiquid.Tests.Ns1.TestClass()
+            var testClass1 = new OurPresence.Liquid.Tests.Ns1.TestClass()
             {
                 TestClassProp1 = "TestClassProp1Value"
             };
@@ -49,10 +49,10 @@ namespace DotLiquid.Tests
 
             Assert.AreEqual(
                 testClass1.TestClassProp1,
-                value1[nameof(DotLiquid.Tests.Ns1.TestClass.TestClassProp1)]);
+                value1[nameof(OurPresence.Liquid.Tests.Ns1.TestClass.TestClassProp1)]);
 
             //Same type name but different namespace
-            var testClass2 = new DotLiquid.Tests.Ns2.TestClass()
+            var testClass2 = new OurPresence.Liquid.Tests.Ns2.TestClass()
             {
                 TestClassProp2 = "TestClassProp2Value"
             };
@@ -60,7 +60,7 @@ namespace DotLiquid.Tests
 
             Assert.AreEqual(
                 testClass2.TestClassProp2,
-                value2[nameof(DotLiquid.Tests.Ns2.TestClass.TestClassProp2)]);
+                value2[nameof(OurPresence.Liquid.Tests.Ns2.TestClass.TestClassProp2)]);
         }
 
         #endregion
@@ -69,26 +69,26 @@ namespace DotLiquid.Tests
 
         private void IncludeBaseClassPropertiesOrNot(bool includeBaseClassProperties)
         {
-            var TestClassPropValue = "TestClassPropValueValue";
-            var TestBaseClassPropValue = "TestBaseClassPropValue";
+            var testClassPropValue = "TestClassPropValueValue";
+            var testBaseClassPropValue = "TestBaseClassPropValue";
 
             var value = Hash.FromAnonymousObject(new TestClass()
             {
-                TestClassProp = TestClassPropValue,
-                TestBaseClassProp = TestBaseClassPropValue
+                TestClassProp = testClassPropValue,
+                TestBaseClassProp = testBaseClassPropValue
             }, includeBaseClassProperties);
 
             Assert.AreEqual(
-                TestClassPropValue,
+                testClassPropValue,
                 value[nameof(TestClass.TestClassProp)]);
 
             Assert.AreEqual(
-                includeBaseClassProperties ? TestBaseClassPropValue :  null,
+                includeBaseClassProperties ? testBaseClassPropValue :  null,
                 value[nameof(TestClass.TestBaseClassProp)]);
         }
 
         /// <summary>
-        /// Mapping without properties from base class 
+        /// Mapping without properties from base class
         /// </summary>
         [Test]
         public void TestShouldNotMapPropertiesFromBaseClass()
@@ -97,7 +97,7 @@ namespace DotLiquid.Tests
         }
 
         /// <summary>
-        /// Mapping with properties from base class 
+        /// Mapping with properties from base class
         /// </summary>
         [Test]
         public void TestShouldMapPropertiesFromBaseClass()
@@ -106,13 +106,13 @@ namespace DotLiquid.Tests
         }
 
         /// <summary>
-        /// Mapping/Not mapping properties from base class should work for same class. 
+        /// Mapping/Not mapping properties from base class should work for same class.
         /// "mapperCache" should consider base class property mapping option ("includeBaseClassProperties").
         /// </summary>
         [Test]
         public void TestUpperTwoScenarioWithSameClass()
         {
-            //These two need to be called together to be sure same cache is being used for two  
+            //These two need to be called together to be sure same cache is being used for two
             IncludeBaseClassPropertiesOrNot(false);
             IncludeBaseClassPropertiesOrNot(true);
         }

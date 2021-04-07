@@ -28,7 +28,7 @@ namespace OurPresence.Modeller.Cli
                 Height = Dim.Fill() - 1
             };
 
-            List<Field> _fields = new();
+            List<Field> fields = new();
 
             return win;
         }

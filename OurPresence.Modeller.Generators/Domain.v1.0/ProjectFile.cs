@@ -6,7 +6,6 @@ using System.Text;
 
 namespace DomainProject
 {
-
     internal class ProjectFile : IGenerator
     {
         private readonly Module _module;
@@ -28,21 +27,21 @@ namespace DomainProject
             project.AddFileGroup(files);
 
             var sb = new StringBuilder();
-            sb.al("<Project Sdk=\"Microsoft.NET.Sdk\">");
-            sb.b();
-            sb.i(1).al("<PropertyGroup>");
-            sb.i(2).al("<TargetFramework>net5.0</TargetFramework>");
-            sb.i(2).al("<Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>");
-            sb.i(2).al($"<RootNamespace>{project.Name}</RootNamespace>");
-            sb.i(2).al($"<Nullable>enable</Nullable>");
-            sb.i(1).al("</PropertyGroup>");
-            sb.b();
-            sb.i(1).al("<ItemGroup>");
-            sb.i(2).al($"<PackageReference Include=\"OurPresence.Core\" Version=\"{Settings.GetPackageVersion("OurPresence.Core", "1.0.0")}\" />");
-            sb.i(2).al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.GetPackageVersion("MediatR", "9.0.0")}\" />");
-            sb.i(1).al("</ItemGroup>");
-            sb.b();
-            sb.al("</Project>");
+            sb.Al("<Project Sdk=\"Microsoft.NET.Sdk\">");
+            sb.B();
+            sb.I(1).Al("<PropertyGroup>");
+            sb.I(2).Al("<TargetFramework>net5.0</TargetFramework>");
+            sb.I(2).Al("<Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>");
+            sb.I(2).Al($"<RootNamespace>{project.Name}</RootNamespace>");
+            sb.I(2).Al($"<Nullable>enable</Nullable>");
+            sb.I(1).Al("</PropertyGroup>");
+            sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al($"<PackageReference Include=\"OurPresence.Core\" Version=\"{Settings.Packages.GetVersion("OurPresence.Core", "1.0.0")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.Packages.GetVersion("MediatR", "9.0.0")}\" />");
+            sb.I(1).Al("</ItemGroup>");
+            sb.B();
+            sb.Al("</Project>");
 
             var projectFile = new File(project.Name + ".csproj", sb.ToString());
             files.AddFile(projectFile);

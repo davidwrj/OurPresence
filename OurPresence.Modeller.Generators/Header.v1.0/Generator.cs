@@ -19,8 +19,8 @@ namespace Header
         public IOutput Create()
         {
             var sb = new System.Text.StringBuilder();
-            sb.al($"// Created using OurPresence.Modeller template '{_metadata.Name}' version {_metadata.Version}");
-            sb.al($"// NOTE: This file cannot be overwritten when regenerated");
+            sb.Al($"// Created using OurPresence.Modeller template '{_metadata.Name}' version {_metadata.Version}");
+            sb.Al($"// NOTE: This file cannot be overwritten when regenerated");
             return new Snippet(sb.ToString());
         }
     }

@@ -1,7 +1,7 @@
-using DotLiquid.FileSystems;
+using OurPresence.Liquid.FileSystems;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests.Tags
+namespace OurPresence.Liquid.Tests.Tags
 {
     [TestFixture]
     public class InheritanceTests

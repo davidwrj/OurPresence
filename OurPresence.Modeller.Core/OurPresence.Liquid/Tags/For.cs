@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
     /// <summary>
     /// "For" iterates over an array or collection.
@@ -51,10 +51,10 @@ namespace DotLiquid.Tags
     /// forloop.first:: Returns true if the item is the first item.
     /// forloop.last:: Returns true if the item is the last item.
     /// </summary>
-    public class For : DotLiquid.Block
+    public class For : OurPresence.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)\s*(reversed)?"), Liquid.QuotedFragment);
-        private static string ForTagMaxIterationsExceededException = Liquid.ResourceManager.GetString("ForTagMaximumIterationsExceededException");
+        private static readonly Regex s_syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)\s*(reversed)?"), Liquid.QuotedFragment);
+        private static string ForTagMaxIterationsExceededException = "For Tag Maximum Iterations Exceeded";
 
         private string _variableName, _collectionName, _name;
         private bool _reversed;
@@ -68,7 +68,7 @@ namespace DotLiquid.Tags
         /// <param name="tokens">Toeksn of the parsed tag</param>
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match match = Syntax.Match(markup);
+            var match = s_syntax.Match(markup);
             if (match.Success)
             {
                 _variableName = match.Groups[1].Value;
@@ -81,7 +81,7 @@ namespace DotLiquid.Tags
             }
             else
             {
-                throw new SyntaxException(Liquid.ResourceManager.GetString("ForTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'for' tag - Valid syntax: for [item] in [collection]");
             }
 
             base.Initialize(tagName, markup, tokens);
@@ -96,21 +96,21 @@ namespace DotLiquid.Tags
         {
             context.Registers["for"] = context.Registers["for"] ?? new Hash(0);
 
-            object collection = context[_collectionName];
+            var collection = context[_collectionName];
 
             if (!(collection is IEnumerable))
                 return;
 
-            int from = (_attributes.ContainsKey("offset"))
+            var from = (_attributes.ContainsKey("offset"))
                 ? (_attributes["offset"] == "continue")
                     ? Convert.ToInt32(context.Registers.Get<Hash>("for")[_name])
                     : Convert.ToInt32(context[_attributes["offset"]])
                 : 0;
 
-            int? limit = _attributes.ContainsKey("limit") ? (int?)Convert.ToInt32(context[_attributes["limit"]]) : null;
-            int? to = (limit != null) ? (int?)(limit.Value + from) : null;
+            var limit = _attributes.ContainsKey("limit") ? (int?)Convert.ToInt32(context[_attributes["limit"]]) : null;
+            var to = (limit != null) ? (int?)(limit.Value + from) : null;
 
-            List<object> segment = SliceCollectionUsingEach(context, (IEnumerable) collection, from, to);
+            var segment = SliceCollectionUsingEach(context, (IEnumerable) collection, from, to);
 
             if (!segment.Any())
                 return;
@@ -118,7 +118,7 @@ namespace DotLiquid.Tags
             if (_reversed)
                 segment.Reverse();
 
-            int length = segment.Count;
+            var length = segment.Count;
 
             // Store our progress through the collection for the continue flag
             context.Registers.Get<Hash>("for")[_name] = from + length;
@@ -136,7 +136,7 @@ namespace DotLiquid.Tags
                         var itemValue = ((KeyValuePair<string, object>) item).Value;
                         BuildContext(context, _variableName, itemKey, itemValue);
 
-                    } else 
+                    } else
                         context[_variableName] = item;
 
                     context["forloop"] = Hash.FromDictionary(new Dictionary<string, object>
@@ -168,9 +168,9 @@ namespace DotLiquid.Tags
 
         private static List<object> SliceCollectionUsingEach(Context context, IEnumerable collection, int from, int? to)
         {
-            List<object> segments = new List<object>();
-            int index = 0;
-            foreach (object item in collection)
+            var segments = new List<object>();
+            var index = 0;
+            foreach (var item in collection)
             {
                 context.CheckTimeout();
 
@@ -196,7 +196,7 @@ namespace DotLiquid.Tags
             {
                 hashValue["itemName"] = key;
                 context[parent] = value;
-                
+
                 foreach (var hashItem in (Hash)value)
                 {
                     if (hashItem.Value is Hash)

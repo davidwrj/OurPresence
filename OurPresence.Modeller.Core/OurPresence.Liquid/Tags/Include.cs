@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DotLiquid.Exceptions;
-using DotLiquid.FileSystems;
-using DotLiquid.Util;
+using OurPresence.Liquid.Exceptions;
+using OurPresence.Liquid.FileSystems;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid.Tags
+namespace OurPresence.Liquid.Tags
 {
-    public class Include : DotLiquid.Block
+    public class Include : OurPresence.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(@"({0}+)(\s+(?:with|for)\s+({0}+))?", Liquid.QuotedFragment);
+        private static readonly Regex s_syntax = R.B(@"({0}+)(\s+(?:with|for)\s+({0}+))?", Liquid.QuotedFragment);
 
         private string _templateName, _variableName;
         private Dictionary<string, string> _attributes;
 
         public override void Initialize(string tagName, string markup, List<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            var syntaxMatch = s_syntax.Match(markup);
             if (syntaxMatch.Success)
             {
                 _templateName = syntaxMatch.Groups[1].Value;
@@ -29,7 +29,7 @@ namespace DotLiquid.Tags
                 R.Scan(markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("IncludeTagSyntaxException"));
+                throw new SyntaxException("Syntax Error in 'include' tag - Valid syntax: include [template]");
 
             base.Initialize(tagName, markup, tokens);
         }
@@ -40,8 +40,8 @@ namespace DotLiquid.Tags
 
         public override void Render(Context context, TextWriter result)
         {
-            IFileSystem fileSystem = context.Registers["file_system"] as IFileSystem ?? Template.FileSystem;
-            ITemplateFileSystem templateFileSystem = fileSystem as ITemplateFileSystem;
+            var fileSystem = context.Registers["file_system"] as IFileSystem ?? Template.FileSystem;
+            var templateFileSystem = fileSystem as ITemplateFileSystem;
             Template partial = null;
             if (templateFileSystem != null)
             {
@@ -49,12 +49,12 @@ namespace DotLiquid.Tags
             }
             if (partial == null)
             {
-                string source = fileSystem.ReadTemplateFile(context, _templateName);
+                var source = fileSystem.ReadTemplateFile(context, _templateName);
                 partial = Template.Parse(source);
             }
 
-            string shortenedTemplateName = _templateName.Substring(1, _templateName.Length - 2);
-            object variable = context[_variableName ?? shortenedTemplateName, _variableName != null];
+            var shortenedTemplateName = _templateName.Substring(1, _templateName.Length - 2);
+            var variable = context[_variableName ?? shortenedTemplateName, _variableName != null];
 
             context.Stack(() =>
             {

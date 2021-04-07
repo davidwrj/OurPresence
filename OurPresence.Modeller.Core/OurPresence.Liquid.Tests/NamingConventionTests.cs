@@ -1,8 +1,7 @@
-using System.Globalization;
-using DotLiquid.NamingConventions;
+using OurPresence.Liquid.NamingConventions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class NamingConventionTests

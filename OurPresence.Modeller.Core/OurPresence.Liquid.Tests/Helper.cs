@@ -1,8 +1,8 @@
-using DotLiquid.NamingConventions;
+using OurPresence.Liquid.NamingConventions;
 using NUnit.Framework;
 using System;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     public class Helper
     {
@@ -32,7 +32,7 @@ namespace DotLiquid.Tests
         }
 
 
-        public static void AssertTemplateResult(string expected, string template, object anonymousObject, INamingConvention namingConvention, SyntaxCompatibility syntax = SyntaxCompatibility.DotLiquid20)
+        public static void AssertTemplateResult(string expected, string template, object anonymousObject, INamingConvention namingConvention, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
         {
             LockTemplateStaticVars(namingConvention, () =>
             {
@@ -51,7 +51,7 @@ namespace DotLiquid.Tests
             AssertTemplateResult(expected: expected, template: template, anonymousObject: null, namingConvention: namingConvention);
         }
 
-        public static void AssertTemplateResult(string expected, string template, Hash localVariables, SyntaxCompatibility syntax = SyntaxCompatibility.DotLiquid20)
+        public static void AssertTemplateResult(string expected, string template, Hash localVariables, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
         {
             var parameters = new RenderParameters(System.Globalization.CultureInfo.CurrentCulture)
             {
@@ -61,7 +61,7 @@ namespace DotLiquid.Tests
             Assert.AreEqual(expected, Template.Parse(template).Render(parameters));
         }
 
-        public static void AssertTemplateResult(string expected, string template, SyntaxCompatibility syntax = SyntaxCompatibility.DotLiquid20)
+        public static void AssertTemplateResult(string expected, string template, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
         {
             AssertTemplateResult(expected: expected, template: template, localVariables: null, syntax: syntax);
         }

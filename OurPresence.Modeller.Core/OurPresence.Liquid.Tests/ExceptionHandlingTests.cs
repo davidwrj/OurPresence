@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
-using DotLiquid.Exceptions;
+using OurPresence.Liquid.Exceptions;
 using NUnit.Framework;
 
-namespace DotLiquid.Tests
+namespace OurPresence.Liquid.Tests
 {
     [TestFixture]
     public class ExceptionHandlingTests

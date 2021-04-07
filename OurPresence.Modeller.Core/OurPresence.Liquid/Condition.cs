@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using DotLiquid.Util;
+using OurPresence.Liquid.Util;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Container for liquid nodes which conveniently wraps decision making logic
@@ -77,7 +76,7 @@ namespace DotLiquid
         public virtual bool Evaluate(Context context, IFormatProvider formatProvider)
         {
             context = context ?? new Context(formatProvider);
-            bool result = InterpretCondition(Left, Right, Operator, context);
+            var result = InterpretCondition(Left, Right, Operator, context);
 
             switch (_childRelation)
             {
@@ -116,12 +115,12 @@ namespace DotLiquid
         private static bool EqualVariables(object left, object right)
         {
             if (left is Symbol leftSymbol)
-            { 
+            {
                 return leftSymbol.EvaluationFunction(right);
             }
 
             if (right is Symbol rightSymbol)
-            { 
+            {
                 return rightSymbol.EvaluationFunction(left);
             }
 
@@ -135,20 +134,20 @@ namespace DotLiquid
             // return this as the result.
             if (string.IsNullOrEmpty(op))
             {
-                object result = context[left, false];
+                var result = context[left, false];
                 return (result != null && (!(result is bool) || (bool) result));
             }
 
-            object leftObject = context[left];
-            object rightObject = context[right];
+            var leftObject = context[left];
+            var rightObject = context[right];
 
             var opKey = Operators.Keys.FirstOrDefault(opk => opk.Equals(op)
                                                                 || opk.ToLowerInvariant().Equals(op)
                                                                 || Template.NamingConvention.OperatorEquals(opk, op)
                                                      );
             if (opKey == null)
-            { 
-                throw new Exceptions.ArgumentException(Liquid.ResourceManager.GetString("ConditionUnknownOperatorException"), op);
+            {
+                throw new Exceptions.ArgumentException("Unknown operator {0}", op);
             }
 
             return Operators[opKey](leftObject, rightObject);

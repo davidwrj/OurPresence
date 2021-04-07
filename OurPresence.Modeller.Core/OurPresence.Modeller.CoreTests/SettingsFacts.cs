@@ -9,12 +9,12 @@ namespace OurPresence.Modeller.CoreTests
     public class SettingsFacts
     {
         [Fact]
-        public void Setting_SupportRegen_DefaultstoTrue()
+        public void Setting_SupportRegen_DefaultsToTrue()
         {
             var context = Substitute.For<IGeneratorConfiguration>();
             context.Version.Returns(new GeneratorVersion());
-
-            ISettings sut = new Settings(context);
+            var packageService = Substitute.For<IPackageService>();
+            ISettings sut = new Settings(context,packageService);
             sut.SupportRegen.Should().BeTrue();
         }
 
@@ -35,8 +35,9 @@ namespace OurPresence.Modeller.CoreTests
             var context = Substitute.For<IGeneratorConfiguration>();
             context.Version.Returns(new GeneratorVersion());
 
-            ISettings sut = new Settings(context);
-            sut.GetPackageVersion("Package1","1.0.0").Should().Be("1.0.0");
+            var packageService = Substitute.For<IPackageService>();
+            ISettings sut = new Settings(context,packageService);
+            sut.Packages.GetVersion("Package1","1.0.0").Should().Be("1.0.0");
         }
 
         //[Fact]

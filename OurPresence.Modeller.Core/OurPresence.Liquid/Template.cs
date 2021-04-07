@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using DotLiquid.FileSystems;
-using DotLiquid.Util;
-using DotLiquid.NamingConventions;
+using OurPresence.Liquid.FileSystems;
+using OurPresence.Liquid.Util;
+using OurPresence.Liquid.NamingConventions;
 
-namespace DotLiquid
+namespace OurPresence.Liquid
 {
     /// <summary>
     /// Templates are central to liquid.
@@ -41,7 +41,7 @@ namespace DotLiquid
         /// <summary>
         /// Liquid syntax flag used for backward compatibility
         /// </summary>
-        public static SyntaxCompatibility DefaultSyntaxCompatibilityLevel { get; set; } = SyntaxCompatibility.DotLiquid20;
+        public static SyntaxCompatibility DefaultSyntaxCompatibilityLevel { get; set; } = SyntaxCompatibility.Liquid20;
 
         /// <summary>
         /// Indicates if the default is thread safe
@@ -55,8 +55,8 @@ namespace DotLiquid
         /// </summary>
         public static TimeSpan RegexTimeOut { get; set; }
 
-        private static readonly Dictionary<Type, Func<object, object>> SafeTypeTransformers;
-        private static readonly Dictionary<Type, Func<object, object>> ValueTypeTransformers;
+        private static readonly Dictionary<Type, Func<object, object>> s_safeTypeTransformers;
+        private static readonly Dictionary<Type, Func<object, object>> s_valueTypeTransformers;
 
         static Template()
         {
@@ -64,8 +64,8 @@ namespace DotLiquid
             NamingConvention = new RubyNamingConvention();
             FileSystem = new BlankFileSystem();
             Tags = new Dictionary<string, Tuple<ITagFactory, Type>>();
-            SafeTypeTransformers = new Dictionary<Type, Func<object, object>>();
-            ValueTypeTransformers = new Dictionary<Type, Func<object, object>>();
+            s_safeTypeTransformers = new Dictionary<Type, Func<object, object>>();
+            s_valueTypeTransformers = new Dictionary<Type, Func<object, object>>();
         }
 
         /// <summary>
@@ -96,14 +96,14 @@ namespace DotLiquid
         /// <returns></returns>
         public static Type GetTagType(string name)
         {
-            Tags.TryGetValue(name, out Tuple<ITagFactory, Type> result);
+            Tags.TryGetValue(name, out var result);
             return result.Item2;
         }
 
         internal static Tag CreateTag(string name)
         {
             Tag tagInstance = null;
-            Tags.TryGetValue(name, out Tuple<ITagFactory, Type> result);
+            Tags.TryGetValue(name, out var result);
 
             if (result != null)
             {
@@ -151,7 +151,7 @@ namespace DotLiquid
         /// <param name="func">Function that converts the specified type into a Liquid Drop-compatible object (eg, implements ILiquidizable)</param>
         public static void RegisterSafeType(Type type, Func<object, object> func)
         {
-            SafeTypeTransformers[type] = func;
+            s_safeTypeTransformers[type] = func;
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace DotLiquid
         /// <param name="func">Function that converts the specified type into a Liquid Drop-compatible object (eg, implements ILiquidizable)</param>
         public static void RegisterValueTypeTransformer(Type type, Func<object, object> func)
         {
-            ValueTypeTransformers[type] = func;
+            s_valueTypeTransformers[type] = func;
         }
 
         /// <summary>
@@ -172,16 +172,16 @@ namespace DotLiquid
         public static Func<object, object> GetValueTypeTransformer(Type type)
         {
             // Check for concrete types
-            if (ValueTypeTransformers.TryGetValue(type, out Func<object, object> transformer))
+            if (s_valueTypeTransformers.TryGetValue(type, out var transformer))
                 return transformer;
 
             // Check for interfaces
             var interfaces = type.GetTypeInfo().ImplementedInterfaces;
             foreach (var interfaceType in interfaces)
             {
-                if (ValueTypeTransformers.TryGetValue(interfaceType, out transformer))
+                if (s_valueTypeTransformers.TryGetValue(interfaceType, out transformer))
                     return transformer;
-                if (interfaceType.GetTypeInfo().IsGenericType && ValueTypeTransformers.TryGetValue(
+                if (interfaceType.GetTypeInfo().IsGenericType && s_valueTypeTransformers.TryGetValue(
                     interfaceType.GetGenericTypeDefinition(), out transformer))
                     return transformer;
             }
@@ -196,16 +196,16 @@ namespace DotLiquid
         public static Func<object, object> GetSafeTypeTransformer(Type type)
         {
             // Check for concrete types
-            if (SafeTypeTransformers.TryGetValue(type, out Func<object, object> transformer))
+            if (s_safeTypeTransformers.TryGetValue(type, out var transformer))
                 return transformer;
 
             // Check for interfaces
             var interfaces = type.GetTypeInfo().ImplementedInterfaces;
             foreach (var interfaceType in interfaces)
             {
-                if (SafeTypeTransformers.TryGetValue(interfaceType, out transformer))
+                if (s_safeTypeTransformers.TryGetValue(interfaceType, out transformer))
                     return transformer;
-                if (interfaceType.GetTypeInfo().IsGenericType && SafeTypeTransformers.TryGetValue(
+                if (interfaceType.GetTypeInfo().IsGenericType && s_safeTypeTransformers.TryGetValue(
                     interfaceType.GetGenericTypeDefinition(), out transformer))
                     return transformer;
             }
@@ -219,7 +219,7 @@ namespace DotLiquid
         /// <returns></returns>
         public static Template Parse(string source)
         {
-            Template template = new Template();
+            var template = new Template();
             template.ParseInternal(source);
             return template;
         }
@@ -282,8 +282,8 @@ namespace DotLiquid
         /// <returns>The template.</returns>
         internal Template ParseInternal(string source)
         {
-            source = DotLiquid.Tags.Literal.FromShortHand(source);
-            source = DotLiquid.Tags.Comment.FromShortHand(source);
+            source = OurPresence.Liquid.Tags.Literal.FromShortHand(source);
+            source = OurPresence.Liquid.Tags.Comment.FromShortHand(source);
 
             this.Root = new Document();
             this.Root.Initialize(tagName: null, markup: null, tokens: Template.Tokenize(source));
@@ -398,7 +398,7 @@ namespace DotLiquid
             if (Root == null)
                 return;
 
-            parameters.Evaluate(this, out Context context, out Hash registers, out IEnumerable<Type> filters);
+            parameters.Evaluate(this, out var context, out var registers, out var filters);
 
             if (!IsThreadSafe)
             {
@@ -437,10 +437,10 @@ namespace DotLiquid
             // Trim trailing whitespace.
             source = Regex.Replace(source, string.Format(@"-({0}|{1})(\n|\r\n|[ \t]+)?", Liquid.VariableEnd, Liquid.TagEnd), "$1", RegexOptions.None, RegexTimeOut);
 
-            List<string> tokens = Regex.Split(source, Liquid.TemplateParser).ToList();
+            var tokens = Regex.Split(source, Liquid.TemplateParser).ToList();
 
             // Trim any whitespace elements from the end of the array.
-            for (int i = tokens.Count - 1; i > 0; --i)
+            for (var i = tokens.Count - 1; i > 0; --i)
                 if (tokens[i] == string.Empty)
                     tokens.RemoveAt(i);
 
