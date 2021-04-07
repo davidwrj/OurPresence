@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>OurPresence.Modeller.Liquid is a templating system using Liquid Markup.</Description>
+    <AssemblyTitle>OurPresence.Modeller.Liquid</AssemblyTitle>
+    <NeutralLanguage>en-AU</NeutralLanguage>
+    <Authors>Allan Nielsen</Authors>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>OurPresence.Modeller.Liquid</AssemblyName>
+    <PackageId>OurPresence.Modeller.Liquid</PackageId>
+    <PackageTags>ourpresence;modeller;template;templating;language;liquid;markup</PackageTags>
+    <RepositoryType>git</RepositoryType>
+      <DocumentationFile>bin\Debug\$(TargetFramework)\OurPresence.Modeller.Liquid.xml</DocumentationFile>
+      <Company>OurPresence</Company>
+      <Copyright>Copyright © 2021  all rights reserved</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="5.11.0.1761" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

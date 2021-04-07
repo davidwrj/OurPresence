@@ -43,12 +43,12 @@ namespace OurPresence.Modeller.Domain.Extensions
         public static Module AddForeignKey(this Module module, Model principal, Model dependant)
         {
             if (principal is null)
-                throw new System.ArgumentNullException(nameof(principal));
+                throw new ArgumentNullException(nameof(principal));
             if (dependant is null)
-                throw new System.ArgumentNullException(nameof(dependant));
+                throw new ArgumentNullException(nameof(dependant));
 
             if (!principal.Key.Fields.Any())
-                throw new System.ArgumentException($"Foreign Key can't be generated since {principal.Name} does not have a primary key.");
+                throw new ArgumentException($"Foreign Key can't be generated since {principal.Name} does not have a primary key.");
 
             var fk = new List<string>();
             foreach (var pk in principal.Key.Fields)

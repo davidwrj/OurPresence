@@ -1,6 +1,5 @@
 ﻿using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Domain.Extensions;
-using System;
 using Xunit;
 using FluentAssertions;
 using ApprovalTests;

@@ -1,7 +1,4 @@
-﻿using OurPresence.Modeller.Domain;
-using System;
-
-namespace OurPresence.Modeller.Domain.Extensions
+﻿namespace OurPresence.Modeller.Domain.Extensions
 {
     public static class EnumerationExtensions
     {

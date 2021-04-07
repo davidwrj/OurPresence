@@ -1,7 +1,5 @@
 ﻿using OurPresence.Modeller.Domain;
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Terminal.Gui;
 
 namespace OurPresence.Modeller.Cli

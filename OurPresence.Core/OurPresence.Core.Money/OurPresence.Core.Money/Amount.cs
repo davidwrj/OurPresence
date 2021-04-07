@@ -17,7 +17,7 @@ namespace OurPresence.Core.Money
         /// <summary>Initializes a new instance of the <see cref="Amount"/> struct, based on the current culture.</summary>
         /// <param name="value">The Amount of money as <see langword="decimal"/>.</param>
         /// <remarks>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
+        /// (<see cref="Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
         /// (<see cref="MidpointRounding"/>). The behavior of this method follows IEEE Standard 754, section 4. This
         /// kind of rounding is sometimes called rounding to nearest, or banker's rounding. It minimizes rounding errors that
         /// result from consistently rounding a midpoint value in a single direction.</remarks>
@@ -30,7 +30,7 @@ namespace OurPresence.Core.Money
         /// <param name="value">The Amount of money as <see langword="decimal"/>.</param>
         /// <param name="currency">A ISO 4217 Currency code, like EUR or USD.</param>
         /// <remarks>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
+        /// (<see cref="Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
         /// (<see cref="MidpointRounding"/>). The behavior of this method follows IEEE Standard 754, section 4. This
         /// kind of rounding is sometimes called rounding to nearest, or banker's rounding. It minimizes rounding errors that
         /// result from consistently rounding a midpoint value in a single direction.</remarks>
@@ -44,7 +44,7 @@ namespace OurPresence.Core.Money
         /// <param name="value">The Amount of money as <see langword="decimal"/>.</param>
         /// <param name="rounding">The rounding mode.</param>
         /// <remarks>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>).</remarks>
+        /// (<see cref="Currency.DecimalDigits"/>).</remarks>
         public Amount(decimal value, MidpointRounding rounding)
             : this(value, Currency.CurrentCurrency, rounding)
         {
@@ -54,7 +54,7 @@ namespace OurPresence.Core.Money
         /// <param name="value">The Amount of money as <see langword="decimal"/>.</param>
         /// <param name="currency">The Currency of the money.</param>
         /// <remarks>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
+        /// (<see cref="Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
         /// (<see cref="MidpointRounding"/>). The behavior of this method follows IEEE Standard 754, section 4. This
         /// kind of rounding is sometimes called rounding to nearest, or banker's rounding. It minimizes rounding errors that
         /// result from consistently rounding a midpoint value in a single direction.</remarks>
@@ -68,7 +68,7 @@ namespace OurPresence.Core.Money
         /// <param name="currency">A ISO 4217 Currency code, like EUR or USD.</param>
         /// <param name="rounding">The rounding mode.</param>
         /// <remarks>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>).</remarks>
+        /// (<see cref="Currency.DecimalDigits"/>).</remarks>
         public Amount(decimal value, string currency, MidpointRounding rounding)
             : this(value, Currency.FromCode(currency), rounding)
         {
@@ -79,7 +79,7 @@ namespace OurPresence.Core.Money
         /// <param name="currency">The Currency of the money.</param>
         /// <param name="rounding">The rounding mode.</param>
         /// <remarks>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>).</remarks>
+        /// (<see cref="Currency.DecimalDigits"/>).</remarks>
         public Amount(decimal value, Currency currency, MidpointRounding rounding)
         {
             Currency = currency;
@@ -94,7 +94,7 @@ namespace OurPresence.Core.Money
         /// <remarks>This constructor will first convert to decimal by rounding the value to 15 significant digits using rounding
         /// to nearest. This is done even if the number has more than 15 digits and the less significant digits are zero.
         /// <para>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
+        /// (<see cref="Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
         /// (<see cref="MidpointRounding"/>). The behavior of this method follows IEEE Standard 754, section 4. This
         /// kind of rounding is sometimes called rounding to nearest, or banker's rounding. It minimizes rounding errors that
         /// result from consistently rounding a midpoint value in a single direction.</para></remarks>
@@ -110,7 +110,7 @@ namespace OurPresence.Core.Money
         /// <remarks>This constructor will first convert to decimal by rounding the value to 15 significant digits using rounding
         /// to nearest. This is done even if the number has more than 15 digits and the less significant digits are zero.
         /// <para>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
+        /// (<see cref="Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
         /// (<see cref="MidpointRounding"/>). The behavior of this method follows IEEE Standard 754, section 4. This
         /// kind of rounding is sometimes called rounding to nearest, or banker's rounding. It minimizes rounding errors that
         /// result from consistently rounding a midpoint value in a single direction.</para></remarks>
@@ -126,7 +126,7 @@ namespace OurPresence.Core.Money
         /// <remarks>This constructor will first convert to decimal by rounding the value to 15 significant digits using rounding
         /// to nearest. This is done even if the number has more than 15 digits and the less significant digits are zero.
         /// <para>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
+        /// (<see cref="Currency.DecimalDigits"/>). As rounding mode, MidpointRounding.ToEven is used
         /// (<see cref="MidpointRounding"/>). The behavior of this method follows IEEE Standard 754, section 4. This
         /// kind of rounding is sometimes called rounding to nearest, or banker's rounding. It minimizes rounding errors that
         /// result from consistently rounding a midpoint value in a single direction.</para></remarks>
@@ -143,7 +143,7 @@ namespace OurPresence.Core.Money
         /// <remarks>This constructor will first convert to decimal by rounding the value to 15 significant digits using rounding
         /// to nearest. This is done even if the number has more than 15 digits and the less significant digits are zero.
         /// <para>The amount will be rounded to the number of decimal digits of the specified currency
-        /// (<see cref="Money.Currency.DecimalDigits"/>).</para></remarks>
+        /// (<see cref="Currency.DecimalDigits"/>).</para></remarks>
         public Amount(double value, Currency currency, MidpointRounding rounding)
             : this((decimal)value, currency, rounding)
         {

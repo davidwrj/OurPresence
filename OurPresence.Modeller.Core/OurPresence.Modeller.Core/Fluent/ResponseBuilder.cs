@@ -15,7 +15,7 @@ namespace OurPresence.Modeller.Fluent
 
         public RequestBuilder Build { get; }
 
-        public Domain.Response Instance { get; }
+        public Response Instance { get; }
         
         public FieldBuilder<ResponseBuilder> AddField(string name)
         {

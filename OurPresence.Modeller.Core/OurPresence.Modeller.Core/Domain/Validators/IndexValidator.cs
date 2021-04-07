@@ -2,7 +2,7 @@
 
 namespace OurPresence.Modeller.Domain.Validators
 {
-    public class IndexValidator : AbstractValidator<Domain.Index>
+    public class IndexValidator : AbstractValidator<Index>
     {
         public IndexValidator()
         {

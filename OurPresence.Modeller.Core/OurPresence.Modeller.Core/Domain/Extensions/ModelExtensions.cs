@@ -60,7 +60,7 @@ namespace OurPresence.Modeller.Domain.Extensions
         }
         public static Model AddIndex(this Model model, string name, bool isUnique = true, bool isClusted = false, params string[] fieldNames)
         {
-            var idx = new Domain.Index(name) { IsUnique = isUnique, IsClustered = isClusted };
+            var idx = new Index(name) { IsUnique = isUnique, IsClustered = isClusted };
             foreach (var fieldName in fieldNames)
                 idx.Fields.Add(new IndexField(fieldName));
             model.Indexes.Add(idx);

@@ -4,7 +4,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 {
     internal class Helpers
     {
-        internal static Domain.Module CreateKeyModule()
+        internal static Module CreateKeyModule()
         {
             var module = Fluent.Module
                 .Create("Hy", "Modeller")
@@ -33,7 +33,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return module;
         }
 
-        internal static Domain.Module CreateTestModule()
+        internal static Module CreateTestModule()
         {
             var module = OurPresence.Modeller.Fluent.Module
                 .Create("Acme", "TestProject")

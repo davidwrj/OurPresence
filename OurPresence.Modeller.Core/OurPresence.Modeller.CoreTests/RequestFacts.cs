@@ -2,7 +2,6 @@
 using OurPresence.Modeller.Domain.Extensions;
 using Xunit;
 using FluentAssertions;
-using System;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 

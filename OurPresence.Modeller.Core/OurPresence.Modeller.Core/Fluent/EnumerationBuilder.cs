@@ -1,5 +1,4 @@
-﻿using OurPresence.Modeller.Domain;
-using OurPresence.Modeller.Domain.Extensions;
+﻿using OurPresence.Modeller.Domain.Extensions;
 using System;
 using System.ComponentModel;
 
