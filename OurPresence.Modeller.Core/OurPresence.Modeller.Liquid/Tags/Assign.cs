@@ -18,7 +18,7 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class Assign : Tag
     {
-        private static readonly Regex Syntax = R.B(R.Q(@"({0}+)\s*=\s*(.*)\s*"), Liquid.VariableSignature);
+        private readonly Regex _syntax ;
         private string _to;
         private Variable _from;
 
@@ -30,19 +30,21 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// <param name="markup"></param>
         protected Assign(Template template, string tagName, string markup)
             : base(template, tagName, markup)
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tokens"></param>
-        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(Markup);
+                _syntax = R.B(template, R.Q(@"({0}+)\s*=\s*(.*)\s*"), Liquid.VariableSignature);
+        }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tokens"></param>
+    public override void Initialize(IEnumerable<string> tokens)
+        {
+            Match syntaxMatch = _syntax.Match(Markup);
             if (syntaxMatch.Success)
             {
                 _to = syntaxMatch.Groups[1].Value;
-                _from = new Variable(syntaxMatch.Groups[2].Value);
+                _from = new Variable(Template, syntaxMatch.Groups[2].Value);
             }
             else
             {

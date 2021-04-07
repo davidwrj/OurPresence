@@ -14,11 +14,11 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public class Block : Tag
     {
-        private static readonly Regex IsTag = R.B(@"^{0}", Liquid.TagStart);
-        private static readonly Regex IsVariable = R.B(@"^{0}", Liquid.VariableStart);
-        private static readonly Regex ContentOfVariable = R.B(@"^{0}(.*){1}$", Liquid.VariableStart, Liquid.VariableEnd);
+        private readonly Regex _isTag ;
+        private readonly Regex _isVariable ;
+        private readonly Regex _contentOfVariable;
 
-        internal static readonly Regex FullToken = R.B(@"^{0}\s*(\w+)\s*(.*)?{1}$", Liquid.TagStart, Liquid.TagEnd);
+        internal readonly Regex FullToken;
 
         /// <summary>
         /// 
@@ -28,7 +28,12 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="markup"></param>
         protected Block(Template template, string tagName, string markup)
             :base(template, tagName,markup)
-        { }
+        {
+            _isTag = R.B(template, @"^{0}", Liquid.TagStart);
+            _isVariable = R.B(template,@"^{0}", Liquid.VariableStart);
+            _contentOfVariable = R.B(template, @"^{0}(.*){1}$", Liquid.VariableStart, Liquid.VariableEnd);
+            FullToken = R.B(template, @"^{0}\s*(\w+)\s*(.*)?{1}$", Liquid.TagStart, Liquid.TagEnd);
+        }
 
         /// <summary>
         /// Parses a list of tokens
@@ -42,7 +47,7 @@ namespace OurPresence.Modeller.Liquid
             string token;
             while ((token = t.Shift()) != null)
             {
-                Match isTagMatch = IsTag.Match(token);
+                Match isTagMatch = _isTag.Match(token);
                 if (isTagMatch.Success)
                 {
                     Match fullTokenMatch = FullToken.Match(token);
@@ -80,7 +85,7 @@ namespace OurPresence.Modeller.Liquid
                         throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNotTerminatedException"), token, Liquid.TagEnd);
                     }
                 }
-                else if (IsVariable.Match(token).Success)
+                else if (_isVariable.Match(token).Success)
                 {
                     NodeList.Add(CreateVariable(token));
                 }
@@ -149,9 +154,9 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public Variable CreateVariable(string token)
         {
-            Match match = ContentOfVariable.Match(token);
+            Match match = _contentOfVariable.Match(token);
             if (match.Success)
-                return new Variable(match.Groups[1].Value);
+                return new Variable(Template, match.Groups[1].Value);
             throw new SyntaxException(Liquid.ResourceManager.GetString("BlockVariableNotTerminatedException"), token, Liquid.VariableEnd);
         }
 

@@ -127,7 +127,7 @@ namespace OurPresence.Modeller.Liquid
 
             return string.IsNullOrEmpty(input)
                 ? input
-                : Regex.Replace(input, @"\b(\w)", m => m.Value.ToUpper(), RegexOptions.None, Template.RegexTimeOut);
+                : Regex.Replace(input, @"\b(\w)", m => m.Value.ToUpper(), RegexOptions.None, context.Template.RegexTimeOut);
         }
 
         /// <summary>
@@ -230,11 +230,11 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string StripHtml(string input)
+        public static string StripHtml(Template template, string input)
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"<.*?>", string.Empty, RegexOptions.None, Template.RegexTimeOut);
+                : Regex.Replace(input, @"<.*?>", string.Empty, RegexOptions.None, template.RegexTimeOut);
         }
 
         /// <summary>
@@ -296,11 +296,11 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string StripNewlines(string input)
+        public static string StripNewlines(Template template, string input)
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"(\r?\n)", string.Empty, RegexOptions.None, Template.RegexTimeOut);
+                : Regex.Replace(input, @"(\r?\n)", string.Empty, RegexOptions.None, template.RegexTimeOut);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="enumerableInput">The enumerable.</param>
         /// <param name="property">The property to map.</param>
         /// <returns></returns>
-        public static IEnumerable Map(IEnumerable enumerableInput, string property)
+        public static IEnumerable Map(Template template, IEnumerable enumerableInput, string property)
         {
             if (enumerableInput == null)
                 return null;
@@ -394,7 +394,7 @@ namespace OurPresence.Modeller.Liquid
                     if (indexable == null)
                     {
                         var type = element.GetType();
-                        var safeTypeTransformer = Template.GetSafeTypeTransformer(type);
+                        var safeTypeTransformer = template.GetSafeTypeTransformer(type);
                         if (safeTypeTransformer != null)
                             indexable = safeTypeTransformer(element) as DropBase;
                         else
@@ -434,7 +434,7 @@ namespace OurPresence.Modeller.Liquid
             if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
                 return input.Replace(@string, replacement);
 
-            return Regex.Replace(input, @string, replacement, RegexOptions.None, Template.RegexTimeOut);
+            return Regex.Replace(input, @string, replacement, RegexOptions.None, context.Template.RegexTimeOut);
         }
 
         /// <summary>
@@ -464,7 +464,7 @@ namespace OurPresence.Modeller.Liquid
 
                 doneReplacement = true;
                 return replacement;
-            }, RegexOptions.None, Template.RegexTimeOut);
+            }, RegexOptions.None, context.Template.RegexTimeOut);
         }
 
         /// <summary>
@@ -525,11 +525,11 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string NewlineToBr(string input)
+        public static string NewlineToBr(Template template, string input)
         {
             return input.IsNullOrWhiteSpace()
                     ? input
-                    : Regex.Replace(input, @"(\r?\n)", "<br />$1", RegexOptions.None, Template.RegexTimeOut);
+                    : Regex.Replace(input, @"(\r?\n)", "<br />$1", RegexOptions.None, template.RegexTimeOut);
         }
 
         /// <summary>

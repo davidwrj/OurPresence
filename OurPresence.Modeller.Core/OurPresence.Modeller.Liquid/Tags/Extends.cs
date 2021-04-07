@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.Exceptions;
 using OurPresence.Modeller.Liquid.FileSystems;
@@ -56,18 +57,18 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </example>
     public class Extends : Modeller.Liquid.Block
     {
-
-        private static readonly Regex Syntax = R.B(@"^({0})", Liquid.QuotedFragment);
-
+        private readonly Regex _syntax;
         private string _templateName;
 
         public Extends(Template template, string tagName, string markup)
-            :base(template, tagName, markup)
-        { }
+            : base(template, tagName, markup)
+        {
+            _syntax = R.B(template, @"^({0})", Liquid.QuotedFragment);
+        }
 
         public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(Markup);
+            Match syntaxMatch = _syntax.Match(Markup);
 
             if (syntaxMatch.Success)
             {
@@ -88,7 +89,7 @@ namespace OurPresence.Modeller.Liquid.Tags
 
             NodeList.GetItems().ForEach(n =>
             {
-                if (!((n is string && ((string) n).IsNullOrWhiteSpace()) || n is Block || n is Comment || n is Extends))
+                if (!((n is string && ((string)n).IsNullOrWhiteSpace()) || n is Block || n is Comment || n is Extends))
                     throw new SyntaxException(Liquid.ResourceManager.GetString("ExtendsTagUnallowedTagsException"));
             });
 
@@ -115,11 +116,11 @@ namespace OurPresence.Modeller.Liquid.Tags
             if (template == null)
             {
                 string source = fileSystem.ReadTemplateFile(context, _templateName);
-                template = Template.Parse(source);
+                template = Template.Parse(source, Template.NamingConvention, template.FileSystem, template.DefaultSyntaxCompatibilityLevel);
             }
 
             List<Block> parentBlocks = FindBlocks(template.Root, null);
-            List<Block> orphanedBlocks = ((List<Block>)context.Scopes[0]["extends"]) ?? new List<Block>();
+            List<Block> orphanedBlocks = ((List<Block>)context.Scopes.First()["extends"]) ?? new List<Block>();
             BlockRenderState blockState = BlockRenderState.Find(context) ?? new BlockRenderState();
 
             context.Stack(() =>
@@ -137,9 +138,9 @@ namespace OurPresence.Modeller.Liquid.Tags
                         pb.AddParent(blockState.Parents, pb.GetNodeList(blockState));
                         blockState.NodeLists[pb] = block.GetNodeList(blockState);
                     }
-                    else if(IsExtending(template))
+                    else if (IsExtending(template))
                     {
-                        ((List<Block>)context.Scopes[0]["extends"]).Add(block);
+                        ((List<Block>)context.Scopes.First()["extends"]).Add(block);
                     }
                 }
                 template.Render(result, RenderParameters.FromContext(context, result.FormatProvider));
@@ -153,11 +154,11 @@ namespace OurPresence.Modeller.Liquid.Tags
 
         private List<Block> FindBlocks(object node, List<Block> blocks)
         {
-            if(blocks == null) blocks = new List<Block>();
+            if (blocks == null) blocks = new List<Block>();
 
             if (node.RespondTo("NodeList"))
             {
-                List<object> nodeList = (List<object>) node.Send("NodeList");
+                List<object> nodeList = (List<object>)node.Send("NodeList");
 
                 if (nodeList != null)
                 {

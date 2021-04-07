@@ -15,8 +15,9 @@ namespace OurPresence.Modeller.Liquid
         public Dictionary<string, MethodInfo> CachedMethods { get; private set; }
 
         public Dictionary<string, PropertyInfo> CachedProperties { get; private set; }
+        public Template Template { get; }
 
-        public TypeResolution(Type type, Func<MemberInfo, bool> filterMemberCallback)
+        public TypeResolution(Template template, Type type, Func<MemberInfo, bool> filterMemberCallback)
         {
             // Cache all methods and properties of this object, but don't include those
             // defined at or above the base Drop class.
@@ -24,6 +25,7 @@ namespace OurPresence.Modeller.Liquid
                                                 mi => filterMemberCallback(mi));
 
             CachedProperties = GetMemberDictionary(GetPropertiesWithoutDuplicateNames(type), mi => filterMemberCallback(mi));
+            Template = template;
         }
 
         private Dictionary<string, T> GetMemberDictionary<T>(IEnumerable<T> members, Func<T, bool> filterMemberCallback) where T : MemberInfo
@@ -115,14 +117,14 @@ namespace OurPresence.Modeller.Liquid
         }
     }
 
-        internal static class TypeResolutionCache
+    internal static class TypeResolutionCache
     {
         [ThreadStatic]
-        private static WeakTable<Type, TypeResolution> _cache;
+        private static WeakTable<Type, TypeResolution> s_cache;
 
         public static WeakTable<Type, TypeResolution> Instance
         {
-            get { return _cache ?? (_cache = new WeakTable<Type, TypeResolution>(32)); }
+            get { return s_cache ?? (s_cache = new WeakTable<Type, TypeResolution>(32)); }
         }
     }
 
@@ -146,13 +148,18 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public abstract class DropBase : ILiquidizable, IIndexable, IContextAware
     {
+        protected DropBase(Template template)
+        {
+            Template = template;
+        }
+
         internal TypeResolution TypeResolution
         {
             get
             {
                 Type dropType = GetObject().GetType();
                 if (!TypeResolutionCache.Instance.TryGetValue(dropType, out TypeResolution resolution))
-                { 
+                {
                     TypeResolutionCache.Instance[dropType] = resolution = CreateTypeResolution(dropType);
                 }
                 return resolution;
@@ -160,6 +167,7 @@ namespace OurPresence.Modeller.Liquid
         }
 
         public Context Context { get; set; }
+        public Template Template { get; }
 
         /// <summary>
         /// Just an alias for InvokeDrop - but the presence of the indexer
@@ -173,17 +181,17 @@ namespace OurPresence.Modeller.Liquid
             get { return InvokeDrop(method); }
         }
 
-#region IIndexable
+        #region IIndexable
 
         public virtual bool ContainsKey(object name) { return true; }
 
-#endregion
+        #endregion
 
-#region ILiquidizable
+        #region ILiquidizable
 
         public virtual object ToLiquid() { return this; }
 
-#endregion
+        #endregion
 
         internal abstract object GetObject();
 
@@ -230,9 +238,14 @@ namespace OurPresence.Modeller.Liquid
 
     public abstract class Drop : DropBase
     {
+        protected Drop(Template template)
+            :base(template)
+        {
+        }
+
         internal override object GetObject() { return this; }
 
-        internal override TypeResolution CreateTypeResolution(Type type) { return new TypeResolution(type, mi => mi.DeclaringType.GetTypeInfo().BaseType != null && typeof(Drop).GetTypeInfo().IsAssignableFrom(mi.DeclaringType.GetTypeInfo().BaseType.GetTypeInfo())); }
+        internal override TypeResolution CreateTypeResolution(Type type) { return new TypeResolution(Template, type, mi => mi.DeclaringType.GetTypeInfo().BaseType != null && typeof(Drop).GetTypeInfo().IsAssignableFrom(mi.DeclaringType.GetTypeInfo().BaseType.GetTypeInfo())); }
     }
 
     /// <summary>
@@ -250,7 +263,8 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         /// <param name="obj">The object to create a proxy for</param>
         /// <param name="allowedMembers">An array of property and method names that are allowed to be called on the object.</param>
-        public DropProxy(object obj, string[] allowedMembers)
+        public DropProxy(Template template, object obj, string[] allowedMembers)
+            :base(template)
         {
             _proxiedObject = obj;
             _allowedMembers = allowedMembers;
@@ -264,8 +278,8 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="obj">The object to create a proxy for</param>
         /// <param name="allowedMembers">An array of property and method names that are allowed to be called on the object.</param>
         /// <param name="value">Function that converts the specified type into a Liquid Drop-compatible object (eg, implements ILiquidizable)</param>
-        public DropProxy(object obj, string[] allowedMembers, Func<object, object> value)
-            : this(obj, allowedMembers)
+        public DropProxy(Template template, object obj, string[] allowedMembers, Func<object, object> value)
+            : this(template,obj, allowedMembers)
         {
             _value = value;
         }
@@ -284,6 +298,6 @@ namespace OurPresence.Modeller.Liquid
 
         internal override object GetObject() { return _proxiedObject; }
 
-        internal override TypeResolution CreateTypeResolution(Type type) { return new TypeResolution(type, mi => _allowAllMembers || _allowedMembers.Contains(mi.Name)); }
+        internal override TypeResolution CreateTypeResolution(Type type) { return new TypeResolution(Template, type, mi => _allowAllMembers || _allowedMembers.Contains(mi.Name)); }
     }
 }

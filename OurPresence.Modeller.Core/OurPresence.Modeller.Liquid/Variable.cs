@@ -22,38 +22,46 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public class Variable : IRenderable
     {
-        private static readonly Regex FilterParserRegex = R.B(R.Q(@"(?:{0}|(?:\s*(?!(?:{0}))(?:{1}|\S+)\s*)+)"), Liquid.FilterSeparator, Liquid.QuotedFragment);
-        private static readonly Regex FilterArgRegex = R.B(R.Q(@"(?:{0}|{1})\s*({2})"), Liquid.FilterArgumentSeparator, Liquid.ArgumentSeparator, Liquid.QuotedFragment);
-        private static readonly Regex QuotedAssignFragmentRegex = R.B(R.Q(@"\s*({0})(.*)"), Liquid.QuotedAssignFragment);
-        private static readonly Regex FilterSeparatorRegex = R.B(R.Q(@"{0}\s*(.*)"), Liquid.FilterSeparator);
-        private static readonly Regex FilterNameRegex = R.B(R.Q(@"\s*(\w+)"));
+        private readonly Regex _filterParserRegex;
+        private readonly Regex _filterArgRegex;
+        private readonly Regex _quotedAssignFragmentRegex;
+        private readonly Regex _filterSeparatorRegex;
+        private readonly Regex _filterNameRegex;
 
         public List<Filter> Filters { get; set; }
         public string Name { get; set; }
 
         private readonly string _markup;
+        public Template Template { get; }
 
-        public Variable(string markup)
+        public Variable(Template template, string markup)
         {
             _markup = markup;
+            Template = template;
 
             Name = null;
             Filters = new List<Filter>();
 
-            Match match = QuotedAssignFragmentRegex.Match(markup);
+            _filterParserRegex = R.B(template, R.Q(@"(?:{0}|(?:\s*(?!(?:{0}))(?:{1}|\S+)\s*)+)"), Liquid.FilterSeparator, Liquid.QuotedFragment);
+            _filterArgRegex = R.B(template, R.Q(@"(?:{0}|{1})\s*({2})"), Liquid.FilterArgumentSeparator, Liquid.ArgumentSeparator, Liquid.QuotedFragment);
+            _quotedAssignFragmentRegex = R.B(template, R.Q(@"\s*({0})(.*)"), Liquid.QuotedAssignFragment);
+            _filterSeparatorRegex = R.B(template, R.Q(@"{0}\s*(.*)"), Liquid.FilterSeparator);
+            _filterNameRegex = R.B(template, R.Q(@"\s*(\w+)"));
+
+            Match match = _quotedAssignFragmentRegex.Match(markup);
             if (match.Success)
             {
                 Name = match.Groups[1].Value;
-                Match filterMatch = FilterSeparatorRegex.Match(match.Groups[2].Value);
+                Match filterMatch = _filterSeparatorRegex.Match(match.Groups[2].Value);
                 if (filterMatch.Success)
                 {
-                    foreach (string f in R.Scan(filterMatch.Value, FilterParserRegex))
+                    foreach (string f in R.Scan(filterMatch.Value, _filterParserRegex))
                     {
-                        Match filterNameMatch = FilterNameRegex.Match(f);
+                        Match filterNameMatch = _filterNameRegex.Match(f);
                         if (filterNameMatch.Success)
                         {
                             string filterName = filterNameMatch.Groups[1].Value;
-                            List<string> filterArgs = R.Scan(f, FilterArgRegex);
+                            List<string> filterArgs = R.Scan(f, _filterArgRegex);
                             Filters.Add(new Filter(filterName, filterArgs.ToArray()));
                         }
                     }
@@ -124,7 +132,7 @@ namespace OurPresence.Modeller.Liquid
             };
 
             if (output is IValueTypeConvertible valueTypeConvertibleOutput)
-            { 
+            {
                 output = valueTypeConvertibleOutput.ConvertToValueType();
             }
 

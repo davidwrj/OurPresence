@@ -253,7 +253,7 @@ namespace OurPresence.Modeller.Liquid
             source = Tags.Literal.FromShortHand(source);
             source = Tags.Comment.FromShortHand(source);
 
-            Root = new Document(null, null);
+            Root = new Document(this, null, null);
             Root.Initialize(Tokenize(source));
             return this;
         }

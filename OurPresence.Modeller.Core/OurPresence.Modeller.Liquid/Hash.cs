@@ -146,21 +146,21 @@ namespace OurPresence.Modeller.Liquid
 
         #region Constructors
 
-        public Hash(object defaultValue)
-            : this()
+        public Hash(Template template, object defaultValue)
+            : this(template)
         {
             _defaultValue = defaultValue;
         }
 
-        public Hash(Func<Hash, string, object> lambda)
-            : this()
+        public Hash(Template template, Func<Hash, string, object> lambda)
+            : this(template)
         {
             _lambda = lambda;
         }
 
-        public Hash()
+        public Hash(Template template)
         {
-            _nestedDictionary = new Dictionary<string, object>(Template.NamingConvention.StringComparer);
+            _nestedDictionary = new Dictionary<string, object>(template.NamingConvention.StringComparer);
         }
 
         #endregion

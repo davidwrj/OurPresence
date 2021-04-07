@@ -21,10 +21,15 @@ namespace OurPresence.Modeller.Liquid.Tags.Html
     /// </example>
     public class TableRow : Modeller.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
-
+        private readonly Regex _syntax;
         private string _variableName, _collectionName;
         private Dictionary<string, string> _attributes;
+
+        protected TableRow(Template template, string tagName, string markup)
+            :base(template, tagName, markup)
+        {
+            _syntax = R.B(template, R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
+        }
 
         /// <summary>
         /// Initializes the tablerow tag
@@ -32,20 +37,20 @@ namespace OurPresence.Modeller.Liquid.Tags.Html
         /// <param name="tagName">Name of the parsed tag</param>
         /// <param name="markup">Markup of the parsed tag</param>
         /// <param name="tokens">Toeksn of the parsed tag</param>
-        public override void Initialize(string tagName, string markup, List<string> tokens)
+        public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(markup);
+            Match syntaxMatch = _syntax.Match(Markup);
             if (syntaxMatch.Success)
             {
                 _variableName = syntaxMatch.Groups[1].Value;
                 _collectionName = syntaxMatch.Groups[2].Value;
                 _attributes = new Dictionary<string, string>(Template.NamingConvention.StringComparer);
-                R.Scan(markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
+                R.Scan(Template, Markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
                 throw new SyntaxException(Liquid.ResourceManager.GetString("TableRowTagSyntaxException"));
 
-            base.Initialize(tagName, markup, tokens);
+            base.Initialize(tokens);
         }
 
         /// <summary>

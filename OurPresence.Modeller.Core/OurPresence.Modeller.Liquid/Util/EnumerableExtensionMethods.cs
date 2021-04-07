@@ -24,6 +24,14 @@ namespace OurPresence.Modeller.Liquid.Util
             }
         }
 
+        public static void ForEach(this IEnumerable<object> array, Action<object> callback)
+        {
+            foreach (var item in array)
+            {
+                callback(item);
+            }
+        }
+
         public static void EachWithIndex(this IEnumerable<object> array, Action<object, int> callback)
         {
             int index = 0;

@@ -11,7 +11,8 @@ namespace OurPresence.Modeller.Liquid.Tags
         private readonly Block _block;
         private readonly TextWriter _result;
 
-        public BlockDrop(Block block, TextWriter result)
+        public BlockDrop(Template template, Block block, TextWriter result)
+            :base(template)
         {
             _block = block;
             _result = result;
@@ -60,7 +61,7 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class Block : Modeller.Liquid.Block
     {
-        private static readonly Regex Syntax = R.C(@"(\w+)");
+        private readonly Regex _syntax;
 
         /// <summary>
         /// 
@@ -70,7 +71,9 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// <param name="markup"></param>
         public Block(Template template, string tagName, string markup)
             :base(template, tagName, markup)
-        { }
+        {
+            _syntax = R.C(template,@"(\w+)");
+        }
 
         internal string BlockName { get; set; }
 
@@ -80,7 +83,7 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// <param name="tokens"></param>
         public override void Initialize(IEnumerable<string> tokens)
         {
-            var syntaxMatch = Syntax.Match(Markup);
+            var syntaxMatch = _syntax.Match(Markup);
             if (syntaxMatch.Success)
             {
                 BlockName = syntaxMatch.Groups[1].Value;
@@ -123,7 +126,7 @@ namespace OurPresence.Modeller.Liquid.Tags
             BlockRenderState blockState = BlockRenderState.Find(context);
             context.Stack(() =>
                 {
-                    context["block"] = new BlockDrop(this, result);
+                    context["block"] = new BlockDrop(context.Template, this, result);
                     RenderAll(GetNodeList(blockState), context, result);
                 });
         }
@@ -134,7 +137,7 @@ namespace OurPresence.Modeller.Liquid.Tags
             return blockState == null ? NodeList : blockState.GetNodeList(this);
         }
 
-        public void AddParent(Dictionary<Block, Block> parents, List<object> nodeList)
+        public void AddParent(Dictionary<Block, Block> parents, NodeList nodeList)
         {
             if (parents.TryGetValue(this, out Block parent))
             {

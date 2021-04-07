@@ -12,10 +12,11 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="tagName"></param>
         /// <param name="markup"></param>
-        public Document(string tagName, string markup)
-            :base(tagName, markup)
+        public Document(Template template, string tagName, string markup)
+            :base(template, tagName, markup)
         { }
 
         /// <summary>

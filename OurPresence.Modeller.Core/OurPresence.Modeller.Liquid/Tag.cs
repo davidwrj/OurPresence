@@ -5,51 +5,6 @@ using System.Linq;
 namespace OurPresence.Modeller.Liquid
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public class NodeList
-    {
-        private readonly List<object> _nodes = new();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public NodeList()
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="items"></param>
-        public NodeList(IEnumerable<object> items)
-        {
-            _nodes.AddRange(items);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Clear() => _nodes.Clear();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        public void Add(object item)
-        {
-            if (item is null) return;
-            _nodes.Add(item);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public IEnumerable<object> GetItems() => _nodes.ToList();
-    }
-
-    /// <summary>
     /// Represents a tag in Liquid: {% cycle 'one', 'two', 'three' %}
     /// </summary>
     public abstract class Tag : IRenderable

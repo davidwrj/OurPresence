@@ -18,14 +18,13 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public class Context
     {
-        private static readonly Regex SingleQuotedRegex = R.C(R.Q(@"^'(.*)'$"));
-        private static readonly Regex DoubleQuotedRegex = R.C(R.Q(@"^""(.*)""$"));
-        private static readonly Regex IntegerRegex = R.C(R.Q(@"^([+-]?\d+)$"));
-        private static readonly Regex RangeRegex = R.C(R.Q(@"^\((\S+)\.\.(\S+)\)$"));
-        private static readonly Regex NumericRegex = R.C(R.Q(@"^([+-]?\d[\d\.|\,]+)$"));
-        private static readonly Regex SquareBracketedRegex = R.C(R.Q(@"^\[(.*)\]$"));
-        private static readonly Regex VariableParserRegex = R.C(Liquid.VariableParser);
-
+        private readonly Regex _singleQuotedRegex;
+        private readonly Regex _doubleQuotedRegex;
+        private readonly Regex _integerRegex;
+        private readonly Regex _rangeRegex;
+        private readonly Regex _numericRegex;
+        private readonly Regex _squareBracketedRegex;
+        private readonly Regex _variableParserRegex;
         private readonly ErrorsOutputMode _errorsOutputMode;
         private readonly Condition _condition = new Condition();
         private readonly int _maxIterations;
@@ -42,8 +41,8 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// 
         /// </summary>
-        public int MaxIterations=>_maxIterations; 
-        
+        public int MaxIterations => _maxIterations;
+
         /// <summary>
         /// 
         /// </summary>
@@ -74,6 +73,7 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Creates a new rendering context
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="environments"></param>
         /// <param name="outerScope"></param>
         /// <param name="registers"></param>
@@ -81,13 +81,14 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="maxIterations"></param>
         /// <param name="formatProvider"></param>
         /// <param name="cancellationToken"></param>
-        public Context(IEnumerable<Hash> environments, Hash outerScope, Hash registers, ErrorsOutputMode errorsOutputMode, int maxIterations, IFormatProvider formatProvider, CancellationToken cancellationToken)
+        public Context(Template template, IEnumerable<Hash> environments, Hash outerScope, Hash registers, ErrorsOutputMode errorsOutputMode, int maxIterations, IFormatProvider formatProvider, CancellationToken cancellationToken)
         {
             _environments.AddRange(environments);
 
             if (outerScope is not null)
                 _scopes.Add(outerScope);
 
+            Template = template;
             Registers = registers;
 
             _errorsOutputMode = errorsOutputMode;
@@ -96,16 +97,26 @@ namespace OurPresence.Modeller.Liquid
             FormatProvider = formatProvider;
             SyntaxCompatibilityLevel = Template.DefaultSyntaxCompatibilityLevel;
 
+            _singleQuotedRegex = R.C(Template, R.Q(@"^'(.*)'$"));
+            _doubleQuotedRegex = R.C(Template, R.Q(@"^""(.*)""$"));
+            _integerRegex = R.C(Template, R.Q(@"^([+-]?\d+)$"));
+            _rangeRegex = R.C(Template, R.Q(@"^\((\S+)\.\.(\S+)\)$"));
+            _numericRegex = R.C(Template, R.Q(@"^([+-]?\d[\d\.|\,]+)$"));
+            _squareBracketedRegex = R.C(Template, R.Q(@"^\[(.*)\]$"));
+            _variableParserRegex = R.C(Template, Liquid.VariableParser);
+
             SquashInstanceAssignsWithEnvironments();
         }
 
         /// <summary>
         /// Creates a new rendering context
         /// </summary>
-        public Context(IFormatProvider formatProvider)
-            : this(new List<Hash>(), new Hash(), new Hash(), ErrorsOutputMode.Display, 0, formatProvider, default)
+        public Context(Template template, IFormatProvider formatProvider)
+            : this(template, new List<Hash>(), new Hash(), new Hash(), ErrorsOutputMode.Display, 0, formatProvider, default)
         {
         }
+
+        public Template Template { get; }
 
         /// <summary>
         /// Strainer for the current context
@@ -343,17 +354,17 @@ namespace OurPresence.Modeller.Liquid
             }
 
             // Single quoted strings.
-            Match match = SingleQuotedRegex.Match(key);
+            Match match = _singleQuotedRegex.Match(key);
             if (match.Success)
                 return match.Groups[1].Value;
 
             // Double quoted strings.
-            match = DoubleQuotedRegex.Match(key);
+            match = _doubleQuotedRegex.Match(key);
             if (match.Success)
                 return match.Groups[1].Value;
 
             // Integer.
-            match = IntegerRegex.Match(key);
+            match = _integerRegex.Match(key);
             if (match.Success)
             {
                 try
@@ -367,13 +378,13 @@ namespace OurPresence.Modeller.Liquid
             }
 
             // Ranges.
-            match = RangeRegex.Match(key);
+            match = _rangeRegex.Match(key);
             if (match.Success)
                 return Util.Range.Inclusive(Convert.ToInt32(Resolve(match.Groups[1].Value)),
                     Convert.ToInt32(Resolve(match.Groups[2].Value)));
 
             // Floating point numbers.
-            match = NumericRegex.Match(key);
+            match = _numericRegex.Match(key);
             if (match.Success)
             {
                 // For cultures with "," as the decimal separator, allow
@@ -441,12 +452,12 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         private object Variable(string markup, bool notifyNotFound)
         {
-            List<string> parts = R.Scan(markup, VariableParserRegex);
+            List<string> parts = R.Scan(markup, _variableParserRegex);
 
             // first item in list, if any
             string firstPart = parts.TryGetAtIndex(0);
 
-            Match firstPartSquareBracketedMatch = SquareBracketedRegex.Match(firstPart);
+            Match firstPartSquareBracketedMatch = _squareBracketedRegex.Match(firstPart);
             if (firstPartSquareBracketedMatch.Success)
                 firstPart = Resolve(firstPartSquareBracketedMatch.Groups[1].Value).ToString();
 
@@ -462,7 +473,7 @@ namespace OurPresence.Modeller.Liquid
             for (int i = 1; i < parts.Count; ++i)
             {
                 var forEachPart = parts[i];
-                Match partSquareBracketedMatch = SquareBracketedRegex.Match(forEachPart);
+                Match partSquareBracketedMatch = _squareBracketedRegex.Match(forEachPart);
                 bool partResolved = partSquareBracketedMatch.Success;
 
                 object part = forEachPart;
@@ -565,23 +576,23 @@ namespace OurPresence.Modeller.Liquid
         {
             object value;
             if (obj is IDictionary dictionaryObj)
-            { 
+            {
                 value = dictionaryObj[key];
             }
             else if (obj is IList listObj)
-            { 
+            {
                 value = listObj[Convert.ToInt32(key)];
             }
             else if (TypeUtility.IsAnonymousType(obj.GetType()))
-            { 
+            {
                 value = obj.GetType().GetRuntimeProperty((string)key).GetValue(obj, null);
             }
             else if (obj is IIndexable indexableObj)
-            { 
+            {
                 value = indexableObj[key];
             }
             else
-            { 
+            {
                 throw new NotSupportedException();
             }
 
@@ -597,11 +608,11 @@ namespace OurPresence.Modeller.Liquid
                     listObj[Convert.ToInt32(key)] = newValue;
                 }
                 else if (TypeUtility.IsAnonymousType(obj.GetType()))
-                { 
+                {
                     obj.GetType().GetRuntimeProperty((string)key).SetValue(obj, newValue, null);
                 }
                 else
-                { 
+                {
                     throw new NotSupportedException();
                 }
                 return newValue;
@@ -610,7 +621,7 @@ namespace OurPresence.Modeller.Liquid
             return value;
         }
 
-        private static object Liquidize(object obj)
+        private object Liquidize(object obj)
         {
             if (obj == null)
             {
@@ -665,7 +676,7 @@ namespace OurPresence.Modeller.Liquid
 
             if (obj.GetType().GetTypeInfo().GetCustomAttributes(typeof(LiquidTypeAttribute), false).Any())
             {
-                var attr = (LiquidTypeAttribute) obj.GetType().GetTypeInfo().GetCustomAttributes(typeof(LiquidTypeAttribute), false).First();
+                var attr = (LiquidTypeAttribute)obj.GetType().GetTypeInfo().GetCustomAttributes(typeof(LiquidTypeAttribute), false).First();
                 return new DropProxy(obj, attr.AllowedMembers);
             }
 

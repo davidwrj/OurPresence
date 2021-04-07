@@ -12,9 +12,9 @@ namespace OurPresence.Modeller.Liquid.Util
             return string.Format("(?-mix:{0})", regex);
         }
 
-        public static Regex B(string format, params string[] args)
+        public static Regex B(Template template, string format, params string[] args)
         {
-            return C(string.Format(format, args));
+            return C(template, string.Format(format, args));
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace OurPresence.Modeller.Liquid.Util
         /// <param name="pattern">regex pattern</param>
         /// <param name="options">regex options; use the default (Compiled) unless there is a good reason not to</param>
         /// <returns>the regex</returns>
-        public static Regex C(string pattern, RegexOptions options = RegexOptions.None)
+        public static Regex C(Template template, string pattern, RegexOptions options = RegexOptions.None)
         {
-            var regex = new Regex(pattern, options, Template.RegexTimeOut);
+            var regex = new Regex(pattern, options, template.RegexTimeOut);
 
             // execute once to trigger the lazy compilation (not strictly necessary, but avoids the first real execution taking a longer time than subsequent ones)
             regex.IsMatch(string.Empty);
@@ -64,9 +64,9 @@ namespace OurPresence.Modeller.Liquid.Util
         /// <param name="pattern">regex pattern</param>
         /// <returns>matches</returns>
         [Obsolete("Use Scan(string, Regex) instead.")]
-        public static List<string> Scan(string input, string pattern)
+        public static List<string> Scan(Template template, string input, string pattern)
         {
-            return Scan(input, new Regex(pattern, RegexOptions.None, Template.RegexTimeOut));
+            return Scan(input, new Regex(pattern, RegexOptions.None, template.RegexTimeOut));
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace OurPresence.Modeller.Liquid.Util
         /// <param name="pattern"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public static void Scan(string input, string pattern, Action<string, string> callback)
+        public static void Scan(Template template, string input, string pattern, Action<string, string> callback)
         {
-            foreach (Match match in Regex.Matches(input, pattern, RegexOptions.None, Template.RegexTimeOut))
+            foreach (Match match in Regex.Matches(input, pattern, RegexOptions.None, template.RegexTimeOut))
                 callback(match.Groups[1].Value, match.Groups[2].Value);
         }
     }
