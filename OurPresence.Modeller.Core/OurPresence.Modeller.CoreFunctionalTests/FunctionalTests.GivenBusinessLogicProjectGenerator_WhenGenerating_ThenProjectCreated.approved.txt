@@ -1,0 +1,17 @@
+file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
+        <RootNamespace>Mizrael.SuperSafeBank.BusinessLogic</RootNamespace>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
+        <PackageReference Include="MediatR" Version="9.0.0" />
+    </ItemGroup>
+
+</Project>
+

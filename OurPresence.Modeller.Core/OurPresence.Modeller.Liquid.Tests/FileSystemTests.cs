@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Globalization;
 using OurPresence.Modeller.Liquid.Exceptions;
 using OurPresence.Modeller.Liquid.FileSystems;
@@ -12,10 +15,9 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestDefault()
         {
-            Assert.Throws<FileSystemException>(() => new BlankFileSystem().ReadTemplateFile(new Context(CultureInfo.InvariantCulture), "dummy"));
+            Assert.Throws<FileSystemException>(() => new BlankFileSystem().ReadTemplateFile(new Context(new Template(), CultureInfo.InvariantCulture), "dummy"));
         }
         
-
         [Fact]        
         [Trait("environment","windows")]
         public void TestLocal()

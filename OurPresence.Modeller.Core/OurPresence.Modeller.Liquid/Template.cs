@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,7 +10,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.FileSystems;
 using OurPresence.Modeller.Liquid.Util;
-using OurPresence.Modeller.Liquid.NamingConventions;
 
 namespace OurPresence.Modeller.Liquid
 {
@@ -18,7 +20,7 @@ namespace OurPresence.Modeller.Liquid
     ///
     /// After you have a compiled template you can then <tt>render</tt> it.
     /// You can use a compiled template over and over again and keep it cached.
-    ///<example>
+    /// <example>
     /// template = Liquid::Template.parse(source)
     /// template.render('user_name' => 'bob')
     /// </example>
@@ -28,42 +30,72 @@ namespace OurPresence.Modeller.Liquid
         private readonly Dictionary<Type, Func<object, object>> _safeTypeTransformers = new();
         private readonly Dictionary<Type, Func<object, object>> _valueTypeTransformers = new();
         private readonly Dictionary<string, (ITagFactory factory, Type type)> _tags = new();
-        private readonly Hash _registers = new Hash();
-        private readonly Hash _assigns = new Hash();
-        private readonly Hash _instanceAssigns = new Hash();
+        private readonly Hash _registers;
+        private readonly Hash _assigns;
+        private readonly Hash _instanceAssigns;
         private readonly List<Exception> _errors = new();
+
+        /// <summary>
+        ///
+        /// </summary>
+        public Template()
+            : this(string.Empty, null)
+        { }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="source"></param>
+        public Template(string source)
+            : this(source, null)
+        { }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="fileSystem"></param>
+        public Template(string source, IFileSystem fileSystem)
+        {
+            _registers = new Hash();
+            _assigns = new Hash();
+            _instanceAssigns = new Hash();
+
+            if(fileSystem is null)
+            {
+                fileSystem = new BlankFileSystem();
+            }
+
+            FileSystem = fileSystem;
+
+            if(!string.IsNullOrEmpty(source))
+            {
+                ParseInternal(source);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new <tt>Template</tt> object from liquid source code
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static Template Parse(string source)
+        {
+            Template template = new Template(source, new BlankFileSystem());
+            template.ParseInternal(source);
+            return template;
+        }
 
         /// <summary>
         /// Creates a new <tt>Template</tt> object from liquid source code
         /// </summary>
         /// <param name="source">template source code</param>
-        /// <param name="namingConvention"></param>
         /// <param name="fileSystem"></param>
-        /// <param name="syntaxCompatibility"></param>
         /// <returns>Template instance that has been parsed.</returns>
-        public static Template Parse(string source, INamingConvention namingConvention, IFileSystem fileSystem, SyntaxCompatibility syntaxCompatibility = SyntaxCompatibility.Liquid20)
+        public static Template Parse(string source, IFileSystem fileSystem)
         {
-            return new Template(source, namingConvention, fileSystem, syntaxCompatibility);
+            return new Template(source, fileSystem);
         }
-
-        private Template(string source, INamingConvention namingConvention, IFileSystem fileSystem, SyntaxCompatibility syntaxCompatibility)
-        {
-            if (namingConvention is null) namingConvention = new RubyNamingConvention();
-            NamingConvention = namingConvention;
-
-            if (fileSystem is null) fileSystem = new BlankFileSystem();
-            FileSystem = fileSystem;
-
-            DefaultSyntaxCompatibilityLevel = syntaxCompatibility;
-
-            ParseInternal(source);
-        }
-
-        /// <summary>
-        /// Naming convention used for template parsing
-        /// </summary>
-        /// <remarks>Default is Ruby</remarks>
-        public INamingConvention NamingConvention { get; }
 
         /// <summary>
         /// Filesystem used for template reading
@@ -71,22 +103,12 @@ namespace OurPresence.Modeller.Liquid
         public IFileSystem FileSystem { get; }
 
         /// <summary>
-        /// Liquid syntax flag used for backward compatibility
-        /// </summary>
-        public SyntaxCompatibility DefaultSyntaxCompatibilityLevel { get; }
-
-        /// <summary>
-        /// TimeOut used for all Regex in OurPresence.Modeller.Liquid
-        /// </summary>
-        public TimeSpan RegexTimeOut { get; set; } = TimeSpan.FromSeconds(10);
-
-        /// <summary>
         /// Register a tag
         /// </summary>
         /// <typeparam name="T">Type of the tag</typeparam>
         /// <param name="name">Name of the tag</param>
         public void RegisterTag<T>(string name)
-            where T : Tag, new()
+            where T : Tag
         {
             var tagType = typeof(T);
             _tags.Add(name, (new ActivatorTagFactory(tagType, name), tagType));
@@ -112,10 +134,9 @@ namespace OurPresence.Modeller.Liquid
             return result.type;
         }
 
-        internal Tag CreateTag(string name)
+        internal Tag CreateTag(string name, string markup)
         {
-            if (!_tags.TryGetValue(name, out var result)) return null;
-            return result.factory.Create(this);
+            return !_tags.TryGetValue(name, out var result) ? null : result.factory.Create(this, markup);
         }
 
         /// <summary>
@@ -123,7 +144,7 @@ namespace OurPresence.Modeller.Liquid
         ///  to all liquid views. Good for registering the standard library
         /// </summary>
         /// <param name="filter"></param>
-        public void RegisterFilter(Type filter)
+        public static void RegisterFilter(Type filter)
         {
             Strainer.GlobalFilter(filter);
         }
@@ -135,7 +156,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="allowedMembers">An array of property and method names that are allowed to be called on the object.</param>
         public void RegisterSafeType(Type type, string[] allowedMembers)
         {
-            RegisterSafeType(type, x => new DropProxy(x, allowedMembers));
+            RegisterSafeType(type, x => new DropProxy(this, x, allowedMembers));
         }
 
         /// <summary>
@@ -146,7 +167,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="func">Function that converts the specified type into a Liquid Drop-compatible object (eg, implements ILiquidizable)</param>
         public void RegisterSafeType(Type type, string[] allowedMembers, Func<object, object> func)
         {
-            RegisterSafeType(type, x => new DropProxy(x, allowedMembers, func));
+            RegisterSafeType(type, x => new DropProxy(this, x, allowedMembers, func));
         }
 
         /// <summary>
@@ -177,18 +198,25 @@ namespace OurPresence.Modeller.Liquid
         public Func<object, object> GetValueTypeTransformer(Type type)
         {
             // Check for concrete types
-            if (_valueTypeTransformers.TryGetValue(type, out Func<object, object> transformer))
+            if(_valueTypeTransformers.TryGetValue(type, out var transformer))
+            {
                 return transformer;
+            }
 
             // Check for interfaces
             var interfaces = type.GetTypeInfo().ImplementedInterfaces;
-            foreach (var interfaceType in interfaces)
+            foreach(var interfaceType in interfaces)
             {
-                if (_valueTypeTransformers.TryGetValue(interfaceType, out transformer))
+                if(_valueTypeTransformers.TryGetValue(interfaceType, out transformer))
+                {
                     return transformer;
-                if (interfaceType.GetTypeInfo().IsGenericType && _valueTypeTransformers.TryGetValue(
+                }
+
+                if(interfaceType.GetTypeInfo().IsGenericType && _valueTypeTransformers.TryGetValue(
                     interfaceType.GetGenericTypeDefinition(), out transformer))
+                {
                     return transformer;
+                }
             }
             return null;
         }
@@ -201,18 +229,25 @@ namespace OurPresence.Modeller.Liquid
         public Func<object, object> GetSafeTypeTransformer(Type type)
         {
             // Check for concrete types
-            if (_safeTypeTransformers.TryGetValue(type, out Func<object, object> transformer))
+            if(_safeTypeTransformers.TryGetValue(type, out var transformer))
+            {
                 return transformer;
+            }
 
             // Check for interfaces
             var interfaces = type.GetTypeInfo().ImplementedInterfaces;
-            foreach (var interfaceType in interfaces)
+            foreach(var interfaceType in interfaces)
             {
-                if (_safeTypeTransformers.TryGetValue(interfaceType, out transformer))
+                if(_safeTypeTransformers.TryGetValue(interfaceType, out transformer))
+                {
                     return transformer;
-                if (interfaceType.GetTypeInfo().IsGenericType && _safeTypeTransformers.TryGetValue(
+                }
+
+                if(interfaceType.GetTypeInfo().IsGenericType && _safeTypeTransformers.TryGetValue(
                     interfaceType.GetGenericTypeDefinition(), out transformer))
+                {
                     return transformer;
+                }
             }
             return null;
         }
@@ -228,12 +263,12 @@ namespace OurPresence.Modeller.Liquid
         public Hash Registers => _registers;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public Hash Assigns => _assigns;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public Hash InstanceAssigns => _instanceAssigns;
 
@@ -305,10 +340,15 @@ namespace OurPresence.Modeller.Liquid
         /// <returns>The rendering result as string.</returns>
         public string Render(TextWriter writer, RenderParameters parameters)
         {
-            if (writer == null)
+            if(writer == null)
+            {
                 throw new ArgumentNullException(paramName: nameof(writer));
-            if (parameters == null)
+            }
+
+            if(parameters == null)
+            {
                 throw new ArgumentNullException(paramName: nameof(parameters));
+            }
 
             RenderInternal(writer, parameters);
             return writer.ToString();
@@ -353,15 +393,22 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         private void RenderInternal(TextWriter result, RenderParameters parameters)
         {
-            if (Root is null) return;
+            if(Root is null)
+            {
+                return;
+            }
 
-            parameters.Evaluate(this, out Context context, out Hash registers, out IEnumerable<Type> filters);
+            parameters.Evaluate(this, out var context, out var registers, out var filters);
 
-            if (registers != null)
+            if(registers != null)
+            {
                 Registers.Merge(registers);
+            }
 
-            if (filters != null)
+            if(filters != null)
+            {
                 context.AddFilters(filters);
+            }
 
             try
             {
@@ -379,29 +426,32 @@ namespace OurPresence.Modeller.Liquid
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        internal IEnumerable<string> Tokenize(string source)
+        internal static IEnumerable<string> Tokenize(string source)
         {
-            if (string.IsNullOrEmpty(source)) return new List<string>();
+            if(string.IsNullOrEmpty(source))
+            {
+                return new List<string>();
+            }
 
             // Trim leading whitespace.
-            source = Regex.Replace(source, string.Format(@"([ \t]+)?({0}|{1})-", Liquid.VariableStart, Liquid.TagStart), "$2", RegexOptions.None, RegexTimeOut);
+            source = Regex.Replace(source, string.Format(@"([ \t]+)?({0}|{1})-", Liquid.VariableStart, Liquid.TagStart), "$2", RegexOptions.None);
 
             // Trim trailing whitespace.
-            source = Regex.Replace(source, string.Format(@"-({0}|{1})(\n|\r\n|[ \t]+)?", Liquid.VariableEnd, Liquid.TagEnd), "$1", RegexOptions.None, RegexTimeOut);
+            source = Regex.Replace(source, string.Format(@"-({0}|{1})(\n|\r\n|[ \t]+)?", Liquid.VariableEnd, Liquid.TagEnd), "$1", RegexOptions.None);
 
             var tokens = Regex.Split(source, Liquid.TemplateParser).ToList();
 
             // Trim any whitespace elements from the end of the array.
-            for (int i = tokens.Count - 1; i > 0; --i)
+            for(var i = tokens.Count - 1; i > 0; --i)
             {
-                if (tokens[i] == string.Empty)
+                if(tokens[i] == string.Empty)
                 {
                     tokens.RemoveAt(i);
                 }
             }
 
             // Removes the rogue empty element at the beginning of the array
-            if (tokens[0] is not null && tokens[0] == string.Empty)
+            if(tokens[0] is not null && tokens[0] == string.Empty)
             {
                 tokens.Shift();
             }

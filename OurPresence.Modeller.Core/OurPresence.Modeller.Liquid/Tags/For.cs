@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,14 +56,21 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class For : Modeller.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)\s*(reversed)?"), Liquid.QuotedFragment);
-        private static string ForTagMaxIterationsExceededException = Liquid.ResourceManager.GetString("ForTagMaximumIterationsExceededException");
+        private static readonly Regex s_syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)\s*(reversed)?"), Liquid.QuotedFragment);
+        private static string s_forTagMaxIterationsExceededException = Liquid.ResourceManager.GetString("ForTagMaximumIterationsExceededException");
 
         private string _variableName, _collectionName, _name;
         private bool _reversed;
         private Dictionary<string, string> _attributes;
 
-        public For(Template template, string tagName, string markup) : base(template, tagName, markup)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
+        public For(Template template, string tagName, string markup)
+            : base(template, tagName, markup)
         { }
 
         /// <summary>
@@ -69,16 +79,15 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// <param name="tokens">Toeksn of the parsed tag</param>
         public override void Initialize(IEnumerable<string> tokens)
         {
-            Match match = Syntax.Match(Markup);
+            var match = s_syntax.Match(Markup);
             if (match.Success)
             {
                 _variableName = match.Groups[1].Value;
                 _collectionName = match.Groups[2].Value;
                 _name = string.Format("{0}-{1}", _variableName, _collectionName);
-                _reversed = (!string.IsNullOrEmpty(match.Groups[3].Value));
-                _attributes = new Dictionary<string, string>(Template.NamingConvention.StringComparer);
-                R.Scan(Markup, Liquid.TagAttributes,
-                    (key, value) => _attributes[key] = value);
+                _reversed = !string.IsNullOrEmpty(match.Groups[3].Value);
+                _attributes = new Dictionary<string, string>();
+                R.Scan(Markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
             {
@@ -97,29 +106,35 @@ namespace OurPresence.Modeller.Liquid.Tags
         {
             context.Registers["for"] = context.Registers["for"] ?? new Hash(0);
 
-            object collection = context[_collectionName];
+            var collection = context[_collectionName];
 
             if (!(collection is IEnumerable))
+            {
                 return;
+            }
 
-            int from = (_attributes.ContainsKey("offset"))
+            var from = _attributes.ContainsKey("offset")
                 ? (_attributes["offset"] == "continue")
                     ? Convert.ToInt32(context.Registers.Get<Hash>("for")[_name])
                     : Convert.ToInt32(context[_attributes["offset"]])
                 : 0;
 
-            int? limit = _attributes.ContainsKey("limit") ? (int?)Convert.ToInt32(context[_attributes["limit"]]) : null;
-            int? to = (limit != null) ? (int?)(limit.Value + from) : null;
+            int? limit = _attributes.ContainsKey("limit") ? Convert.ToInt32(context[_attributes["limit"]]) : null;
+            int? to = (limit != null) ? limit.Value + from : null;
 
-            List<object> segment = SliceCollectionUsingEach(context, (IEnumerable) collection, from, to);
+            var segment = SliceCollectionUsingEach(context, (IEnumerable)collection, from, to);
 
             if (!segment.Any())
+            {
                 return;
+            }
 
             if (_reversed)
+            {
                 segment.Reverse();
+            }
 
-            int length = segment.Count;
+            var length = segment.Count;
 
             // Store our progress through the collection for the continue flag
             context.Registers.Get<Hash>("for")[_name] = from + length;
@@ -131,14 +146,17 @@ namespace OurPresence.Modeller.Liquid.Tags
                     context.CheckTimeout();
 
                     var item = segment[index];
-                    if (item is KeyValuePair<string,object>)
+                    if (item is KeyValuePair<string, object>)
                     {
-                        var itemKey = ((KeyValuePair<string, object>) item).Key;
-                        var itemValue = ((KeyValuePair<string, object>) item).Value;
+                        var itemKey = ((KeyValuePair<string, object>)item).Key;
+                        var itemValue = ((KeyValuePair<string, object>)item).Value;
                         BuildContext(context, _variableName, itemKey, itemValue);
 
-                    } else 
+                    }
+                    else
+                    {
                         context[_variableName] = item;
+                    }
 
                     context["forloop"] = Hash.FromDictionary(new Dictionary<string, object>
                     {
@@ -148,8 +166,8 @@ namespace OurPresence.Modeller.Liquid.Tags
                         ["index0"] = index,
                         ["rindex"] = length - index,
                         ["rindex0"] = length - index - 1,
-                        ["first"] = (index == 0),
-                        ["last"] = (index == length - 1)
+                        ["first"] = index == 0,
+                        ["last"] = index == length - 1
                     });
                     try
                     {
@@ -169,23 +187,27 @@ namespace OurPresence.Modeller.Liquid.Tags
 
         private static List<object> SliceCollectionUsingEach(Context context, IEnumerable collection, int from, int? to)
         {
-            List<object> segments = new List<object>();
-            int index = 0;
-            foreach (object item in collection)
+            var segments = new List<object>();
+            var index = 0;
+            foreach (var item in collection)
             {
                 context.CheckTimeout();
 
                 if (to != null && to.Value <= index)
+                {
                     break;
+                }
 
                 if (from <= index)
+                {
                     segments.Add(item);
+                }
 
                 ++index;
 
                 if (context.MaxIterations > 0 && index > context.MaxIterations)
                 {
-                    throw new MaximumIterationsExceededException(For.ForTagMaxIterationsExceededException, context.MaxIterations.ToString());
+                    throw new MaximumIterationsExceededException(For.s_forTagMaxIterationsExceededException, context.MaxIterations.ToString());
                 }
             }
             return segments;
@@ -197,7 +219,7 @@ namespace OurPresence.Modeller.Liquid.Tags
             {
                 hashValue["itemName"] = key;
                 context[parent] = value;
-                
+
                 foreach (var hashItem in (Hash)value)
                 {
                     if (hashItem.Value is Hash)

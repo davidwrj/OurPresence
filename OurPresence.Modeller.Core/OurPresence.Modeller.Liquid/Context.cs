@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,25 +21,22 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public class Context
     {
-        private readonly Regex _singleQuotedRegex;
-        private readonly Regex _doubleQuotedRegex;
-        private readonly Regex _integerRegex;
-        private readonly Regex _rangeRegex;
-        private readonly Regex _numericRegex;
-        private readonly Regex _squareBracketedRegex;
-        private readonly Regex _variableParserRegex;
+        private static readonly Regex s_singleQuotedRegex = R.C(R.Q(@"^'(.*)'$"));
+        private static readonly Regex s_doubleQuotedRegex = R.C(R.Q(@"^""(.*)""$"));
+        private static readonly Regex s_integerRegex = R.C(R.Q(@"^([+-]?\d+)$"));
+        private static readonly Regex s_rangeRegex = R.C(R.Q(@"^\((\S+)\.\.(\S+)\)$"));
+        private static readonly Regex s_numericRegex = R.C(R.Q(@"^([+-]?\d[\d\.|\,]+)$"));
+        private static readonly Regex s_squareBracketedRegex = R.C(R.Q(@"^\[(.*)\]$"));
+        private static readonly Regex s_variableParserRegex = R.C(Liquid.VariableParser);
+
         private readonly ErrorsOutputMode _errorsOutputMode;
+
         private readonly Condition _condition = new Condition();
         private readonly int _maxIterations;
         private Strainer _strainer;
         private readonly List<Hash> _scopes = new();
         private readonly List<Exception> _errors = new();
         private readonly List<Hash> _environments = new();
-
-        /// <summary>
-        /// Liquid syntax flag used for backward compatibility
-        /// </summary>
-        public SyntaxCompatibility SyntaxCompatibilityLevel { get; set; }
 
         /// <summary>
         /// 
@@ -86,7 +86,9 @@ namespace OurPresence.Modeller.Liquid
             _environments.AddRange(environments);
 
             if (outerScope is not null)
+            {
                 _scopes.Add(outerScope);
+            }
 
             Template = template;
             Registers = registers;
@@ -95,15 +97,6 @@ namespace OurPresence.Modeller.Liquid
             _maxIterations = maxIterations;
             _cancellationToken = cancellationToken;
             FormatProvider = formatProvider;
-            SyntaxCompatibilityLevel = Template.DefaultSyntaxCompatibilityLevel;
-
-            _singleQuotedRegex = R.C(Template, R.Q(@"^'(.*)'$"));
-            _doubleQuotedRegex = R.C(Template, R.Q(@"^""(.*)""$"));
-            _integerRegex = R.C(Template, R.Q(@"^([+-]?\d+)$"));
-            _rangeRegex = R.C(Template, R.Q(@"^\((\S+)\.\.(\S+)\)$"));
-            _numericRegex = R.C(Template, R.Q(@"^([+-]?\d[\d\.|\,]+)$"));
-            _squareBracketedRegex = R.C(Template, R.Q(@"^\[(.*)\]$"));
-            _variableParserRegex = R.C(Template, Liquid.VariableParser);
 
             SquashInstanceAssignsWithEnvironments();
         }
@@ -112,10 +105,13 @@ namespace OurPresence.Modeller.Liquid
         /// Creates a new rendering context
         /// </summary>
         public Context(Template template, IFormatProvider formatProvider)
-            : this(template, new List<Hash>(), new Hash(), new Hash(), ErrorsOutputMode.Display, 0, formatProvider, default)
+            : this(template, new List<Hash>(), new Hash(template), new Hash(template), ErrorsOutputMode.Display, 0, formatProvider, default)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Template Template { get; }
 
         /// <summary>
@@ -135,7 +131,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="func">Filter function</param>
         public void AddFilter<TIn, TOut>(string filterName, Func<TIn, TOut> func)
         {
-            Strainer.AddFunction(filterName, func);
+            Strainer.AddFunction(Template, filterName, func);
         }
 
         /// <summary>
@@ -148,7 +144,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="func">Filter function</param>
         public void AddFilter<TIn, TIn2, TOut>(string filterName, Func<TIn, TIn2, TOut> func)
         {
-            Strainer.AddFunction(filterName, func);
+            Strainer.AddFunction(Template, filterName, func);
         }
 
         /// <summary>
@@ -159,8 +155,10 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="filters"></param>
         public void AddFilters(IEnumerable<Type> filters)
         {
-            foreach (Type f in filters)
-                Strainer.Extend(f);
+            foreach (var f in filters)
+            {
+                Strainer.Extend(Template, f);
+            }
         }
 
         /// <summary>
@@ -170,7 +168,9 @@ namespace OurPresence.Modeller.Liquid
         public void AddFilters(params Type[] filters)
         {
             if (filters != null)
+            {
                 AddFilters(filters.AsEnumerable());
+            }
         }
 
         /// <summary>
@@ -188,19 +188,18 @@ namespace OurPresence.Modeller.Liquid
             _errors.Add(ex);
 
             if (_errorsOutputMode == ErrorsOutputMode.Suppress)
+            {
                 return string.Empty;
+            }
 
             if (_errorsOutputMode == ErrorsOutputMode.Rethrow)
             {
                 ExceptionDispatchInfo.Capture(ex).Throw();
             }
 
-            if (ex is SyntaxException)
-            {
-                return string.Format(Liquid.ResourceManager.GetString("ContextLiquidSyntaxError"), ex.Message);
-            }
-
-            return string.Format(Liquid.ResourceManager.GetString("ContextLiquidError"), ex.Message);
+            return ex is SyntaxException
+                ? string.Format(Liquid.ResourceManager.GetString("ContextLiquidSyntaxError"), ex.Message)
+                : string.Format(Liquid.ResourceManager.GetString("ContextLiquidError"), ex.Message);
         }
 
         /// <summary>
@@ -211,12 +210,7 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public object Invoke(string method, List<object> args)
         {
-            if (Strainer.RespondTo(method))
-            {
-                return Strainer.Invoke(method, args);
-            }
-
-            return args.First();
+            return Strainer.RespondTo(method) ? Strainer.Invoke(method, args) : args.First();
         }
 
         /// <summary>
@@ -252,7 +246,7 @@ namespace OurPresence.Modeller.Liquid
                 throw new ContextException();
             }
 
-            Hash result = _scopes[0];
+            var result = _scopes[0];
             _scopes.RemoveAt(0);
             return result;
         }
@@ -289,7 +283,7 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="callback"></param>
         public void Stack(Action callback)
         {
-            Stack(new Hash(), callback);
+            Stack(new Hash(Template), callback);
         }
 
         /// <summary>
@@ -350,21 +344,25 @@ namespace OurPresence.Modeller.Liquid
                     return false;
                 case "blank":
                 case "empty":
-                    return new Symbol(o => o is IEnumerable && !((IEnumerable)o).Cast<object>().Any());
+                    return new Symbol(o => o is IEnumerable value && !value.Cast<object>().Any());
             }
 
             // Single quoted strings.
-            Match match = _singleQuotedRegex.Match(key);
+            var match = s_singleQuotedRegex.Match(key);
             if (match.Success)
+            {
                 return match.Groups[1].Value;
+            }
 
             // Double quoted strings.
-            match = _doubleQuotedRegex.Match(key);
+            match = s_doubleQuotedRegex.Match(key);
             if (match.Success)
+            {
                 return match.Groups[1].Value;
+            }
 
             // Integer.
-            match = _integerRegex.Match(key);
+            match = s_integerRegex.Match(key);
             if (match.Success)
             {
                 try
@@ -378,13 +376,15 @@ namespace OurPresence.Modeller.Liquid
             }
 
             // Ranges.
-            match = _rangeRegex.Match(key);
+            match = s_rangeRegex.Match(key);
             if (match.Success)
+            {
                 return Util.Range.Inclusive(Convert.ToInt32(Resolve(match.Groups[1].Value)),
                     Convert.ToInt32(Resolve(match.Groups[2].Value)));
+            }
 
             // Floating point numbers.
-            match = _numericRegex.Match(key);
+            match = s_numericRegex.Match(key);
             if (match.Success)
             {
                 // For cultures with "," as the decimal separator, allow
@@ -394,18 +394,21 @@ namespace OurPresence.Modeller.Liquid
                 // Also, first try higher precision decimal.
                 // If that fails, try to parse as double (precision float).
                 // Double is less precise but has a larger range.
-                if (decimal.TryParse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, FormatProvider, out decimal parsedDecimalCurrentCulture))
-                    return parsedDecimalCurrentCulture;
-                if (decimal.TryParse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, CultureInfo.InvariantCulture, out decimal parsedDecimalInvariantCulture))
-                    return parsedDecimalInvariantCulture;
-                if (double.TryParse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, FormatProvider, out double parsedDouble))
-                    return parsedDouble;
-                return double.Parse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, CultureInfo.InvariantCulture);
+                return decimal.TryParse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, FormatProvider, out var parsedDecimalCurrentCulture)
+                    ? parsedDecimalCurrentCulture
+                    : decimal.TryParse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedDecimalInvariantCulture)
+                    ? parsedDecimalInvariantCulture
+                    : double.TryParse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, FormatProvider, out var parsedDouble)
+                    ? parsedDouble
+                    : (object)double.Parse(match.Groups[1].Value, NumberStyles.Number | NumberStyles.Float, CultureInfo.InvariantCulture);
             }
 
             return Variable(key, notifyNotFound);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IFormatProvider FormatProvider { get; }
 
         /// <summary>
@@ -416,19 +419,21 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         private object FindVariable(string key)
         {
-            Hash scope = Scopes.FirstOrDefault(s => s.ContainsKey(key));
+            var scope = Scopes.FirstOrDefault(s => s.ContainsKey(key));
             object variable = null;
             if (scope == null)
             {
-                foreach (Hash e in Environments)
+                foreach (var e in Environments)
+                {
                     if ((variable = LookupAndEvaluate(e, key)) != null)
                     {
                         scope = e;
                         break;
                     }
+                }
             }
-            scope = scope ?? Environments.LastOrDefault() ?? Scopes.Last();
-            variable = variable ?? LookupAndEvaluate(scope, key);
+            scope ??= Environments.LastOrDefault() ?? Scopes.Last();
+            variable ??= LookupAndEvaluate(scope, key);
 
             variable = Liquidize(variable);
             if (variable is IContextAware contextAwareVariable)
@@ -452,39 +457,46 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         private object Variable(string markup, bool notifyNotFound)
         {
-            List<string> parts = R.Scan(markup, _variableParserRegex);
+            var parts = R.Scan(markup, s_variableParserRegex);
 
             // first item in list, if any
-            string firstPart = parts.TryGetAtIndex(0);
+            var firstPart = parts.TryGetAtIndex(0);
 
-            Match firstPartSquareBracketedMatch = _squareBracketedRegex.Match(firstPart);
+            var firstPartSquareBracketedMatch = s_squareBracketedRegex.Match(firstPart);
             if (firstPartSquareBracketedMatch.Success)
+            {
                 firstPart = Resolve(firstPartSquareBracketedMatch.Groups[1].Value).ToString();
+            }
 
             object @object;
             if ((@object = FindVariable(firstPart)) == null)
             {
                 if (notifyNotFound)
+                {
                     _errors.Add(new VariableNotFoundException(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), markup)));
+                }
+
                 return null;
             }
 
             // try to resolve the rest of the parts (starting from the second item in the list)
-            for (int i = 1; i < parts.Count; ++i)
+            for (var i = 1; i < parts.Count; ++i)
             {
                 var forEachPart = parts[i];
-                Match partSquareBracketedMatch = _squareBracketedRegex.Match(forEachPart);
-                bool partResolved = partSquareBracketedMatch.Success;
+                var partSquareBracketedMatch = s_squareBracketedRegex.Match(forEachPart);
+                var partResolved = partSquareBracketedMatch.Success;
 
                 object part = forEachPart;
                 if (partResolved)
+                {
                     part = Resolve(partSquareBracketedMatch.Groups[1].Value);
+                }
 
                 // If object is a KeyValuePair, we treat it a bit differently - we might be rendering
                 // an included template.
                 if (IsKeyValuePair(@object) && (part.SafeTypeInsensitiveEqual(0L) || part.Equals("Key")))
                 {
-                    object res = @object.GetType().GetRuntimeProperty("Key").GetValue(@object);
+                    var res = @object.GetType().GetRuntimeProperty("Key").GetValue(@object);
                     @object = Liquidize(res);
                 }
                 // If object is a hash- or array-like object we look for the
@@ -492,7 +504,7 @@ namespace OurPresence.Modeller.Liquid
                 else if (IsKeyValuePair(@object) && (part.SafeTypeInsensitiveEqual(1L) || part.Equals("Value")))
                 {
                     // If its a proc we will replace the entry with the proc
-                    object res = @object.GetType().GetRuntimeProperty("Value").GetValue(@object);
+                    var res = @object.GetType().GetRuntimeProperty("Value").GetValue(@object);
                     @object = Liquidize(res);
                 }
                 // No key was present with the desired value and it wasn't one of the directly supported
@@ -503,7 +515,7 @@ namespace OurPresence.Modeller.Liquid
                     // an included template.
                     if (@object is KeyValuePair<string, object> && ((KeyValuePair<string, object>)@object).Key == (string)part)
                     {
-                        object res = ((KeyValuePair<string, object>)@object).Value;
+                        var res = ((KeyValuePair<string, object>)@object).Value;
                         @object = Liquidize(res);
                     }
                     // If object is a hash- or array-like object we look for the
@@ -511,25 +523,27 @@ namespace OurPresence.Modeller.Liquid
                     else if (IsHashOrArrayLikeObject(@object, part))
                     {
                         // If its a proc we will replace the entry with the proc
-                        object res = LookupAndEvaluate(@object, part);
+                        var res = LookupAndEvaluate(@object, part);
                         @object = Liquidize(res);
                     }
                     // Some special cases. If the part wasn't in square brackets and
                     // no key with the same name was found we interpret following calls
                     // as commands and call them on the current object
-                    else if (!partResolved && (@object is IEnumerable) && (Template.NamingConvention.OperatorEquals(part as string, "size") || Template.NamingConvention.OperatorEquals(part as string, "first") || Template.NamingConvention.OperatorEquals(part as string, "last")))
+                    else if (!partResolved && @object is IEnumerable && (part == "size" || part == "first" || part == "last"))
                     {
                         var castCollection = ((IEnumerable)@object).Cast<object>();
-                        if (Template.NamingConvention.OperatorEquals(part as string, "size"))
-                            @object = castCollection.Count();
-                        else if (Template.NamingConvention.OperatorEquals(part as string, "first"))
+                        if (part == "size")
                         {
-                            object res = castCollection.FirstOrDefault();
+                            @object = castCollection.Count();
+                        }
+                        else if (part =="first")
+                        {
+                            var res = castCollection.FirstOrDefault();
                             @object = Liquidize(res);
                         }
-                        else if (Template.NamingConvention.OperatorEquals(part as string, "last"))
+                        else if (part =="last")
                         {
-                            object res = castCollection.LastOrDefault();
+                            var res = castCollection.LastOrDefault();
                             @object = Liquidize(res);
                         }
                     }
@@ -555,19 +569,29 @@ namespace OurPresence.Modeller.Liquid
         private static bool IsHashOrArrayLikeObject(object obj, object part)
         {
             if (obj == null)
+            {
                 return false;
+            }
 
-            if ((obj is IDictionary && ((IDictionary)obj).Contains(part)))
+            if (obj is IDictionary && ((IDictionary)obj).Contains(part))
+            {
                 return true;
+            }
 
-            if ((obj is IList) && (part is int || part is long))
+            if (obj is IList && (part is int || part is long))
+            {
                 return true;
+            }
 
             if (TypeUtility.IsAnonymousType(obj.GetType()) && obj.GetType().GetRuntimeProperty((string)part) != null)
+            {
                 return true;
+            }
 
-            if ((obj is IIndexable) && ((IIndexable)obj).ContainsKey(part))
+            if (obj is IIndexable && ((IIndexable)obj).ContainsKey(part))
+            {
                 return true;
+            }
 
             return false;
         }
@@ -587,18 +611,14 @@ namespace OurPresence.Modeller.Liquid
             {
                 value = obj.GetType().GetRuntimeProperty((string)key).GetValue(obj, null);
             }
-            else if (obj is IIndexable indexableObj)
-            {
-                value = indexableObj[key];
-            }
             else
             {
-                throw new NotSupportedException();
+                value = obj is IIndexable indexableObj ? indexableObj[key] : throw new NotSupportedException();
             }
 
             if (value is Proc procValue)
             {
-                object newValue = procValue.Invoke(this);
+                var newValue = procValue.Invoke(this);
                 if (obj is IDictionary dicObj)
                 {
                     dicObj[key] = newValue;
@@ -677,25 +697,22 @@ namespace OurPresence.Modeller.Liquid
             if (obj.GetType().GetTypeInfo().GetCustomAttributes(typeof(LiquidTypeAttribute), false).Any())
             {
                 var attr = (LiquidTypeAttribute)obj.GetType().GetTypeInfo().GetCustomAttributes(typeof(LiquidTypeAttribute), false).First();
-                return new DropProxy(obj, attr.AllowedMembers);
+                return new DropProxy(Template, obj, attr.AllowedMembers);
             }
 
-            if (IsKeyValuePair(obj))
-            {
-                return obj;
-            }
-
-            throw new SyntaxException(Liquid.ResourceManager.GetString("ContextObjectInvalidException"), obj.ToString());
+            return IsKeyValuePair(obj)
+                ? obj
+                : throw new SyntaxException(Liquid.ResourceManager.GetString("ContextObjectInvalidException"), obj.ToString());
         }
 
         private static bool IsKeyValuePair(object obj)
         {
             if (obj != null)
             {
-                Type valueType = obj.GetType();
+                var valueType = obj.GetType();
                 if (valueType.GetTypeInfo().IsGenericType)
                 {
-                    Type baseType = valueType.GetGenericTypeDefinition();
+                    var baseType = valueType.GetGenericTypeDefinition();
                     if (baseType == typeof(KeyValuePair<,>))
                     {
                         return true;
@@ -707,31 +724,43 @@ namespace OurPresence.Modeller.Liquid
 
         private void SquashInstanceAssignsWithEnvironments()
         {
-            Dictionary<string, object> tempAssigns = new Dictionary<string, object>(Template.NamingConvention.StringComparer);
+            var tempAssigns = new Dictionary<string, object>();
 
-            Hash lastScope = Scopes.Last();
-            foreach (string k in lastScope.Keys)
-                foreach (Hash env in Environments)
+            var lastScope = Scopes.Last();
+            foreach (var k in lastScope.Keys)
+            {
+                foreach (var env in Environments)
+                {
                     if (env.ContainsKey(k))
                     {
                         tempAssigns[k] = LookupAndEvaluate(env, k);
                         break;
                     }
+                }
+            }
 
-            foreach (string k in tempAssigns.Keys)
+            foreach (var k in tempAssigns.Keys)
+            {
                 lastScope[k] = tempAssigns[k];
+            }
         }
 
         private readonly int _timeout;
-        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly Stopwatch _stopwatch = new();
         private readonly CancellationToken _cancellationToken = CancellationToken.None;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void RestartTimeout()
         {
             _stopwatch.Restart();
             _cancellationToken.ThrowIfCancellationRequested();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void CheckTimeout()
         {
             if (_timeout > 0 && _stopwatch.ElapsedMilliseconds > _timeout)

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace DomainProject.v1._0
+namespace DomainProject
 {
     public class GeneratorDetails : MetadataBase
     {

@@ -11,7 +11,7 @@ namespace OurPresence.Modeller.Domain
     {
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
         private string DebuggerDisplay => $"{Name}";
-                
+
         public Enumeration(string name, bool flag=false)
             : base(name)
         {
@@ -23,7 +23,6 @@ namespace OurPresence.Modeller.Domain
         public bool Flag { get; set; }
 
         [JsonProperty]
-        public List<EnumerationItem> Items { get; } = new List<EnumerationItem>();
+        public List<EnumerationItem> Items { get; } = new();
     }
-
 }

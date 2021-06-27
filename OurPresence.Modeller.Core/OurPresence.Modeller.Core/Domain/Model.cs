@@ -33,16 +33,16 @@ namespace OurPresence.Modeller.Domain
         public bool HasAudit { get; set; } = true;
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public IList<Field> Fields { get; } = new List<Field>();
+        public List<Field> Fields { get; } = new List<Field>();
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public IList<Index> Indexes { get; } = new List<Index>();
+        public List<Index> Indexes { get; } = new List<Index>();
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public IList<Relationship> Relationships { get; } = new List<Relationship>();
+        public List<Relationship> Relationships { get; } = new List<Relationship>();
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public IList<Behaviour> Behaviours { get; } = new List<Behaviour>();
+        public List<Behaviour> Behaviours { get; } = new List<Behaviour>();
 
         [JsonIgnore]
         public IEnumerable<Field> AllFields => Key.Fields.Concat(Fields);

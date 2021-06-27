@@ -8,7 +8,6 @@
     <Description>Package providing basic base classes for default OurPresence.Modeller generated files</Description>
     <Copyright>Copyright © 2021  all rights reserved</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   
   <ItemGroup>
@@ -18,12 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-    </None>
   </ItemGroup>
 
 </Project>

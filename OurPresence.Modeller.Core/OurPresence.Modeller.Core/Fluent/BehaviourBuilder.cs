@@ -22,6 +22,12 @@ namespace OurPresence.Modeller.Fluent
             return this;
         }
 
+        public BehaviourBuilder<T> AltersDomain(bool value = true)
+        {
+            Instance.AltersDomain = value;
+            return this;
+        }
+
         public FieldBuilder<BehaviourBuilder<T>> AddField(string name)
         {
             var field = Field<BehaviourBuilder<T>>.Create(this, name);

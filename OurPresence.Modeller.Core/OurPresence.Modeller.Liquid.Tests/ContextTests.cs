@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -55,6 +58,10 @@ namespace OurPresence.Modeller.Liquid.Tests
 
         private class CentsDrop : Drop
         {
+            public CentsDrop(Template template) : base(template)
+            {
+            }
+
             public object Amount
             {
                 get { return new HundredCents(); }
@@ -68,6 +75,10 @@ namespace OurPresence.Modeller.Liquid.Tests
 
         private class ContextSensitiveDrop : Drop
         {
+            public ContextSensitiveDrop(Template template) : base(template)
+            {
+            }
+
             public object Test()
             {
                 return Context["test"];
@@ -78,7 +89,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             public string Name { get; set; }
 
-            public Category(string name)
+            public Category(Template template, string name):base(template)
             {
                 Name = name;
             }
@@ -103,6 +114,10 @@ namespace OurPresence.Modeller.Liquid.Tests
         private class CounterDrop : Drop
         {
             private int _count;
+
+            public CounterDrop(Template template) : base(template)
+            {
+            }
 
             public int Count()
             {
@@ -136,7 +151,9 @@ namespace OurPresence.Modeller.Liquid.Tests
 
         private class IndexableLiquidizable : IIndexable, ILiquidizable
         {
+#pragma warning disable IDE1006 // Naming Styles
             private const string theKey = "thekey";
+#pragma warning restore IDE1006 // Naming Styles
 
             public object this[object key] => key as string == theKey ? new LiquidizableList() : null;
 
@@ -161,7 +178,7 @@ namespace OurPresence.Modeller.Liquid.Tests
 
         #endregion
 
-        private readonly Context _context= new Context(CultureInfo.InvariantCulture);
+        private readonly Context _context= new Context(new Template(), CultureInfo.InvariantCulture);
 
         [Fact]
         public void TestVariables()
@@ -227,7 +244,7 @@ namespace OurPresence.Modeller.Liquid.Tests
  
             Assert.Equal("", rendered);
             template.Errors.Should().HaveCount(1);
-            Assert.Equal(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "does_not_exist"), template.Errors[0].Message);
+            Assert.Equal(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "does_not_exist"), template.Errors.First().Message);
         }
  
         [Fact]
@@ -237,9 +254,9 @@ namespace OurPresence.Modeller.Liquid.Tests
             string rendered = template.Render(Hash.FromAnonymousObject(new { second = new { foo = "hi!" } }));
  
             Assert.Equal("", rendered);
-            Assert.Equal(2, template.Errors.Count);
-            Assert.Equal(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "first.test"), template.Errors[0].Message);
-            Assert.Equal(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "second.test"), template.Errors[1].Message);
+            Assert.Equal(2, template.Errors.Count());
+            Assert.Equal(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "first.test"), template.Errors.ElementAt(0).Message);
+            Assert.Equal(string.Format(Liquid.ResourceManager.GetString("VariableNotFoundException"), "second.test"), template.Errors.ElementAt(1).Message);
         }
  
         [Fact]
@@ -329,11 +346,11 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestAddFilter()
         {
-            Context context = new Context(CultureInfo.InvariantCulture);
+            Context context = new Context(new Template(), CultureInfo.InvariantCulture);
             context.AddFilters(new[] { typeof(TestFilters) });
             Assert.Equal("hi? hi!", context.Invoke("hi", new List<object> { "hi?" }));
 
-            context = new Context(CultureInfo.InvariantCulture);
+            context = new Context(new Template(), CultureInfo.InvariantCulture);
             Assert.Equal("hi?", context.Invoke("hi", new List<object> { "hi?" }));
 
             context.AddFilters(new[] { typeof(TestFilters) });
@@ -343,13 +360,13 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestAddContextFilter()
         {
-            Context context = new Context(CultureInfo.InvariantCulture);
+            Context context = new Context(new Template(), CultureInfo.InvariantCulture);
             context["name"] = "King Kong";
 
             context.AddFilters(new[] { typeof(TestContextFilters) });
             Assert.Equal("hi? hi from King Kong!", context.Invoke("hi", new List<object> { "hi?" }));
 
-            context = new Context(CultureInfo.InvariantCulture);
+            context = new Context(new Template(), CultureInfo.InvariantCulture);
             Assert.Equal("hi?", context.Invoke("hi", new List<object> { "hi?" }));
         }
 
@@ -364,7 +381,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestOnlyIntendedFiltersMakeItThere()
         {
-            Context context = new Context(CultureInfo.InvariantCulture);
+            Context context = new Context(new Template(), CultureInfo.InvariantCulture);
             var methodsBefore = context.Strainer.Methods.Select(mi => mi.Name).ToList();
             context.AddFilters(new[] { typeof(TestFilters) });
             var methodsAfter = context.Strainer.Methods.Select(mi => mi.Name).ToList();
@@ -567,35 +584,35 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestCentsThroughDrop()
         {
-            _context.Merge(Hash.FromAnonymousObject(new { cents = new CentsDrop() }));
+            _context.Merge(Hash.FromAnonymousObject(new { cents = new CentsDrop(_context.Template) }));
             Assert.Equal(100, _context["cents.amount"]);
         }
 
         [Fact]
         public void TestNestedCentsThroughDrop()
         {
-            _context.Merge(Hash.FromAnonymousObject(new { vars = new { cents = new CentsDrop() } }));
+            _context.Merge(Hash.FromAnonymousObject(new { vars = new { cents = new CentsDrop(_context.Template) } }));
             Assert.Equal(100, _context["vars.cents.amount"]);
         }
 
         [Fact]
         public void TestDropMethodsWithQuestionMarks()
         {
-            _context.Merge(Hash.FromAnonymousObject(new { cents = new CentsDrop() }));
+            _context.Merge(Hash.FromAnonymousObject(new { cents = new CentsDrop(_context.Template) }));
             Assert.Equal(true, _context["cents.non_zero"]);
         }
 
         [Fact]
         public void TestContextFromWithinDrop()
         {
-            _context.Merge(Hash.FromAnonymousObject(new { test = "123", vars = new ContextSensitiveDrop() }));
+            _context.Merge(Hash.FromAnonymousObject(new { test = "123", vars = new ContextSensitiveDrop(_context.Template) }));
             Assert.Equal("123", _context["vars.test"]);
         }
 
         [Fact]
         public void TestNestedContextFromWithinDrop()
         {
-            _context.Merge(Hash.FromAnonymousObject(new { test = "123", vars = new { local = new ContextSensitiveDrop() } }));
+            _context.Merge(Hash.FromAnonymousObject(new { test = "123", vars = new { local = new ContextSensitiveDrop(_context.Template) } }));
             Assert.Equal("123", _context["vars.local.test"]);
         }
 
@@ -612,17 +629,17 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestCentsThroughDropNestedly()
         {
-            _context.Merge(Hash.FromAnonymousObject(new { cents = new { cents = new CentsDrop() } }));
+            _context.Merge(Hash.FromAnonymousObject(new { cents = new { cents = new CentsDrop(_context.Template) } }));
             Assert.Equal(100, _context["cents.cents.amount"]);
 
-            _context.Merge(Hash.FromAnonymousObject(new { cents = new { cents = new { cents = new CentsDrop() } } }));
+            _context.Merge(Hash.FromAnonymousObject(new { cents = new { cents = new { cents = new CentsDrop(_context.Template) } } }));
             Assert.Equal(100, _context["cents.cents.cents.amount"]);
         }
 
         [Fact]
         public void TestDropWithVariableCalledOnlyOnce()
         {
-            _context["counter"] = new CounterDrop();
+            _context["counter"] = new CounterDrop(_context.Template);
 
             Assert.Equal(1, _context["counter.count"]);
             Assert.Equal(2, _context["counter.count"]);
@@ -632,7 +649,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestDropWithKeyOnlyCalledOnce()
         {
-            _context["counter"] = new CounterDrop();
+            _context["counter"] = new CounterDrop(_context.Template);
 
             Assert.Equal(1, _context["counter['count']"]);
             Assert.Equal(2, _context["counter['count']"]);
@@ -876,7 +893,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestToLiquidAndContextAtFirstLevel()
         {
-            _context["category"] = new Category("foobar");
+            _context["category"] = new Category(_context.Template,"foobar");
             _context["category"].Should().BeOfType<CategoryDrop>();
 
             Assert.Equal(_context, ((CategoryDrop) _context["category"]).Context);

@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,25 +49,38 @@ namespace OurPresence.Modeller.Liquid.Util
         internal static Type BinaryNumericResultType(Type left, Type right)
         {
             if (left == right)
+            {
                 return left;
+            }
 
             if (!NumericTypePromotions.ContainsKey(left))
+            {
                 throw new ArgumentException("Argument is not numeric", nameof(left));
+            }
+
             if (!NumericTypePromotions.ContainsKey(right))
+            {
                 throw new ArgumentException("Argument is not numeric", nameof(right));
+            }
 
             // Test left to right promotion
             if (NumericTypePromotions[right].Contains(left))
+            {
                 return left;
+            }
+
             if (NumericTypePromotions[left].Contains(right))
+            {
                 return right;
+            }
+
             return NumericTypePromotions[right].First(p => NumericTypePromotions[left].Contains(p));
         }
 
         private static (Expression left, Expression right) Cast(Expression lhs, Expression rhs,Type leftType, Type rightType, Type resultType)
         {
-            var castLhs = leftType == resultType ? lhs : (Expression)Expression.Convert(lhs, resultType);
-            var castRhs = rightType == resultType ? rhs : (Expression)Expression.Convert(rhs, resultType);
+            var castLhs = leftType == resultType ? lhs : Expression.Convert(lhs, resultType);
+            var castRhs = rightType == resultType ? rhs : Expression.Convert(rhs, resultType);
             return (castLhs, castRhs);
         }
 
@@ -109,7 +125,7 @@ namespace OurPresence.Modeller.Liquid.Util
             }
             catch (Exception ex)
             {
-                string msg = ex.Message; // avoid capture of ex itself
+                var msg = ex.Message; // avoid capture of ex itself
                 return Expression.Lambda(Expression.Throw(Expression.Constant(new InvalidOperationException(msg))), lhs, rhs).Compile();
             }
         }

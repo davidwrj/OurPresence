@@ -6,6 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Embedded\**" />
+    <Compile Remove="Framework\**" />
+    <EmbeddedResource Remove="Embedded\**" />
+    <EmbeddedResource Remove="Framework\**" />
+    <None Remove="Embedded\**" />
+    <None Remove="Framework\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Framework\ExtendedCollectionAssert.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Embedded\_layout.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="coverlet.msbuild" Version="3.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

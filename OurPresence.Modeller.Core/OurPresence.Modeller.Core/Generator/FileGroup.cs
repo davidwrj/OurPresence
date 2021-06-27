@@ -10,6 +10,7 @@ namespace OurPresence.Modeller.Generator
     public class FileGroup : IFileGroup
     {
         private readonly IList<IFile> _files = new List<IFile>();
+        private readonly IList<IFileGroup> _fileGroups = new List<IFileGroup>();
         private readonly string _relativePath;
 
         public FileGroup()
@@ -21,13 +22,14 @@ namespace OurPresence.Modeller.Generator
         public FileGroup(string relativePath)
         {
             if (string.IsNullOrWhiteSpace(relativePath))
-                throw new ArgumentException(nameof(relativePath));
+                relativePath = string.Empty;
 
             _relativePath = relativePath;
             Name = _relativePath;
         }
 
         public IEnumerable<IFile> Files => new ReadOnlyCollection<IFile>(_files);
+        public IEnumerable<IFileGroup> FileGroups => new ReadOnlyCollection<IFileGroup>(_fileGroups);
 
         public string Name { get; private set; }
 
@@ -39,6 +41,16 @@ namespace OurPresence.Modeller.Generator
 
             foreach (var file in Files)
                 file.Path = DirectoryHelper.MergePaths(Name, file.Path);
+        }
+
+        public void AddFileGroup(IFileGroup fileGroup)
+        {
+            if(fileGroup == null) return;
+
+            if(_fileGroups.Any(f => f.Name == fileGroup.Name))
+                throw new FileGroupExistsException(fileGroup.Name);
+
+            _fileGroups.Add(fileGroup);
         }
 
         public void AddFile(IFile file)

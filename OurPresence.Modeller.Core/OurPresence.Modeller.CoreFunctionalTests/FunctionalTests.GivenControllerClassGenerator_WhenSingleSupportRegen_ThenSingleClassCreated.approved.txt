@@ -1,0 +1,45 @@
+file[0] = Controllers\AccountController.cs
+namespace Mizrael.SuperSafeBank.Controllers
+{
+    partial class AccountController : ApplicationController    {
+
+        public AccountController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[1] = Controllers\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Mizrael.SuperSafeBank.Account.Withdraw;
+using Mizrael.SuperSafeBank.Account.Deposit;
+
+namespace Mizrael.SuperSafeBank.Controllers
+{
+    [Route("api/[controller]/[Action]")]
+    partial class AccountController : ApplicationController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpPost]
+        public async Task<IActionResult> WithdrawAsync([FromBody] AccountWithdrawRequest accountWithdrawRequest)
+        {
+            var result = await _mediator.Send(accountWithdrawRequest);
+            return FromResult(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DepositAsync([FromBody] AccountDepositRequest accountDepositRequest)
+        {
+            var result = await _mediator.Send(accountDepositRequest);
+            return FromResult(result);
+        }
+    }
+}
+

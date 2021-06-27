@@ -1,5 +1,9 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using OurPresence.Modeller.Liquid.Exceptions;
 using Xunit;
 
@@ -7,13 +11,26 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
 {
     public class StandardTagTests
     {
+        private class MyTag : Tag
+        {
+            public MyTag(Template template, string tagName, string markup):base(template, tagName, markup)
+            {
+            }
+
+            public override void Render(Context context, TextWriter result)
+            {
+                
+            }
+        }
+
         [Fact]
         public void TestTag()
         {
-            Tag tag = new Tag();
-            tag.Initialize("tag", null, null);
+            var template = new Template();
+            Tag tag = new MyTag(template, "tag",null);
+            tag.Initialize( null);
             Assert.Equal("tag", tag.Name);
-            Assert.Equal(string.Empty, tag.Render(new Context(CultureInfo.InvariantCulture)));
+            Assert.Equal(string.Empty, tag.Render(new Context(template,CultureInfo.InvariantCulture)));
         }
 
         [Fact]
@@ -87,7 +104,7 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
 
         public class TestDictObject : Drop
         {
-            public TestDictObject()
+            public TestDictObject(Template template):base(template)
             {
                 Testdict = new Dictionary<string, string>() { { "aa", "bb" }, { "dd", "ee" }, { "ff", "gg" } };
             }
@@ -98,7 +115,7 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
         public void TestDictionaryFor()
         {
             var template = Template.Parse("{%for item in bla.testdict %}{{ item[0] }}-{{ item[1]}} {%endfor%}");
-            var result = template.Render(Hash.FromAnonymousObject(new { bla = new TestDictObject() }));
+            var result = template.Render(Hash.FromAnonymousObject(new { bla = new TestDictObject(template) }));
             Assert.Equal("aa-bb dd-ee ff-gg ", result);
         }
 

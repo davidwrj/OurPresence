@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,45 +8,73 @@ using System.Reflection;
 
 namespace OurPresence.Modeller.Liquid.Util
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ObjectExtensionMethods
     {
-        private static HashSet<HashSet<Type>> _BackCompatComparableTypeBoundaries = new HashSet<HashSet<Type>>() {
+        private static HashSet<HashSet<Type>> s_backCompatComparableTypeBoundaries = new HashSet<HashSet<Type>>() {
             new HashSet<Type> { typeof(decimal), typeof(double), typeof(float), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(short), typeof(ushort) },
             new HashSet<Type> { typeof(string), typeof(char) }
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="member"></param>
+        /// <param name="ensureNoParameters"></param>
+        /// <returns></returns>
         public static bool RespondTo(this object value, string member, bool ensureNoParameters = true)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value");
+            }
 
-            Type type = value.GetType();
+            var type = value.GetType();
 
-            MethodInfo methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
+            var methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
             if (methodInfo != null && (!ensureNoParameters || !methodInfo.GetParameters().Any()))
+            {
                 return true;
+            }
 
-            PropertyInfo propertyInfo = type.GetRuntimeProperty(member);
+            var propertyInfo = type.GetRuntimeProperty(member);
             if (propertyInfo != null && propertyInfo.CanRead)
+            {
                 return true;
+            }
 
             return false;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="member"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public static object Send(this object value, string member, object[] parameters = null)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value");
+            }
 
-            Type type = value.GetType();
+            var type = value.GetType();
 
-            MethodInfo methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
+            var methodInfo = type.GetRuntimeMethod(member, Type.EmptyTypes);
             if (methodInfo != null)
+            {
                 return methodInfo.Invoke(value, parameters);
+            }
 
-            PropertyInfo propertyInfo = type.GetRuntimeProperty(member);
+            var propertyInfo = type.GetRuntimeProperty(member);
             if (propertyInfo != null)
+            {
                 return propertyInfo.GetValue(value, null);
+            }
 
             return null;
         }
@@ -61,7 +92,7 @@ namespace OurPresence.Modeller.Liquid.Util
                 // NOTE(daviburg): Historically testing for equality cross integer and string boundaries resulted in not equal.
                 // This ensures we preserve the behavior.
                 var comparedTypes = new HashSet<Type>() { value.GetType(), otherValue.GetType() };
-                if (comparedTypes.Count > 1 && _BackCompatComparableTypeBoundaries.All(boundary => !comparedTypes.IsSubsetOf(boundary)))
+                if (comparedTypes.Count > 1 && s_backCompatComparableTypeBoundaries.All(boundary => !comparedTypes.IsSubsetOf(boundary)))
                 {
                     return false;
                 }

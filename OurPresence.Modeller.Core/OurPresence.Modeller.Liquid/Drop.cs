@@ -1,8 +1,10 @@
-﻿using System;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using OurPresence.Modeller.Liquid.NamingConventions;
 using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid
@@ -30,8 +32,7 @@ namespace OurPresence.Modeller.Liquid
 
         private Dictionary<string, T> GetMemberDictionary<T>(IEnumerable<T> members, Func<T, bool> filterMemberCallback) where T : MemberInfo
         {
-            return members.Where(filterMemberCallback)
-                          .ToDictionary(mi => Template.NamingConvention.GetMemberName(mi.Name), Template.NamingConvention.StringComparer);
+            return members.Where(filterMemberCallback).ToDictionary(mi => mi.Name);
         }
 
         /// <summary>
@@ -39,7 +40,6 @@ namespace OurPresence.Modeller.Liquid
         ///     the most derived declaring type.
         /// </summary>
         /// <param name="type">Type to get properties for</param>
-        /// <param name="bindingFlags">Binding flags for properties</param>
         /// <param name="predicate">Any additional filtering on properties</param>
         /// <returns>Filtered properties</returns>
         private static IEnumerable<PropertyInfo> GetPropertiesWithoutDuplicateNames(Type type, Func<PropertyInfo, bool> predicate = null)
@@ -64,7 +64,6 @@ namespace OurPresence.Modeller.Liquid
         ///     derived declaring type.
         /// </summary>
         /// <param name="type">Type to get methods for</param>
-        /// <param name="bindingFlags">Binding flags for methods</param>
         /// <param name="predicate">Any additional filtering on methods</param>
         /// <returns>Filtered methods</returns>
         private static IEnumerable<MethodInfo> GetMethodsWithoutDuplicateNames(Type type, Func<MethodInfo, bool> predicate = null)
@@ -104,12 +103,14 @@ namespace OurPresence.Modeller.Liquid
                 var declaringTypes = duplicates.Select(d => d.DeclaringType)
                                                .ToList();
 
-                var mostDerived = declaringTypes.Single(t => !declaringTypes.Any(o => t.GetTypeInfo().IsAssignableFrom(o.GetTypeInfo()) && (o != t)));
+                var mostDerived = declaringTypes.Single(t => !declaringTypes.Any(o => t.GetTypeInfo().IsAssignableFrom(o.GetTypeInfo()) && o != t));
 
                 foreach (var duplicate in duplicates)
                 {
                     if (duplicate.DeclaringType != mostDerived)
+                    {
                         members.Remove(duplicate);
+                    }
                 }
             }
 
@@ -124,7 +125,7 @@ namespace OurPresence.Modeller.Liquid
 
         public static WeakTable<Type, TypeResolution> Instance
         {
-            get { return s_cache ?? (s_cache = new WeakTable<Type, TypeResolution>(32)); }
+            get { return s_cache ??= new WeakTable<Type, TypeResolution>(32); }
         }
     }
 
@@ -148,6 +149,10 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public abstract class DropBase : ILiquidizable, IIndexable, IContextAware
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
         protected DropBase(Template template)
         {
             Template = template;
@@ -157,8 +162,8 @@ namespace OurPresence.Modeller.Liquid
         {
             get
             {
-                Type dropType = GetObject().GetType();
-                if (!TypeResolutionCache.Instance.TryGetValue(dropType, out TypeResolution resolution))
+                var dropType = GetObject().GetType();
+                if (!TypeResolutionCache.Instance.TryGetValue(dropType, out var resolution))
                 {
                     TypeResolutionCache.Instance[dropType] = resolution = CreateTypeResolution(dropType);
                 }
@@ -166,7 +171,14 @@ namespace OurPresence.Modeller.Liquid
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Context Context { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Template Template { get; }
 
         /// <summary>
@@ -181,17 +193,18 @@ namespace OurPresence.Modeller.Liquid
             get { return InvokeDrop(method); }
         }
 
-        #region IIndexable
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public virtual bool ContainsKey(object name) { return true; }
 
-        #endregion
-
-        #region ILiquidizable
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual object ToLiquid() { return this; }
-
-        #endregion
 
         internal abstract object GetObject();
 
@@ -204,19 +217,6 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public virtual object BeforeMethod(string method)
         {
-            // Quite a common (and easy) mistake is to use C#-style property names,
-            // without realising that the default naming convention is Ruby-style.
-            // To try to help with this, we check if the given name *would* match,
-            // if we were using Ruby-style names.
-            if (Template.NamingConvention is RubyNamingConvention)
-            {
-                string rubyMethod = Template.NamingConvention.GetMemberName(method);
-
-                if (TypeResolution.CachedMethods.TryGetValue(rubyMethod, out MethodInfo mi) || TypeResolution.CachedProperties.TryGetValue(rubyMethod, out PropertyInfo pi))
-                {
-                    return string.Format(Liquid.ResourceManager.GetString("DropWrongNamingConventionMessage"), rubyMethod);
-                }
-            }
             return null;
         }
 
@@ -226,18 +226,30 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="name"></param>
         public object InvokeDrop(object name)
         {
-            string method = (string)name;
+            var method = (string)name;
 
-            if (TypeResolution.CachedMethods.TryGetValue(method, out MethodInfo mi))
+            if (TypeResolution.CachedMethods.TryGetValue(method, out var mi))
+            {
                 return mi.Invoke(GetObject(), null);
-            if (TypeResolution.CachedProperties.TryGetValue(method, out PropertyInfo pi))
+            }
+
+            if (TypeResolution.CachedProperties.TryGetValue(method, out var pi))
+            {
                 return pi.GetValue(GetObject(), null);
+            }
+
             return BeforeMethod(method);
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class Drop : DropBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
         protected Drop(Template template)
             :base(template)
         {
@@ -261,6 +273,7 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Create a new DropProxy object
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="obj">The object to create a proxy for</param>
         /// <param name="allowedMembers">An array of property and method names that are allowed to be called on the object.</param>
         public DropProxy(Template template, object obj, string[] allowedMembers)
@@ -275,6 +288,7 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Create a new DropProxy object
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="obj">The object to create a proxy for</param>
         /// <param name="allowedMembers">An array of property and method names that are allowed to be called on the object.</param>
         /// <param name="value">Function that converts the specified type into a Liquid Drop-compatible object (eg, implements ILiquidizable)</param>
@@ -285,11 +299,16 @@ namespace OurPresence.Modeller.Liquid
         }
 
         #region IValueTypeConvertible
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual object ConvertToValueType()
         {
             if (_value == null)
+            {
                 return null;
+            }
 
             return _value(_proxiedObject);
         }

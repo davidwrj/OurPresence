@@ -20,7 +20,7 @@ namespace DomainProject
 
         public IOutput Create()
         {
-            var projectName = _module.Namespace;
+            var projectName = _module.Namespace+".Domain";
             var project = (IProject)new Project(projectName) { Path = System.IO.Path.Combine("src", projectName) };
 
             var files = new FileGroup();
@@ -38,7 +38,6 @@ namespace DomainProject
             sb.B();
             sb.I(1).Al("<ItemGroup>");
             sb.I(2).Al($"<PackageReference Include=\"OurPresence.Core\" Version=\"{Settings.Packages.GetVersion("OurPresence.Core", "1.0.0")}\" />");
-            sb.I(2).Al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.Packages.GetVersion("MediatR", "9.0.0")}\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");

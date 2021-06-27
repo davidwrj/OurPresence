@@ -1,0 +1,221 @@
+file[0] = Mizrael.SuperSafeBank.Application.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
+        <RootNamespace>Mizrael.SuperSafeBank.Application</RootNamespace>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
+        <PackageReference Include="MediatR" Version="9.0.0" />
+    </ItemGroup>
+
+</Project>
+
+file[1] = Program.cs
+namespace Mizrael.SuperSafeBank.Application
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+}
+
+file[2] = Startup.cs
+namespace Mizrael.SuperSafeBank.Application
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+    }
+}
+
+file[3] = ExceptionHandler.cs
+namespace Mizrael.SuperSafeBank.Application
+{
+    public sealed class ExceptionHandler
+    {
+        private readonly RequestDelegate _next;
+        private readonly IWebHostEnvironment _env;
+
+        public ExceptionHandler(RequestDelegate next, IWebHostEnvironment env)
+        {
+            _next = next;
+            _env = env;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                await HandleException(context, ex);
+            }
+        }
+
+        private Task HandleException(HttpContext context, Exception exception)
+        {
+            string errorMessage = _env.IsProduction() ? "Internal server error" : "Exception: " + exception.Message;
+            Error error = Errors.General.InternalServerError(errorMessage);
+            Envelope envelope = Envelope.Error(error, null);
+            string result = JsonSerializer.Serialize(envelope);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            return context.Response.WriteAsync(result);
+        }
+    }
+}
+
+file[4] = Envelop.cs
+namespace Mizrael.SuperSafeBank.Application
+{
+    public class Envelope
+    {
+        public object Result { get; }
+        public string ErrorCode { get; }
+        public string ErrorMessage { get; }
+        public string InvalidField { get; }
+        public DateTime TimeGenerated { get; }
+
+        private Envelope(object result, Error error, string invalidField)
+        {
+            Result = result;
+            ErrorCode = error?.Code;
+            ErrorMessage = error?.Message;
+            InvalidField = invalidField;
+            TimeGenerated = DateTime.UtcNow;
+        }
+
+        public static Envelope Ok(object result = null)
+        {
+            return new Envelope(result, null, null);
+        }
+
+        public static Envelope Error(Error error, string invalidField)
+        {
+            return new Envelope(null, error, invalidField);
+        }
+    }
+}
+
+file[5] = EnvelopResult.cs
+namespace Mizrael.SuperSafeBank.Application
+{
+    public sealed class EnvelopeResult : IActionResult
+    {
+        private readonly Envelope _envelope;
+        private readonly int _statusCode;
+
+        public EnvelopeResult(Envelope envelope, HttpStatusCode statusCode)
+        {
+            _statusCode = (int)statusCode;
+            _envelope = envelope;
+        }
+
+        public Task ExecuteResultAsync(ActionContext context)
+        {
+            var objectResult = new ObjectResult(_envelope)
+            {
+                StatusCode = _statusCode
+            };
+            return objectResult.ExecuteResultAsync(context);
+        }
+    }
+}
+
+file[6] = Controllers\AccountController.cs
+namespace Mizrael.SuperSafeBank.Controllers
+{
+    partial class AccountController : ApplicationController    {
+
+        public AccountController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[7] = Controllers\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Mizrael.SuperSafeBank.Account.Withdraw;
+using Mizrael.SuperSafeBank.Account.Deposit;
+
+namespace Mizrael.SuperSafeBank.Controllers
+{
+    [Route("api/[controller]/[Action]")]
+    partial class AccountController : ApplicationController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpPost]
+        public async Task<IActionResult> WithdrawAsync([FromBody] AccountWithdrawRequest accountWithdrawRequest)
+        {
+            var result = await _mediator.Send(accountWithdrawRequest);
+            return FromResult(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DepositAsync([FromBody] AccountDepositRequest accountDepositRequest)
+        {
+            var result = await _mediator.Send(accountDepositRequest);
+            return FromResult(result);
+        }
+    }
+}
+
+file[8] = Controllers\CustomerController.cs
+namespace Mizrael.SuperSafeBank.Controllers
+{
+    partial class CustomerController : ApplicationController    {
+
+        public CustomerController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[9] = Controllers\Customer.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+
+namespace Mizrael.SuperSafeBank.Controllers
+{
+    [Route("api/[controller]/[Action]")]
+    partial class CustomerController : ApplicationController
+    {
+        private readonly IMediator _mediator;
+    }
+}
+

@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using FluentAssertions;
 using System.Globalization;
 using System.IO;
@@ -46,7 +49,6 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestThreadSafeInstanceAssignsNotPersistOnSameTemplateObjectBetweenParses()
         {
             Template t = new Template();
-            t.MakeThreadSafe();
             Assert.Equal("from instance assigns", t.ParseInternal("{% assign foo = 'from instance assigns' %}{{ foo }}").Render());
             Assert.Equal("", t.ParseInternal("{{ foo }}").Render());
         }
@@ -63,7 +65,6 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestThreadSafeInstanceAssignsNotPersistOnSameTemplateParsingBetweenRenders()
         {
             Template t = Template.Parse("{{ foo }}{% assign foo = 'foo' %}{{ foo }}");
-            t.MakeThreadSafe();
             Assert.Equal("foo", t.Render());
             Assert.Equal("foo", t.Render());
         }
@@ -189,8 +190,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestRegisterSimpleType()
         {
-            Template.RegisterSafeType(typeof(MySimpleType), new[] { "Name" });
-            Template template = Template.Parse("{{context.Name}}");
+            var template = Template.Parse("{{context.Name}}");
+            template.RegisterSafeType(typeof(MySimpleType), new[] { "Name" });
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType() { Name = "worked" } }));
 
@@ -200,8 +201,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestRegisterSimpleTypeToString()
         {
-            Template.RegisterSafeType(typeof(MySimpleType), new[] { "ToString" });
             Template template = Template.Parse("{{context}}");
+            template.RegisterSafeType(typeof(MySimpleType), new[] { "ToString" });
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType() }));
 
@@ -212,12 +213,11 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestRegisterSimpleTypeToStringWhenTransformReturnsComplexType()
         {
-            Template.RegisterSafeType(typeof(MySimpleType), o =>
-                {
-                    return o;
-                });
-
             Template template = Template.Parse("{{context}}");
+            template.RegisterSafeType(typeof(MySimpleType), o =>
+            {
+                return o;
+            });
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType() }));
 
@@ -228,8 +228,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestRegisterSimpleTypeTransformer()
         {
-            Template.RegisterSafeType(typeof(MySimpleType), o => o.ToString());
             Template template = Template.Parse("{{context}}");
+            template.RegisterSafeType(typeof(MySimpleType), o => o.ToString());
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType() }));
 
@@ -240,9 +240,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestRegisterRegisterSafeTypeWithValueTypeTransformer()
         {
-            Template.RegisterSafeType(typeof(MySimpleType), new[] { "Name" }, m => m.ToString());
-
             Template template = Template.Parse("{{context}}{{context.Name}}"); //
+            template.RegisterSafeType(typeof(MySimpleType), new[] { "Name" }, m => m.ToString());
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType() { Name = "Bar" } }));
 
@@ -265,9 +264,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestNestedRegisterRegisterSafeTypeWithValueTypeTransformer()
         {
-            Template.RegisterSafeType(typeof(NestedMySimpleType), new[] { "Name", "Nested" }, m => m.ToString());
-
             Template template = Template.Parse("{{context}}{{context.Name}} {{context.Nested}}{{context.Nested.Name}}"); //
+            template.RegisterSafeType(typeof(NestedMySimpleType), new[] { "Name", "Nested" }, m => m.ToString());
 
             var inner = new NestedMySimpleType() { Name = "Bar2" };
 
@@ -280,9 +278,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestOverrideDefaultBoolRenderingWithValueTypeTransformer()
         {
-            Template.RegisterValueTypeTransformer(typeof(bool), m => (bool)m ? "Win" : "Fail");
-
             Template template = Template.Parse("{{var1}} {{var2}}");
+            template.RegisterValueTypeTransformer(typeof(bool), m => (bool)m ? "Win" : "Fail");
 
             var output = template.Render(Hash.FromAnonymousObject(new { var1 = true, var2 = false }));
 
@@ -292,9 +289,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestHtmlEncodingFilter()
         {
-            Template.RegisterValueTypeTransformer(typeof(string), m => WebUtility.HtmlEncode((string) m));
-
             Template template = Template.Parse("{{var1}} {{var2}}");
+            template.RegisterValueTypeTransformer(typeof(string), m => WebUtility.HtmlEncode((string) m));
 
             var output = template.Render(Hash.FromAnonymousObject(new { var1 = "<html>", var2 = "Some <b>bold</b> text." }));
 
@@ -315,8 +311,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestRegisterSimpleTypeTransformIntoAnonymousType()
         {
             // specify a transform function
-            Template.RegisterSafeType(typeof(MySimpleType2), x => new { Name = ((MySimpleType2)x).Name } );
             Template template = Template.Parse("{{context.Name}}");
+            template.RegisterSafeType(typeof(MySimpleType2), x => new { Name = ((MySimpleType2)x).Name } );
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType2 { Name = "worked" } }));
 
@@ -327,8 +323,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestRegisterInterfaceTransformIntoAnonymousType()
         {
             // specify a transform function
-            Template.RegisterSafeType(typeof(IMySimpleInterface2), x => new { Name = ((IMySimpleInterface2) x).Name });
             Template template = Template.Parse("{{context.Name}}");
+            template.RegisterSafeType(typeof(IMySimpleInterface2), x => new { Name = ((IMySimpleInterface2) x).Name });
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType2 { Name = "worked" } }));
 
@@ -344,8 +340,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         public void TestRegisterSimpleTypeTransformIntoUnsafeType()
         {
             // specify a transform function
-            Template.RegisterSafeType(typeof(MySimpleType2), x => new MyUnsafeType2 { Name = ((MySimpleType2)x).Name });
             Template template = Template.Parse("{{context.Name}}");
+            template.RegisterSafeType(typeof(MySimpleType2), x => new MyUnsafeType2 { Name = ((MySimpleType2)x).Name });
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MySimpleType2 { Name = "worked" } }));
 
@@ -365,8 +361,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestRegisterGenericInterface()
         {
-            Template.RegisterSafeType(typeof(MyGenericInterface<>), new[] { "Value" });
             Template template = Template.Parse("{{context.Value}}");
+            template.RegisterSafeType(typeof(MyGenericInterface<>), new[] { "Value" });
 
             var output = template.Render(Hash.FromAnonymousObject(new { context = new MyGenericImpl<string> { Value = "worked" } }));
 
@@ -376,7 +372,8 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestFirstAndLastOfObjectArray()
         {
-            Template.RegisterSafeType(typeof(MySimpleType), new[] { "Name" });
+            var template = new Template();
+            template.RegisterSafeType(typeof(MySimpleType), new[] { "Name" });
 
             var array = new
             {
@@ -395,43 +392,6 @@ namespace OurPresence.Modeller.Liquid.Tests
                 expected: "Mike",
                 template: "{{ People.last.Name }}",
                 localVariables: Hash.FromAnonymousObject(array));
-        }
-
-        [Fact]
-        public void TestSyntaxCompatibilityLevel()
-        {
-            Helper.LockTemplateStaticVars(Template.NamingConvention, () =>
-            {
-                var template = Template.Parse("{{ foo }}");
-                template.MakeThreadSafe();
-
-                // Template defaults to legacy OurPresence.Modeller.Liquid 2.0 Handling
-                Assert.Equal(SyntaxCompatibility.Liquid20, Template.DefaultSyntaxCompatibilityLevel);
-
-                // RenderParameters Applies Template Defaults 
-                Template.DefaultSyntaxCompatibilityLevel = SyntaxCompatibility.Liquid21;
-                var renderParamsDefault = new RenderParameters(CultureInfo.CurrentCulture); 
-                Assert.Equal(Template.DefaultSyntaxCompatibilityLevel, renderParamsDefault.SyntaxCompatibilityLevel);
-
-                // Context Applies Template Defaults
-                var context = new Context(CultureInfo.CurrentCulture);
-                Assert.Equal(Template.DefaultSyntaxCompatibilityLevel, context.SyntaxCompatibilityLevel);
-
-                Template.DefaultSyntaxCompatibilityLevel = SyntaxCompatibility.Liquid20;
-                renderParamsDefault.Evaluate(template, out Context defaultContext, out Hash defaultRegisters, out System.Collections.Generic.IEnumerable<System.Type> defaultFilters);
-                // Context applies RenderParameters
-                Assert.Equal(renderParamsDefault.SyntaxCompatibilityLevel, defaultContext.SyntaxCompatibilityLevel);
-                // RenderParameters not affected by later changes to Template defaults
-                Assert.NotEqual(Template.DefaultSyntaxCompatibilityLevel, renderParamsDefault.SyntaxCompatibilityLevel);
-                // But newly constructed RenderParameters is
-                Assert.Equal(Template.DefaultSyntaxCompatibilityLevel, new RenderParameters(CultureInfo.CurrentCulture).SyntaxCompatibilityLevel);
-
-                // RenderParameters overrides template defaults when specified
-                var renderParamsExplicit = new RenderParameters(CultureInfo.CurrentCulture) { SyntaxCompatibilityLevel = SyntaxCompatibility.Liquid21 };
-                Assert.Equal(SyntaxCompatibility.Liquid21, renderParamsExplicit.SyntaxCompatibilityLevel);
-                renderParamsExplicit.Evaluate(template, out Context explicitContext, out Hash explicitRegisters, out System.Collections.Generic.IEnumerable<System.Type> explicitFilters);
-                Assert.Equal(renderParamsExplicit.SyntaxCompatibilityLevel, explicitContext.SyntaxCompatibilityLevel);
-            });
         }
     }
 }

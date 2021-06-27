@@ -23,6 +23,7 @@ namespace OurPresence.Modeller.Fluent
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
             Instance.Name.SetName(name);
             return this;
         }
@@ -36,6 +37,12 @@ namespace OurPresence.Modeller.Fluent
         public EnumerationBuilder AddItem(string name)
         {
             Instance.AddItem(name);
+            return this;
+        }
+
+        public EnumerationBuilder AddItem(string name, int value, string? display = null)
+        {
+            Instance.AddItem(name, value, display);
             return this;
         }
     }

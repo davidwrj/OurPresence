@@ -39,15 +39,7 @@ namespace DomainClass
             sb.B();
             sb.Al($"namespace {_module.Namespace}");
             sb.Al("{");
-
-            if (Settings.SupportRegen)
-            {
-                sb.I(1).A($"partial class {_model.Name}");
-            }
-            else
-            {
-                sb.I(1).A($"public class {_model.Name}");
-            }
+            sb.I(1).A(Settings.SupportRegen ? $"partial class {_model.Name}" : $"public class {_model.Name}");
             var entity = string.Empty;
             if (isEntity)
             {

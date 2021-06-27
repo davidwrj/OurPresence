@@ -1,4 +1,7 @@
-﻿namespace OurPresence.Modeller.Domain.Extensions
+﻿using System;
+using System.Linq;
+
+namespace OurPresence.Modeller.Domain.Extensions
 {
     public static class EnumerationExtensions
     {
@@ -15,6 +18,16 @@
             enumeration.Items.Add(new EnumerationItem(value, name));
             return enumeration;
         }
-    }
 
+        public static Enumeration AddItem(this Enumeration enumeration, string name, int value, string? display = null)
+        {
+            if (enumeration.Items.Any(i => i.Value == value))
+                throw new ArgumentOutOfRangeException(nameof(value), value, "Value already exists in the enumeration");
+
+            if (string.IsNullOrWhiteSpace(display)) display = name;
+
+            enumeration.Items.Add(new EnumerationItem(value, name, display));
+            return enumeration;
+        }
+    }
 }

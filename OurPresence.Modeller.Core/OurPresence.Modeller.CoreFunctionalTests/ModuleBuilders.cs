@@ -4,7 +4,7 @@
     {
         public static Domain.Module CreateModule()
         {
-            var mb = Fluent.Module.Create("SuperSafeBank", "Domain");
+            var mb = Fluent.Module.Create("Mizrael","SuperSafeBank");
 
             return mb
                 .AddAccount()
@@ -13,7 +13,7 @@
 
         public static Domain.Module CreateProject()
         {
-            var mb = Fluent.Module.Create("SuperSafeBank", "Domain");
+            var mb = Fluent.Module.Create("Mizrael", "SuperSafeBank");
 
             return mb
                 .AddAccount()
@@ -29,6 +29,7 @@
                 .AddField("Balance").DataType(Domain.DataTypes.Object).DataTypeTypeName("Money").Build
                 .AddBehaviour("Withdraw")
                     .Raising("Withdrawal")
+                    .AltersDomain()
                     .AddField("Amount")
                         .DataType(Domain.DataTypes.Object)
                         .DataTypeTypeName("Money")
@@ -36,6 +37,7 @@
                     .Build
                 .AddBehaviour("Deposit")
                     .Raising("Deposit")
+                    .AltersDomain()
                     .AddField("Amount")
                         .DataType(Domain.DataTypes.Object)
                         .DataTypeTypeName("Money")

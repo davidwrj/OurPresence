@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Globalization;
 using FluentAssertions;
 using Xunit;
@@ -91,7 +94,7 @@ namespace OurPresence.Modeller.Liquid.Tests
 
         #endregion
 
-        private Context _context= new Context(CultureInfo.InvariantCulture);
+        private Context _context= new Context(new Template(), CultureInfo.InvariantCulture);
 
         /*[Fact]
         public void TestNonExistentFilter()
@@ -105,7 +108,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(MoneyFilter));
-            Assert.Equal(" 1000$ ", new Variable("var | money").Render(_context));
+            Assert.Equal(" 1000$ ", new Variable(_context.Template,"var | money").Render(_context));
         }
 
         [Fact]
@@ -113,7 +116,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(MoneyFilter));
-            Assert.Equal(" 1000$ ", new Variable("var | money_with_underscore").Render(_context));
+            Assert.Equal(" 1000$ ", new Variable(_context.Template, "var | money_with_underscore").Render(_context));
         }
 
         [Fact]
@@ -121,7 +124,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000L;
             _context.AddFilters(typeof(FiltersWithArgumentsInt));
-            Assert.Equal("[1005]", new Variable("var | adjust: 5").Render(_context));
+            Assert.Equal("[1005]", new Variable(_context.Template, "var | adjust: 5").Render(_context));
         }
 
         [Fact]
@@ -129,7 +132,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000L;
             _context.AddFilters(typeof(FiltersWithArgumentsInt));
-            Assert.Equal("[995]", new Variable("var | adjust: -5").Render(_context));
+            Assert.Equal("[995]", new Variable(_context.Template, "var | adjust: -5").Render(_context));
         }
 
         [Fact]
@@ -137,7 +140,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(FiltersWithArgumentsInt));
-            Assert.Equal("[1010]", new Variable("var | adjust").Render(_context));
+            Assert.Equal("[1010]", new Variable(_context.Template, "var | adjust").Render(_context));
         }
 
         [Fact]
@@ -145,7 +148,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000L;
             _context.AddFilters(typeof(FiltersWithArgumentsInt));
-            Assert.Equal("[1150]", new Variable("var | add_sub: 200, 50").Render(_context));
+            Assert.Equal("[1150]", new Variable(_context.Template, "var | add_sub: 200, 50").Render(_context));
         }
 
         [Fact]
@@ -153,7 +156,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(FiltersWithArgumentsLong));
-            Assert.Equal("[1005]", new Variable("var | adjust: 5").Render(_context));
+            Assert.Equal("[1005]", new Variable(_context.Template, "var | adjust: 5").Render(_context));
         }
 
         [Fact]
@@ -161,7 +164,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(FiltersWithArgumentsLong));
-            Assert.Equal("[995]", new Variable("var | adjust: -5").Render(_context));
+            Assert.Equal("[995]", new Variable(_context.Template, "var | adjust: -5").Render(_context));
         }
 
         [Fact]
@@ -169,7 +172,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(FiltersWithArgumentsLong));
-            Assert.Equal("[1010]", new Variable("var | adjust").Render(_context));
+            Assert.Equal("[1010]", new Variable(_context.Template, "var | adjust").Render(_context));
         }
 
         [Fact]
@@ -177,7 +180,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = 1000;
             _context.AddFilters(typeof(FiltersWithArgumentsLong));
-            Assert.Equal("[1150]", new Variable("var | add_sub: 200, 50").Render(_context));
+            Assert.Equal("[1150]", new Variable(_context.Template, "var | add_sub: 200, 50").Render(_context));
         }
 
         [Fact]
@@ -215,7 +218,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             _context["var"] = 1000;
             _context.AddFilters(typeof(MoneyFilter));
             _context.AddFilters(typeof(CanadianMoneyFilter));
-            Assert.Equal(" 1000$ CAD ", new Variable("var | money").Render(_context));
+            Assert.Equal(" 1000$ CAD ", new Variable(_context.Template, "var | money").Render(_context));
         }
 
         [Fact]
@@ -223,14 +226,14 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             _context["var"] = "abcd";
             _context.AddFilters(typeof(MoneyFilter));
-            Assert.Equal(4, new Variable("var | size").Render(_context));
+            Assert.Equal(4, new Variable(_context.Template, "var | size").Render(_context));
         }
 
         [Fact]
         public void TestJoin()
         {
             _context["var"] = new[] { 1, 2, 3, 4 };
-            Assert.Equal("1 2 3 4", new Variable("var | join").Render(_context));
+            Assert.Equal("1 2 3 4", new Variable(_context.Template, "var | join").Render(_context));
         }
 
         [Fact]
@@ -241,44 +244,44 @@ namespace OurPresence.Modeller.Liquid.Tests
             _context["words"] = new[] { "expected", "as", "alphabetic" };
             _context["arrays"] = new[] { new[] { "flattened" }, new[] { "are" } };
 
-            new Variable("numbers | sort").Render(_context).Should().BeEquivalentTo(new[] { 1, 2, 3, 4 });
+            new Variable(_context.Template, "numbers | sort").Render(_context).Should().BeEquivalentTo(new[] { 1, 2, 3, 4 });
 
-            new Variable("words | sort").Render(_context).Should().BeEquivalentTo(new[] { "alphabetic", "as", "expected" });
-            new Variable("value | sort").Render(_context).Should().BeEquivalentTo(new[] { 3 });
-            new Variable("arrays | sort").Render(_context).Should().BeEquivalentTo(new[] { "are", "flattened" });
+            new Variable(_context.Template, "words | sort").Render(_context).Should().BeEquivalentTo(new[] { "alphabetic", "as", "expected" });
+            new Variable(_context.Template, "value | sort").Render(_context).Should().BeEquivalentTo(new[] { 3 });
+            new Variable(_context.Template, "arrays | sort").Render(_context).Should().BeEquivalentTo(new[] { "are", "flattened" });
         }
 
         [Fact]
         public void TestSplit()
         {
             _context["var"] = "a~b";
-            Assert.Equal(new[] { "a", "b" }, new Variable("var | split:'~'").Render(_context));
+            Assert.Equal(new[] { "a", "b" }, new Variable(_context.Template, "var | split:'~'").Render(_context));
         }
 
         [Fact]
         public void TestStripHtml()
         {
             _context["var"] = "<b>bla blub</a>";
-            Assert.Equal("bla blub", new Variable("var | strip_html").Render(_context));
+            Assert.Equal("bla blub", new Variable(_context.Template, "var | strip_html").Render(_context));
         }
 
         [Fact]
         public void Capitalize()
         {
             _context["var"] = "blub";
-            Assert.Equal("Blub", new Variable("var | capitalize").Render(_context));
+            Assert.Equal("Blub", new Variable(_context.Template, "var | capitalize").Render(_context));
         }
 
         [Fact]
         public void Slice()
         {
             _context["var"] = "blub";
-            Assert.Equal("b", new Variable("var | slice: 0, 1").Render(_context));
-            Assert.Equal("bl", new Variable("var | slice: 0, 2").Render(_context));
-            Assert.Equal("l", new Variable("var | slice: 1").Render(_context));
-            Assert.Equal("", new Variable("var | slice: 4, 1").Render(_context));
-            Assert.Equal("ub", new Variable("var | slice: -2, 2").Render(_context));
-            Assert.Equal(null, new Variable("var | slice: 5, 1").Render(_context));
+            Assert.Equal("b", new Variable(_context.Template, "var | slice: 0, 1").Render(_context));
+            Assert.Equal("bl", new Variable(_context.Template, "var | slice: 0, 2").Render(_context));
+            Assert.Equal("l", new Variable(_context.Template, "var | slice: 1").Render(_context));
+            Assert.Equal("", new Variable(_context.Template, "var | slice: 4, 1").Render(_context));
+            Assert.Equal("ub", new Variable(_context.Template, "var | slice: -2, 2").Render(_context));
+            Assert.Equal(null, new Variable(_context.Template, "var | slice: 5, 1").Render(_context));
         }
 
         [Fact]
@@ -297,7 +300,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             _context["var"] = 1000;
             _context["name"] = "King Kong";
             _context.AddFilters(typeof(ContextFilters));
-            Assert.Equal(" King Kong has 1000$ ", new Variable("var | bank_statement").Render(_context));
+            Assert.Equal(" King Kong has 1000$ ", new Variable(_context.Template, "var | bank_statement").Render(_context));
         }
     }
 }

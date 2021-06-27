@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 
@@ -27,58 +30,35 @@ namespace OurPresence.Modeller.Liquid
         /// Hash of user-defined, internally-available variables
         /// </summary>
         public Hash Registers { get; set; }
-        
-        private ErrorsOutputMode _erorsOutputMode = ErrorsOutputMode.Display;
 
         /// <summary>
         /// Errors output mode
         /// </summary>
-        public ErrorsOutputMode ErrorsOutputMode
-        {
-            get
-            {
-                return _erorsOutputMode;
-            }
-
-            set
-            {
-                _erorsOutputMode = value;
-            }
-        }
-
-        /// <summary>
-        /// Liquid syntax flag used for backward compatibility
-        /// </summary>
-        public SyntaxCompatibility SyntaxCompatibilityLevel { get; set; }
-
-        private int _maxIterations = 0;
+        public ErrorsOutputMode ErrorsOutputMode { get; set; } = ErrorsOutputMode.Display;
 
         /// <summary>
         /// Maximum number of iterations for the For tag
         /// </summary>
-        public int MaxIterations
-        {
-            get { return _maxIterations; }
-            set { _maxIterations = value; }
-        }
+        public int MaxIterations { get; set; } = 0;
 
-        private int _timeout = 0;
+        /// <summary>
+        ///
+        /// </summary>
         public IFormatProvider FormatProvider { get; }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="formatProvider"></param>
         public RenderParameters(IFormatProvider formatProvider)
         {
             FormatProvider = formatProvider ?? throw new ArgumentNullException( nameof(formatProvider) );
-            SyntaxCompatibilityLevel = Template.DefaultSyntaxCompatibilityLevel;
         }
 
         /// <summary>
         /// Rendering timeout in ms
         /// </summary>
-        public int Timeout
-        {
-            get { return _timeout; }
-            set { _timeout = value; }
-        }
+        public int Timeout { get; set; } = 0;
 
         internal void Evaluate(Template template, out Context context, out Hash registers, out IEnumerable<Type> filters)
         {
@@ -91,24 +71,16 @@ namespace OurPresence.Modeller.Liquid
                 return;
             }
 
-            List<Hash> environments = new List<Hash>();
+            var environments = new List<Hash>();
             if (LocalVariables != null)
+            {
                 environments.Add(LocalVariables);
-            if (template.IsThreadSafe)
-            {
-                context = new Context(environments, new Hash(), new Hash(), ErrorsOutputMode, MaxIterations, FormatProvider, default)
-                {
-                    SyntaxCompatibilityLevel = this.SyntaxCompatibilityLevel
-                };
             }
-            else
-            {
-                environments.Add(template.Assigns);
-                context = new Context(environments, template.InstanceAssigns, template.Registers, ErrorsOutputMode, MaxIterations, FormatProvider, default)
-                {
-                    SyntaxCompatibilityLevel = this.SyntaxCompatibilityLevel
-                };
-            }
+
+            environments.Add(template.Assigns);
+            context = new Context(template, environments, template.InstanceAssigns, template.Registers, ErrorsOutputMode,
+                MaxIterations, FormatProvider, default);
+
             registers = Registers;
             filters = Filters;
         }
@@ -122,7 +94,10 @@ namespace OurPresence.Modeller.Liquid
         public static RenderParameters FromContext(Context context, IFormatProvider formatProvider)
         {
             if (context == null)
+            {
                 throw new ArgumentNullException( nameof(context) );
+            }
+
             return new RenderParameters(formatProvider) { Context = context };
         }
     }

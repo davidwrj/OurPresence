@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,18 +25,34 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public class Variable : IRenderable
     {
-        private readonly Regex _filterParserRegex;
-        private readonly Regex _filterArgRegex;
-        private readonly Regex _quotedAssignFragmentRegex;
-        private readonly Regex _filterSeparatorRegex;
-        private readonly Regex _filterNameRegex;
+        private readonly Regex _filterParserRegex = R.B(R.Q(@"(?:{0}|(?:\s*(?!(?:{0}))(?:{1}|\S+)\s*)+)"), Liquid.FilterSeparator, Liquid.QuotedFragment);
+        private readonly Regex _filterArgRegex = R.B(R.Q(@"(?:{0}|{1})\s*({2})"), Liquid.FilterArgumentSeparator, Liquid.ArgumentSeparator, Liquid.QuotedFragment);
+        private readonly Regex _quotedAssignFragmentRegex = R.B(R.Q(@"\s*({0})(.*)"), Liquid.QuotedAssignFragment);
+        private readonly Regex _filterSeparatorRegex = R.B(R.Q(@"{0}\s*(.*)"), Liquid.FilterSeparator);
+        private readonly Regex _filterNameRegex = R.B(R.Q(@"\s*(\w+)"));
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<Filter> Filters { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Name { get; set; }
 
         private readonly string _markup;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Template Template { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="markup"></param>
         public Variable(Template template, string markup)
         {
             _markup = markup;
@@ -42,26 +61,20 @@ namespace OurPresence.Modeller.Liquid
             Name = null;
             Filters = new List<Filter>();
 
-            _filterParserRegex = R.B(template, R.Q(@"(?:{0}|(?:\s*(?!(?:{0}))(?:{1}|\S+)\s*)+)"), Liquid.FilterSeparator, Liquid.QuotedFragment);
-            _filterArgRegex = R.B(template, R.Q(@"(?:{0}|{1})\s*({2})"), Liquid.FilterArgumentSeparator, Liquid.ArgumentSeparator, Liquid.QuotedFragment);
-            _quotedAssignFragmentRegex = R.B(template, R.Q(@"\s*({0})(.*)"), Liquid.QuotedAssignFragment);
-            _filterSeparatorRegex = R.B(template, R.Q(@"{0}\s*(.*)"), Liquid.FilterSeparator);
-            _filterNameRegex = R.B(template, R.Q(@"\s*(\w+)"));
-
-            Match match = _quotedAssignFragmentRegex.Match(markup);
+            var match = _quotedAssignFragmentRegex.Match(markup);
             if (match.Success)
             {
                 Name = match.Groups[1].Value;
-                Match filterMatch = _filterSeparatorRegex.Match(match.Groups[2].Value);
+                var filterMatch = _filterSeparatorRegex.Match(match.Groups[2].Value);
                 if (filterMatch.Success)
                 {
-                    foreach (string f in R.Scan(filterMatch.Value, _filterParserRegex))
+                    foreach (var f in R.Scan(filterMatch.Value, _filterParserRegex))
                     {
-                        Match filterNameMatch = _filterNameRegex.Match(f);
+                        var filterNameMatch = _filterNameRegex.Match(f);
                         if (filterNameMatch.Success)
                         {
-                            string filterName = filterNameMatch.Groups[1].Value;
-                            List<string> filterArgs = R.Scan(f, _filterArgRegex);
+                            var filterName = filterNameMatch.Groups[1].Value;
+                            var filterArgs = R.Scan(f, _filterArgRegex);
                             Filters.Add(new Filter(filterName, filterArgs.ToArray()));
                         }
                     }
@@ -69,6 +82,11 @@ namespace OurPresence.Modeller.Liquid
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="result"></param>
         public void Render(Context context, TextWriter result)
         {
             // NOTE(David Burg): The decimal type default string serialization behavior adds non-significant trailing zeroes
@@ -83,27 +101,33 @@ namespace OurPresence.Modeller.Liquid
                         ? ifo.ToString(format: null, formatProvider: formatProvider)
                         : (obj?.ToString() ?? "");
 
-            object output = RenderInternal(context);
+            var output = RenderInternal(context);
 
             if (output is ILiquidizable)
+            {
                 output = null;
+            }
 
             if (output != null)
             {
                 var transformer = Template.GetValueTypeTransformer(output.GetType());
 
                 if (transformer != null)
+                {
                     output = transformer(output);
+                }
 
                 // Treating Strings as IEnumerable, and was joining Chars in loop
                 if (!(output is string outputString))
                 {
                     if (output is IEnumerable enumerable)
+                    {
                         outputString = string.Join(string.Empty, enumerable.Cast<object>().Select(o => ToFormattedString(o, result.FormatProvider)).ToArray());
-                    else if (output is bool)
-                        outputString = output.ToString().ToLower();
+                    }
                     else
-                        outputString = ToFormattedString(output, result.FormatProvider);
+                    {
+                        outputString = output is bool ? output.ToString().ToLower() : ToFormattedString(output, result.FormatProvider);
+                    }
                 }
 
                 result.Write(outputString);
@@ -113,13 +137,15 @@ namespace OurPresence.Modeller.Liquid
         private object RenderInternal(Context context)
         {
             if (Name == null)
+            {
                 return null;
+            }
 
-            object output = context[Name];
+            var output = context[Name];
 
             foreach (var filter in Filters.ToList())
             {
-                List<object> filterArgs = filter.Arguments.Select(a => context[a]).ToList();
+                var filterArgs = filter.Arguments.Select(a => context[a]).ToList();
                 try
                 {
                     filterArgs.Insert(0, output);
@@ -149,15 +175,30 @@ namespace OurPresence.Modeller.Liquid
             return RenderInternal(context);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public class Filter
         {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="name"></param>
+            /// <param name="arguments"></param>
             public Filter(string name, string[] arguments)
             {
                 Name = name;
                 Arguments = arguments;
             }
 
+            /// <summary>
+            /// 
+            /// </summary>
             public string Name { get; set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
             public string[] Arguments { get; set; }
         }
     }

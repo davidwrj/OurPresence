@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 
@@ -62,20 +65,25 @@ namespace OurPresence.Modeller.Liquid.Util
 
         internal static string Succ(string val)
         {
-            int lastAlphaNumeric = -1;
-            for (int i = val.Length - 1; i >= 0 && lastAlphaNumeric == -1; i--)
+            var lastAlphaNumeric = -1;
+            for (var i = val.Length - 1; i >= 0 && lastAlphaNumeric == -1; i--)
             {
                 if (char.IsLetterOrDigit(val[i]))
+                {
                     lastAlphaNumeric = i;
+                }
             }
             if (lastAlphaNumeric == val.Length - 1 || lastAlphaNumeric == -1)
+            {
                 return Succ(val, val.Length);
+            }
+
             return Succ(val, lastAlphaNumeric + 1) + val.Substring(lastAlphaNumeric + 1);
         }
 
         internal static string Succ(string val, int length)
         {
-            char lastChar = val[length - 1];
+            var lastChar = val[length - 1];
             switch (lastChar)
             {
                 case '9':
@@ -93,7 +101,7 @@ namespace OurPresence.Modeller.Liquid.Util
 
         public static IEnumerable<T> Inclusive<T>(T start, T finish, Func<T, T> succ, Comparison<T> comp)
         {
-            T value = start;
+            var value = start;
             while (comp(value, finish) <= 0)
             {
                 yield return value;
@@ -104,7 +112,10 @@ namespace OurPresence.Modeller.Liquid.Util
         internal static int Comp<T>(T a, T b) where T : IComparable<T>
         {
             if (a != null)
+            {
                 return a.CompareTo(b);
+            }
+
             return (b == null) ? 0 : -1;
         }
 

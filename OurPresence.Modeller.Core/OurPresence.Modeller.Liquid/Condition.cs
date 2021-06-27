@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -28,7 +31,7 @@ namespace OurPresence.Modeller.Liquid
                 new KeyValuePair<string, ConditionOperatorDelegate>( ">", (left, right) => left != null && right != null && Comparer<object>.Default.Compare(left, Convert.ChangeType(right, left.GetType())) == 1 ),
                 new KeyValuePair<string, ConditionOperatorDelegate>( "<=", (left, right) => left != null && right != null && Comparer<object>.Default.Compare(left, Convert.ChangeType(right, left.GetType())) <= 0 ),
                 new KeyValuePair<string, ConditionOperatorDelegate>( ">=", (left, right) => left != null && right != null && Comparer<object>.Default.Compare(left, Convert.ChangeType(right, left.GetType())) >= 0 ),
-                new KeyValuePair<string, ConditionOperatorDelegate>( "contains", (left, right) => ((left is string) ? ((string)left).Contains((string)right) : (left is IEnumerable) ? Any((IEnumerable)left, (element) => element.BackCompatSafeTypeInsensitiveEqual(right)) : false) ),
+                new KeyValuePair<string, ConditionOperatorDelegate>( "contains", (left, right) => (left is string) ? ((string)left).Contains((string)right) : (left is IEnumerable) && Any((IEnumerable)left, (element) => element.BackCompatSafeTypeInsensitiveEqual(right)) ),
                 new KeyValuePair<string, ConditionOperatorDelegate>( "startsWith", (left, right) => (left is IList) ? EqualVariables(((IList)left).OfType<object>().FirstOrDefault(), right) : ((left is string) ? ((string)left).StartsWith((string)right) : false) ),
                 new KeyValuePair<string, ConditionOperatorDelegate>( "endsWith", (left, right) => (left is IList) ? EqualVariables(((IList)left).OfType<object>().LastOrDefault(), right) : ((left is string) ? ((string)left).EndsWith((string)right) : false) ),
                 new KeyValuePair<string, ConditionOperatorDelegate>( "hasKey", (left, right) => (left is IDictionary) ? ((IDictionary)left).Contains(right) : false ),
@@ -174,20 +177,24 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="context"></param>
         /// <param name="formatProvider"></param>
         /// <returns></returns>
-        public virtual bool Evaluate(Context context, IFormatProvider formatProvider)
+        public virtual bool Evaluate(Template template, Context context, IFormatProvider formatProvider)
         {
-            context = context ?? new Context(formatProvider);
-            bool result = InterpretCondition(Left, Right, Operator, context);
+            if (context is null)
+            {
+                context = new Context(template, formatProvider);
+            }
+            var result = InterpretCondition(Left, Right, Operator, context);
 
             switch (_childRelation)
             {
                 case "or":
-                    return result || _childCondition.Evaluate(context, formatProvider);
+                    return result || _childCondition.Evaluate(context.Template, context, formatProvider);
                 case "and":
-                    return result && _childCondition.Evaluate(context, formatProvider);
+                    return result && _childCondition.Evaluate(context.Template, context, formatProvider);
                 default:
                     return result;
             }
@@ -240,16 +247,16 @@ namespace OurPresence.Modeller.Liquid
             // return this as the result.
             if (string.IsNullOrEmpty(op))
             {
-                object result = context[left, false];
-                return (result != null && (!(result is bool) || (bool)result));
+                var result = context[left, false];
+                return result != null && (!(result is bool boolean) || boolean);
             }
 
-            object leftObject = context[left];
-            object rightObject = context[right];
+            var leftObject = context[left];
+            var rightObject = context[right];
 
             var opKey = _operators.Keys.FirstOrDefault(opk => opk.Equals(op)
                                                                 || opk.ToLowerInvariant().Equals(op)
-                                                                || _template.NamingConvention.OperatorEquals(opk, op)
+                                                                || opk== op
                                                      );
             if (opKey == null)
             {
@@ -276,10 +283,11 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="context"></param>
         /// <param name="formatProvider"></param>
         /// <returns></returns>
-        public override bool Evaluate(Context context, IFormatProvider formatProvider)
+        public override bool Evaluate(Template template, Context context, IFormatProvider formatProvider)
         {
             return true;
         }

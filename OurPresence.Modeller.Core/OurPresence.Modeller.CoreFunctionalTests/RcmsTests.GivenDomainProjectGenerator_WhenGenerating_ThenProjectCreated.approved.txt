@@ -1,0 +1,581 @@
+file[0] = Nhvr.Rcms.Domain.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
+        <RootNamespace>Nhvr.Rcms.Domain</RootNamespace>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
+    </ItemGroup>
+
+</Project>
+
+file[1] = .filenesting.json
+{
+    "help": "https://go.microsoft.com/fwlink/?linkid=866610",
+    "root": false,
+
+    "dependentFileProviders": {
+        "add": { 
+            "allExtensions": {
+                "add": {
+                    ".*": [
+                        ".cs"
+                    ]
+                }
+            }
+        }
+    }
+}
+
+file[2] = Domain\Event.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    public partial class Event
+    {
+        public Event(Guid? creationId, Guid? statusId, Guid? organisationId, Guid? reviewedUserId, DateTimeOffset? reviewedDateTime, DateTimeOffset? createDate, DateTimeOffset? completedDate, DateTimeOffset? reportedOnDate, DateTimeOffset? tookPlaceStartDate, DateTimeOffset? tookPlaceEndDate, DateTimeOffset? vehicleReleaseDate, bool? vehicleGrounded, string? operationName, string? methodOfIntercept, string? directionOfTravel, bool? light, bool? siren, bool? urgentDutyDriving, bool? complianceActionOffenceReport, bool? complianceActionOffenceReportReference, bool active, SourceSystemTypes systemId)
+        {
+            CreationId = creationId;
+            StatusId = statusId;
+            OrganisationId = organisationId;
+            ReviewedUserId = reviewedUserId;
+            ReviewedDateTime = reviewedDateTime;
+            CreateDate = createDate;
+            CompletedDate = completedDate;
+            ReportedOnDate = reportedOnDate;
+            TookPlaceStartDate = tookPlaceStartDate;
+            TookPlaceEndDate = tookPlaceEndDate;
+            VehicleReleaseDate = vehicleReleaseDate;
+            VehicleGrounded = vehicleGrounded;
+            OperationName = operationName;
+            MethodOfIntercept = methodOfIntercept;
+            DirectionOfTravel = directionOfTravel;
+            Light = light;
+            Siren = siren;
+            UrgentDutyDriving = urgentDutyDriving;
+            ComplianceActionOffenceReport = complianceActionOffenceReport;
+            ComplianceActionOffenceReportReference = complianceActionOffenceReportReference;
+            Active = active;
+            SystemId = systemId;
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[3] = Domain\Event.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    partial class Event : BaseAggregateRoot<Event, Guid>
+    {
+        public Guid? CreationId { get; private set; }
+
+        public Guid? StatusId { get; private set; }
+
+        public Guid? OrganisationId { get; private set; }
+
+        public Guid? ReviewedUserId { get; private set; }
+
+        public DateTimeOffset? ReviewedDateTime { get; private set; }
+
+        public DateTimeOffset? CreateDate { get; private set; }
+
+        public DateTimeOffset? CompletedDate { get; private set; }
+
+        public DateTimeOffset? ReportedOnDate { get; private set; }
+
+        public DateTimeOffset? TookPlaceStartDate { get; private set; }
+
+        public DateTimeOffset? TookPlaceEndDate { get; private set; }
+
+        public DateTimeOffset? VehicleReleaseDate { get; private set; }
+
+        public bool? VehicleGrounded { get; private set; }
+
+        public string? OperationName { get; private set; }
+
+        public string? MethodOfIntercept { get; private set; }
+
+        public string? DirectionOfTravel { get; private set; }
+
+        public bool? Light { get; private set; }
+
+        public bool? Siren { get; private set; }
+
+        public bool? UrgentDutyDriving { get; private set; }
+
+        public bool? ComplianceActionOffenceReport { get; private set; }
+
+        public bool? ComplianceActionOffenceReportReference { get; private set; }
+
+        public bool Active { get; private set; }
+
+        public SourceSystemTypes SystemId { get; private set; }
+    }
+}
+
+file[4] = Domain\EventAddress.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    public partial class EventAddress
+    {
+        public EventAddress(Guid? stateId, AddressType eventAddressType, string? localGovernmentArea, string? lGAShortTitle, string? near, string? commonName, string? remark, bool active, decimal? altitude, decimal? altitudeAccuracy, decimal? horizontalAccuracy, decimal? longitude, decimal? latitude, decimal? elevation, string? floorNumber, string? unitType, string? unitNumber, string? streetName, string? streetType, string? streetSuffix, string? streetNumberFirst, string? streetNumberFirstPrefix, string? streetNumberFirstSuffix, string? streetNumberLast, string? streetNumberLastPrefix, string? streetNumberLastSuffix, string? streetDirectional, string? postalContainer, string? postalCode, string? suburb, string? country, string? fullAddress, DateTimeOffset dateAdded)
+        {
+            StateId = stateId;
+            EventAddressType = eventAddressType;
+            LocalGovernmentArea = localGovernmentArea;
+            LGAShortTitle = lGAShortTitle;
+            Near = near;
+            CommonName = commonName;
+            Remark = remark;
+            Active = active;
+            Altitude = altitude;
+            AltitudeAccuracy = altitudeAccuracy;
+            HorizontalAccuracy = horizontalAccuracy;
+            Longitude = longitude;
+            Latitude = latitude;
+            Elevation = elevation;
+            FloorNumber = floorNumber;
+            UnitType = unitType;
+            UnitNumber = unitNumber;
+            StreetName = streetName;
+            StreetType = streetType;
+            StreetSuffix = streetSuffix;
+            StreetNumberFirst = streetNumberFirst;
+            StreetNumberFirstPrefix = streetNumberFirstPrefix;
+            StreetNumberFirstSuffix = streetNumberFirstSuffix;
+            StreetNumberLast = streetNumberLast;
+            StreetNumberLastPrefix = streetNumberLastPrefix;
+            StreetNumberLastSuffix = streetNumberLastSuffix;
+            StreetDirectional = streetDirectional;
+            PostalContainer = postalContainer;
+            PostalCode = postalCode;
+            Suburb = suburb;
+            Country = country;
+            FullAddress = fullAddress;
+            DateAdded = dateAdded;
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[5] = Domain\EventAddress.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    partial class EventAddress : BaseAggregateRoot<EventAddress, Guid>
+    {
+        public Guid? StateId { get; private set; }
+
+        public AddressType EventAddressType { get; private set; }
+
+        public string? LocalGovernmentArea { get; private set; }
+
+        public string? LGAShortTitle { get; private set; }
+
+        public string? Near { get; private set; }
+
+        public string? CommonName { get; private set; }
+
+        public string? Remark { get; private set; }
+
+        public bool Active { get; private set; }
+
+        public decimal? Altitude { get; private set; }
+
+        public decimal? AltitudeAccuracy { get; private set; }
+
+        public decimal? HorizontalAccuracy { get; private set; }
+
+        public decimal? Longitude { get; private set; }
+
+        public decimal? Latitude { get; private set; }
+
+        public decimal? Elevation { get; private set; }
+
+        public string? FloorNumber { get; private set; }
+
+        public string? UnitType { get; private set; }
+
+        public string? UnitNumber { get; private set; }
+
+        public string? StreetName { get; private set; }
+
+        public string? StreetType { get; private set; }
+
+        public string? StreetSuffix { get; private set; }
+
+        public string? StreetNumberFirst { get; private set; }
+
+        public string? StreetNumberFirstPrefix { get; private set; }
+
+        public string? StreetNumberFirstSuffix { get; private set; }
+
+        public string? StreetNumberLast { get; private set; }
+
+        public string? StreetNumberLastPrefix { get; private set; }
+
+        public string? StreetNumberLastSuffix { get; private set; }
+
+        public string? StreetDirectional { get; private set; }
+
+        public string? PostalContainer { get; private set; }
+
+        public string? PostalCode { get; private set; }
+
+        public string? Suburb { get; private set; }
+
+        public string? Country { get; private set; }
+
+        public string? FullAddress { get; private set; }
+
+        public DateTimeOffset DateAdded { get; private set; }
+    }
+}
+
+file[6] = Domain\Organisation.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    public partial class Organisation
+    {
+        public Organisation(Guid? creationId, string name, string? aCN, OrganisationType typeId, string? nevdisId, string? vicCustomerNo, int? parentId, bool active, int systemId)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Must include a value for Name");
+            CreationId = creationId;
+            Name = name;
+            ACN = aCN;
+            TypeId = typeId;
+            NevdisId = nevdisId;
+            VicCustomerNo = vicCustomerNo;
+            ParentId = parentId;
+            Active = active;
+            SystemId = systemId;
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[7] = Domain\Organisation.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    partial class Organisation : BaseAggregateRoot<Organisation, Guid>
+    {
+        public Guid? CreationId { get; private set; }
+
+        public string Name { get; private set; }
+
+        public string? ACN { get; private set; }
+
+        public OrganisationType TypeId { get; private set; }
+
+        public string? NevdisId { get; private set; }
+
+        public string? VicCustomerNo { get; private set; }
+
+        public int? ParentId { get; private set; }
+
+        public bool Active { get; private set; }
+
+        public int SystemId { get; private set; }
+    }
+}
+
+file[8] = Domain\Person.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    public partial class Person
+    {
+        public Person(Guid? creationId, string givenName, string familyName, DateTimeOffset dateOfBirth, string? licenceNumber, States licenceState, int systemId, bool active, string? sourcePersonId, string? nevdisId, int? parentId)
+        {
+            if(string.IsNullOrWhiteSpace(givenName))
+                throw new ArgumentException("Must include a value for Given Name");
+            if(string.IsNullOrWhiteSpace(familyName))
+                throw new ArgumentException("Must include a value for Family Name");
+            CreationId = creationId;
+            GivenName = givenName;
+            FamilyName = familyName;
+            DateOfBirth = dateOfBirth;
+            LicenceNumber = licenceNumber;
+            LicenceState = licenceState;
+            SystemId = systemId;
+            Active = active;
+            SourcePersonId = sourcePersonId;
+            NevdisId = nevdisId;
+            ParentId = parentId;
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[9] = Domain\Person.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    partial class Person : BaseAggregateRoot<Person, Guid>
+    {
+        public Guid? CreationId { get; private set; }
+
+        public string GivenName { get; private set; }
+
+        public string FamilyName { get; private set; }
+
+        public DateTimeOffset DateOfBirth { get; private set; }
+
+        public string? LicenceNumber { get; private set; }
+
+        public States LicenceState { get; private set; }
+
+        public int SystemId { get; private set; }
+
+        public bool Active { get; private set; }
+
+        public string? SourcePersonId { get; private set; }
+
+        public string? NevdisId { get; private set; }
+
+        public int? ParentId { get; private set; }
+    }
+}
+
+file[10] = Domain\Vehicle.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    public partial class Vehicle
+    {
+        public Vehicle(Guid? creationId, States registrationState, string? registrationNumber, bool isNationalRegistration, string? vehicleIdentificationNumber, string? engineNumber, string? chassisNumber, string sourceVehicleId, SourceSystemTypes systemId, bool active)
+        {
+            if(string.IsNullOrWhiteSpace(sourceVehicleId))
+                throw new ArgumentException("Must include a value for Source Vehicle Id");
+            CreationId = creationId;
+            RegistrationState = registrationState;
+            RegistrationNumber = registrationNumber;
+            IsNationalRegistration = isNationalRegistration;
+            VehicleIdentificationNumber = vehicleIdentificationNumber;
+            EngineNumber = engineNumber;
+            ChassisNumber = chassisNumber;
+            SourceVehicleId = sourceVehicleId;
+            SystemId = systemId;
+            Active = active;
+        }
+
+        public partial void Create(States registrationState, string? registrationNumber, bool isNationalRegistration, string? vehicleIdentificationNumber, string? engineNumber, string? chassisNumber, string sourceVehicleId, SourceSystemTypes systemId)
+        {
+            // todo: Add Create behaviour here
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[11] = Domain\Vehicle.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    partial class Vehicle : BaseAggregateRoot<Vehicle, Guid>
+    {
+        public Guid? CreationId { get; private set; }
+
+        public States RegistrationState { get; private set; }
+
+        public string? RegistrationNumber { get; private set; }
+
+        public bool IsNationalRegistration { get; private set; }
+
+        public string? VehicleIdentificationNumber { get; private set; }
+
+        public string? EngineNumber { get; private set; }
+
+        public string? ChassisNumber { get; private set; }
+
+        public string SourceVehicleId { get; private set; }
+
+        public SourceSystemTypes SystemId { get; private set; }
+
+        public bool Active { get; private set; }
+
+        public partial void Create(States registrationState, string? registrationNumber, bool isNationalRegistration, string? vehicleIdentificationNumber, string? engineNumber, string? chassisNumber, string sourceVehicleId, SourceSystemTypes systemId);
+    }
+}
+
+file[12] = Events\Created.cs
+using System;
+using Nhvr.Rcms.Models;
+
+namespace Nhvr.Rcms.Events
+{
+    public class Created : BaseDomainEvent<Vehicle, Guid>
+    {
+        /// <summary>
+        /// for deserialization
+        /// </summary>
+        private Created() { }
+
+        public Created(Vehicle vehicle) : base(vehicle)
+        {
+            // todo: 
+        }
+    }
+}
+
+file[13] = Domain\VehicleDetail.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    public partial class VehicleDetail
+    {
+        public VehicleDetail(string? vehicleIdentificationNumber, string? engineNumber, string? chassisNumber, States registrationState, string? registrationNumber, string? registrationStatus, bool isNationalRegistration, string sourceVehicleId, SourceSystemTypes systemId)
+        {
+            if(string.IsNullOrWhiteSpace(sourceVehicleId))
+                throw new ArgumentException("Must include a value for Source Vehicle Id");
+            VehicleIdentificationNumber = vehicleIdentificationNumber;
+            EngineNumber = engineNumber;
+            ChassisNumber = chassisNumber;
+            RegistrationState = registrationState;
+            RegistrationNumber = registrationNumber;
+            RegistrationStatus = registrationStatus;
+            IsNationalRegistration = isNationalRegistration;
+            SourceVehicleId = sourceVehicleId;
+            SystemId = systemId;
+        }
+
+        protected override void Apply(IDomainEvent<Guid> @event)
+        {
+            // todo: Apply events
+        }
+    }
+}
+
+file[14] = Domain\VehicleDetail.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using System;
+using OurPresence.Core.Models;
+
+namespace Nhvr.Rcms
+{
+    partial class VehicleDetail : BaseAggregateRoot<VehicleDetail, Guid>
+    {
+        public string? VehicleIdentificationNumber { get; private set; }
+
+        public string? EngineNumber { get; private set; }
+
+        public string? ChassisNumber { get; private set; }
+
+        public States RegistrationState { get; private set; }
+
+        public string? RegistrationNumber { get; private set; }
+
+        public string? RegistrationStatus { get; private set; }
+
+        public bool IsNationalRegistration { get; private set; }
+
+        public string SourceVehicleId { get; private set; }
+
+        public SourceSystemTypes SystemId { get; private set; }
+    }
+}
+

@@ -241,15 +241,6 @@ namespace OurPresence.Modeller.Liquid.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing property. Did you mean &apos;{0}&apos;?.
-        /// </summary>
-        internal static string DropWrongNamingConventionMessage {
-            get {
-                return ResourceManager.GetString("DropWrongNamingConventionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Liquid Error - &apos;extends&apos; tag can be used only once.
         /// </summary>
         internal static string ExtendsTagCanBeUsedOneException {

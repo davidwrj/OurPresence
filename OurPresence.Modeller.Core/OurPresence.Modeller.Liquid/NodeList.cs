@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,7 +42,11 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="item"></param>
         public void Add(object item)
         {
-            if (item is null) return;
+            if (item is null)
+            {
+                return;
+            }
+
             _nodes.Add(item);
         }
 
@@ -56,6 +63,14 @@ namespace OurPresence.Modeller.Liquid
         public int Count(Func<object, bool> p)
         {
             return _nodes.Count(p);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int Count()
+        {
+            return _nodes.Count;
         }
 
         /// <summary>

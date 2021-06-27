@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 
 namespace OurPresence.Modeller.Liquid.Util
@@ -21,13 +24,16 @@ namespace OurPresence.Modeller.Liquid.Util
         {
             get
             {
-                if (!TryGetValue(key, out TValue ret))
+                if (!TryGetValue(key, out var ret))
+                {
                     throw new ArgumentException(Liquid.ResourceManager.GetString("WeakTableKeyNotFoundException"));
+                }
+
                 return ret;
             }
             set
             {
-                int i = Math.Abs(key.GetHashCode()) % _buckets.Length;
+                var i = Math.Abs(key.GetHashCode()) % _buckets.Length;
                 _buckets[i].Key = key;
                 _buckets[i].Value = new WeakReference(value);
             }
@@ -35,7 +41,7 @@ namespace OurPresence.Modeller.Liquid.Util
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            int i = Math.Abs(key.GetHashCode()) % _buckets.Length;
+            var i = Math.Abs(key.GetHashCode()) % _buckets.Length;
             WeakReference wr;
             if ((wr = _buckets[i].Value) == null || !_buckets[i].Key.Equals(key))
             {
@@ -48,9 +54,11 @@ namespace OurPresence.Modeller.Liquid.Util
 
         public void Remove(TKey key)
         {
-            int i = Math.Abs(key.GetHashCode()) % _buckets.Length;
+            var i = Math.Abs(key.GetHashCode()) % _buckets.Length;
             if (_buckets[i].Key.Equals(key))
+            {
                 _buckets[i].Value = null;
+            }
         }
     }
 }

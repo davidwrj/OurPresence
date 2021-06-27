@@ -1,6 +1,10 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using OurPresence.Modeller.Liquid.Exceptions;
@@ -12,6 +16,10 @@ namespace OurPresence.Modeller.Liquid.Tests
     {
         private class ExceptionDrop : Drop
         {
+            public ExceptionDrop(Template template):base(template)
+            {
+            }
+
             public void ArgumentException()
             {
                 throw new Exceptions.ArgumentException("argument exception");
@@ -34,11 +42,11 @@ namespace OurPresence.Modeller.Liquid.Tests
             Template template = null;
             Action action = () => { template = Template.Parse(" {{ errors.syntax_exception }} "); };
             action.Should().NotThrow();
-            string result = template.Render(Hash.FromAnonymousObject(new { errors = new ExceptionDrop() }));
+            string result = template.Render(Hash.FromAnonymousObject(new { errors = new ExceptionDrop(template) }));
             Assert.Equal(" Liquid syntax error: syntax exception ", result);
 
             template.Errors.Should().HaveCount(1);
-            template.Errors[0].Should().BeOfType<SyntaxException>();
+            template.Errors.ElementAt(0).Should().BeOfType<SyntaxException>();
         }
 
         [Fact]
@@ -47,11 +55,11 @@ namespace OurPresence.Modeller.Liquid.Tests
             Template template = null;
             Action action = () => { template = Template.Parse(" {{ errors.argument_exception }} "); };
             action.Should().NotThrow();
-            string result = template.Render(Hash.FromAnonymousObject(new { errors = new ExceptionDrop() }));
+            string result = template.Render(Hash.FromAnonymousObject(new { errors = new ExceptionDrop(template) }));
             Assert.Equal(" Liquid error: argument exception ", result);
 
             template.Errors.Should().HaveCount(1);
-            template.Errors[0].Should().BeOfType<Exceptions.ArgumentException>();
+            template.Errors.ElementAt(0).Should().BeOfType<Exceptions.ArgumentException>();
         }
 
         [Fact]
@@ -69,7 +77,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             Assert.Equal(" Liquid error: Unknown operator =! ", template.Render());
 
             template.Errors.Should().HaveCount(1);
-            template.Errors[0].Should().BeOfType<Exceptions.ArgumentException>();
+            template.Errors.ElementAt(0).Should().BeOfType<Exceptions.ArgumentException>();
         }
 
         [Fact]
@@ -78,7 +86,7 @@ namespace OurPresence.Modeller.Liquid.Tests
             Template template = null;
             Action action = () => { template = Template.Parse(" {{ errors.interrupt_exception }} "); };
             action.Should().NotThrow();
-            var localVariables = Hash.FromAnonymousObject(new { errors = new ExceptionDrop() });
+            var localVariables = Hash.FromAnonymousObject(new { errors = new ExceptionDrop(template) });
             var exception = Assert.Throws<InterruptException>(() => template.Render(localVariables));
 
             Assert.Equal("interrupted", exception.Message);
@@ -115,7 +123,7 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             var template = Template.Parse(" {% for i in (1..1000000) %} {{ i }} {% endfor %} ");
             var source = new CancellationTokenSource(100);
-            var context = new Context(
+            var context = new Context(template,
                 environments: new List<Hash>(),
                 outerScope: new Hash(),
                 registers: new Hash(),

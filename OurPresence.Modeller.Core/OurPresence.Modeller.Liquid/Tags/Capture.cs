@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,27 +24,29 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class Capture : Modeller.Liquid.Block
     {
-        private static readonly Regex Syntax = R.C(@"(\w+)");
+        private static readonly Regex s_syntax = R.C(@"(\w+)");
         private string _to;
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="template"></param>
         /// <param name="tagName"></param>
         /// <param name="markup"></param>
-        public Capture(Template template, string tagName, string markup) : base(template, tagName, markup)
+        public Capture(Template template, string tagName, string markup)
+            : base(template, tagName, markup)
         { }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="tokens"></param>
         public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(Markup);
-            if (syntaxMatch.Success)
-                _to = syntaxMatch.Groups[1].Value;
-            else
-                throw new SyntaxException(Liquid.ResourceManager.GetString("CaptureTagSyntaxException"));
+            var syntaxMatch = s_syntax.Match(Markup);
+            _to = syntaxMatch.Success
+                ? syntaxMatch.Groups[1].Value
+                : throw new SyntaxException(Liquid.ResourceManager.GetString("CaptureTagSyntaxException"));
 
             base.Initialize(tokens);
         }

@@ -1,4 +1,7 @@
-﻿using Xunit;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using Xunit;
 using System.Threading.Tasks;
 
 namespace OurPresence.Modeller.Liquid.Tests
@@ -7,7 +10,6 @@ namespace OurPresence.Modeller.Liquid.Tests
         [Fact]
         public void TestCachedTemplateRender() {
             Template template = Template.Parse(@"{% assign foo = 'from instance assigns' %}{{foo}}");
-            template.MakeThreadSafe();
 
             var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 30 };
 

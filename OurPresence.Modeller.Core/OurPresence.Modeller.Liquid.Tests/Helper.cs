@@ -1,63 +1,33 @@
-using OurPresence.Modeller.Liquid.NamingConventions;
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using Xunit;
-using System;
 
 namespace OurPresence.Modeller.Liquid.Tests
 {
     public class Helper
     {
-        public static void LockTemplateStaticVars(INamingConvention namingConvention, Action test)
+        public static void AssertTemplateResult(string expected, string template, object anonymousObject)
         {
-            //Have to lock Template.NamingConvention for this test to
-            //prevent other tests from being run simultaneously that
-            //require the default naming convention.
-            var currentNamingConvention = Template.NamingConvention;
-            var currentSyntax = Template.DefaultSyntaxCompatibilityLevel;
-            var currentIsRubyDateFormat = Liquid.UseRubyDateFormat;
-            lock (Template.NamingConvention)
-            {
-                Template.NamingConvention = namingConvention;
-
-                try
-                {
-                    test();
-                }
-                finally
-                {
-                    Template.NamingConvention = currentNamingConvention;
-                    Template.DefaultSyntaxCompatibilityLevel = currentSyntax;
-                    Liquid.UseRubyDateFormat = currentIsRubyDateFormat;
-                }
-            }
+            var localVariables = anonymousObject == null ? null : Hash.FromAnonymousObject(anonymousObject);
+            AssertTemplateResult(expected, template, localVariables);
         }
 
-        public static void AssertTemplateResult(string expected, string template, object anonymousObject, INamingConvention namingConvention, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
+        public static void AssertTemplateResult(string expected, string template)
         {
-            LockTemplateStaticVars(namingConvention, () =>
-            {
-                var localVariables = anonymousObject == null ? null : Hash.FromAnonymousObject(anonymousObject);
-                AssertTemplateResult(expected, template, localVariables, syntax);
-            });
+            AssertTemplateResult(expected: expected, template: template, anonymousObject: null);
         }
 
-        public static void AssertTemplateResult(string expected, string template, INamingConvention namingConvention)
-        {
-            AssertTemplateResult(expected: expected, template: template, anonymousObject: null, namingConvention: namingConvention);
-        }
-
-        public static void AssertTemplateResult(string expected, string template, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
-        {
-            AssertTemplateResult(expected: expected, template: template, localVariables: null, syntax: syntax);
-        }
-
-        public static void AssertTemplateResult(string expected, string template, Hash localVariables, SyntaxCompatibility syntax = SyntaxCompatibility.Liquid20)
+        public static void AssertTemplateResult(string expected, string template, Hash localVariables)
         {
             var parameters = new RenderParameters(System.Globalization.CultureInfo.CurrentCulture)
             {
                 LocalVariables = localVariables,
-                SyntaxCompatibilityLevel = syntax
             };
-            Assert.Equal(expected, Template.Parse(template).Render(parameters));
+            var tpl = Template.Parse(template);
+            var actual = tpl.Render(parameters);
+
+            Assert.Equal(expected, actual);
         }
 
         [LiquidType("PropAllowed")]
@@ -69,6 +39,10 @@ namespace OurPresence.Modeller.Liquid.Tests
 
         public class DataObjectDrop : Drop
         {
+            public DataObjectDrop(Template template)
+                : base(template)
+            { }
+
             public string Prop { get; set; }
         }
     }

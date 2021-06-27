@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,22 +10,16 @@ using System.Reflection;
 
 namespace OurPresence.Modeller.Liquid
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Hash : IDictionary<string, object>, IDictionary
     {
-        #region Static fields
+        private static System.Collections.Concurrent.ConcurrentDictionary<string, Action<object, Hash>> s_mapperCache = new System.Collections.Concurrent.ConcurrentDictionary<string, Action<object, Hash>>();
 
-        private static System.Collections.Concurrent.ConcurrentDictionary<string, Action<object, Hash>> mapperCache = new System.Collections.Concurrent.ConcurrentDictionary<string, Action<object, Hash>>();
-
-        #endregion
-
-        #region Fields
         private readonly Func<Hash, string, object> _lambda;
         private readonly Dictionary<string, object> _nestedDictionary;
         private readonly object _defaultValue;
-
-        #endregion
-
-        #region Static construction methods
 
         /// <summary>
         /// 
@@ -32,7 +29,7 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public static Hash FromAnonymousObject(object anonymousObject, bool includeBaseClassProperties = false)
         {
-            Hash result = new Hash();
+            var result = new Hash();
             if (anonymousObject != null)
             {
                 FromAnonymousObject(anonymousObject, result, includeBaseClassProperties);
@@ -42,7 +39,7 @@ namespace OurPresence.Modeller.Liquid
 
         private static void FromAnonymousObject(object anonymousObject, Hash hash, bool includeBaseClassProperties)
         {
-            Action<object, Hash> mapper = GetObjToDictionaryMapper(anonymousObject.GetType(), includeBaseClassProperties);
+            var mapper = GetObjToDictionaryMapper(anonymousObject.GetType(), includeBaseClassProperties);
             mapper.Invoke(anonymousObject, hash);                
         }
 
@@ -50,7 +47,7 @@ namespace OurPresence.Modeller.Liquid
         {
             var cacheKey = type.FullName + "_" + (includeBaseClassProperties ? "WithBaseProperties" : "WithoutBaseProperties");
 
-            if (!mapperCache.TryGetValue(cacheKey, out Action<object, Hash> mapper))
+            if (!s_mapperCache.TryGetValue(cacheKey, out var mapper))
             {
                 /* Bogdan Mart: Note regarding concurrency:
                  * This is concurrent dictionary, but if this will be called from two threads
@@ -69,7 +66,7 @@ namespace OurPresence.Modeller.Liquid
                  * create bottleneck, as only one mapper could be generated at a time.
                  */
                 mapper = GenerateMapper(type, includeBaseClassProperties);
-                mapperCache[cacheKey] = mapper;
+                s_mapperCache[cacheKey] = mapper;
             }
 
             return mapper;
@@ -82,9 +79,9 @@ namespace OurPresence.Modeller.Liquid
 
         private static Action<object, Hash> GenerateMapper(Type type, bool includeBaseClassProperties)
         {
-            ParameterExpression objParam = Expression.Parameter(typeof(object), "objParam");
-            ParameterExpression hashParam = Expression.Parameter(typeof(Hash), "hashParam");
-            List<Expression> bodyInstructions = new List<Expression>();
+            var objParam = Expression.Parameter(typeof(object), "objParam");
+            var hashParam = Expression.Parameter(typeof(Hash), "hashParam");
+            var bodyInstructions = new List<Expression>();
 
             var castedObj = Expression.Variable(type,"castedObj");
             
@@ -97,9 +94,12 @@ namespace OurPresence.Modeller.Liquid
                 .Where(p => p.CanRead && p.GetMethod.IsPublic && !p.GetMethod.IsStatic).ToList();
             
             //Add properties from base class 
-            if (includeBaseClassProperties) AddBaseClassProperties(type, propertyList);
+            if (includeBaseClassProperties)
+            {
+                AddBaseClassProperties(type, propertyList);
+            }
 
-            foreach (PropertyInfo property in propertyList)
+            foreach (var property in propertyList)
             {
                 bodyInstructions.Add(
                     Expression.Assign(
@@ -123,15 +123,20 @@ namespace OurPresence.Modeller.Liquid
             return expr.Compile();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dictionary"></param>
+        /// <returns></returns>
         public static Hash FromDictionary(IDictionary<string, object> dictionary)
         {
-            Hash result = new Hash();
+            var result = new Hash();
 
             foreach (var keyValue in dictionary)
             {
-                    if (keyValue.Value is IDictionary<string, object>)
+                    if (keyValue.Value is IDictionary<string, object> dictionary1)
                     {
-                        result.Add(keyValue.Key, FromDictionary((IDictionary<string, object>) keyValue.Value));
+                        result.Add(keyValue.Key, FromDictionary(dictionary1));
                     }
                     else
                     {
@@ -142,49 +147,64 @@ namespace OurPresence.Modeller.Liquid
             return result;
         }
 
-        #endregion
-
-        #region Constructors
-
-        public Hash(Template template, object defaultValue)
-            : this(template)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="defaultValue"></param>
+        public Hash(object defaultValue)
+            : this()
         {
             _defaultValue = defaultValue;
         }
 
-        public Hash(Template template, Func<Hash, string, object> lambda)
-            : this(template)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lambda"></param>
+        public Hash(Func<Hash, string, object> lambda)
+            : this()
         {
             _lambda = lambda;
         }
 
-        public Hash(Template template)
+        /// <summary>
+        /// 
+        /// </summary>
+        public Hash()
         {
-            _nestedDictionary = new Dictionary<string, object>(template.NamingConvention.StringComparer);
+            _nestedDictionary = new Dictionary<string, object>();
         }
 
-        #endregion
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="otherValues"></param>
         public void Merge(IDictionary<string, object> otherValues)
         {
-            foreach (string key in otherValues.Keys)
+            foreach (var key in otherValues.Keys)
+            {
                 _nestedDictionary[key] = otherValues[key];
+            }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected virtual object GetValue(string key)
         {
-            if (_nestedDictionary.ContainsKey(key))
-                return _nestedDictionary[key];
-
-            if (_lambda != null)
-                return _lambda(this, key);
-
-            if (_defaultValue != null)
-                return _defaultValue;
-
-            return null;
+            return _nestedDictionary.ContainsKey(key)
+                ? _nestedDictionary[key]
+                : _lambda != null ? _lambda(this, key) : _defaultValue != null ? _defaultValue : null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public T Get<T>(string key)
         {
             return (T) this[key];
@@ -192,11 +212,19 @@ namespace OurPresence.Modeller.Liquid
 
         #region IDictionary<string, object>
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
             return _nestedDictionary.GetEnumerator();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
         public void Remove(object key)
         {
             ((IDictionary) _nestedDictionary).Remove(key);
@@ -206,9 +234,7 @@ namespace OurPresence.Modeller.Liquid
         {
             get
             {
-                if (!(key is string))
-                    throw new NotSupportedException();
-                return GetValue((string) key);
+                return key is not string ? throw new NotSupportedException() : GetValue((string) key);
             }
             set { ((IDictionary) _nestedDictionary)[key] = value; }
         }
@@ -218,21 +244,38 @@ namespace OurPresence.Modeller.Liquid
             return _nestedDictionary.GetEnumerator();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
         public void Add(KeyValuePair<string, object> item)
         {
             ((IDictionary<string, object>) _nestedDictionary).Add(item);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public virtual bool Contains(object key)
         {
             return ((IDictionary) _nestedDictionary).Contains(key);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(object key, object value)
         {
             ((IDictionary) _nestedDictionary).Add(key, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Clear()
         {
             _nestedDictionary.Clear();
@@ -243,16 +286,31 @@ namespace OurPresence.Modeller.Liquid
             return ((IDictionary) _nestedDictionary).GetEnumerator();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public bool Contains(KeyValuePair<string, object> item)
         {
             return ((IDictionary<string, object>) _nestedDictionary).Contains(item);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
         public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
         {
             ((IDictionary<string, object>) _nestedDictionary).CopyTo(array, arrayIndex);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public bool Remove(KeyValuePair<string, object> item)
         {
             return ((IDictionary<string, object>) _nestedDictionary).Remove(item);
@@ -262,67 +320,116 @@ namespace OurPresence.Modeller.Liquid
 
         #region IDictionary
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="index"></param>
         public void CopyTo(Array array, int index)
         {
             ((IDictionary) _nestedDictionary).CopyTo(array, index);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int Count
         {
             get { return _nestedDictionary.Count; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public object SyncRoot
         {
             get { return ((IDictionary) _nestedDictionary).SyncRoot; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsSynchronized
         {
             get { return ((IDictionary) _nestedDictionary).IsSynchronized; }
         }
-
+        
         ICollection IDictionary.Values
         {
             get { return ((IDictionary) _nestedDictionary).Values; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsReadOnly
         {
             get { return ((IDictionary<string, object>) _nestedDictionary).IsReadOnly; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsFixedSize
         {
             get { return ((IDictionary) _nestedDictionary).IsFixedSize; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool ContainsKey(string key)
         {
             return _nestedDictionary.ContainsKey(key);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public void Add(string key, object value)
         {
             _nestedDictionary.Add(key, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool Remove(string key)
         {
             return _nestedDictionary.Remove(key);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool TryGetValue(string key, out object value)
         {
             return _nestedDictionary.TryGetValue(key, out value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public object this[string key]
         {
             get { return GetValue(key); }
             set { _nestedDictionary[key] = value; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ICollection<string> Keys
         {
             get { return _nestedDictionary.Keys; }
@@ -333,6 +440,9 @@ namespace OurPresence.Modeller.Liquid
             get { return ((IDictionary) _nestedDictionary).Keys; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ICollection<object> Values
         {
             get { return _nestedDictionary.Values; }

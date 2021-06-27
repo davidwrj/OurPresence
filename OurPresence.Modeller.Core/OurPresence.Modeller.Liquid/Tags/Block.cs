@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -6,18 +9,30 @@ using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid.Tags
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BlockDrop : Drop
     {
         private readonly Block _block;
         private readonly TextWriter _result;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="block"></param>
+        /// <param name="result"></param>
         public BlockDrop(Template template, Block block, TextWriter result)
-            :base(template)
+            : base(template)
         {
             _block = block;
             _result = result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Super()
         {
             _block.CallSuper(Context, _result);
@@ -36,17 +51,20 @@ namespace OurPresence.Modeller.Liquid.Tags
 
         public NodeList GetNodeList(Block block)
         {
-            if (!NodeLists.TryGetValue(block, out NodeList nodeList))
+            if (!NodeLists.TryGetValue(block, out var nodeList))
+            {
                 nodeList = block.NodeList;
+            }
+
             return nodeList;
         }
 
         // Searches up the scopes for the inner-most BlockRenderState (though there should be only one)
         public static BlockRenderState Find(Context context)
         {
-            foreach (Hash scope in context.Scopes)
+            foreach (var scope in context.Scopes)
             {
-                if (scope.TryGetValue("blockstate", out object blockState))
+                if (scope.TryGetValue("blockstate", out var blockState))
                 {
                     return blockState as BlockRenderState;
                 }
@@ -61,7 +79,7 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class Block : Modeller.Liquid.Block
     {
-        private readonly Regex _syntax;
+        private static readonly Regex s_syntax = R.C(@"(\w+)");
 
         /// <summary>
         /// 
@@ -70,10 +88,8 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// <param name="tagName"></param>
         /// <param name="markup"></param>
         public Block(Template template, string tagName, string markup)
-            :base(template, tagName, markup)
-        {
-            _syntax = R.C(template,@"(\w+)");
-        }
+            : base(template, tagName, markup)
+        { }
 
         internal string BlockName { get; set; }
 
@@ -83,15 +99,10 @@ namespace OurPresence.Modeller.Liquid.Tags
         /// <param name="tokens"></param>
         public override void Initialize(IEnumerable<string> tokens)
         {
-            var syntaxMatch = _syntax.Match(Markup);
-            if (syntaxMatch.Success)
-            {
-                BlockName = syntaxMatch.Groups[1].Value;
-            }
-            else
-            {
-                throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagSyntaxException"));
-            }
+            var syntaxMatch = s_syntax.Match(Markup);
+            BlockName = syntaxMatch.Success
+                ? syntaxMatch.Groups[1].Value
+                : throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagSyntaxException"));
 
             if (tokens is not null)
             {
@@ -103,13 +114,13 @@ namespace OurPresence.Modeller.Liquid.Tags
         {
             rootNodeList.GetItems().ForEach(n =>
                 {
-                    Block b1 = n as Block;
+                    var b1 = n as Block;
 
                     if (b1 != null)
                     {
-                        List<object> found = rootNodeList.FindAll(o =>
+                        var found = rootNodeList.FindAll(o =>
                             {
-                                Block b2 = o as Block;
+                                var b2 = o as Block;
                                 return b2 != null && b1.BlockName == b2.BlockName;
                             });
 
@@ -121,9 +132,14 @@ namespace OurPresence.Modeller.Liquid.Tags
                 });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="result"></param>
         public override void Render(Context context, TextWriter result)
         {
-            BlockRenderState blockState = BlockRenderState.Find(context);
+            var blockState = BlockRenderState.Find(context);
             context.Stack(() =>
                 {
                     context["block"] = new BlockDrop(context.Template, this, result);
@@ -137,9 +153,14 @@ namespace OurPresence.Modeller.Liquid.Tags
             return blockState == null ? NodeList : blockState.GetNodeList(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parents"></param>
+        /// <param name="nodeList"></param>
         public void AddParent(Dictionary<Block, Block> parents, NodeList nodeList)
         {
-            if (parents.TryGetValue(this, out Block parent))
+            if (parents.TryGetValue(this, out var parent))
             {
                 parent.AddParent(parents, nodeList);
             }
@@ -151,11 +172,16 @@ namespace OurPresence.Modeller.Liquid.Tags
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="result"></param>
         public void CallSuper(Context context, TextWriter result)
         {
-            BlockRenderState blockState = BlockRenderState.Find(context);
+            var blockState = BlockRenderState.Find(context);
             if (blockState != null
-                && blockState.Parents.TryGetValue(this, out Block parent)
+                && blockState.Parents.TryGetValue(this, out var parent)
                 && parent != null)
             {
                 parent.Render(context, result);

@@ -1,6 +1,8 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using Xunit;
 using OurPresence.Modeller.Liquid.Exceptions;
-using OurPresence.Modeller.Liquid.NamingConventions;
 
 namespace OurPresence.Modeller.Liquid.Tests
 {
@@ -13,39 +15,16 @@ namespace OurPresence.Modeller.Liquid.Tests
             Helper.AssertTemplateResult(
                 expected: "Hello Tobi",
                 template: template,
-                anonymousObject: new { greeting = "Hello", name = "Tobi" },
-                namingConvention: new RubyNamingConvention());
+                anonymousObject: new { greeting = "Hello", name = "Tobi" });
 
-            var csNamingConvention = new CSharpNamingConvention();
             Helper.AssertTemplateResult(
                 expected: "Hello Tobi",
                 template: template,
-                anonymousObject: new { Greeting = "Hello", Name = "Tobi" },
-                namingConvention: csNamingConvention);
+                anonymousObject: new { Greeting = "Hello", Name = "Tobi" });
             Helper.AssertTemplateResult(
                 expected: " ",
                 template: template,
-                anonymousObject: new { greeting = "Hello", name = "Tobi" },
-                namingConvention: csNamingConvention);
-        }
-
-        [Fact]
-        public void TestTagsStudlyCapsAreNotAllowed()
-        {
-            lock (Template.NamingConvention)
-            {
-                var currentNamingConvention = Template.NamingConvention;
-                Template.NamingConvention = new RubyNamingConvention();
-
-                try
-                {
-                    Assert.Throws<SyntaxException>(() => Template.Parse("{% IF user = 'tobi' %}Hello Tobi{% EndIf %}"));
-                }
-                finally
-                {
-                    Template.NamingConvention = currentNamingConvention;
-                }
-            }
+                anonymousObject: new { greeting = "Hello", name = "Tobi" });
         }
 
         [Fact]
@@ -53,43 +32,24 @@ namespace OurPresence.Modeller.Liquid.Tests
         {
             Helper.AssertTemplateResult(
                 expected:"HI TOBI",
-                template: "{{ 'hi tobi' | upcase }}",
-                namingConvention: new RubyNamingConvention());
+                template: "{{ 'hi tobi' | upcase }}");
 
             Helper.AssertTemplateResult(
                 expected: "HI TOBI",
-                template: "{{ 'hi tobi' | Upcase }}",
-                namingConvention: new CSharpNamingConvention());
+                template: "{{ 'hi tobi' | Upcase }}");
         }
 
         [Fact]
         public void TestAssignsStudlyCaps()
         {
-            var rubyNamingConvention = new RubyNamingConvention();
-
-            Helper.AssertTemplateResult(
-                expected: ".foo.",
-                template: "{% assign FoO = values %}.{{ fOo[0] }}.",
-                anonymousObject: new { values = new[] { "foo", "bar", "baz" } },
-                namingConvention: rubyNamingConvention);
-            Helper.AssertTemplateResult(
-                expected: ".bar.",
-                template: "{% assign fOo = values %}.{{ fOO[1] }}.",
-                anonymousObject: new { values = new[] { "foo", "bar", "baz" } },
-                namingConvention: rubyNamingConvention);
-
-            var csNamingConvention = new CSharpNamingConvention();
-
             Helper.AssertTemplateResult(
                 expected: ".foo.",
                 template: "{% assign Foo = values %}.{{ Foo[0] }}.",
-                anonymousObject: new { values = new[] { "foo", "bar", "baz" } },
-                namingConvention: csNamingConvention);
+                anonymousObject: new { values = new[] { "foo", "bar", "baz" } });
             Helper.AssertTemplateResult(
                 expected: ".bar.",
                 template: "{% assign fOo = values %}.{{ fOo[1] }}.",
-                anonymousObject: new { values = new[] { "foo", "bar", "baz" } },
-                namingConvention: csNamingConvention);
+                anonymousObject: new { values = new[] { "foo", "bar", "baz" } });
         }
     }
 }

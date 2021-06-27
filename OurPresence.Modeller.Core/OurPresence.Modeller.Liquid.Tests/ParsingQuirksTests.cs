@@ -1,6 +1,10 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using FluentAssertions;
 using OurPresence.Modeller.Liquid.Exceptions;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace OurPresence.Modeller.Liquid.Tests
@@ -13,8 +17,8 @@ namespace OurPresence.Modeller.Liquid.Tests
             const string text = " div { font-weight: bold; } ";
             Template template = Template.Parse(text);
             Assert.Equal(text, template.Render());
-            Assert.Equal(1, template.Root.NodeList.Count);
-            template.Root.NodeList[0].Should().BeOfType<string>();
+            Assert.Equal(1, template.Root.NodeList.Count());
+            template.Root.NodeList.GetItems().ElementAt(0).Should().BeOfType<string>();
         }
 
         [Fact]

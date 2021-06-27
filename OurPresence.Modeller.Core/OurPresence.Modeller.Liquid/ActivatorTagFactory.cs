@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 
 namespace OurPresence.Modeller.Liquid
 {
@@ -22,7 +25,7 @@ namespace OurPresence.Modeller.Liquid
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string TagName => _tagName;
 
@@ -30,9 +33,9 @@ namespace OurPresence.Modeller.Liquid
         /// Creates the tag
         /// </summary>
         /// <returns></returns>
-        public Tag Create(Template template)
-        {            
-            return Activator.CreateInstance(_tagType, template, _tagName, _tagType) as Tag;
+        public Tag Create(Template template,string markup)
+        {
+            return Activator.CreateInstance(_tagType, template, _tagName, markup) as Tag;
         }
     }
 }

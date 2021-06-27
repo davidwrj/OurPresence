@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using OurPresence.Modeller.Liquid.Exceptions;
 using OurPresence.Modeller.Liquid.FileSystems;
@@ -96,10 +99,10 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
             }
         }
 
-        public IncludeTagTests()
-        {
-            Template.FileSystem = new TestFileSystem();
-        }
+        //public IncludeTagTests()
+        //{
+        //    Template.FileSystem = new TestFileSystem();
+        //}
 
         [Fact]
         public void TestIncludeTagMustNotBeConsideredError()
@@ -173,9 +176,9 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
         [Fact]
         public void TestRecursivelyIncludedTemplateDoesNotProductEndlessLoop()
         {
-            Template.FileSystem = new InfiniteFileSystem();
+            var tpl = Template.Parse("{% include 'loop' %}",new InfiniteFileSystem());
 
-            Assert.Throws<StackLevelException>(() => Template.Parse("{% include 'loop' %}").Render(new RenderParameters(CultureInfo.InvariantCulture) { ErrorsOutputMode = ErrorsOutputMode.Rethrow }));
+            Assert.Throws<StackLevelException>(() => tpl.Render(new RenderParameters(CultureInfo.InvariantCulture) { ErrorsOutputMode = ErrorsOutputMode.Rethrow }));
         }
 
         [Fact]
@@ -195,9 +198,8 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
 
         [Fact]
         public void TestUndefinedTemplateVariableWithLocalFileSystem()
-        {
-            Template.FileSystem = new LocalFileSystem(string.Empty);
-            Assert.Throws<FileSystemException>(() => Template.Parse(" hello {% include notthere %} world ").Render(new RenderParameters(CultureInfo.InvariantCulture)
+        {            
+            Assert.Throws<FileSystemException>(() => Template.Parse(" hello {% include notthere %} world ", new LocalFileSystem(string.Empty)).Render(new RenderParameters(CultureInfo.InvariantCulture)
             {
                 ErrorsOutputMode = ErrorsOutputMode.Rethrow
             }));
@@ -206,8 +208,7 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
         [Fact]
         public void TestMissingTemplateWithLocalFileSystem()
         {
-            Template.FileSystem = new LocalFileSystem(string.Empty);
-            Assert.Throws<FileSystemException>(() => Template.Parse(" hello {% include 'doesnotexist' %} world ").Render(new RenderParameters(CultureInfo.InvariantCulture)
+            Assert.Throws<FileSystemException>(() => Template.Parse(" hello {% include 'doesnotexist' %} world ", new LocalFileSystem(string.Empty)).Render(new RenderParameters(CultureInfo.InvariantCulture)
             {
                 ErrorsOutputMode = ErrorsOutputMode.Rethrow
             }));
@@ -217,10 +218,10 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
         public void TestIncludeFromTemplateFileSystem()
         {
             var fileSystem = new TestTemplateFileSystem(new TestFileSystem());
-            Template.FileSystem = fileSystem;
+            
             for (int i = 0; i < 2; ++i)
             {
-                Assert.Equal("Product: Draft 151cm ", Template.Parse("{% include 'product' with products[0] %}").Render(Hash.FromAnonymousObject(new { products = new[] { Hash.FromAnonymousObject(new { title = "Draft 151cm" }), Hash.FromAnonymousObject(new { title = "Element 155cm" }) } })));
+                Assert.Equal("Product: Draft 151cm ", Template.Parse("{% include 'product' with products[0] %}", fileSystem).Render(Hash.FromAnonymousObject(new { products = new[] { Hash.FromAnonymousObject(new { title = "Draft 151cm" }), Hash.FromAnonymousObject(new { title = "Element 155cm" }) } })));
             }
             Assert.Equal(fileSystem.CacheHitTimes, 1);
         }

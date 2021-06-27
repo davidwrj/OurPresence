@@ -5,7 +5,7 @@ file[0] = Domain\Account.cs
 using System;
 using OurPresence.Core.Models;
 
-namespace SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank
 {
     public class Account : BaseAggregateRoot<Account, Guid>
     {
@@ -38,9 +38,9 @@ namespace SuperSafeBank.Domain
 
 file[1] = Events\Withdrawal.cs
 using System;
-using SuperSafeBank.Domain.Models;
+using Mizrael.SuperSafeBank.Models;
 
-namespace SuperSafeBank.Domain.Events
+namespace Mizrael.SuperSafeBank.Events
 {
     public class Withdrawal : BaseDomainEvent<Account, Guid>
     {
@@ -58,9 +58,9 @@ namespace SuperSafeBank.Domain.Events
 
 file[2] = Events\Deposit.cs
 using System;
-using SuperSafeBank.Domain.Models;
+using Mizrael.SuperSafeBank.Models;
 
-namespace SuperSafeBank.Domain.Events
+namespace Mizrael.SuperSafeBank.Events
 {
     public class Deposit : BaseDomainEvent<Account, Guid>
     {
@@ -82,7 +82,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace SuperSafeBank.Domain.Commands
+namespace Mizrael.SuperSafeBank.Commands
 {
     public class Deposit : INotification
     {
@@ -113,7 +113,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace SuperSafeBank.Domain.Commands
+namespace Mizrael.SuperSafeBank.Commands
 {
     public class Withdraw : INotification
     {

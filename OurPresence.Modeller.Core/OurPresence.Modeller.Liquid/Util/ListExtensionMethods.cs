@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -60,9 +63,11 @@ namespace OurPresence.Modeller.Liquid.Util
             where T : class
         {
             if (list == null || !list.Any())
+            {
                 return null;
+            }
 
-            T result = list.First();
+            var result = list.First();
             list.Remove(result);
 
             return result;
@@ -79,9 +84,11 @@ namespace OurPresence.Modeller.Liquid.Util
             where T : class
         {
             if (list == null || !list.Any())
+            {
                 return null;
+            }
 
-            T result = list.Last();
+            var result = list.Last();
             list.Remove(result);
 
             return result;

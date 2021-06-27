@@ -1,20 +1,37 @@
-﻿using System;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace OurPresence.Modeller.Liquid.Util
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class R
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="regex"></param>
+        /// <returns></returns>
         public static string Q(string regex)
         {
             return string.Format("(?-mix:{0})", regex);
         }
 
-        public static Regex B(Template template, string format, params string[] args)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static Regex B(string format, params string[] args)
         {
-            return C(template, string.Format(format, args));
+            return C(string.Format(format, args));
         }
 
         /// <summary>
@@ -30,9 +47,9 @@ namespace OurPresence.Modeller.Liquid.Util
         /// <param name="pattern">regex pattern</param>
         /// <param name="options">regex options; use the default (Compiled) unless there is a good reason not to</param>
         /// <returns>the regex</returns>
-        public static Regex C(Template template, string pattern, RegexOptions options = RegexOptions.None)
+        public static Regex C(string pattern, RegexOptions options = RegexOptions.None)
         {
-            var regex = new Regex(pattern, options, template.RegexTimeOut);
+            var regex = new Regex(pattern, options);
 
             // execute once to trigger the lazy compilation (not strictly necessary, but avoids the first real execution taking a longer time than subsequent ones)
             regex.IsMatch(string.Empty);
@@ -57,19 +74,6 @@ namespace OurPresence.Modeller.Liquid.Util
         }
 
         /// <summary>
-        /// Deprecated for performance reasons. New code should not use this.
-        /// See comments for Scan(string, Regex) above.
-        /// </summary>
-        /// <param name="input">input text</param>
-        /// <param name="pattern">regex pattern</param>
-        /// <returns>matches</returns>
-        [Obsolete("Use Scan(string, Regex) instead.")]
-        public static List<string> Scan(Template template, string input, string pattern)
-        {
-            return Scan(input, new Regex(pattern, RegexOptions.None, template.RegexTimeOut));
-        }
-
-        /// <summary>
         /// Overload that only works when the pattern contains two groups. The callback
         /// is called for each match, passing the two group values.
         /// </summary>
@@ -77,10 +81,12 @@ namespace OurPresence.Modeller.Liquid.Util
         /// <param name="pattern"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public static void Scan(Template template, string input, string pattern, Action<string, string> callback)
+        public static void Scan(string input, string pattern, Action<string, string> callback)
         {
-            foreach (Match match in Regex.Matches(input, pattern, RegexOptions.None, template.RegexTimeOut))
+            foreach (Match match in Regex.Matches(input, pattern, RegexOptions.None))
+            {
                 callback(match.Groups[1].Value, match.Groups[2].Value);
+            }
         }
     }
 }

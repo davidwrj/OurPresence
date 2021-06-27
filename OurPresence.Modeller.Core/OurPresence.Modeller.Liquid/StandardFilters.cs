@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,15 +26,9 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public static int Size(object input)
         {
-            if (input is string stringInput)
-            {
-                return stringInput.Length;
-            }
-            if (input is IEnumerable enumerableInput)
-            {
-                return enumerableInput.Cast<object>().Count();
-            }
-            return 0;
+            return input is string stringInput
+                ? stringInput.Length
+                : input is IEnumerable enumerableInput ? enumerableInput.Cast<object>().Count() : 0;
         }
 
         /// <summary>
@@ -44,7 +41,9 @@ namespace OurPresence.Modeller.Liquid
         public static string Slice(string input, long start, long len = 1)
         {
             if (input == null || start > input.Length)
+            {
                 return null;
+            }
 
             if (start < 0)
             { 
@@ -117,17 +116,12 @@ namespace OurPresence.Modeller.Liquid
         public static string Capitalize(Context context, string input)
         {
             if (input.IsNullOrWhiteSpace())
-                return input;
-
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
             {
-                var trimmed = input.TrimStart();
-                return input.Substring(0, input.Length - trimmed.Length) + char.ToUpper(trimmed[0]) + trimmed.Substring(1);
+                return input;
             }
 
-            return string.IsNullOrEmpty(input)
-                ? input
-                : Regex.Replace(input, @"\b(\w)", m => m.Value.ToUpper(), RegexOptions.None, context.Template.RegexTimeOut);
+            var trimmed = input.TrimStart();
+            return input.Substring(0, input.Length - trimmed.Length) + char.ToUpper(trimmed[0]) + trimmed.Substring(1);
         }
 
         /// <summary>
@@ -139,7 +133,9 @@ namespace OurPresence.Modeller.Liquid
         public static string Escape(string input)
         {
             if (string.IsNullOrEmpty(input))
+            {
                 return input;
+            }
 
             try
             {
@@ -228,13 +224,14 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Strip all html nodes from input
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="input"></param>
         /// <returns></returns>
         public static string StripHtml(Template template, string input)
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"<.*?>", string.Empty, RegexOptions.None, template.RegexTimeOut);
+                : Regex.Replace(input, @"<.*?>", string.Empty, RegexOptions.None);
         }
 
         /// <summary>
@@ -276,7 +273,7 @@ namespace OurPresence.Modeller.Liquid
         public static string Currency(object input, string cultureInfo = null)
         {
 
-            if (decimal.TryParse(input.ToString(), out decimal amount))
+            if (decimal.TryParse(input.ToString(), out var amount))
             {
                 if (cultureInfo.IsNullOrWhiteSpace())
                 {
@@ -294,13 +291,14 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Remove all newlines from the string
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="input"></param>
         /// <returns></returns>
         public static string StripNewlines(Template template, string input)
         {
             return input.IsNullOrWhiteSpace()
                 ? input
-                : Regex.Replace(input, @"(\r?\n)", string.Empty, RegexOptions.None, template.RegexTimeOut);
+                : Regex.Replace(input, @"(\r?\n)", string.Empty, RegexOptions.None);
         }
 
         /// <summary>
@@ -312,9 +310,11 @@ namespace OurPresence.Modeller.Liquid
         public static string Join(IEnumerable input, string glue = " ")
         {
             if (input == null)
+            {
                 return null;
+            }
 
-            IEnumerable<object> castInput = input.Cast<object>();
+            var castInput = input.Cast<object>();
 
             return string.Join(glue, castInput);
         }
@@ -329,26 +329,30 @@ namespace OurPresence.Modeller.Liquid
         public static IEnumerable Sort(object input, string property = null)
         {
             if (input == null)
+            {
                 return null;
+            }
 
             List<object> ary;
             if(input is IEnumerable<Hash> enumerableHash && !string.IsNullOrEmpty(property))
+            {
                 ary = enumerableHash.Cast<object>().ToList();
-            else if (input is IEnumerable enumerableInput)
-                ary = enumerableInput.Flatten().Cast<object>().ToList();
+            }
             else
-            { 
-                ary = new List<object>(new[] { input });
+            {
+                ary = input is IEnumerable enumerableInput ? enumerableInput.Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
             }
 
             if (!ary.Any())
+            {
                 return ary;
+            }
 
             if (string.IsNullOrEmpty(property))
             { 
                 ary.Sort();
             }
-            else if ((ary.All(o => o is IDictionary)) && (ary.Any(o => ((IDictionary)o).Contains(property))))
+            else if (ary.All(o => o is IDictionary) && ary.Any(o => ((IDictionary)o).Contains(property)))
             { 
                 ary.Sort((a, b) => Comparer<object>.Default.Compare(((IDictionary)a)[property], ((IDictionary)b)[property]));
             }
@@ -363,32 +367,41 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Map/collect on a given property
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="enumerableInput">The enumerable.</param>
         /// <param name="property">The property to map.</param>
         /// <returns></returns>
         public static IEnumerable Map(Template template, IEnumerable enumerableInput, string property)
         {
             if (enumerableInput == null)
+            {
                 return null;
+            }
 
             // Enumerate to a list so we can repeatedly parse through the collection.
-            List<object> listedInput = enumerableInput.Cast<object>().ToList();
+            var listedInput = enumerableInput.Cast<object>().ToList();
 
             // If the list happens to be empty we are done already.
             if (!listedInput.Any())
+            {
                 return listedInput;
+            }
 
             // Note that liquid assumes that contained complex elements are all following the same schema.
             // Hence here we only check if the first element has the property requested for the map.
             if (listedInput.All(element => element is IDictionary)
                 && ((IDictionary)listedInput.First()).Contains(key: property))
+            {
                 return listedInput.Select(element => ((IDictionary)element)[property]);
+            }
 
             return listedInput
                 .Select(selector: element =>
                 {
                     if (element == null)
+                    {
                         return null;
+                    }
 
                     var indexable = element as IIndexable;
                     if (indexable == null)
@@ -396,7 +409,9 @@ namespace OurPresence.Modeller.Liquid
                         var type = element.GetType();
                         var safeTypeTransformer = template.GetSafeTypeTransformer(type);
                         if (safeTypeTransformer != null)
+                        {
                             indexable = safeTypeTransformer(element) as DropBase;
+                        }
                         else
                         {
                             var liquidTypeAttribute = type
@@ -405,7 +420,7 @@ namespace OurPresence.Modeller.Liquid
                                 .FirstOrDefault() as LiquidTypeAttribute;
                             if (liquidTypeAttribute != null)
                             {
-                                indexable = new DropProxy(element, liquidTypeAttribute.AllowedMembers);
+                                indexable = new DropProxy(template, element, liquidTypeAttribute.AllowedMembers);
                             }
                             else if (TypeUtility.IsAnonymousType(type))
                             {
@@ -429,12 +444,11 @@ namespace OurPresence.Modeller.Liquid
         public static string Replace(Context context, string input, string @string, string replacement = "")
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(@string))
+            {
                 return input;
+            }
 
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
-                return input.Replace(@string, replacement);
-
-            return Regex.Replace(input, @string, replacement, RegexOptions.None, context.Template.RegexTimeOut);
+            return input.Replace(@string, replacement);
         }
 
         /// <summary>
@@ -448,23 +462,12 @@ namespace OurPresence.Modeller.Liquid
         public static string ReplaceFirst(Context context, string input, string @string, string replacement = "")
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(@string))
-                return input;
-
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
             {
-                int position = input.IndexOf(@string);
-                return position < 0 ? input : input.Remove(position, @string.Length).Insert(position, replacement);
+                return input;
             }
 
-            bool doneReplacement = false;
-            return Regex.Replace(input, @string, m =>
-            {
-                if (doneReplacement)
-                    return m.Value;
-
-                doneReplacement = true;
-                return replacement;
-            }, RegexOptions.None, context.Template.RegexTimeOut);
+            var position = input.IndexOf(@string);
+            return position < 0 ? input : input.Remove(position, @string.Length).Insert(position, replacement);
         }
 
         /// <summary>
@@ -523,13 +526,14 @@ namespace OurPresence.Modeller.Liquid
         /// <summary>
         /// Add <br /> tags in front of all newlines in input string
         /// </summary>
+        /// <param name="template"></param>
         /// <param name="input"></param>
         /// <returns></returns>
         public static string NewlineToBr(Template template, string input)
         {
             return input.IsNullOrWhiteSpace()
                     ? input
-                    : Regex.Replace(input, @"(\r?\n)", "<br />$1", RegexOptions.None, template.RegexTimeOut);
+                    : Regex.Replace(input, @"(\r?\n)", "<br />$1", RegexOptions.None);
         }
 
         /// <summary>
@@ -542,36 +546,39 @@ namespace OurPresence.Modeller.Liquid
         public static string Date(Context context, object input, string format)
         {
             if (input == null)
+            {
                 return null;
+            }
 
             if (input is DateTime date)
             {
                 if (format.IsNullOrWhiteSpace())
+                {
                     return date.ToString();
+                }
 
                 return Liquid.UseRubyDateFormat
-                    ? context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21 ? new DateTimeOffset(date).ToStrFTime(format) : date.ToStrFTime(format)
+                    ? new DateTimeOffset(date).ToStrFTime(format) 
                     : date.ToString(format);
             }
 
-            if (context.SyntaxCompatibilityLevel == SyntaxCompatibility.Liquid20)
-                return DateLegacyParsing(input.ToString(), format);
-
             if (format.IsNullOrWhiteSpace())
+            {
                 return input.ToString();
+            }
 
             DateTimeOffset dateTimeOffset;
             if (input is DateTimeOffset inputOffset)
             {
                 dateTimeOffset = inputOffset;
             }
-            else if ((input is decimal) || (input is double) || (input is float) || (input is int) || (input is uint) || (input is long) || (input is ulong) || (input is short) || (input is ushort))
+            else if (input is decimal || input is double || input is float || input is int || input is uint || input is long || input is ulong || input is short || input is ushort)
             {
                 dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(input)).ToLocalTime();
             }
             else
             {
-                string value = input.ToString();
+                var value = input.ToString();
 
                 if (string.Equals(value, "now", StringComparison.OrdinalIgnoreCase) || string.Equals(value, "today", StringComparison.OrdinalIgnoreCase))
                 {
@@ -595,7 +602,9 @@ namespace OurPresence.Modeller.Liquid
                 date = DateTime.Now;
 
                 if (format.IsNullOrWhiteSpace())
+                {
                     return date.ToString();
+                }
             }
             else if (!DateTime.TryParse(value, out date))
             {
@@ -603,8 +612,10 @@ namespace OurPresence.Modeller.Liquid
             }
 
             if (format.IsNullOrWhiteSpace())
+            {
                 return value;
-            
+            }
+
             return Liquid.UseRubyDateFormat ? date.ToStrFTime(format) : date.ToString(format);
         }
 
@@ -619,7 +630,9 @@ namespace OurPresence.Modeller.Liquid
         public static object First(IEnumerable array)
         {
             if (array == null)
+            {
                 return null;
+            }
 
             return array.Cast<object>().FirstOrDefault();
         }
@@ -635,7 +648,9 @@ namespace OurPresence.Modeller.Liquid
         public static object Last(IEnumerable array)
         {
             if (array == null)
+            {
                 return null;
+            }
 
             return array.Cast<object>().LastOrDefault();
         }
@@ -649,12 +664,7 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public static object Plus(Context context, object input, object operand)
         {
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
-                return DoMathsOperation(context, input, operand, Expression.AddChecked);
-
-            return input is string
-                ? string.Concat(input, operand)
-                : DoMathsOperation(context, input, operand, Expression.AddChecked);
+            return DoMathsOperation(context, input, operand, Expression.AddChecked);
         }
 
         /// <summary>
@@ -678,12 +688,7 @@ namespace OurPresence.Modeller.Liquid
         /// <returns></returns>
         public static object Times(Context context, object input, object operand)
         {
-            if (context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21)
-                return DoMathsOperation(context, input, operand, Expression.MultiplyChecked);
-
-            return input is string && (operand is int || operand is long)
-                ? Enumerable.Repeat((string)input, Convert.ToInt32(operand))
-                : DoMathsOperation(context, input, operand, Expression.MultiplyChecked);
+            return DoMathsOperation(context, input, operand, Expression.MultiplyChecked);
         }
 
         /// <summary>
@@ -713,10 +718,14 @@ namespace OurPresence.Modeller.Liquid
         /// <returns>The rounded value; null if an exception have occured</returns>
         public static object Ceil(object input)
         {
-            if (decimal.TryParse(input.ToString(), out decimal d))
+            if (decimal.TryParse(input.ToString(), out var d))
+            {
                 return Math.Ceiling(d);
+            }
             else
+            {
                 return null;
+            }
         }
 
         /// <summary>
@@ -726,10 +735,14 @@ namespace OurPresence.Modeller.Liquid
         /// <returns>The rounded value; null if an exception have occured</returns>
         public static object Floor(object input)
         {
-            if (decimal.TryParse(input.ToString(), out decimal d))
+            if (decimal.TryParse(input.ToString(), out var d))
+            {
                 return Math.Floor(d);
+            }
             else
+            {
                 return null;
+            }
         }
 
         /// <summary>
@@ -772,13 +785,15 @@ namespace OurPresence.Modeller.Liquid
         private static object DoMathsOperation(Context context, object input, object operand, Func<Expression, Expression, BinaryExpression> operation)
         {
             if (input == null || operand == null)
+            {
                 return null;
+            }
 
             // NOTE(David Burg): Try for maximal precision if the input and operand fit the decimal's range.
             // This avoids rounding errors in financial arithmetics.
             // E.g.: 0.1 | Plus 10 | Minus 10 to remain 0.1, not 0.0999999999999996
             // Otherwise revert to maximum range (possible precision loss).
-            var shouldConvertStrings = context.SyntaxCompatibilityLevel >= SyntaxCompatibility.Liquid21 && ((input is string) || (operand is string));
+            var shouldConvertStrings = input is string || operand is string;
             if (IsReal(input) || IsReal(operand) || shouldConvertStrings)
             {
                 try
@@ -793,7 +808,7 @@ namespace OurPresence.Modeller.Liquid
                             rightType: operand.GetType())
                         .DynamicInvoke(input, operand);
                 }
-                catch (Exception ex) when (ex is OverflowException || ex is DivideByZeroException || (ex is TargetInvocationException && (ex?.InnerException is OverflowException || ex?.InnerException is DivideByZeroException)))
+                catch (Exception ex) when (ex is OverflowException || ex is DivideByZeroException || ex is TargetInvocationException && (ex?.InnerException is OverflowException || ex?.InnerException is DivideByZeroException))
                 {
                     input = Convert.ToDouble(input);
                     operand = Convert.ToDouble(operand);
@@ -824,18 +839,15 @@ namespace OurPresence.Modeller.Liquid
         public static IEnumerable Uniq(object input)
         {
             if (input == null)
+            {
                 return null;
-
-            List<object> ary;
-            if (input is IEnumerable)
-                ary = ((IEnumerable) input).Flatten().Cast<object>().ToList();
-            else
-            { 
-                ary = new List<object>(new[] { input });
             }
 
+            var ary = input is IEnumerable ? ((IEnumerable) input).Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
             if (!ary.Any())
+            {
                 return ary;
+            }
 
             return ary.Distinct().ToList();
         }
@@ -907,18 +919,15 @@ namespace OurPresence.Modeller.Liquid
         public static IEnumerable Compact(object input)
         {
             if (input == null)
-                return null;
-
-            List<object> ary;
-            if (input is IEnumerable)
-                ary = ((IEnumerable)input).Flatten().Cast<object>().ToList();
-            else
             {
-                ary = new List<object>(new[] { input });
+                return null;
             }
 
+            var ary = input is IEnumerable ? ((IEnumerable)input).Flatten().Cast<object>().ToList() : new List<object>(new[] { input });
             if (!ary.Any())
+            {
                 return ary;
+            }
 
             ary.RemoveAll(item => item == null);
             return ary;

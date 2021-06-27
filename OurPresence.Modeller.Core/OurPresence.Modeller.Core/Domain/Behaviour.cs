@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace OurPresence.Modeller.Domain
@@ -21,5 +22,9 @@ namespace OurPresence.Modeller.Domain
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? Event { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [DefaultValue(false)]
+        public bool AltersDomain { get; set; }
     }
 }

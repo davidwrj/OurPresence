@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,34 +24,38 @@ namespace OurPresence.Modeller.Liquid.Tags.Html
     /// </example>
     public class TableRow : Modeller.Liquid.Block
     {
-        private readonly Regex _syntax;
+        private static readonly Regex s_syntax = R.B(R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
         private string _variableName, _collectionName;
         private Dictionary<string, string> _attributes;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
         protected TableRow(Template template, string tagName, string markup)
             :base(template, tagName, markup)
-        {
-            _syntax = R.B(template, R.Q(@"(\w+)\s+in\s+({0}+)"), Liquid.VariableSignature);
-        }
+        { }
 
         /// <summary>
         /// Initializes the tablerow tag
         /// </summary>
-        /// <param name="tagName">Name of the parsed tag</param>
-        /// <param name="markup">Markup of the parsed tag</param>
         /// <param name="tokens">Toeksn of the parsed tag</param>
         public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = _syntax.Match(Markup);
+            var syntaxMatch = s_syntax.Match(Markup);
             if (syntaxMatch.Success)
             {
                 _variableName = syntaxMatch.Groups[1].Value;
                 _collectionName = syntaxMatch.Groups[2].Value;
-                _attributes = new Dictionary<string, string>(Template.NamingConvention.StringComparer);
-                R.Scan(Template, Markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
+                _attributes = new Dictionary<string, string>();
+                R.Scan(Markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
+            {
                 throw new SyntaxException(Liquid.ResourceManager.GetString("TableRowTagSyntaxException"));
+            }
 
             base.Initialize(tokens);
         }
@@ -60,31 +67,34 @@ namespace OurPresence.Modeller.Liquid.Tags.Html
         /// <param name="result"></param>
         public override void Render(Context context, TextWriter result)
         {
-            object coll = context[_collectionName];
+            var coll = context[_collectionName];
 
             if (!(coll is IEnumerable))
+            {
                 return;
-            IEnumerable<object> collection = ((IEnumerable) coll).Cast<object>();
+            }
+
+            var collection = ((IEnumerable) coll).Cast<object>();
 
             if (_attributes.ContainsKey("offset"))
             {
-                int offset = Convert.ToInt32(_attributes["offset"]);
+                var offset = Convert.ToInt32(_attributes["offset"]);
                 collection = collection.Skip(offset);
             }
 
             if (_attributes.ContainsKey("limit"))
             {
-                int limit = Convert.ToInt32(_attributes["limit"]);
+                var limit = Convert.ToInt32(_attributes["limit"]);
                 collection = collection.Take(limit);
             }
 
             collection = collection.ToList();
-            int length = collection.Count();
+            var length = collection.Count();
 
-            int cols = Convert.ToInt32(context[_attributes["cols"]]);
+            var cols = Convert.ToInt32(context[_attributes["cols"]]);
 
-            int row = 1;
-            int col = 0;
+            var row = 1;
+            var col = 0;
 
             result.WriteLine("<tr class=\"row1\">");
             context.Stack(() => collection.EachWithIndex((item, index) =>
@@ -99,10 +109,10 @@ namespace OurPresence.Modeller.Liquid.Tags.Html
                     col0 = col,
                     rindex = length - index,
                     rindex0 = length - index - 1,
-                    first = (index == 0),
-                    last = (index == length - 1),
-                    col_first = (col == 0),
-                    col_last = (col == cols - 1)
+                    first = index == 0,
+                    last = index == length - 1,
+                    col_first = col == 0,
+                    col_last = col == cols - 1
                 });
 
                 ++col;

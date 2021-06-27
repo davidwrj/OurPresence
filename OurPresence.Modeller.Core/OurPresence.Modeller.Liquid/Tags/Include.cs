@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -9,64 +12,84 @@ using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid.Tags
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Include : Modeller.Liquid.Block
     {
-        private static readonly Regex Syntax = R.B(@"({0}+)(\s+(?:with|for)\s+({0}+))?", Liquid.QuotedFragment);
-
+        private readonly Regex _syntax = R.B(@"({0}+)(\s+(?:with|for)\s+({0}+))?", Liquid.QuotedFragment);
         private string _templateName, _variableName;
         private Dictionary<string, string> _attributes;
 
-        public Include(Template template, string tagName, string markup) : base(template, tagName, markup)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
+        public Include(Template template, string tagName, string markup) 
+            : base(template, tagName, markup)
         { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokens"></param>
         public override void Initialize(IEnumerable<string> tokens)
         {
-            Match syntaxMatch = Syntax.Match(Markup);
+            var syntaxMatch = _syntax.Match(Markup);
             if (syntaxMatch.Success)
             {
                 _templateName = syntaxMatch.Groups[1].Value;
                 _variableName = syntaxMatch.Groups[3].Value;
                 if (_variableName == string.Empty)
+                {
                     _variableName = null;
-                _attributes = new Dictionary<string, string>(Template.NamingConvention.StringComparer);
+                }
+
+                _attributes = new Dictionary<string, string>();
                 R.Scan(Markup, Liquid.TagAttributes, (key, value) => _attributes[key] = value);
             }
             else
+            {
                 throw new SyntaxException(Liquid.ResourceManager.GetString("IncludeTagSyntaxException"));
+            }
 
             base.Initialize(tokens);
         }
 
-        protected override void Parse(IEnumerable<string> tokens)
-        {
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="result"></param>
         public override void Render(Context context, TextWriter result)
         {
-            IFileSystem fileSystem = context.Registers["file_system"] as IFileSystem ?? Template.FileSystem;
-            ITemplateFileSystem templateFileSystem = fileSystem as ITemplateFileSystem;
+            var fileSystem = context.Registers["file_system"] as IFileSystem ?? Template.FileSystem;
             Template partial = null;
-            if (templateFileSystem != null)
+            if (fileSystem is ITemplateFileSystem templateFileSystem)
             {
                 partial = templateFileSystem.GetTemplate(context, _templateName);
             }
             if (partial == null)
             {
-                string source = fileSystem.ReadTemplateFile(context, _templateName);
-                partial = Template.Parse(source, Template.NamingConvention, Template.FileSystem, Template.DefaultSyntaxCompatibilityLevel);
+                var source = fileSystem.ReadTemplateFile(context, _templateName);
+                partial = Template.Parse(source, Template.FileSystem);
             }
 
-            string shortenedTemplateName = _templateName.Substring(1, _templateName.Length - 2);
-            object variable = context[_variableName ?? shortenedTemplateName, _variableName != null];
+            var shortenedTemplateName = _templateName[1..^1];
+            var variable = context[_variableName ?? shortenedTemplateName, _variableName != null];
 
             context.Stack(() =>
             {
                 foreach (var keyValue in _attributes)
-                    context[keyValue.Key] = context[keyValue.Value];
-
-                if (variable is IEnumerable)
                 {
-                    ((IEnumerable) variable).Cast<object>().ToList().ForEach(v =>
+                    context[keyValue.Key] = context[keyValue.Value];
+                }
+
+                if (variable is IEnumerable enumerable)
+                {
+                    enumerable.Cast<object>().ToList().ForEach(v =>
                     {
                         context[shortenedTemplateName] = v;
                         partial.Render(result, RenderParameters.FromContext(context, result.FormatProvider));

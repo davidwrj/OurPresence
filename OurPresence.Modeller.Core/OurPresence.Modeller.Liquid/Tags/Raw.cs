@@ -1,6 +1,7 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.Util;
 
 namespace OurPresence.Modeller.Liquid.Tags
@@ -13,9 +14,20 @@ namespace OurPresence.Modeller.Liquid.Tags
     /// </summary>
     public class Raw : Modeller.Liquid.Block
     {
-        public Raw(Template template, string tagName, string markup) : base(template, tagName, markup)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="tagName"></param>
+        /// <param name="markup"></param>
+        public Raw(Template template, string tagName, string markup) 
+            : base(template, tagName, markup)
         { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokens"></param>
         protected override void Parse(IEnumerable<string> tokens)
         {
             NodeList.Clear();
@@ -24,14 +36,16 @@ namespace OurPresence.Modeller.Liquid.Tags
             var t = tokens as List<string>;
             while ((token = t.Shift()) != null)
             {
-                Match fullTokenMatch = FullToken.Match(token);
+                var fullTokenMatch = FullToken.Match(token);
                 if (fullTokenMatch.Success && BlockDelimiter == fullTokenMatch.Groups[1].Value)
                 {
                     EndTag();
                     return;
                 }
                 else
+                {
                     NodeList.Add(token);
+                }
             }
 
             AssertMissingDelimitation();

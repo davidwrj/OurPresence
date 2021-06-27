@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,26 +17,21 @@ namespace OurPresence.Modeller.Liquid
     /// </summary>
     public class Block : Tag
     {
-        private readonly Regex _isTag ;
-        private readonly Regex _isVariable ;
-        private readonly Regex _contentOfVariable;
+        private static readonly Regex s_isTag = R.B(@"^{0}", Liquid.TagStart);
+        private static readonly Regex s_isVariable = R.B(@"^{0}", Liquid.VariableStart);
+        private static readonly Regex s_contentOfVariable= R.B(@"^{0}(.*){1}$", Liquid.VariableStart, Liquid.VariableEnd);
 
-        internal readonly Regex FullToken;
+        internal static readonly Regex FullToken = R.B(@"^{0}\s*(\w+)\s*(.*)?{1}$", Liquid.TagStart, Liquid.TagEnd);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="template"></param>
         /// <param name="tagName"></param>
         /// <param name="markup"></param>
         protected Block(Template template, string tagName, string markup)
             :base(template, tagName,markup)
-        {
-            _isTag = R.B(template, @"^{0}", Liquid.TagStart);
-            _isVariable = R.B(template,@"^{0}", Liquid.VariableStart);
-            _contentOfVariable = R.B(template, @"^{0}(.*){1}$", Liquid.VariableStart, Liquid.VariableEnd);
-            FullToken = R.B(template, @"^{0}\s*(\w+)\s*(.*)?{1}$", Liquid.TagStart, Liquid.TagEnd);
-        }
+        { }
 
         /// <summary>
         /// Parses a list of tokens
@@ -47,10 +45,10 @@ namespace OurPresence.Modeller.Liquid
             string token;
             while ((token = t.Shift()) != null)
             {
-                Match isTagMatch = _isTag.Match(token);
+                var isTagMatch = s_isTag.Match(token);
                 if (isTagMatch.Success)
                 {
-                    Match fullTokenMatch = FullToken.Match(token);
+                    var fullTokenMatch = FullToken.Match(token);
                     if (fullTokenMatch.Success)
                     {
                         // If we found the proper block delimitor just end parsing here and let the outer block
@@ -63,7 +61,7 @@ namespace OurPresence.Modeller.Liquid
 
                         // Fetch the tag from registered blocks
                         Tag tag;
-                        if ((tag = Template.CreateTag(fullTokenMatch.Groups[1].Value)) is not null)
+                        if ((tag = Template.CreateTag(fullTokenMatch.Groups[1].Value,fullTokenMatch.Groups[2].Value)) is not null)
                         {
                             //todo: Confirm this change still sets correct tag fields
                             //tag.Initialize(fullTokenMatch.Groups[1].Value, fullTokenMatch.Groups[2].Value, tokens);
@@ -85,7 +83,7 @@ namespace OurPresence.Modeller.Liquid
                         throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNotTerminatedException"), token, Liquid.TagEnd);
                     }
                 }
-                else if (_isVariable.Match(token).Success)
+                else if (s_isVariable.Match(token).Success)
                 {
                     NodeList.Add(CreateVariable(token));
                 }
@@ -120,15 +118,12 @@ namespace OurPresence.Modeller.Liquid
         /// <param name="tokens"></param>
         public virtual void UnknownTag(string tag, string markup, IEnumerable<string> tokens)
         {
-            switch (tag)
+            throw tag switch
             {
-                case "else":
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNoElseException"), BlockName);
-                case "end":
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNoEndException"), BlockName, BlockDelimiter);
-                default:
-                    throw new SyntaxException(Liquid.ResourceManager.GetString("BlockUnknownTagException"), tag);
-            }
+                "else" => new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNoElseException"), BlockName),
+                "end" => new SyntaxException(Liquid.ResourceManager.GetString("BlockTagNoEndException"), BlockName, BlockDelimiter),
+                _ => new SyntaxException(Liquid.ResourceManager.GetString("BlockUnknownTagException"), tag),
+            };
         }
 
         /// <summary>
@@ -147,17 +142,17 @@ namespace OurPresence.Modeller.Liquid
 
         /// <summary>
         /// Creates a variable from a token:
-        /// 
+        ///
         /// {{ variable }}
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         public Variable CreateVariable(string token)
         {
-            Match match = _contentOfVariable.Match(token);
-            if (match.Success)
-                return new Variable(Template, match.Groups[1].Value);
-            throw new SyntaxException(Liquid.ResourceManager.GetString("BlockVariableNotTerminatedException"), token, Liquid.VariableEnd);
+            var match = s_contentOfVariable.Match(token);
+            return match.Success
+                ? new Variable(Template, match.Groups[1].Value)
+                : throw new SyntaxException(Liquid.ResourceManager.GetString("BlockVariableNotTerminatedException"), token, Liquid.VariableEnd);
         }
 
         /// <summary>

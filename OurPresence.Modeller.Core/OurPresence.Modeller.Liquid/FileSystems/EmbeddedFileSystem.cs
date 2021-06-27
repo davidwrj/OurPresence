@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.IO;
 using System.Text.RegularExpressions;
 using OurPresence.Modeller.Liquid.Exceptions;
@@ -19,16 +22,33 @@ namespace OurPresence.Modeller.Liquid.FileSystems
     /// </summary>
     public class EmbeddedFileSystem : IFileSystem
     {
+        /// <summary>
+        /// 
+        /// </summary>
         protected System.Reflection.Assembly Assembly { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Root { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="root"></param>
         public EmbeddedFileSystem(System.Reflection.Assembly assembly, string root)
         {
             Assembly = assembly;
             Root = root;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="templateName"></param>
+        /// <returns></returns>
         public string ReadTemplateFile(Context context, string templateName)
         {
             var templatePath = (string)context[templateName];
@@ -36,8 +56,10 @@ namespace OurPresence.Modeller.Liquid.FileSystems
 
             var stream = Assembly.GetManifestResourceStream(fullPath);
             if (stream == null)
+            {
                 throw new FileSystemException(
                     Liquid.ResourceManager.GetString("LocalFileSystemTemplateNotFoundException"), templatePath);
+            }
 
             using (var reader = new StreamReader(stream))
             {
@@ -45,11 +67,18 @@ namespace OurPresence.Modeller.Liquid.FileSystems
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="templatePath"></param>
+        /// <returns></returns>
         public string FullPath(string templatePath)
         {
             if (templatePath == null || !Regex.IsMatch(templatePath, @"^[^.\/][a-zA-Z0-9_\/]+$"))
+            {
                 throw new FileSystemException(
                     Liquid.ResourceManager.GetString("LocalFileSystemIllegalTemplateNameException"), templatePath);
+            }
 
             var basePath = templatePath.Contains("/")
                 ? Path.Combine(Root, Path.GetDirectoryName(templatePath))

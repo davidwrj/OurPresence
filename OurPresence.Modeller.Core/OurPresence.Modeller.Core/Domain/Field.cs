@@ -46,7 +46,7 @@ namespace OurPresence.Modeller.Domain
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         [DefaultValue(false)]
-        public bool Nullable { get; set; } = false;
+        public bool Nullable { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         [DefaultValue(false)]

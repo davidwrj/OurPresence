@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System.Globalization;
 using Xunit;
 
@@ -98,6 +101,10 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
 
         private class AssignDrop : Drop
         {
+            public AssignDrop(Template template) : base(template)
+            {
+            }
+
             public string MyProperty
             {
                 get { return "MyValue"; }
@@ -107,8 +114,10 @@ namespace OurPresence.Modeller.Liquid.Tests.Tags
         [Fact]
         public void TestAssignWithDrop()
         {
+            var template = new Template();
+
             Helper.AssertTemplateResult(".MyValue.", @"{% assign foo = value %}.{{ foo.my_property }}.",
-                Hash.FromAnonymousObject(new { value = new AssignDrop() }));
+                Hash.FromAnonymousObject(new { value = new AssignDrop(template) }));
         }
     }
 }

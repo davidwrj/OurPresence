@@ -1,3 +1,6 @@
+// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 namespace OurPresence.Modeller.Liquid.FileSystems
 {
     /// <summary>
@@ -20,7 +23,8 @@ namespace OurPresence.Modeller.Liquid.FileSystems
         /// <summary>
         /// Called by Liquid to retrieve a template file
         /// </summary>
-        /// <param name="templatePath"></param>
+        /// <param name="context"></param>
+        /// <param name="templateName"></param>
         /// <returns></returns>
         string ReadTemplateFile(Context context, string templateName);
     }
