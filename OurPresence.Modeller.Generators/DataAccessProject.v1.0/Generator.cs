@@ -19,8 +19,7 @@ namespace DataAccessProject
         public IOutput Create()
         {
             var project = (IProject)new ProjectFile(Settings, _module).Create();
-            _module.Models.ForEach(m =>
-                project.AddFileGroup((IFileGroup)new DataAccessEntityConfig.Generator(Settings, _module, m).Create()));
+            project.AddFileGroup((IFileGroup)new DataAccessEntityConfig.Generator(Settings, _module,null).Create());
             return project;
         }
     }

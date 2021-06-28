@@ -22,10 +22,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             var c = new DataAccessProject.Generator(settings, module);
 
             IProject output = c.Create() as IProject;
-            foreach(var item in output.FileGroups)
-            {
-                Approvals.VerifyAll(item.Files, "file", f => $"{f.FullName}\r\n{f.Content}");
-            }
+            Approvals.VerifyAll(output.FileGroups.SelectMany(f=>f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
         }
 
         [Fact]
@@ -66,10 +63,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             var c = new BusinessLogicProject.Generator(settings, module);
 
             IProject output = c.Create() as IProject;
-            foreach(var item in output.FileGroups)
-            {
-                Approvals.VerifyAll(item.Files, "file", f => $"{f.FullName}\r\n{f.Content}");
-            }
+            Approvals.VerifyAll(output.FileGroups.SelectMany(f => f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
         }
 
         [Fact]
