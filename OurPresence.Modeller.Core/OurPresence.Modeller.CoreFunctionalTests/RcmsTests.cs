@@ -6,6 +6,7 @@ using NSubstitute;
 using System.Linq;
 using OurPresence.Modeller.Generator;
 using Xunit;
+using OurPresence.Modeller.Domain.Extensions;
 
 namespace OurPresence.Modeller.CoreFunctionalTests
 {
@@ -25,6 +26,16 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 
             IProject output = c.Create() as IProject;
             Approvals.VerifyAll(output.FileGroups.SelectMany(f=>f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
+        }
+
+        [Fact]
+        public void GivenAProject_WhenSerialised_ReturnsJsonModel()
+        {
+            var module = RcmsModuleBuilders.CreateProject();
+
+            var json = module.ToJson();
+
+            Approvals.VerifyJson(json);
         }
     }
 }

@@ -2,7 +2,7 @@
 using OurPresence.Modeller.Interfaces;
 using System;
 
-namespace DataAccessProject
+namespace EntityFrameworkProject
 {
     public class Generator : IGenerator
     {
@@ -19,7 +19,7 @@ namespace DataAccessProject
         public IOutput Create()
         {
             var project = (IProject)new ProjectFile(Settings, _module).Create();
-            project.AddFileGroup((IFileGroup)new DataAccessEntityConfig.Generator(Settings, _module,null).Create());
+            project.AddFileGroup((IFileGroup)new EntityFrameworkClass.Generator(Settings, _module, null).Create());
             return project;
         }
     }

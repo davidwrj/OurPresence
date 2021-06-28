@@ -2,10 +2,7 @@ file[0] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Mizrael.SuperSafeBank
+namespace Mizrael.SuperSafeBank.Domain
 {
     public class Account : BaseAggregateRoot<Account, Guid>
     {
@@ -37,9 +34,6 @@ namespace Mizrael.SuperSafeBank
 }
 
 file[1] = Events\Withdrawal.cs
-using System;
-using Mizrael.SuperSafeBank.Models;
-
 namespace Mizrael.SuperSafeBank.Events
 {
     public class Withdrawal : BaseDomainEvent<Account, Guid>
@@ -57,9 +51,6 @@ namespace Mizrael.SuperSafeBank.Events
 }
 
 file[2] = Events\Deposit.cs
-using System;
-using Mizrael.SuperSafeBank.Models;
-
 namespace Mizrael.SuperSafeBank.Events
 {
     public class Deposit : BaseDomainEvent<Account, Guid>
@@ -72,68 +63,6 @@ namespace Mizrael.SuperSafeBank.Events
         public Deposit(Account account) : base(account)
         {
             // todo: 
-        }
-    }
-}
-
-file[3] = Commands\Deposit.cs
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-
-namespace Mizrael.SuperSafeBank.Commands
-{
-    public class Deposit : INotification
-    {
-        public Deposit(Guid accountId, Money amount)
-        {
-            AccountId = accountId;
-            Amount = amount;
-        }
-
-        public Guid AccountId { get;  set; }
-
-        public Money Amount { get;  set; }
-
-    }
-
-    public class DepositHandler : INotificationHandler<Deposit>
-    {
-        public async Task Handle(Deposit command, CancellationToken cancellationToken)
-        {
-            // todo: Add code to complete the command
-        }
-    }
-}
-
-file[4] = Commands\Withdraw.cs
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-
-namespace Mizrael.SuperSafeBank.Commands
-{
-    public class Withdraw : INotification
-    {
-        public Withdraw(Guid accountId, Money amount)
-        {
-            AccountId = accountId;
-            Amount = amount;
-        }
-
-        public Guid AccountId { get;  set; }
-
-        public Money Amount { get;  set; }
-
-    }
-
-    public class WithdrawHandler : INotificationHandler<Withdraw>
-    {
-        public async Task Handle(Withdraw command, CancellationToken cancellationToken)
-        {
-            // todo: Add code to complete the command
         }
     }
 }

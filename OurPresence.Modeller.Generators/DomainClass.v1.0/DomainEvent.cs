@@ -29,9 +29,6 @@ namespace DomainClass
                 {
                     var sb = new StringBuilder();
 
-                    sb.Al("using System;");
-                    sb.Al($"using {_module.Namespace}.Models;");
-                    sb.Al("");
                     sb.Al($"namespace {_module.Namespace}.Events");
                     sb.Al("{");
                     sb.I(1).Al($"public class {behaviour.Event} : BaseDomainEvent<{_model.Name}, Guid>");

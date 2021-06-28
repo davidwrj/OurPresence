@@ -36,10 +36,7 @@ file[2] = Domain\Event.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     public partial class Event
     {
@@ -83,10 +80,7 @@ file[3] = Domain\Event.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     partial class Event : BaseAggregateRoot<Event, Guid>
     {
@@ -140,10 +134,7 @@ file[4] = Domain\EventAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     public partial class EventAddress
     {
@@ -198,10 +189,7 @@ file[5] = Domain\EventAddress.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     partial class EventAddress : BaseAggregateRoot<EventAddress, Guid>
     {
@@ -277,10 +265,7 @@ file[6] = Domain\Organisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     public partial class Organisation
     {
@@ -313,10 +298,7 @@ file[7] = Domain\Organisation.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     partial class Organisation : BaseAggregateRoot<Organisation, Guid>
     {
@@ -344,10 +326,7 @@ file[8] = Domain\Person.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     public partial class Person
     {
@@ -384,10 +363,7 @@ file[9] = Domain\Person.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     partial class Person : BaseAggregateRoot<Person, Guid>
     {
@@ -419,10 +395,7 @@ file[10] = Domain\Vehicle.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     public partial class Vehicle
     {
@@ -461,10 +434,7 @@ file[11] = Domain\Vehicle.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     partial class Vehicle : BaseAggregateRoot<Vehicle, Guid>
     {
@@ -493,9 +463,6 @@ namespace Nhvr.Rcms
 }
 
 file[12] = Events\Created.cs
-using System;
-using Nhvr.Rcms.Models;
-
 namespace Nhvr.Rcms.Events
 {
     public class Created : BaseDomainEvent<Vehicle, Guid>
@@ -516,10 +483,7 @@ file[13] = Domain\VehicleDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     public partial class VehicleDetail
     {
@@ -552,10 +516,7 @@ file[14] = Domain\VehicleDetail.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace Nhvr.Rcms
+namespace Nhvr.Rcms.Domain
 {
     partial class VehicleDetail : BaseAggregateRoot<VehicleDetail, Guid>
     {

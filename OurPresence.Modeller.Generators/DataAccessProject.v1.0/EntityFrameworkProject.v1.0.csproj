@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>DataAccessEntityConfig</RootNamespace>
+    <RootNamespace>EntityFrameworkProject</RootNamespace>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\OurPresence.Modeller.Core\OurPresence.Modeller.Core\OurPresence.Modeller.Core.csproj" />
+    <ProjectReference Include="..\DataAccessEntityConfig.v1.0\EntityFrameworkClass.v1.0.csproj" />
   </ItemGroup>
 
 </Project>

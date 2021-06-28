@@ -4,7 +4,7 @@ using OurPresence.Modeller.Interfaces;
 using System;
 using System.Text;
 
-namespace DataAccessProject
+namespace EntityFrameworkProject
 {
     internal class ProjectFile : IGenerator
     {

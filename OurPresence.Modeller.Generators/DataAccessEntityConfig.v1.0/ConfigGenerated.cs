@@ -8,7 +8,7 @@ using OurPresence.Modeller.Domain.Extensions;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 
-namespace DataAccessEntityConfig
+namespace EntityFrameworkClass
 {
     public class ConfigGenerated : IGenerator
     {
@@ -24,17 +24,14 @@ namespace DataAccessEntityConfig
 
         public IOutput Create()
         {
-            if (!_model.IsEntity())
-                return null;
-
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Data.Configuration");
+            sb.Al($"namespace {_module.Namespace}.Data.Configurations");
             sb.Al("{");
             sb.I(1).Al($"public partial class {_model.Name}Configuration : IEntityTypeConfiguration<{_model.Name}>");
             sb.I(1).Al("{");
             sb.I(2).Al($"public void Configure(EntityTypeBuilder<{_model.Name}> builder)");
             sb.I(2).Al("{");
-            sb.I(3).Al($"builder.ToTable(\"{_model.Name}\")");
+            sb.I(3).Al($"builder.ToTable(\"{_model.Name}\");");
 
             foreach (var field in _model.Fields)
             {

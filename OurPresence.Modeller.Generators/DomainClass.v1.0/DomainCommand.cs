@@ -25,11 +25,6 @@ namespace DomainClass
         {
             var sb = new StringBuilder();
 
-            sb.Al("using System;");
-            sb.Al("using System.Threading;");
-            sb.Al("using System.Threading.Tasks;");
-            sb.Al("using MediatR;");
-            sb.B();
             sb.Al($"namespace {_module.Namespace}.Commands");
             sb.Al("{");
             sb.I(1).Al($"public class {_request.Name} : INotification");

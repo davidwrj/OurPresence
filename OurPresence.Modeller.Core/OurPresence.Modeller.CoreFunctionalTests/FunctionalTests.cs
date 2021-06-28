@@ -19,7 +19,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             settings.Packages.Returns(packages);
             var module = ModuleBuilders.CreateProject();
 
-            var c = new DataAccessProject.Generator(settings, module);
+            var c = new EntityFrameworkProject.Generator(settings, module);
 
             IProject output = c.Create() as IProject;
             Approvals.VerifyAll(output.FileGroups.SelectMany(f=>f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
@@ -32,7 +32,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             settings.SupportRegen = true;
             var module = ModuleBuilders.CreateModule();
 
-            var c = new DataAccessEntityConfig.Generator(settings, module, module.Models.First());
+            var c = new EntityFrameworkClass.Generator(settings, module, module.Models.First());
 
             IFileGroup output = c.Create() as IFileGroup;
             Approvals.VerifyAll(output.Files, "file", f => $"{f.FullName}\r\n{f.Content}");
@@ -44,7 +44,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             var settings = Substitute.For<ISettings>();
             var module = ModuleBuilders.CreateModule();
 
-            var c = new DataAccessEntityConfig.Generator(settings, module, module.Models.First());
+            var c = new EntityFrameworkClass.Generator(settings, module, module.Models.First());
 
             IFileGroup output = c.Create() as IFileGroup;
             Approvals.VerifyAll(output.Files, "file", f => $"{f.FullName}\r\n{f.Content}");

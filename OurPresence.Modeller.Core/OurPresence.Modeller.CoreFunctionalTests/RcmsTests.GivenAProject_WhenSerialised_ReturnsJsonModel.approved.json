@@ -1,0 +1,742 @@
+{
+    "company": "Nhvr",
+    "project": "Rcm[Rcms]",
+    "models": [
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "CreationId"
+                },
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "StatusId"
+                },
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "ReviewedUserId"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ReviewedDateTime"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "CreateDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "CompletedDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ReportedOnDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "TookPlaceStartDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "TookPlaceEndDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "VehicleReleaseDate"
+                },
+                {
+                    "dataType": "Bool",
+                    "nullable": true,
+                    "name": "VehicleGrounded"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "OperationName"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "MethodOfIntercept"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "DirectionOfTravel"
+                },
+                {
+                    "dataType": "Bool",
+                    "nullable": true,
+                    "name": "Light"
+                },
+                {
+                    "dataType": "Bool",
+                    "nullable": true,
+                    "name": "Siren"
+                },
+                {
+                    "dataType": "Bool",
+                    "nullable": true,
+                    "name": "UrgentDutyDriving"
+                },
+                {
+                    "dataType": "Bool",
+                    "nullable": true,
+                    "name": "ComplianceActionOffenceReport"
+                },
+                {
+                    "dataType": "Bool",
+                    "nullable": true,
+                    "name": "ComplianceActionOffenceReportReference"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "SourceSystemTypes",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Event"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "StateId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "AddressType",
+                    "nullable": true,
+                    "name": "EventAddressType"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "LocalGovernmentArea"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "LGAShortTitle"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "Near"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "CommonName"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "Remark"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Altitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Longitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Latitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Elevation"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "FloorNumber"
+                },
+                {
+                    "maxLength": 200,
+                    "nullable": true,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "nullable": true,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "nullable": true,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 200,
+                    "nullable": true,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 200,
+                    "nullable": true,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 100,
+                    "nullable": true,
+                    "name": "Suburb"
+                },
+                {
+                    "maxLength": 128,
+                    "nullable": true,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 1500,
+                    "nullable": true,
+                    "name": "FullAddress"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "name": "DateAdded"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "Event",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "EventAddress",
+                    "dependantFields": [
+                        "EventId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "EventAddress"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "CreationId"
+                },
+                {
+                    "maxLength": 255,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "ACN"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "OrganisationType",
+                    "name": "TypeId"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "NevdisId"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "VicCustomerNo"
+                },
+                {
+                    "dataType": "Int32",
+                    "nullable": true,
+                    "name": "ParentId"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "default": "30",
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Organisation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "CreationId"
+                },
+                {
+                    "maxLength": 255,
+                    "name": "GivenName"
+                },
+                {
+                    "maxLength": 255,
+                    "name": "FamilyName"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "name": "DateOfBirth"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "LicenceNumber"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "States",
+                    "name": "LicenceState"
+                },
+                {
+                    "default": "30",
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "maxLength": 64,
+                    "nullable": true,
+                    "name": "SourcePersonId"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "NevdisId"
+                },
+                {
+                    "dataType": "Int32",
+                    "nullable": true,
+                    "name": "ParentId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Person"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "businessKey": true,
+                    "name": "CreationId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "States",
+                    "nullable": true,
+                    "name": "RegistrationState"
+                },
+                {
+                    "maxLength": 10,
+                    "nullable": true,
+                    "name": "RegistrationNumber"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "IsNationalRegistration"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "VehicleIdentificationNumber"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "EngineNumber"
+                },
+                {
+                    "maxLength": 32,
+                    "nullable": true,
+                    "name": "ChassisNumber"
+                },
+                {
+                    "maxLength": 64,
+                    "name": "SourceVehicleId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "SourceSystemTypes",
+                    "name": "SystemId"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [
+                {
+                    "fields": [
+                        {
+                            "dataType": "Object",
+                            "dataTypeTypeName": "States",
+                            "nullable": true,
+                            "name": "RegistrationState"
+                        },
+                        {
+                            "maxLength": 10,
+                            "nullable": true,
+                            "name": "RegistrationNumber"
+                        },
+                        {
+                            "dataType": "Bool",
+                            "name": "IsNationalRegistration"
+                        },
+                        {
+                            "maxLength": 20,
+                            "nullable": true,
+                            "name": "VehicleIdentificationNumber"
+                        },
+                        {
+                            "maxLength": 20,
+                            "nullable": true,
+                            "name": "EngineNumber"
+                        },
+                        {
+                            "maxLength": 32,
+                            "nullable": true,
+                            "name": "ChassisNumber"
+                        },
+                        {
+                            "maxLength": 64,
+                            "name": "SourceVehicleId"
+                        },
+                        {
+                            "dataType": "Object",
+                            "dataTypeTypeName": "SourceSystemTypes",
+                            "name": "SystemId"
+                        }
+                    ],
+                    "event": "Created",
+                    "name": "Create"
+                }
+            ],
+            "name": "Vehicle"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "VehicleIdentificationNumber"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "EngineNumber"
+                },
+                {
+                    "maxLength": 32,
+                    "nullable": true,
+                    "name": "ChassisNumber"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "States",
+                    "nullable": true,
+                    "name": "RegistrationState"
+                },
+                {
+                    "maxLength": 10,
+                    "nullable": true,
+                    "name": "RegistrationNumber"
+                },
+                {
+                    "maxLength": 64,
+                    "nullable": true,
+                    "name": "RegistrationStatus"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "IsNationalRegistration"
+                },
+                {
+                    "maxLength": 64,
+                    "name": "SourceVehicleId"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "SourceSystemTypes",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "Vehicle",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "Event",
+                    "dependantFields": [
+                        "VehicleId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "VehicleDetail"
+        }
+    ],
+    "enumerations": [
+        {
+            "items": [
+                {
+                    "name": "ACT",
+                    "display": "Australian Capitol Territory",
+                    "value": 60
+                },
+                {
+                    "name": "WA",
+                    "display": "Western Australia",
+                    "value": 61
+                },
+                {
+                    "name": "SA",
+                    "display": "South Australia",
+                    "value": 62
+                },
+                {
+                    "name": "NT",
+                    "display": "Northern Territory",
+                    "value": 63
+                },
+                {
+                    "name": "VIC",
+                    "display": "Victoria",
+                    "value": 64
+                },
+                {
+                    "name": "QLD",
+                    "display": "Queensland",
+                    "value": 65
+                },
+                {
+                    "name": "NSW",
+                    "display": "New South Wales",
+                    "value": 66
+                },
+                {
+                    "name": "TAS",
+                    "display": "Tasmania",
+                    "value": 67
+                }
+            ],
+            "name": "State"
+        },
+        {
+            "items": [
+                {
+                    "name": "RCMS",
+                    "display": "RCMS",
+                    "value": 30
+                },
+                {
+                    "name": "NHVR",
+                    "display": "NHVR",
+                    "value": 31
+                },
+                {
+                    "name": "VCOM",
+                    "display": "VCOM",
+                    "value": 32
+                },
+                {
+                    "name": "INTERCEPT",
+                    "display": "INTERCEPT",
+                    "value": 33
+                },
+                {
+                    "name": "VICROADSNHVR",
+                    "display": "VICROADSNHVR",
+                    "value": 34
+                },
+                {
+                    "name": "VICROADS",
+                    "display": "VICROADS",
+                    "value": 35
+                },
+                {
+                    "name": "ASIC",
+                    "display": "ASIC",
+                    "value": 36
+                },
+                {
+                    "name": "NEVDIS",
+                    "display": "NEVDIS",
+                    "value": 37
+                },
+                {
+                    "name": "QLDTMR",
+                    "display": "QLDTMR",
+                    "value": 38
+                },
+                {
+                    "name": "NEVDISSERVICE",
+                    "display": "NEVDISSERVICE",
+                    "value": 39
+                }
+            ],
+            "name": "SourceSystemType"
+        }
+    ],
+    "requests": []
+}

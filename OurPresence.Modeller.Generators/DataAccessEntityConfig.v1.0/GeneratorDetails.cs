@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace DataAccessEntityConfig
+namespace EntityFrameworkClass
 {
     public class GeneratorDetails : MetadataBase
     {
         public GeneratorDetails() : base("1.0.0")
         { }
 
-        public override string Name => "Data Access Entity Configuration File";
+        public override string Name => "Entity Framework Entity classes";
 
-        public override string Description => "Build an Entity Framework Configuration file";
+        public override string Description => "Build the Entity Framework Entity classes";
 
         public override Type EntryPoint => typeof(Generator);
 

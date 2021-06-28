@@ -34,10 +34,7 @@ namespace DomainClass
 
             var sb = new StringBuilder();
             sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
-            sb.Al("using System;");
-            sb.Al("using OurPresence.Core.Models;");
-            sb.B();
-            sb.Al($"namespace {_module.Namespace}");
+            sb.Al($"namespace {_module.Namespace}.Domain");
             sb.Al("{");
             sb.I(1).Al($"public partial class {_model.Name}");
             sb.I(1).Al("{");

@@ -1,16 +1,15 @@
-file[0] = SuperSafeBank.Domain.csproj
+file[0] = Mizrael.SuperSafeBank.Domain.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
-        <RootNamespace>SuperSafeBank.Domain</RootNamespace>
+        <RootNamespace>Mizrael.SuperSafeBank.Domain</RootNamespace>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="OurPresence.Core" Version="1.0.0" />
-        <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
 </Project>
@@ -37,10 +36,7 @@ file[2] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Domain
 {
     public partial class Account
     {
@@ -74,10 +70,7 @@ file[3] = Domain\Account.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Domain
 {
     partial class Account : BaseAggregateRoot<Account, Guid>
     {
@@ -92,10 +85,7 @@ namespace SuperSafeBank.Domain
 }
 
 file[4] = Events\Withdrawal.cs
-using System;
-using SuperSafeBank.Domain.Models;
-
-namespace SuperSafeBank.Domain.Events
+namespace Mizrael.SuperSafeBank.Events
 {
     public class Withdrawal : BaseDomainEvent<Account, Guid>
     {
@@ -112,10 +102,7 @@ namespace SuperSafeBank.Domain.Events
 }
 
 file[5] = Events\Deposit.cs
-using System;
-using SuperSafeBank.Domain.Models;
-
-namespace SuperSafeBank.Domain.Events
+namespace Mizrael.SuperSafeBank.Events
 {
     public class Deposit : BaseDomainEvent<Account, Guid>
     {
@@ -131,76 +118,11 @@ namespace SuperSafeBank.Domain.Events
     }
 }
 
-file[6] = Commands\Deposit.cs
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-
-namespace SuperSafeBank.Domain.Commands
-{
-    public class Deposit : INotification
-    {
-        public Deposit(Guid accountId, Money amount)
-        {
-            AccountId = accountId;
-            Amount = amount;
-        }
-
-        public Guid AccountId { get;  set; }
-
-        public Money Amount { get;  set; }
-
-    }
-
-    public class DepositHandler : INotificationHandler<Deposit>
-    {
-        public async Task Handle(Deposit command, CancellationToken cancellationToken)
-        {
-            // todo: Add code to complete the command
-        }
-    }
-}
-
-file[7] = Commands\Withdraw.cs
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-
-namespace SuperSafeBank.Domain.Commands
-{
-    public class Withdraw : INotification
-    {
-        public Withdraw(Guid accountId, Money amount)
-        {
-            AccountId = accountId;
-            Amount = amount;
-        }
-
-        public Guid AccountId { get;  set; }
-
-        public Money Amount { get;  set; }
-
-    }
-
-    public class WithdrawHandler : INotificationHandler<Withdraw>
-    {
-        public async Task Handle(Withdraw command, CancellationToken cancellationToken)
-        {
-            // todo: Add code to complete the command
-        }
-    }
-}
-
-file[8] = Domain\Customer.cs
+file[6] = Domain\Customer.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-using System;
-using OurPresence.Core.Models;
-
-namespace SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Domain
 {
     public partial class Customer
     {
@@ -224,17 +146,14 @@ namespace SuperSafeBank.Domain
     }
 }
 
-file[9] = Domain\Customer.generated.cs
+file[7] = Domain\Customer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-using System;
-using OurPresence.Core.Models;
-
-namespace SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Domain
 {
     partial class Customer : BaseAggregateRoot<Customer, Guid>
     {

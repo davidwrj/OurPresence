@@ -46,17 +46,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurPresence.Modeller.Liquid
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationProject.v1.0", "OurPresence.Modeller.Generators\Application.v1.0\ApplicationProject.v1.0.csproj", "{740BB280-CBC9-4D73-94B3-81F13786C587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerClass.v1.0", "OurPresence.Modeller.Generators\ControllerClass.v1.0\ControllerClass.v1.0.csproj", "{5921B657-D233-41C0-8751-7B977E8E54DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerClass.v1.0", "OurPresence.Modeller.Generators\ControllerClass.v1.0\ControllerClass.v1.0.csproj", "{5921B657-D233-41C0-8751-7B977E8E54DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicProject.v1.0", "OurPresence.Modeller.Generators\BusinessLogicProject.v1.0\BusinessLogicProject.v1.0.csproj", "{456F4F14-831C-4089-BB11-ADB05B71F2E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicProject.v1.0", "OurPresence.Modeller.Generators\BusinessLogicProject.v1.0\BusinessLogicProject.v1.0.csproj", "{456F4F14-831C-4089-BB11-ADB05B71F2E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicBehaviour.v1.0", "OurPresence.Modeller.Generators\BusinessLogicBehaviour.v1.0\BusinessLogicBehaviour.v1.0.csproj", "{0244A3E6-6FA3-44CE-A164-1AB50ABBAC90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessProject.v1.0", "OurPresence.Modeller.Generators\DataAccessProject.v1.0\DataAccessProject.v1.0.csproj", "{E905C859-0848-429C-91A4-5D2FD5B5D67C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkProject.v1.0", "OurPresence.Modeller.Generators\DataAccessProject.v1.0\EntityFrameworkProject.v1.0.csproj", "{E905C859-0848-429C-91A4-5D2FD5B5D67C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicBehaviorAction.v1.0", "OurPresence.Modeller.Generators\BusinessLogicBehaviorAction.v1.0\BusinessLogicBehaviorAction.v1.0.csproj", "{7327A52D-D673-4EB2-AFB1-9BF811D220DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicBehaviorAction.v1.0", "OurPresence.Modeller.Generators\BusinessLogicBehaviorAction.v1.0\BusinessLogicBehaviorAction.v1.0.csproj", "{7327A52D-D673-4EB2-AFB1-9BF811D220DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessEntityConfig.v1.0", "OurPresence.Modeller.Generators\DataAccessEntityConfig.v1.0\DataAccessEntityConfig.v1.0.csproj", "{4EE3C9E2-A6D6-45AF-9CE4-F3D88CF24BDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkClass.v1.0", "OurPresence.Modeller.Generators\DataAccessEntityConfig.v1.0\EntityFrameworkClass.v1.0.csproj", "{4EE3C9E2-A6D6-45AF-9CE4-F3D88CF24BDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
