@@ -1,19 +1,4 @@
-﻿using OurPresence.Modeller.Domain;
-using OurPresence.Modeller.Domain.Extensions;
-using OurPresence.Modeller.Generator;
-using OurPresence.Modeller.Interfaces;
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Terminal.Gui;
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnassignedGetOnlyAutoProperty
-
-namespace OurPresence.Modeller.Cli
+﻿namespace OurPresence.Modeller.Cli
 {
     internal class ListViewItemModel 
     {
@@ -58,7 +43,6 @@ namespace OurPresence.Modeller.Cli
         [Option(ShortName = "", Inherited = true)]
         public bool Verbose { get; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Top level unexpected catch all")]
         internal int OnExecute()
         {
             try

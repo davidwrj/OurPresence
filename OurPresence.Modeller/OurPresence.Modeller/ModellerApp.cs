@@ -1,34 +1,29 @@
-﻿using OurPresence.Modeller.Cli;
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.Extensions.Configuration;
-
-// ReSharper disable MemberCanBePrivate.Global
-
-namespace OurPresence.Modeller
+﻿namespace OurPresence.Modeller
 {
     [Subcommand(typeof(Create))]
-    [Subcommand(typeof(Settings))]
+    [Subcommand(typeof(Cli.Settings))]
     [Subcommand(typeof(Build))]
     [Subcommand(typeof(Generators))]
-    // ReSharper disable once ClassNeverInstantiated.Global
+    [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
     public class ModellerApp
     {
         private readonly ILogger<ModellerApp> _logger;
+        private readonly IConfiguration _configuration;
 
         public ModellerApp(ILogger<ModellerApp> logger, IConfiguration configuration)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _configuration = configuration;
         }
+
+        internal static string GetVersion()
+            => typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0";
 
         [Option(Description = "Settings file to use when generating code. Settings in the file will override arguments on the command line")]
         [FileExists]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public string? Settings { get; }
 
         [Option(Description = "Target framework. Defaults to net5.0")]
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public string? Target { get; }
 
         [Option(ShortName = "")]

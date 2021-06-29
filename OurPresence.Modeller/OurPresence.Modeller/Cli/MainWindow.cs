@@ -1,6 +1,4 @@
-﻿using OurPresence.Modeller.Domain;
-using System.Collections.Generic;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 
 namespace OurPresence.Modeller.Cli
 {

@@ -1,8 +1,4 @@
-﻿using OurPresence.Modeller.Interfaces;
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Logging;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 // ReSharper disable MemberCanBePrivate.Local
 
 namespace OurPresence.Modeller.Cli

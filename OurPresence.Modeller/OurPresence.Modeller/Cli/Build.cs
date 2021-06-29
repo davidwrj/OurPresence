@@ -1,14 +1,4 @@
-﻿using OurPresence.Modeller.Generator;
-using OurPresence.Modeller.Interfaces;
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.Extensions.Configuration;
-
-// ReSharper disable UnassignedGetOnlyAutoProperty
-// ReSharper disable MemberCanBePrivate.Global
-
-namespace OurPresence.Modeller.Cli
+﻿namespace OurPresence.Modeller.Cli
 {
     [Command(Name = "build", Description = "Use DLL components to generate code")]
     internal class Build

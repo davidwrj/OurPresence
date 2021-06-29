@@ -1,12 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using OurPresence.Modeller.Generator;
-using OurPresence.Modeller.Generator.Outputs;
-using OurPresence.Modeller.Interfaces;
-using OurPresence.Modeller.Loaders;
-using Serilog;
 
 namespace OurPresence.Modeller
 {
@@ -50,7 +43,7 @@ namespace OurPresence.Modeller
 
             services.AddLogging(configure => configure.AddSerilog());
 
-            services.AddSingleton<ISettings, Settings>();
+            services.AddSingleton<ISettings, Generator.Settings>();
             services.AddSingleton<IGeneratorConfiguration, GeneratorConfiguration>();
             services.AddSingleton<IContext, Context>();
 

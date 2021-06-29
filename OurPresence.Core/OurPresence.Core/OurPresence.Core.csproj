@@ -11,11 +11,11 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="DotNetConfig" Version="1.0.0-rc.2" />
+    <PackageReference Include="DotNetConfig" Version="1.0.4" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
 

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace OurPresence.Modeller
+﻿namespace OurPresence.Modeller
 {
     public static class LoggingEvents
     {

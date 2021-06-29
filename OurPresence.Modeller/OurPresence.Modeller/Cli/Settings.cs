@@ -1,8 +1,4 @@
-﻿using OurPresence.Modeller.Interfaces;
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.Logging;
-
-namespace OurPresence.Modeller.Cli
+﻿namespace OurPresence.Modeller.Cli
 {
     [Command(Description = "Model generator settings")]
     internal class Settings
