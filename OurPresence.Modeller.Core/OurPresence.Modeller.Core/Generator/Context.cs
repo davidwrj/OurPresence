@@ -4,15 +4,17 @@ using System.Linq;
 using OurPresence.Modeller.Interfaces;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using OurPresence.Modeller.Loaders;
 
 namespace OurPresence.Modeller.Generator
 {
     public class Context : IContext
     {
-        private readonly IGeneratorConfiguration _configuration;
+        //private readonly IGeneratorConfiguration _configuration;
         private readonly ILoader<ISettings> _settingsLoader;
         private readonly ILoader<IEnumerable<INamedElement>> _moduleLoader;
         private readonly ILoader<IEnumerable<IGeneratorItem>> _generatorLoader;
+        private readonly IPackageService _packageService;
         private readonly ILogger<IContext> _logger;
 
         private INamedElement? _module;
@@ -21,16 +23,16 @@ namespace OurPresence.Modeller.Generator
         private INamedElement? _model;
 
         public Context(
-            IGeneratorConfiguration configuration,
             ILoader<ISettings> settingsLoader,
             ILoader<IEnumerable<INamedElement>> moduleLoader,
             ILoader<IEnumerable<IGeneratorItem>> generatorLoader,
+            IPackageService packageService,
             ILogger<Context> logger)
         {
-            _configuration = configuration;
             _settingsLoader = settingsLoader;
             _moduleLoader = moduleLoader;
             _generatorLoader = generatorLoader;
+            _packageService = packageService;
             _logger = logger;
         }
 
@@ -42,19 +44,20 @@ namespace OurPresence.Modeller.Generator
 
         public INamedElement? Model => _model;
 
-        private ISettings GetSettings()
+        private ISettings GetSettings(IGeneratorConfiguration configuration)
         {
-            _settings = _settingsLoader.Load(_configuration.SettingsFile);
-
-            _logger.LogInformation("Registered {Packages} packages", _settings.Packages.Count.ToString());
-
+            if(_settingsLoader.TryLoad(configuration.SettingsFile, out var settings))
+            {
+                _settings = settings;
+                _logger.LogInformation("Registered {Packages} packages", _settings.Packages.Count.ToString());
+            }
             return _settings;
         }
 
-        private IGeneratorItem? GetGenerator()
+        private IGeneratorItem? GetGenerator(IGeneratorConfiguration configuration)
         {
-            var generators = _generatorLoader.Load(_configuration.LocalFolder);
-            var name = _configuration.GeneratorName.ToLowerInvariant();
+            var generators = _generatorLoader.Load(configuration.LocalFolder);
+            var name = configuration.GeneratorName.ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
@@ -63,7 +66,7 @@ namespace OurPresence.Modeller.Generator
             var matches = generators.Where(g =>
                     g.Metadata.Name.ToLowerInvariant() == name || g.AbbreviatedFileName.ToLowerInvariant() == name)
                 .ToList();
-            var exact = matches.SingleOrDefault(m => m.Metadata.Version == _configuration.Version);
+            var exact = matches.SingleOrDefault(m => m.Metadata.Version == configuration.Version);
             var item = exact ?? matches.OrderByDescending(k => k.Metadata.Version).FirstOrDefault();
 
             _logger.LogInformation("Generator Loaded: {S}",
@@ -79,12 +82,16 @@ namespace OurPresence.Modeller.Generator
             return sb.ToString();
         }
 
-        public ValidationResult ValidateConfiguration()
+        public ValidationResult ValidateConfiguration(IGeneratorConfiguration configuration)
         {
             var result = new ValidationResult();
 
-            _settings = GetSettings();
-            _generator = GetGenerator();
+            _settings = GetSettings(configuration);
+            if(_settings==null)
+            {
+                _settings = new Settings(configuration, _packageService);                
+            }
+            _generator = GetGenerator(configuration);
             if (!string.IsNullOrEmpty(_settings.SourceModel))
             {
                 var items = _moduleLoader.Load(_settings.SourceModel).ToList();
@@ -103,7 +110,7 @@ namespace OurPresence.Modeller.Generator
             }
 
             if (_module != null && string.IsNullOrEmpty(_settings.ModelName))
-                _model = ((Domain.Module) _module).Models.FirstOrDefault(m => m.Name.Value == _configuration.ModelName);
+                _model = ((Domain.Module) _module).Models.FirstOrDefault(m => m.Name.Value == configuration.ModelName);
 
             var configValidator = new ContextValidator();
             var results = configValidator.Validate(this);

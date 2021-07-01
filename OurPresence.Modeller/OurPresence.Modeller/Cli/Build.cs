@@ -14,7 +14,6 @@
             Target = configuration.GetValue<string>("Target");
             Output = configuration.GetValue<string>("Output");
             LocalFolder = configuration.GetValue<string>("LocalFolder");
-            Settings = Environment.CurrentDirectory;
         }
 
         [Argument(0, Description = "The generator to use.")]
@@ -57,7 +56,7 @@
             {
                 IGeneratorConfiguration config = new GeneratorConfiguration()
                 {
-                    Verbose = Verbose,
+                    Verbose = Verbose,                    
                     Overwrite = Overwrite
                 };
 
@@ -81,7 +80,7 @@
 
                 _logger.LogTrace("Generator Build Command - OnExecute");
 
-                _builder.Create();
+                _builder.Create(config);
 
                 return 0;
             }

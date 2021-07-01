@@ -7,10 +7,14 @@ namespace OurPresence.Modeller.CoreFunctionalTests
         public static Domain.Module CreateProject()
         {
             var mb = Fluent.Module.Create("Nhvr", "Rcms[Rcms]");
-            
+
             return mb
                 .AddEnumStates()
                 .AddEnumSourceSystemTypes()
+
+                .AddActivityLog()
+                .AddAddressBook()
+                .AddAlert()
 
                 .AddEvent()
                 .AddEventAddress()
@@ -124,7 +128,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Build
 
                 .AddRelationship()
-                    .Relate("Event", new []{"Id"}, "EventAddress", new []{"EventId"}).Build
+                    .Relate("Event", new[] { "Id" }, "EventAddress", new[] { "EventId" }).Build
                 .Build;
         }
 
@@ -211,7 +215,85 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
                 .AddField("SourceVehicleId").MaxLength(64).Build
                 .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
-                .AddRelationship().Relate("Vehicle", new []{"Id"}, "Event", new []{"VehicleId"}).Build
+                .AddRelationship().Relate("Vehicle", new[] { "Id" }, "Event", new[] { "VehicleId" }).Build
+                .Build;
+        }
+
+        private static Fluent.ModuleBuilder AddActivityLog(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddModel("ActivityLog")
+                .WithDefaultKey()
+                .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
+                .AddField("ActivityType").MaxLength(128).Build
+                .AddField("EventId").Build
+                .AddField("IsManualEntry").DataType(DataTypes.Bool).Default("true").Build
+                .AddField("StartDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EndDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("Lights").DataType(DataTypes.Bool).Build
+                .AddField("Sirens").DataType(DataTypes.Bool).Build
+                .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
+                .AddField("Remarks").Build
+                .AddField("ShiftId").Build
+                .AddField("UserId").Build
+                .AddRelationship().Relate("Event", new[] { "Id" }, "ActivityLog", new[] { "EventId" }).Build
+                .AddRelationship().Relate("Shift", new[] { "Id" }, "ActivityLog", new[] { "ShiftId" }).Build
+                .AddRelationship().Relate("User", new[] { "Id" }, "ActivityLog", new[] { "UserId" }).Build
+                .AddIndex("IDX_ActivityItem_EndDate").AddField("EndDate").Build.Build
+                .Build;
+        }
+
+        private static Fluent.ModuleBuilder AddAddressBook(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddModel("AddressBook")
+                .WithDefaultKey()
+                .AddField("UnitType").MaxLength(128).Build
+                .AddField("UnitNumber").MaxLength(128).Build
+                .AddField("StreetName").MaxLength(128).Build
+                .AddField("StreetType").MaxLength(128).Build
+                .AddField("StreetSuffix").MaxLength(128).Build
+                .AddField("StreetNumberFirst").MaxLength(128).Build
+                .AddField("StreetNumberFirstPrefix").MaxLength(128).Build
+                .AddField("StreetNumberFirstSuffix").MaxLength(128).Build
+                .AddField("StreetNumberLast").MaxLength(128).Build
+                .AddField("StreetNumberLastPrefix").MaxLength(128).Build
+                .AddField("StreetNumberLastSuffix").MaxLength(128).Build
+                .AddField("StreetDirectional").MaxLength(128).Build
+                .AddField("PostalContainer").MaxLength(128).Build
+                .AddField("PostalCode").MaxLength(128).Build
+                .AddField("Suburb").MaxLength(128).Build
+                .AddField("Country").MaxLength(128).Build
+                .AddField("FullAddress").MaxLength(128).Build
+                .Build;
+        }
+
+        private static Fluent.ModuleBuilder AddAlert(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddModel("Alert")
+                .WithDefaultKey()
+                .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
+                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("Level").DataType(DataTypes.Int32).Build
+                .AddField("Title").MaxLength(128).Build
+                .AddField("Remarks").Build
+                .AddField("ReasonForDeletion").MaxLength(128).Build
+                .AddField("Silent").DataType(DataTypes.Bool).Build
+                .AddField("SilentNotifyContactId").DataType(DataTypes.Int32).Build
+                .AddField("PersonId").DataType(DataTypes.Int32).Build
+                .AddField("VehicleId").DataType(DataTypes.Int32).Build
+                .AddField("OrganisationId").DataType(DataTypes.Int32).Build
+                .AddField("UserId").DataType(DataTypes.Int32).Build
+                .AddField("SystemId").DataType(DataTypes.Int32).Build
+                .AddField("IsManualEntry").DataType(DataTypes.Bool).Build
+
+                .AddRelationship().Relate("Organisation", new[] { "Id" }, "Alert", new[] { "OrganisationId" }).Build
+                .AddRelationship().Relate("Person", new[] { "Id" }, "Alert", new[] { "PersonId" }).Build
+                .AddRelationship().Relate("User", new[] { "Id" }, "Alert", new[] { "UserId" }).Build
+                .AddRelationship().Relate("Vehicle", new[] { "Id" }, "Alert", new[] { "VehicleId" }).Build
                 .Build;
         }
     }

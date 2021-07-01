@@ -21,24 +21,15 @@ namespace BusinessLogicBehaviour
 
         public IOutput Create()
         {
-            if(_model == null)
+            var files = new FileGroup();
+            if(_model is null)
             {
-                var files = new FileGroup();
-                _module.Models.ForEach(m => files.AddFileGroup(AddModelFiles(m)));
-                return files;
+                _module.Models.ForEach(m => m.Behaviours.ForEach(b => files.AddFile((IFile)new BehaviourRequestGenerator(Settings, _module, m, b).Create())));
             }
             else
             {
-                return AddModelFiles(_model);
+                _model.Behaviours.ForEach(b => files.AddFile((IFile)new BehaviourRequestGenerator(Settings, _module, _model, b).Create()));
             }
-        }
-
-        private IFileGroup AddModelFiles(Model model)
-        {
-            var files = new FileGroup(model.Name.ToString());
-
-            model.Behaviours.ForEach(b =>  new BusinessLogicBehaviourAction.Generator(Settings, _module, _model, b));
-
             return files;
         }
     }

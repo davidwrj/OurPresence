@@ -55,7 +55,9 @@ namespace EntityFrameworkClass
             }
             if (_model.HasBusinessKey() != null)
             {
-                sb.I(3).Al($"builder.HasIndex(i => i.{_model.HasBusinessKey()?.Name}).IsUnique().ForSqlServerIsClustered();");
+                sb.I(3).A($"builder.HasIndex(i => i.{_model.HasBusinessKey()?.Name})");
+                sb.I(4).A($".IsUnique()");
+                sb.I(4).A($".IsClustered(); ");
             }
 
             if (Settings.SupportRegen)
@@ -71,7 +73,7 @@ namespace EntityFrameworkClass
             sb.I(1).Al("}");
             sb.Al("}");
 
-            return new File($"{_model.Name}Configuration.cs", content: sb.ToString());
+            return new File($"{_model.Name}Configuration.cs", path:"Configurations", content: sb.ToString());
         }
 
         public ISettings Settings { get; }

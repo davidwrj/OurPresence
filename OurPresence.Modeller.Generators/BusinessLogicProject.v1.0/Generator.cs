@@ -1,6 +1,8 @@
-﻿using OurPresence.Modeller.Domain;
+﻿using DomainProject;
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Interfaces;
 using System;
+using System.Linq;
 
 namespace BusinessLogicProject
 {
@@ -19,6 +21,7 @@ namespace BusinessLogicProject
         public IOutput Create()
         {
             var project = (IProject)new ProjectFile(Settings, _module).Create();
+            project.FileGroups.First().AddFile((IFile)new UsingsFile(Settings).Create());
             project.AddFileGroup((IFileGroup)new BusinessLogicBehaviour.Generator(Settings, _module, null).Create());
             return project;
         }

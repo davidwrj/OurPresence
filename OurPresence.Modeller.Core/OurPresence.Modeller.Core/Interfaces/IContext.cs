@@ -12,6 +12,6 @@ namespace OurPresence.Modeller.Interfaces
 
         ISettings Settings { get; }
 
-        ValidationResult ValidateConfiguration();
+        ValidationResult ValidateConfiguration(IGeneratorConfiguration configuration);
     }
 }

@@ -19,11 +19,11 @@ namespace OurPresence.Modeller.Generator.Outputs
             _logger = logger;
         }
 
-        public void Create()
+        public void Create(IGeneratorConfiguration configuration)
         {
             _logger.LogInformation("Generation started: {Started}",DateTime.Now.ToShortTimeString());
-
-            var result = _context.ValidateConfiguration();
+            
+            var result = _context.ValidateConfiguration(configuration);
             if (!result.IsValid)
             {
                 _logger.LogInformation("Generation failed: {Failed}",DateTime.Now.ToShortTimeString());

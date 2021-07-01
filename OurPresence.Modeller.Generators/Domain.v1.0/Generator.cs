@@ -21,6 +21,7 @@ namespace DomainProject
         {
             var project = (IProject)new ProjectFile(Settings, _module).Create();
             project.FileGroups.First().AddFile((IFile)new NestingFile(Settings).Create());
+            project.FileGroups.First().AddFile((IFile)new UsingsFile(Settings).Create());
             project.AddFileGroup((IFileGroup)new DomainClass.Generator(Settings, _module, null).Create());
             return project;
         }

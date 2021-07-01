@@ -1,4 +1,5 @@
-﻿using OurPresence.Modeller.Domain;
+﻿using DomainProject;
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Interfaces;
 using System;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace ApplicationProject
             var project = (IProject)new ProjectFile(Settings, _module).Create();
             project.FileGroups.First().AddFile((IFile)new ProgramFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new StartupFile(Settings, _module).Create());
+            project.FileGroups.First().AddFile((IFile)new UsingsFile(Settings).Create());
             project.FileGroups.First().AddFile((IFile)new ExceptionHandlerFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new EnvelopeFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new EnvelopeResultFile(Settings, _module).Create());

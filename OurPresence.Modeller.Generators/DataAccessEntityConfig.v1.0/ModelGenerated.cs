@@ -72,7 +72,7 @@ namespace EntityFrameworkClass
             }
             filename += ".cs";
 
-            return new File(filename, sb.ToString(), canOverwrite: Settings.SupportRegen);
+            return new File(filename, sb.ToString(), path: "Models", canOverwrite: Settings.SupportRegen);
         }
 
         public ISettings Settings { get; }

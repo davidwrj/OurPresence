@@ -46,7 +46,7 @@ namespace BusinessLogicBehaviour
             }
             filename += ".cs";
 
-            return new File(filename, sb.ToString(), path: _behaviour.Name.ToString(), canOverwrite: Settings.SupportRegen);
+            return new File(filename, sb.ToString(), path: System.IO.Path.Combine(_model.Name.ToString(), _behaviour.Name.ToString()), canOverwrite: Settings.SupportRegen);
         }
 
         public ISettings Settings { get; }

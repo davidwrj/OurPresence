@@ -21,22 +21,17 @@ namespace EntityFrameworkClass
 
         public IOutput Create()
         {
-            var files = new FileGroup("Data");
-            var configs = new FileGroup("Configurations");
-            var models = new FileGroup("Models");
-
-            files.AddFileGroup(configs);
-            files.AddFileGroup(models);
+            var files = new FileGroup();
 
             if (_model == null)
             {
-                _module.Models.ForEach(a => configs.AddFile((IFile)new ConfigGenerated(Settings, _module, a).Create()));
-                _module.Models.ForEach(a => models.AddFile((IFile)new ModelGenerated(Settings, _module, a).Create()));
+                _module.Models.ForEach(a => files.AddFile((IFile)new ConfigGenerated(Settings, _module, a).Create()));
+                _module.Models.ForEach(a => files.AddFile((IFile)new ModelGenerated(Settings, _module, a).Create()));
             }
             else
             {
-                configs.AddFile((IFile)new ConfigGenerated(Settings, _module, _model).Create());
-                models.AddFile((IFile)new ModelGenerated(Settings, _module, _model).Create());
+                files.AddFile((IFile)new ConfigGenerated(Settings, _module, _model).Create());
+                files.AddFile((IFile)new ModelGenerated(Settings, _module, _model).Create());
             }
             return files;
         }

@@ -16,8 +16,8 @@ namespace OurPresence.Modeller.Generator
 
         public IOutput Create(IContext context)
         {
-            var result = context.ValidateConfiguration();
-            if (!result.IsValid) return new EmptyOutput();
+            //var result = context.ValidateConfiguration();
+            //if (!result.IsValid) return new EmptyOutput();
 
             _logger.LogInformation("Context", context.ToString());
 
