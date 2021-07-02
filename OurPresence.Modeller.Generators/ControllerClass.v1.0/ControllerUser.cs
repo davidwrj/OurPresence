@@ -28,15 +28,12 @@ namespace ControllerClass
             var sb = new StringBuilder();
             sb.Al($"namespace {_module.Namespace}.Controllers");
             sb.Al("{");
-            sb.I(1).A($"partial class {_model.Name}Controller : ApplicationController");
+            sb.I(1).Al($"partial class {_model.Name}Controller : ApplicationController");
             sb.I(1).Al("{");
-            sb.B();
             sb.I(2).Al($"public {_model.Name}Controller(IMediator mediator)");
             sb.I(2).Al("{");
             sb.I(3).Al("_mediator = mediator;");
             sb.I(2).Al("}");
-
-
 
 
             sb.I(1).Al("}");

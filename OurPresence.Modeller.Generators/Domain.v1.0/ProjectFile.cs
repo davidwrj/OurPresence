@@ -20,7 +20,7 @@ namespace DomainProject
 
         public IOutput Create()
         {
-            var projectName = _module.Namespace+".Domain";
+            var projectName = _module.Namespace+".Common";
             var project = (IProject)new Project(projectName) { Path = System.IO.Path.Combine("src", projectName) };
 
             var files = new FileGroup();
@@ -31,15 +31,10 @@ namespace DomainProject
             sb.B();
             sb.I(1).Al("<PropertyGroup>");
             sb.I(2).Al("<TargetFramework>net5.0</TargetFramework>");
-            sb.I(2).Al("<Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>");
             sb.I(2).Al($"<RootNamespace>{project.Name}</RootNamespace>");
             sb.I(2).Al("<LangVersion>Preview</LangVersion>");
             sb.I(2).Al($"<Nullable>enable</Nullable>");
             sb.I(1).Al("</PropertyGroup>");
-            sb.B();
-            sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<PackageReference Include=\"OurPresence.Core\" Version=\"{Settings.Packages.GetVersion("OurPresence.Core", "1.0.0")}\" />");
-            sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");
 

@@ -20,7 +20,7 @@ namespace EntityFrameworkProject
 
         public IOutput Create()
         {
-            var projectName = _module.Namespace;
+            var projectName = _module.Namespace+ ".DataAccess";
             var project = (IProject)new Project(projectName) { Path = System.IO.Path.Combine("src", projectName) };
 
             var files = new FileGroup();

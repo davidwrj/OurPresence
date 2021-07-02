@@ -5,6 +5,7 @@ file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
         <TargetFramework>net5.0</TargetFramework>
         <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
         <RootNamespace>Mizrael.SuperSafeBank.BusinessLogic</RootNamespace>
+        <LangVersion>Preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
@@ -14,4 +15,36 @@ file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
     </ItemGroup>
 
 </Project>
+
+file[1] = usings.cs
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using MediatR;
+
+file[2] = Account\Withdraw\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
+{
+    partial record AccountWithdraw : IRequest<Account, 
+}
+
+file[3] = Account\Deposit\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
+{
+    partial record AccountDeposit : IRequest<Account, 
+}
 

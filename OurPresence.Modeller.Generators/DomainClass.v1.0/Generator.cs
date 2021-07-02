@@ -8,9 +8,9 @@ namespace DomainClass
     public class Generator : IGenerator
     {
         private readonly Module _module;
-        private readonly Model _model;
+        private readonly Model? _model;
 
-        public Generator(ISettings settings, Module module, Model model)
+        public Generator(ISettings settings, Module module, Model? model)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _module = module ?? throw new ArgumentNullException(nameof(module));
@@ -21,7 +21,7 @@ namespace DomainClass
 
         public IOutput Create()
         {
-            var files = new FileGroup();
+            var files = new FileGroup("Domain");
             if (_model == null)
             {
                 _module.Models.ForEach(m => AddModelFiles(files, m));

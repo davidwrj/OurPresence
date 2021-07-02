@@ -1,15 +1,15 @@
-file[0] = Mizrael.SuperSafeBank.csproj
+file[0] = Mizrael.SuperSafeBank.DataAccess.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
-        <RootNamespace>Mizrael.SuperSafeBank</RootNamespace>
+        <RootNamespace>Mizrael.SuperSafeBank.DataAccess</RootNamespace>
+        <LangVersion>Preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,4 +19,93 @@ file[0] = Mizrael.SuperSafeBank.csproj
     </ItemGroup>
 
 </Project>
+
+file[1] = usings.cs
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Mizrael.SuperSafeBank.Data.Models
+
+file[2] = Configurations\AccountConfiguration.cs
+namespace Mizrael.SuperSafeBank.Data.Configurations
+{
+    public partial class AccountConfiguration : IEntityTypeConfiguration<Account>
+    {
+        public void Configure(EntityTypeBuilder<Account> builder)
+        {
+            builder.ToTable("Account");
+            builder.Property(p => p.OwnerId)
+                .IsRequired();
+            builder.Property(p => p.Balance)
+                .IsRequired();
+            builder.HasIndex(i => i.OwnerId)                .IsUnique()                .IsClustered();             OnConfigurePartial(builder);
+        }
+        partial void OnConfigurePartial(EntityTypeBuilder<Account> builder);
+    }
+}
+
+file[3] = Configurations\CustomerConfiguration.cs
+namespace Mizrael.SuperSafeBank.Data.Configurations
+{
+    public partial class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    {
+        public void Configure(EntityTypeBuilder<Customer> builder)
+        {
+            builder.ToTable("Customer");
+            builder.Property(p => p.FirstName)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder.Property(p => p.LastName)
+                .IsRequired()
+                .HasMaxLength(100);
+            builder.Property(p => p.Email)
+                .IsRequired()
+                .HasMaxLength(256);
+            builder.HasIndex(i => i.Email)                .IsUnique()                .IsClustered();             OnConfigurePartial(builder);
+        }
+        partial void OnConfigurePartial(EntityTypeBuilder<Customer> builder);
+    }
+}
+
+file[4] = Models\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Mizrael.SuperSafeBank.Data.Models
+{
+    partial class Account : AuditableBase
+    {
+        public Guid OwnerId { get; private set; }
+
+        public Money Balance { get; private set; }
+
+    }
+}
+
+file[5] = Models\Customer.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Mizrael.SuperSafeBank.Data.Models
+{
+    partial class Customer : AuditableBase
+    {
+        public string FirstName { get; private set; }
+
+        public string LastName { get; private set; }
+
+        public string Email { get; private set; }
+
+    }
+}
 

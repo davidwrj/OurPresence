@@ -29,7 +29,7 @@ namespace DomainClass
                 {
                     var sb = new StringBuilder();
 
-                    sb.Al($"namespace {_module.Namespace}.Events");
+                    sb.Al($"namespace {_module.Namespace}.Common.Domain.Events");
                     sb.Al("{");
                     sb.I(1).Al($"public class {behaviour.Event} : BaseDomainEvent<{_model.Name}, Guid>");
                     sb.I(1).Al("{");

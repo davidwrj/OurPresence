@@ -1,8 +1,8 @@
 file[0] = Controllers\AccountController.cs
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    partial class AccountController : ApplicationController    {
-
+    partial class AccountController : ApplicationController
+    {
         public AccountController(IMediator mediator)
         {
             _mediator = mediator;
@@ -10,7 +10,7 @@ namespace Mizrael.SuperSafeBank.Controllers
     }
 }
 
-file[1] = Controllers\Account.generated.cs
+file[1] = Controllers\AccountController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -22,8 +22,8 @@ using Mizrael.SuperSafeBank.Account.Deposit;
 
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    [Route("api/[controller]/[Action]")]
-    partial class AccountController : ApplicationController
+    [Route("api/[controller]/[action]")]
+    partial class AccountController
     {
         private readonly IMediator _mediator;
 

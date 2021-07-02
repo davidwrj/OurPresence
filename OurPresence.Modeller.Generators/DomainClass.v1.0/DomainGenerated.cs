@@ -34,7 +34,7 @@ namespace DomainClass
             {
                 sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
             }
-            sb.Al($"namespace {_module.Namespace}.Domain");
+            sb.Al($"namespace {_module.Namespace}.Common.Domain");
             sb.Al("{");
             sb.I(1).A(Settings.SupportRegen ? $"partial class {_model.Name}" : $"public class {_model.Name}");
             var entity = string.Empty;
@@ -145,7 +145,7 @@ namespace DomainClass
             }
             filename += ".cs";
 
-            return new File(filename, sb.ToString(), path: "Domain", canOverwrite: Settings.SupportRegen);
+            return new File(filename, sb.ToString(), canOverwrite: Settings.SupportRegen);
         }
 
         public ISettings Settings { get; }

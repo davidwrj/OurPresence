@@ -22,13 +22,15 @@ namespace ApplicationProject
         {
             var project = (IProject)new ProjectFile(Settings, _module).Create();
             project.FileGroups.First().AddFile((IFile)new ProgramFile(Settings, _module).Create());
+            project.FileGroups.First().AddFile((IFile)new AppSettingsFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new StartupFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new UsingsFile(Settings).Create());
             project.FileGroups.First().AddFile((IFile)new ExceptionHandlerFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new EnvelopeFile(Settings, _module).Create());
             project.FileGroups.First().AddFile((IFile)new EnvelopeResultFile(Settings, _module).Create());
 
-            project.AddFileGroup((IFileGroup)new ControllerClass.Generator(Settings, _module, null).Create());
+            var controllers = project.AddFileGroup((IFileGroup)new ControllerClass.Generator(Settings, _module, null).Create());
+            controllers.AddFile((IFile)new ApplicationControllerFile(Settings, _module).Create());
 
             return project;
         }

@@ -13,6 +13,2200 @@
             },
             "fields": [
                 {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActivityType"
+                },
+                {
+                    "name": "EventId"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "IsManualEntry"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "StartDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EndDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Light"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Siren"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "UrgentDutyDriving"
+                },
+                {
+                    "name": "Remark"
+                },
+                {
+                    "name": "ShiftId"
+                },
+                {
+                    "name": "UserId"
+                }
+            ],
+            "indexes": [
+                {
+                    "fields": [
+                        {
+                            "name": "EndDate"
+                        }
+                    ],
+                    "name": "IDXActivityitemEnddate"
+                }
+            ],
+            "relationships": [
+                {
+                    "principalModel": "Event",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ActivityLog",
+                    "dependantFields": [
+                        "EventId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "Shift",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ActivityLog",
+                    "dependantFields": [
+                        "ShiftId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "User",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ActivityLog",
+                    "dependantFields": [
+                        "UserId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "ActivityLog"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "maxLength": 128,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Suburb"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FullAddress"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "AddressBook"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectFrom"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectTo"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "Level"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Title"
+                },
+                {
+                    "name": "Remark"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ReasonForDeletion"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Silent"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SilentNotifyContactId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "UserId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "IsManualEntry"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "Organisation",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "Alert",
+                    "dependantFields": [
+                        "OrganisationId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "Person",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "Alert",
+                    "dependantFields": [
+                        "PersonId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "User",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "Alert",
+                    "dependantFields": [
+                        "UserId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "Vehicle",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "Alert",
+                    "dependantFields": [
+                        "VehicleId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "Alert"
+        },
+        {
+            "key": {
+                "fields": []
+            },
+            "hasAudit": false,
+            "fields": [
+                {
+                    "dataType": "Int64",
+                    "name": "Id"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "OperationTime"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Command"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ExtraInfo"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "StartTime"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EndTime"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StatusMessage"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "AzureSqlmaintenanceLog"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "maxLength": 128,
+                    "name": "Url"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StatusId"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "StartedOn"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "StoppedOn"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "BatchProcess"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "TypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StatusId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EntityId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EntityTypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "BatchProcessId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ResultMessage"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "StartedOn"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "StoppedOn"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "BatchProcessTask"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "TaskId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StatusId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EntityId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EntityTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Reference"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ResultMessage"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "",
+                    "dependantFields": [
+                        "Id"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "BatchProcessTaskItem"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "TypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NoticeNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "MediaId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateIssued"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "NoticeIssuedDate"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "JuroEntry"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceAction"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleRegistrationStateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "VehicleRegistrationNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PersonGivenName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PersonFamilyName"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "PersonDateOfBirth"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PersonLicenceNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonLicenceStateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "OrganisationAcn"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "OrganisationIncorporatedNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "TypeId"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateIssued"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateCleared"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NoticeNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Line1"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Line2"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Line3"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Line4"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceActionImport"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LocalGovernmentArea"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LgashortTitle"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Near"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "CommonName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Remark"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Altitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Longitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Latitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Elevation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FloorNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Suburb"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FullAddress"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceActionLocation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Category"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectiveDate"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ExpiryDate"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ShortTitle"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Title"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "SortOrder"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "DemeritPoint"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SuspensionPeriod"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Fine"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ReportingCategory"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LegislationReference"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PenaltyDescription"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "InfringementCategory"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "InfringementIssueCategory"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LongDescription"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Levy"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Code"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceManifestId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "CausePermitFlag"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "CausePermit"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "InspectorDetail"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceActionOffence"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "RegisteredAddressId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AlternateAddressId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Email"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ServiceEmail"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "HasServiceRegisteredAddress"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "HasServiceAlternateAddress"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ServiceInPerson"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceActionService"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LocalGovernmentArea"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LgashortTitle"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Near"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "CommonName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Remark"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Altitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Longitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Latitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Elevation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FloorNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Suburb"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FullAddress"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceActionServiceAddress"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StatusId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Reason"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "RecordedDate"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ToProceedOffence"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "GivenName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FamilyName"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "UserId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "HomeLocation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "ComplianceAction",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ComplianceActionStatus",
+                    "dependantFields": [
+                        "ComplianceActionId"
+                    ],
+                    "dependantType": "One"
+                },
+                {
+                    "principalModel": "User",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ComplianceActionStatus",
+                    "dependantFields": [
+                        "UserId"
+                    ],
+                    "dependantType": "One"
+                }
+            ],
+            "behaviours": [],
+            "name": "ComplianceActionStatus"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NameCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Action"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActionCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Information"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "ComplianceAction",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ComplianceActionSubComponent",
+                    "dependantFields": [
+                        "ComplianceActionId"
+                    ],
+                    "dependantType": "One"
+                }
+            ],
+            "behaviours": [],
+            "name": "ComplianceActionSubComponent"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "precision": 1,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Odometer"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "VehicleUnattended"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "NumberPlateDefective"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LabelAttached"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "RoadWorthyRequired"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ConditionOfUse"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NoticeToBeCleared"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "VehicleNotUsed"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleNotUsedDay"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleNotUsedHour"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "InspectionType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NatureOfInspection"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InspectionTypeFull"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InspectionTypePartial"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InspectionTypeOther"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InspectionTypeAudit"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DefectCategoryMinor"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DefectCategoryMajor"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DefectCategoryMajorGrounded"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DefectCategorySelfClearing"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "VicRoadsInspection"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InfringementIssued"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "HowIsTheVehicleDefective"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ClearanceInspection"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ClearedAt"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ClearanceOther"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ClearedReferenceId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Direction"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MethodOfRemoval"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "ComplianceAction",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ComplianceDefect",
+                    "dependantFields": [
+                        "ComplianceActionId"
+                    ],
+                    "dependantType": "One"
+                },
+                {
+                    "principalModel": "ComplianceDefect",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ComplianceDefectSubComponent",
+                    "dependantFields": [
+                        "ComplianceDefectId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "ComplianceDefect"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceDefectId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NameCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Action"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActionCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Information"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "ComplianceDefect",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "ComplianceDefectSubComponent",
+                    "dependantFields": [
+                        "ComplianceDefectId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "ComplianceDefectSubComponent"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonDriverId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonOperatorId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationOperatorId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassLimit"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DimensionLimit"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Unsafe"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "NotSecured"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Severity"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "SecureLoad"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ReduceGvm"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "ReduceGvmnumber"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "AdjustAxleGroup"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AdjustAxleGroupNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AdjustAxleGroupBy"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "AdjustVehicleDimension"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AdjustVehicleDimensionLength"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AdjustVehicleDimensionWidth"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AdjustVehicleDimensionHeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AdjustVehicleDimensionOverhang"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NominatedPlace"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Condition"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceDirectionDimension"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonDriverId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonOperatorId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationOperatorId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceDirectionDimensionsHardcopy"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WorkDiaryPageNumber"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ReasonableBeliefFatigue"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ReasonableBeliefMaximumWorkTime"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ReasonableBeliefMinimumRestTime"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ReasonableBeliefNoWorkDiary"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "SuitableRestPlace"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SuitableRestPlaceSuburb"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SuitableRestPlaceOther"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "WorkReduced"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "WorkReducedHour"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "WorkReducedMinute"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ContinuousRest"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ContinuousRestFrom"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ContinuousRestTo"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "RestOrBreak"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "RestOrBreakHour"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "RestOrBreakMinute"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "RestOrBreakCommencing"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceDirectionFatigue"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DescriptionOfBreach"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DirectedTo"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DirectedToLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MovementCondition"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceDirectionToRectify"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Category"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "OnRoad"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "TopicOfInterest"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "TimeTakenHour"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "TimeTakenMinute"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceEducation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DetectedSpeed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AllegedSpeed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "PermittedSpeed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Information"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActionInvolvement"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Employer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Occupation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceFormalCaution"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "UseTheVehicle"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "PermittedTheUse"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Other"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActionInvolvement"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceFormalWarning"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DetectedSpeed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AllegedSpeed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "PermittedSpeed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Information"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActionInvolvement"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Employer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Occupation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "AssociateWeighingNotice"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleOccupant"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Pplate"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceInfringement"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "UseTheVehicle"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "PermittedTheUse"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Other"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActionInvolvement"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceOfficialWarning"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ReferenceNumber"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceReportForProsecution"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ComplianceActionId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "UseTheVehicle"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "PermittedTheUse"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Other"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ComplianceWAFormalCaution"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
                     "dataType": "UniqueIdentifier",
                     "nullable": true,
                     "name": "CreationId"
@@ -333,6 +2527,1370 @@
             },
             "fields": [
                 {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "VehicleStandardsInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "VehicleStandardsPassed"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleStandardsLevel"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "VehicleStandardsEquipment"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "PermitInspected"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Permit"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassGenerateWeighingNotice"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingNoticeMediaRef"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingNoticeNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassAxleConfiguration"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingCategory"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingMethod"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassBridgeCalibratedZeroed"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassConformingSite"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassDriverViewedWeighing"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassOperatorCourseOfTrade"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassDriverStatusToOwner"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassDriverInstructedBy"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassPublicTrade"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassGrossEndAndEnd"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWitnessName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWitnessPhoneNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassComment"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "WeighingDataStepCount"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataExtremeAxleDistance"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataCombinedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataDefaultAllowedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataAllowedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataMassAdjustment"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataMassAdjustmentPerStep"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataPercentageOfAllowed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WeighingDataPermit"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WeighBridgeName"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "WeighBridgeExpiry"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "WeighBridgeConfigureDate"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WeighBridgeLocation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DimensionsInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DimensionsPassed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsHeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsWidth"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsLength"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsRearOverhang"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DimensionsMeasuringInstrument"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DimensionsProjection"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DimensionsSingleVehicle"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LoadRestraintInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LoadRestraintPassed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LoadRestraintNote"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventInspection"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventInspectionId"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DefaultMassAdjustment"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "MassAdjustment"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "WheelCount"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "CombinedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "PercentageOfAllowed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AllowedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DefaultAllowedWeight"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventInspectionAxleGroup"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventInspectionAxleGroupId"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AxleOffset"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "OffSide"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "NearSide"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "CombinedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DistanceBetweenAxle"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "IsCustom"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventInspectionAxleWeight"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventInspectionAxleWeightId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Number"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "Expiry"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventInspectionAxleWeightPwd"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventInspectionId"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "FoundWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "PercentageOfAllowed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "MassAdjustment"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AllowedWeight"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventInspectionMovement"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Type"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Uri"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventMediaExternal"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "UniqueIdentifier",
+                    "name": "ReferenceId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MimeType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FileName"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InPerson"
+                },
+                {
+                    "dataType": "UniqueIdentifier",
+                    "name": "ThumbnailReferenceId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventMedium"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "TextValue"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "RecordedDate"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventNote"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "UserId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventOfficerTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "HomeStation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "AuthorityNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FirstName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Surname"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventOfficer"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventOrganisationTypeId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventOrganisation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventPersonTypeId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventPerson"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Presented"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "OtherReason"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Other"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LessThan100km"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LessThan160km"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LessThan12ton"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Type"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "BookNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PageNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "IssueDate"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ElectronicId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventPersonDiary"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Regulated"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "AppearFatigued"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DriverHomeLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "RecordKeeperName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "RecordKeeperLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "AccreditationNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Scheduler"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventPersonFatigue"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventVehicleTypeId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventVehicle"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Code"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventVehicleConcession"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Type"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventVehicleCondition"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Module"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Number"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ExpiryDate"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "EventVehicleScheme"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "InterceptNumber"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Intercept"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleRegistrationStateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "VehicleRegistrationNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PersonGivenName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PersonFamilyName"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "PersonDateOfBirth"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PersonLicenceNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonLicenceStateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "OrganisationAcn"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "OrganisationIncorporatedNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "InterceptNumber"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateIssued"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "VehicleInfo"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NoticesDescription"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "HasNotice"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "InterceptImport"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "InterceptId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "IndustrySector"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StartingLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "EndLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Consignor"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ConsignorLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Loader"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LoaderLocation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Consignee"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ConsigneeLocation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "PhotosProvided"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DriverEmployer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LoadedGood"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LoadedOther"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Odometer"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "InterceptJourney"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "InterceptId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "InterceptOrganisation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "InterceptId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "InterceptPerson"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "InterceptId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "InterceptVehicle"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "hasAudit": false,
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "LogTypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "LogLevelTypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "LogComponentTypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "UserId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SignInName"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EventDate"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DeviceId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Message"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Exception"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "RequestId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "RequestBody"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ResponseBody"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "Duration"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ClientVersion"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Log"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "NoticeTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StartSequenceNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "LastSequenceNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "NumberFormat"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PerCallAllocation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "NoticeNumber"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
                     "dataType": "UniqueIdentifier",
                     "nullable": true,
                     "name": "CreationId"
@@ -352,21 +3910,6 @@
                     "name": "TypeId"
                 },
                 {
-                    "maxLength": 255,
-                    "nullable": true,
-                    "name": "NevdisId"
-                },
-                {
-                    "maxLength": 255,
-                    "nullable": true,
-                    "name": "VicCustomerNo"
-                },
-                {
-                    "dataType": "Int32",
-                    "nullable": true,
-                    "name": "ParentId"
-                },
-                {
                     "default": "true",
                     "dataType": "Bool",
                     "name": "Active"
@@ -381,6 +3924,293 @@
             "relationships": [],
             "behaviours": [],
             "name": "Organisation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AddressTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LocalGovernmentArea"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LgashortTitle"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Near"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "CommonName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Remark"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Altitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Longitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Latitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Elevation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FloorNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Suburb"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FullAddress"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "OrganisationAddress"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "ContactTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ContactValue"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "OrganisationContact"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Acn"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "IncorporatedNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "TypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Status"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateOfRegistration"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AlertLevel"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AssociatedAlertLevel"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "OrganisationDetail"
         },
         {
             "key": {
@@ -433,22 +4263,693 @@
                     "maxLength": 64,
                     "nullable": true,
                     "name": "SourcePersonId"
-                },
-                {
-                    "maxLength": 255,
-                    "nullable": true,
-                    "name": "NevdisId"
-                },
-                {
-                    "dataType": "Int32",
-                    "nullable": true,
-                    "name": "ParentId"
                 }
             ],
             "indexes": [],
             "relationships": [],
             "behaviours": [],
             "name": "Person"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AddressTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LocalGovernmentArea"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LgashortTitle"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Near"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "CommonName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Remark"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Altitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Longitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Latitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Elevation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FloorNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Suburb"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FullAddress"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "PersonAddress"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "ContactTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ContactValue"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "PersonContact"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "GivenName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FamilyName"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateOfBirth"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MiddleName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Gender"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AlertLevel"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AssociatedAlertLevel"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LicenceType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LicenceNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LicenceClass"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LicenceCondition"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LicenceProduced"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "LicenceEffective"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "LicenceExpiry"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LicenceStatus"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "LicenceStateId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "InternationalLicence"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Jurisdiction"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ProfileImageUrl"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "PersonDetail"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "SourceId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Postcode1"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Locality"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "State"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Postcode"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "CategoryId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Code"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectFrom"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectTo"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SortOrder"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ReferenceDatum"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ReferenceDataId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Value"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ReferenceDataAttribute"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "maxLength": 128,
+                    "name": "Code"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Description"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SortOrder"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "SystemUse"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ReferenceDataCategory"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ReferenceDataId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "ReferenceDataCategoryId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceValue"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ReferenceDataMapping"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "StartTime"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EndTime"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EstimatedEndTime"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Operation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Remark"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "Shift"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "ShiftId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "UserId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "ShiftOfficer"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "maxLength": 128,
+                    "name": "SignInName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FirstName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Surname"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "UserOrganisation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "PrimaryRole"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ActingRole"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ActingFrom"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "ActingTo"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "IsAdmin"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ManageBasicManifest"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "ManageAdvancedManifest"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectFrom"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "EffectTo"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "AuthorityNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "HomeStation"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Region"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Team"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "User"
         },
         {
             "key": {
@@ -634,6 +5135,496 @@
             ],
             "behaviours": [],
             "name": "VehicleDetail"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Latitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Longitude"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Direction"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "SampleTakenOn"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceReference"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "VehicleFootprint"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Latitude"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "Longitude"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Direction"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "SampleTakenOn"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "FullAddress"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleRegistrationStateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "VehicleRegistrationNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceType"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceReference"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "SourceRecordId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "VehicleFootprintImport"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "VehicleOrganisation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "PersonId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "VehicleId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "VehiclePerson"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "UniqueIdentifier",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "WainterceptId"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DangerousGoodsInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DangerousGoodsHardCopy"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsJuroEntry"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsClassOrDivisionOfDg"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsProduct"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsLoadDescriptor"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsPrimeContractorName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsPrimeContractorAddress"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsPrimeContractorPhone"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsConsignorName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsConsignorAddress"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsConsignorPhone"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsInspectionType"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DangerousGoodsRemediationNoticeIssued"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsRemediationNoticeNumber"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DangerousGoodsPhotosAttached"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsComment"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DangerousGoodsMediaRef"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "VehicleStandardsInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "VehicleStandardsPassed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "VehicleStandardsEquipment"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassInspected"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingNoticeMediaRef"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingNoticeNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassAxleConfiguration"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingCategory"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWeighingMethod"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassBridgeCalibratedZeroed"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassConformingSite"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "MassDriverViewedWeighing"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassOperatorCourseOfTrade"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassDriverStatusToOwner"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassDriverInstructedBy"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassPublicTrade"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassGrossEndAndEnd"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWitnessName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassWitnessPhoneNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "MassComment"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "WeighingDataStepCount"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataExtremeAxleDistance"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataCombinedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataDefaultAllowedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataAllowedWeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataMassAdjustment"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataMassAdjustmentPerStep"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "WeighingDataPercentageOfAllowed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WeighingDataPermit"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WeighBridgeName"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "WeighBridgeExpiry"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "WeighBridgeConfigureDate"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "WeighBridgeLocation"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DimensionsInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "DimensionsPassed"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsHeight"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsWidth"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsLength"
+                },
+                {
+                    "precision": 2,
+                    "scale": 18,
+                    "dataType": "Decimal",
+                    "name": "DimensionsRearOverhang"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DimensionsProjection"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "DimensionsOtherDimension"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LoadRestraintInspected"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "LoadRestraintPassed"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LoadRestraintNote"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "WAEventInspection"
         }
     ],
     "enumerations": [

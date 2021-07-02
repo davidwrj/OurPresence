@@ -37,9 +37,14 @@ namespace ControllerClass
             sb.B();
             sb.Al($"namespace {_module.Namespace}.Controllers");
             sb.Al("{");
-            sb.I(1).Al("[Route(\"api/[controller]/[Action]\")]");
-            sb.I(1).A(Settings.SupportRegen ? $"partial class {_model.Name}" : $"public class {_model.Name}");
-            sb.Al("Controller : ApplicationController");
+            sb.I(1).Al("[Route(\"api/[controller]/[action]\")]");
+            sb.I(1).A(Settings.SupportRegen ? "partial" : "public");
+            sb.A($" class {_model.Name}Controller");
+            if(!Settings.SupportRegen)
+            {
+                sb.A(": ApplicationController");
+            }
+            sb.B();            
             sb.I(1).Al("{");
             sb.I(2).Al("private readonly IMediator _mediator;");
 
@@ -67,7 +72,8 @@ namespace ControllerClass
             sb.Al("}");
 
             var filename = _model.Name.ToString();
-            if (Settings.SupportRegen)
+            filename += "Controller";
+            if(Settings.SupportRegen)
             {
                 filename += ".generated";
             }

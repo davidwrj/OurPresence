@@ -1,27 +1,506 @@
-file[0] = Mizrael.SuperSafeBank.Domain.csproj
+file[0] = Mizrael.SuperSafeBank.Common.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
-        <RootNamespace>Mizrael.SuperSafeBank.Domain</RootNamespace>
+        <RootNamespace>Mizrael.SuperSafeBank.Common</RootNamespace>
+        <LangVersion>Preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
-    </ItemGroup>
-
 </Project>
 
-file[1] = .filenesting.json
+file[1] = Entity.cs
+namespace Mizrael.SuperSafeBank.Common
+{
+    public abstract class Entity<TId>
+    {
+        public virtual TId Id { get; protected set; }
+
+        protected Entity()
+        {
+        }
+
+        protected Entity(TId id)
+        {
+            Id = id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Entity<TId> other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return ValueObject.GetUnproxiedType(this) != ValueObject.GetUnproxiedType(other)
+                ? false
+                : Id.Equals(default(TId)) || other.Id.Equals(default(TId)) ? false : Id.Equals(other.Id);
+        }
+
+        public static bool operator ==(Entity<TId> a, Entity<TId> b)
+        {
+            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+        }
+
+        public static bool operator !=(Entity<TId> a, Entity<TId> b)
+        {
+            return !(a == b);
+        }
+
+        public override int GetHashCode()
+        {
+            return (ValueObject.GetUnproxiedType(this).ToString() + Id).GetHashCode();
+        }
+    }
+
+    public abstract class Entity : Entity<long>
+    {
+        protected Entity()
+        {
+        }
+
+        protected Entity(long id)
+            : base(id)
+        {
+        }
+    }
+}
+
+file[2] = EnumValueObject.cs
+namespace Mizrael.SuperSafeBank.Common
+{
+    public abstract class EnumValueObject<TEnumeration, TId> : ValueObject
+            where TEnumeration : EnumValueObject<TEnumeration, TId>
+            where TId : struct
+    {
+        private static readonly Dictionary<TId, TEnumeration> EnumerationsById = GetEnumerations().ToDictionary(e => e.Id);
+        private static readonly Dictionary<string, TEnumeration> EnumerationsByName = GetEnumerations().ToDictionary(e => e.Name);
+
+        protected EnumValueObject(TId id, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("The name cannot be null or empty");
+            }
+
+            Id = id;
+            Name = name;
+        }
+
+        public TId Id { get; protected set; }
+
+        public string Name { get; protected set; }
+
+        public static bool operator ==(EnumValueObject<TEnumeration, TId> a, TId b)
+        {
+            return a is null ? false : a.Id.Equals(b);
+        }
+
+        public static bool operator !=(EnumValueObject<TEnumeration, TId> a, TId b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator ==(TId a, EnumValueObject<TEnumeration, TId> b)
+        {
+            return b == a;
+        }
+
+        public static bool operator !=(TId a, EnumValueObject<TEnumeration, TId> b)
+        {
+            return !(b == a);
+        }
+
+        public static Maybe<TEnumeration> FromId(TId id)
+        {
+            return EnumerationsById.ContainsKey(id)
+                ? EnumerationsById[id]
+                : null;
+        }
+
+        public static Maybe<TEnumeration> FromName(string name)
+        {
+            return EnumerationsByName.ContainsKey(name)
+                ? EnumerationsByName[name]
+                : null;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Id;
+        }
+
+        private static TEnumeration[] GetEnumerations()
+        {
+            var enumerationType = typeof(TEnumeration);
+
+            return enumerationType
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                .Where(info => info.FieldType == typeof(TEnumeration))
+                .Select(info => (TEnumeration)info.GetValue(null))
+                .ToArray();
+        }
+    }
+
+    public abstract class EnumValueObject<TEnumeration> : ValueObject
+        where TEnumeration : EnumValueObject<TEnumeration>
+    {
+        private static readonly Dictionary<string, TEnumeration> Enumerations = GetEnumerations().ToDictionary(e => e.Id);
+
+        protected EnumValueObject(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentException("The enum key cannot be null or empty");
+            }
+
+            Id = id;
+        }
+
+        public static IEnumerable<TEnumeration> All = Enumerations.Values;
+
+        public virtual string Id { get; protected set; }
+
+        public static bool operator ==(EnumValueObject<TEnumeration> a, string b)
+        {
+            return a is null && b is null ? true : a is null || b is null ? false : a.Id.Equals(b);
+        }
+
+        public static bool operator !=(EnumValueObject<TEnumeration> a, string b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator ==(string a, EnumValueObject<TEnumeration> b)
+        {
+            return b == a;
+        }
+
+        public static bool operator !=(string a, EnumValueObject<TEnumeration> b)
+        {
+            return !(b == a);
+        }
+
+        public static Maybe<TEnumeration> FromId(string id)
+        {
+            return Enumerations.ContainsKey(id)
+                ? Enumerations[id]
+                : null;
+        }
+
+        public static bool Is(string possibleKey) => All.Select(e => e.Id).Contains(possibleKey);
+
+        public override string ToString() => Id;
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Id;
+        }
+
+        private static TEnumeration[] GetEnumerations()
+        {
+            var enumerationType = typeof(TEnumeration);
+
+            return enumerationType
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                .Where(info => info.FieldType == typeof(TEnumeration))
+                .Select(info => (TEnumeration)info.GetValue(null))
+                .ToArray();
+        }
+    }
+}
+
+file[3] = SimpleValueObject.cs
+namespace Mizrael.SuperSafeBank.Common
+{
+    public abstract class SimpleValueObject<T> : ValueObject
+    {
+        public T Value { get; }
+
+        protected SimpleValueObject(T value)
+        {
+            Value = value;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
+
+        public override string ToString()
+        {
+            return Value?.ToString();
+        }
+
+        public static implicit operator T(SimpleValueObject<T> valueObject)
+        {
+            return valueObject == null ? default : valueObject.Value;
+        }
+    }
+}
+
+file[4] = ValueObject.cs
+namespace Mizrael.SuperSafeBank.Common
+{
+    [Serializable]
+    public abstract class ValueObject<T>
+            where T : ValueObject<T>
+    {
+        private int? _cachedHashCode;
+
+        public override bool Equals(object obj)
+        {
+            var valueObject = obj as T;
+
+            return valueObject is null
+                ? false
+                : ValueObject.GetUnproxiedType(this) != ValueObject.GetUnproxiedType(obj) ? false : EqualsCore(valueObject);
+        }
+
+        protected abstract bool EqualsCore(T other);
+
+        public override int GetHashCode()
+        {
+            if (!_cachedHashCode.HasValue)
+            {
+                _cachedHashCode = GetHashCodeCore();
+            }
+
+            return _cachedHashCode.Value;
+        }
+
+        protected abstract int GetHashCodeCore();
+
+        public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
+        {
+            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+        }
+
+        public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
+        {
+            return !(a == b);
+        }
+    }
+
+    public abstract class ValueObject : IComparable, IComparable<ValueObject>
+    {
+        private int? _cachedHashCode;
+
+        protected abstract IEnumerable<object> GetEqualityComponents();
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (GetUnproxiedType(this) != GetUnproxiedType(obj))
+            {
+                return false;
+            }
+
+            var valueObject = (ValueObject)obj;
+
+            return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
+        }
+
+        public override int GetHashCode()
+        {
+            if (!_cachedHashCode.HasValue)
+            {
+                _cachedHashCode = GetEqualityComponents()
+                    .Aggregate(1, (current, obj) =>
+                    {
+                        unchecked
+                        {
+                            return current * 23 + (obj?.GetHashCode() ?? 0);
+                        }
+                    });
+            }
+
+            return _cachedHashCode.Value;
+        }
+
+        public virtual int CompareTo(object obj)
+        {
+            var thisType = GetUnproxiedType(this);
+            var otherType = GetUnproxiedType(obj);
+
+            if (thisType != otherType)
+            {
+                return string.Compare(thisType.ToString(), otherType.ToString(), StringComparison.Ordinal);
+            }
+
+            var other = (ValueObject)obj;
+
+            var components = GetEqualityComponents().ToArray();
+            var otherComponents = other.GetEqualityComponents().ToArray();
+
+            for (var i = 0; i < components.Length; i++)
+            {
+                var comparison = CompareComponents(components[i], otherComponents[i]);
+                if (comparison != 0)
+                {
+                    return comparison;
+                }
+            }
+
+            return 0;
+        }
+
+        private int CompareComponents(object object1, object object2)
+        {
+            if (object1 is null && object2 is null)
+            {
+                return 0;
+            }
+
+            if (object1 is null)
+            {
+                return -1;
+            }
+
+            return object2 is null
+                ? 1
+                : object1 is IComparable comparable1 && object2 is IComparable comparable2
+                ? comparable1.CompareTo(comparable2)
+                : object1.Equals(object2) ? 0 : -1;
+        }
+
+        public virtual int CompareTo(ValueObject other)
+        {
+            return CompareTo(other as object);
+        }
+
+        public static bool operator ==(ValueObject a, ValueObject b)
+        {
+            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+        }
+
+        public static bool operator !=(ValueObject a, ValueObject b)
+        {
+            return !(a == b);
+        }
+
+        internal static Type GetUnproxiedType(object obj)
+        {
+            const string EFCoreProxyPrefix = "Castle.Proxies.";
+            const string NHibernateProxyPostfix = "Proxy";
+
+            var type = obj.GetType();
+            var typeString = type.ToString();
+
+            return typeString.Contains(EFCoreProxyPrefix) || typeString.EndsWith(NHibernateProxyPostfix) ? type.BaseType : type;
+        }
+    }
+}
+
+file[5] = Error.cs
+namespace Mizrael.SuperSafeBank.Common
+{
+    public sealed class Error : ValueObject
+    {
+        private const string Separator = "||";
+
+        public string Code { get; }
+        public string Message { get; }
+
+        internal Error(string code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Code;
+        }
+
+        public string Serialize()
+        {
+            return $"{Code}{Separator}{Message}";
+        }
+
+        public static Error Deserialize(string serialized)
+        {
+            if (serialized == "A non-empty request body is required.")
+            {
+                return Errors.General.ValueIsRequired();
+            }
+
+            var data = serialized.Split(new[] { Separator }, StringSplitOptions.RemoveEmptyEntries);
+
+            return data.Length < 2 ? throw new Exception($"Invalid error serialization: '{serialized}'") : new Error(data[0], data[1]);
+        }
+    }
+
+    public static class Errors
+    {
+        public static class Vehicle
+        {
+            public static Error InvalidSearch(string error)
+            {
+                return new Error("invalid.vehicle.search", $"Invalid vehicle search. {error}");
+            }
+        }
+
+        public static class General
+        {
+            public static Error NotFound(long? id = null)
+            {
+                var forId = id == null ? "" : $" for Id '{id}'";
+                return new Error("record.not.found", $"Record not found{forId}");
+            }
+
+            public static Error ValueIsInvalid() =>
+                new Error("value.is.invalid", "Value is invalid");
+
+            public static Error ValueIsRequired() =>
+                new Error("value.is.required", "Value is required");
+
+            public static Error InvalidLength(string name = null)
+            {
+                var label = name == null ? " " : " " + name + " ";
+                return new Error("invalid.string.length", $"Invalid{label}length");
+            }
+
+            public static Error CollectionIsTooSmall(int min, int current)
+            {
+                return new Error(
+                    "collection.is.too.small",
+                    $"The collection must contain {min} items or more. It contains {current} items.");
+            }
+
+            public static Error CollectionIsTooLarge(int max, int current)
+            {
+                return new Error(
+                    "collection.is.too.large",
+                    $"The collection must contain {max} items or more. It contains {current} items.");
+            }
+
+            public static Error InternalServerError(string message)
+            {
+                return new Error("internal.server.error", message);
+            }
+        }
+    }
+}
+
+file[6] = .filenesting.json
 {
     "help": "https://go.microsoft.com/fwlink/?linkid=866610",
     "root": false,
 
     "dependentFileProviders": {
         "add": { 
-            "allExtensions": {
+            "pathSegment": {
                 "add": {
                     ".*": [
                         ".cs"
@@ -32,11 +511,55 @@ file[1] = .filenesting.json
     }
 }
 
-file[2] = Domain\Account.cs
+file[7] = usings.cs
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Reflection;
+global using System.Text.RegularExpressions;
+global using System.Threading.Tasks;
+
+file[8] = Domain\Email.cs
+using Rcms.Common.EntityTypes;
+
+namespace Rcms.Common.Domain
+{
+    public class Email : ValueObject
+    {
+        public string Value { get; }
+
+        private Email(string value)
+        {
+            Value = value;
+        }
+
+        public static Result<Email, Error> Create(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return Errors.General.ValueIsRequired();
+            }
+
+            var email = input.Trim();
+
+            return email.Length > 500
+                ? Errors.General.InvalidLength()
+                : Regex.IsMatch(email, @"^(.+)@(.+)$") == false ? Errors.General.ValueIsInvalid() : new Email(email);
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
+    }
+}
+
+file[9] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-namespace Mizrael.SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     public partial class Account
     {
@@ -63,14 +586,14 @@ namespace Mizrael.SuperSafeBank.Domain
     }
 }
 
-file[3] = Domain\Account.generated.cs
+file[10] = Domain\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-namespace Mizrael.SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     partial class Account : BaseAggregateRoot<Account, Guid>
     {
@@ -84,8 +607,8 @@ namespace Mizrael.SuperSafeBank.Domain
     }
 }
 
-file[4] = Events\Withdrawal.cs
-namespace Mizrael.SuperSafeBank.Events
+file[11] = Domain\Events\Withdrawal.cs
+namespace Mizrael.SuperSafeBank.Common.Domain.Events
 {
     public class Withdrawal : BaseDomainEvent<Account, Guid>
     {
@@ -101,8 +624,8 @@ namespace Mizrael.SuperSafeBank.Events
     }
 }
 
-file[5] = Events\Deposit.cs
-namespace Mizrael.SuperSafeBank.Events
+file[12] = Domain\Events\Deposit.cs
+namespace Mizrael.SuperSafeBank.Common.Domain.Events
 {
     public class Deposit : BaseDomainEvent<Account, Guid>
     {
@@ -118,11 +641,11 @@ namespace Mizrael.SuperSafeBank.Events
     }
 }
 
-file[6] = Domain\Customer.cs
+file[13] = Domain\Customer.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-namespace Mizrael.SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     public partial class Customer
     {
@@ -146,14 +669,14 @@ namespace Mizrael.SuperSafeBank.Domain
     }
 }
 
-file[7] = Domain\Customer.generated.cs
+file[14] = Domain\Customer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-namespace Mizrael.SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     partial class Customer : BaseAggregateRoot<Customer, Guid>
     {

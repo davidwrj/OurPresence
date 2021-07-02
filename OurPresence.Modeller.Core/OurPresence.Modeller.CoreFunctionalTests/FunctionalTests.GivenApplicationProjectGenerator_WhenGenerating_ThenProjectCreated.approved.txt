@@ -1,16 +1,22 @@
 file[0] = Mizrael.SuperSafeBank.Application.csproj
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
         <RootNamespace>Mizrael.SuperSafeBank.Application</RootNamespace>
+        <LangVersion>Preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
-        <PackageReference Include="MediatR" Version="9.0.0" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Mizrael.SuperSafeBank.BusinessLogic\Mizrael.SuperSafeBank.BusinessLogic" />
+        <ProjectReference Include="..\Mizrael.SuperSafeBank.Common\Mizrael.SuperSafeBank.Common.csproj" />
     </ItemGroup>
 
 </Project>
@@ -34,7 +40,25 @@ namespace Mizrael.SuperSafeBank.Application
     }
 }
 
-file[2] = Startup.cs
+file[2] = appsettings.json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*"
+}
+
+file[3] = Startup.cs
+using Mizrael.SuperSafeBank.BusinessLogic.Vehicle.Search;
+using Mizrael.SuperSafeBank.BusinessLogic.Vehicle;
+using Mizrael.SuperSafeBank.Common.EntityTypes;
+using Mizrael.SuperSafeBank.DataAccess.Rcms;
+using Mizrael.SuperSafeBank.DataAccess.Nevdis;
+
 namespace Mizrael.SuperSafeBank.Application
 {
     public class Startup
@@ -45,10 +69,85 @@ namespace Mizrael.SuperSafeBank.Application
         }
 
         public IConfiguration Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(AccountWithdrawRequest).Assembly);
+
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;
+                })
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblyContaining<AccountWithdrawRequestValidator>();
+                });
+
+            //todo: Add your service registrations here
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mizrael Super Safe Bank", Version = "v1" });
+            });
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mizrael Super Safe Bank v1"));
+            }
+
+            app.UseMiddleware<ExceptionHandler>();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
+
+    public class ModelStateValidator
+    {
+        public static IActionResult ValidateModelState(ActionContext context)
+        {
+            (string fieldName, ModelStateEntry entry) = context.ModelState.First(x => x.Value.Errors.Count > 0);
+            string errorSerialized = entry.Errors.First().ErrorMessage;
+
+            Error error = Error.Deserialize(errorSerialized);
+            Envelope envelope = Envelope.Error(error, fieldName);
+            var envelopeResult = new EnvelopeResult(envelope, HttpStatusCode.BadRequest);
+
+            return envelopeResult;
+        }
     }
 }
 
-file[3] = ExceptionHandler.cs
+file[4] = usings.cs
+global using System;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using System.Net;
+global using System.Text.Json;
+global using FluentValidation.AspNetCore;
+global using MediatR;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.ModelBinding;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.OpenApi.Models;
+
+file[5] = ExceptionHandler.cs
 namespace Mizrael.SuperSafeBank.Application
 {
     public sealed class ExceptionHandler
@@ -88,7 +187,7 @@ namespace Mizrael.SuperSafeBank.Application
     }
 }
 
-file[4] = Envelop.cs
+file[6] = Envelop.cs
 namespace Mizrael.SuperSafeBank.Application
 {
     public class Envelope
@@ -120,7 +219,7 @@ namespace Mizrael.SuperSafeBank.Application
     }
 }
 
-file[5] = EnvelopResult.cs
+file[7] = EnvelopResult.cs
 namespace Mizrael.SuperSafeBank.Application
 {
     public sealed class EnvelopeResult : IActionResult
@@ -145,11 +244,11 @@ namespace Mizrael.SuperSafeBank.Application
     }
 }
 
-file[6] = Controllers\AccountController.cs
+file[8] = Controllers\AccountController.cs
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    partial class AccountController : ApplicationController    {
-
+    partial class AccountController : ApplicationController
+    {
         public AccountController(IMediator mediator)
         {
             _mediator = mediator;
@@ -157,7 +256,7 @@ namespace Mizrael.SuperSafeBank.Controllers
     }
 }
 
-file[7] = Controllers\Account.generated.cs
+file[9] = Controllers\AccountController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -169,8 +268,8 @@ using Mizrael.SuperSafeBank.Account.Deposit;
 
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    [Route("api/[controller]/[Action]")]
-    partial class AccountController : ApplicationController
+    [Route("api/[controller]/[action]")]
+    partial class AccountController
     {
         private readonly IMediator _mediator;
 
@@ -190,11 +289,11 @@ namespace Mizrael.SuperSafeBank.Controllers
     }
 }
 
-file[8] = Controllers\CustomerController.cs
+file[10] = Controllers\CustomerController.cs
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    partial class CustomerController : ApplicationController    {
-
+    partial class CustomerController : ApplicationController
+    {
         public CustomerController(IMediator mediator)
         {
             _mediator = mediator;
@@ -202,7 +301,7 @@ namespace Mizrael.SuperSafeBank.Controllers
     }
 }
 
-file[9] = Controllers\Customer.generated.cs
+file[11] = Controllers\CustomerController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -212,10 +311,51 @@ file[9] = Controllers\Customer.generated.cs
 
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    [Route("api/[controller]/[Action]")]
-    partial class CustomerController : ApplicationController
+    [Route("api/[controller]/[action]")]
+    partial class CustomerController
     {
         private readonly IMediator _mediator;
     }
+}
+
+file[12] = Controllers\ApplicationController.cs
+using Mizrael.SuperSafeBank.Common;
+using Mizrael.SuperSafeBank.Common.EntityTypes;
+
+namespace Mizrael.SuperSafeBank.Controllers
+{
+        [ApiController]
+        public abstract class ApplicationController : ControllerBase
+        {
+            protected new IActionResult Ok(object result = null)
+            {
+                return new EnvelopeResult(Envelope.Ok(result), HttpStatusCode.OK);
+            }
+
+            protected IActionResult NotFound(Error error, string invalidField = null)
+            {
+                return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.NotFound);
+            }
+
+            protected IActionResult Error(Error error, string invalidField = null)
+            {
+                return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.BadRequest);
+            }
+
+            protected IActionResult FromResult(Result result)
+            {
+                return result.IsSuccess ? Ok() : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
+            }
+
+            protected IActionResult FromResult<T>(Result<T> result)
+            {
+                return result.IsSuccess ? Ok(result.Value) : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
+            }
+
+            protected IActionResult FromResult<T>(Result<T, Error> result)
+            {
+                return result.IsSuccess ? Ok(result.Value) : Error(result.Error);
+            }
+        }
 }
 

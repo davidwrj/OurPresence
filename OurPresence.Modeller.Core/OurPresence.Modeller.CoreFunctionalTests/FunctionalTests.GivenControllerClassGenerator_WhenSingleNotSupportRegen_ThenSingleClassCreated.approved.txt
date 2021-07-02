@@ -1,4 +1,4 @@
-file[0] = Controllers\Account.cs
+file[0] = Controllers\AccountController.cs
 // Created using OurPresence.Modeller template 'Controller Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -7,8 +7,8 @@ using Mizrael.SuperSafeBank.Account.Deposit;
 
 namespace Mizrael.SuperSafeBank.Controllers
 {
-    [Route("api/[controller]/[Action]")]
-    public class AccountController : ApplicationController
+    [Route("api/[controller]/[action]")]
+    public class AccountController: ApplicationController
     {
         private readonly IMediator _mediator;
 

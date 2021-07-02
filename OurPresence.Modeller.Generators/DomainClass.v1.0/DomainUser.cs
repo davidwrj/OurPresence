@@ -8,7 +8,6 @@ using System.Text;
 
 namespace DomainClass
 {
-
     public class DomainUser : IGenerator
     {
         private readonly Module _module;
@@ -34,7 +33,7 @@ namespace DomainClass
 
             var sb = new StringBuilder();
             sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
-            sb.Al($"namespace {_module.Namespace}.Domain");
+            sb.Al($"namespace {_module.Namespace}.Common.Domain");
             sb.Al("{");
             sb.I(1).Al($"public partial class {_model.Name}");
             sb.I(1).Al("{");
@@ -82,7 +81,7 @@ namespace DomainClass
             sb.I(1).Al("}");
             sb.Al("}");
 
-            return new File(_model.Name + ".cs", sb.ToString(), path: "Domain");
+            return new File(_model.Name + ".cs", sb.ToString());
         }
     }
 }

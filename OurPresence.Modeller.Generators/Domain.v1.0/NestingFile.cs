@@ -23,7 +23,7 @@ namespace DomainProject
             sb.B();
             sb.I(1).Al($"\"dependentFileProviders\": {{");
             sb.I(2).Al($"\"add\": {{ ");
-            sb.I(3).Al($"\"allExtensions\": {{");
+            sb.I(3).Al($"\"pathSegment\": {{");
             sb.I(4).Al($"\"add\": {{");
             sb.I(5).Al($"\".*\": [");
             sb.I(6).Al($"\".cs\"");

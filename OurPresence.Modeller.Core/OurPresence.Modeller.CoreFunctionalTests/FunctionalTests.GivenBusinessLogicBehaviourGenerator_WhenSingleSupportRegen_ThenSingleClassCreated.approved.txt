@@ -1,1 +1,24 @@
-file is empty
+file[0] = Account\Withdraw\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
+{
+    partial record AccountWithdraw : IRequest<Account, 
+}
+
+file[1] = Account\Deposit\Account.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
+{
+    partial record AccountDeposit : IRequest<Account, 
+}
+

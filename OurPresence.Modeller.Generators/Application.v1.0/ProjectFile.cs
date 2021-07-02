@@ -27,19 +27,24 @@ namespace ApplicationProject
             project.AddFileGroup(files);
 
             var sb = new StringBuilder();
-            sb.Al("<Project Sdk=\"Microsoft.NET.Sdk\">");
+            sb.Al("<Project Sdk=\"Microsoft.NET.Sdk.Web\">");
             sb.B();
             sb.I(1).Al("<PropertyGroup>");
             sb.I(2).Al("<TargetFramework>net5.0</TargetFramework>");
-            sb.I(2).Al("<Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>");
             sb.I(2).Al($"<RootNamespace>{project.Name}</RootNamespace>");
             sb.I(2).Al("<LangVersion>Preview</LangVersion>");
             sb.I(2).Al($"<Nullable>enable</Nullable>");
             sb.I(1).Al("</PropertyGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<PackageReference Include=\"OurPresence.Core\" Version=\"{Settings.Packages.GetVersion("OurPresence.Core", "1.0.0")}\" />");
-            sb.I(2).Al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.Packages.GetVersion("MediatR", "9.0.0")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"FluentValidation.AspNetCore\" Version=\"{Settings.Packages.GetVersion("FluentValidation.AspNetCore", "10.2.3")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"MediatR.Extensions.Microsoft.DependencyInjection\" Version=\"{Settings.Packages.GetVersion("MediatR.Extensions.Microsoft.DependencyInjection", "9.0.0")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"{Settings.Packages.GetVersion("Swashbuckle.AspNetCore", "6.1.4")}\" />");
+            sb.I(1).Al("</ItemGroup>");
+            sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.BusinessLogic\\{_module.Company}.{_module.Project}.BusinessLogic\" />");
+            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Common\\{_module.Company}.{_module.Project}.Common.csproj\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");

@@ -2,7 +2,7 @@ file[0] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-namespace Mizrael.SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     public partial class Account
     {
@@ -36,7 +36,7 @@ file[1] = Domain\Account.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
-namespace Mizrael.SuperSafeBank.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     partial class Account : BaseAggregateRoot<Account, Guid>
     {
@@ -50,8 +50,8 @@ namespace Mizrael.SuperSafeBank.Domain
     }
 }
 
-file[2] = Events\Withdrawal.cs
-namespace Mizrael.SuperSafeBank.Events
+file[2] = Domain\Events\Withdrawal.cs
+namespace Mizrael.SuperSafeBank.Common.Domain.Events
 {
     public class Withdrawal : BaseDomainEvent<Account, Guid>
     {
@@ -67,8 +67,8 @@ namespace Mizrael.SuperSafeBank.Events
     }
 }
 
-file[3] = Events\Deposit.cs
-namespace Mizrael.SuperSafeBank.Events
+file[3] = Domain\Events\Deposit.cs
+namespace Mizrael.SuperSafeBank.Common.Domain.Events
 {
     public class Deposit : BaseDomainEvent<Account, Guid>
     {
