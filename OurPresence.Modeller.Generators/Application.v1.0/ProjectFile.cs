@@ -43,7 +43,7 @@ namespace ApplicationProject
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.BusinessLogic\\{_module.Company}.{_module.Project}.BusinessLogic\" />");
+            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.BusinessLogic\\{_module.Company}.{_module.Project}.BusinessLogic.csproj\" />");
             sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Common\\{_module.Company}.{_module.Project}.Common.csproj\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();

@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using Newtonsoft.Json;
+using OurPresence.Modeller.Domain.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

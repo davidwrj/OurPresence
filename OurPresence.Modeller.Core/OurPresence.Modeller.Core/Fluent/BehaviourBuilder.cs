@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using OurPresence.Modeller.Domain;
 
 namespace OurPresence.Modeller.Fluent
 {
@@ -22,17 +23,24 @@ namespace OurPresence.Modeller.Fluent
             return this;
         }
 
-        public BehaviourBuilder<T> AltersDomain(bool value = true)
+        public BehaviourBuilder<T> AltersDomain(BehaviourVerb value)
         {
-            Instance.AltersDomain = value;
+            Instance.Verb = value;
             return this;
         }
 
-        public FieldBuilder<BehaviourBuilder<T>> AddField(string name)
+        public BehaviourRequestBuilder<BehaviourBuilder<T>> AddRequest(string name)
         {
-            var field = Field<BehaviourBuilder<T>>.Create(this, name);
-            Instance.Fields.Add(field.Instance);
-            return field;
+            var request = BehaviourRequest<BehaviourBuilder<T>>.Create(this, name);
+            Instance.Request = request.Instance;
+            return request;
+        }
+   
+        public BehaviourResponseBuilder<BehaviourBuilder<T>> AddResponse(string name)
+        {
+            var response = BehaviourResponse<BehaviourBuilder<T>>.Create(this, name);
+            Instance.Response = response.Instance;
+            return response;
         }
     }
 }

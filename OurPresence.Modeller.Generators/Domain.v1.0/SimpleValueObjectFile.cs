@@ -37,7 +37,7 @@ namespace DomainProject
             sb.I(3).Al("yield return Value;");
             sb.I(2).Al("}");
             sb.B();
-            sb.I(2).Al("public override string ToString()");
+            sb.I(2).Al("public override string? ToString()");
             sb.I(2).Al("{");
             sb.I(3).Al("return Value?.ToString();");
             sb.I(2).Al("}");

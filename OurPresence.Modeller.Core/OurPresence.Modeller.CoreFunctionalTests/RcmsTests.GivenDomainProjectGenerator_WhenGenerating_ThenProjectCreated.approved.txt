@@ -8,6 +8,10 @@ file[0] = Nhvr.Rcms.Common.csproj
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="CSharpFunctionalExtensions" Version="2.17.0" />
+    </ItemGroup>
+
 </Project>
 
 file[1] = Entity.cs
@@ -233,7 +237,7 @@ namespace Nhvr.Rcms.Common
             yield return Value;
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return Value?.ToString();
         }
@@ -254,13 +258,9 @@ namespace Nhvr.Rcms.Common
     {
         private int? _cachedHashCode;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            var valueObject = obj as T;
-
-            return valueObject is null
-                ? false
-                : ValueObject.GetUnproxiedType(this) != ValueObject.GetUnproxiedType(obj) ? false : EqualsCore(valueObject);
+            return obj is T valueObject && ValueObject.GetUnproxiedType(this) == ValueObject.GetUnproxiedType(obj) && EqualsCore(valueObject);
         }
 
         protected abstract bool EqualsCore(T other);
@@ -271,7 +271,6 @@ namespace Nhvr.Rcms.Common
             {
                 _cachedHashCode = GetHashCodeCore();
             }
-
             return _cachedHashCode.Value;
         }
 
@@ -279,7 +278,7 @@ namespace Nhvr.Rcms.Common
 
         public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
         {
-            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+            return a is null && b is null || a is not null && b is not null && a.Equals(b);
         }
 
         public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
@@ -294,7 +293,7 @@ namespace Nhvr.Rcms.Common
 
         protected abstract IEnumerable<object> GetEqualityComponents();
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null)
             {
@@ -328,7 +327,7 @@ namespace Nhvr.Rcms.Common
             return _cachedHashCode.Value;
         }
 
-        public virtual int CompareTo(object obj)
+        public virtual int CompareTo(object? obj)
         {
             var thisType = GetUnproxiedType(this);
             var otherType = GetUnproxiedType(obj);
@@ -338,14 +337,13 @@ namespace Nhvr.Rcms.Common
                 return string.Compare(thisType.ToString(), otherType.ToString(), StringComparison.Ordinal);
             }
 
-            var other = (ValueObject)obj;
-
+            var other = obj as ValueObject;
             var components = GetEqualityComponents().ToArray();
-            var otherComponents = other.GetEqualityComponents().ToArray();
+            var otherComponents = other?.GetEqualityComponents().ToArray();
 
             for (var i = 0; i < components.Length; i++)
             {
-                var comparison = CompareComponents(components[i], otherComponents[i]);
+                var comparison = CompareComponents(components[i], otherComponents?[i]);
                 if (comparison != 0)
                 {
                     return comparison;
@@ -355,33 +353,27 @@ namespace Nhvr.Rcms.Common
             return 0;
         }
 
-        private int CompareComponents(object object1, object object2)
+        private static int CompareComponents(object? object1, object? object2)
         {
-            if (object1 is null && object2 is null)
-            {
-                return 0;
-            }
-
-            if (object1 is null)
-            {
-                return -1;
-            }
-
-            return object2 is null
+            return object1 is null && object2 is null
+                ? 0;
+                : object1 is null
+                ? -1;
+                : object2 is null
                 ? 1
                 : object1 is IComparable comparable1 && object2 is IComparable comparable2
                 ? comparable1.CompareTo(comparable2)
                 : object1.Equals(object2) ? 0 : -1;
         }
 
-        public virtual int CompareTo(ValueObject other)
+        public virtual int CompareTo(ValueObject? other)
         {
             return CompareTo(other as object);
         }
 
         public static bool operator ==(ValueObject a, ValueObject b)
         {
-            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+            return a is null && b is null || a is not null && b is not null && a.Equals(b);
         }
 
         public static bool operator !=(ValueObject a, ValueObject b)
@@ -389,7 +381,7 @@ namespace Nhvr.Rcms.Common
             return !(a == b);
         }
 
-        internal static Type GetUnproxiedType(object obj)
+        internal static Type? GetUnproxiedType(object? obj)
         {
             const string EFCoreProxyPrefix = "Castle.Proxies.";
             const string NHibernateProxyPostfix = "Proxy";
@@ -519,6 +511,7 @@ global using System.Text;
 global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using System.Threading.Tasks;
+global using CSharpFunctionalExtensions;
 
 file[8] = Domain\Email.cs
 using Rcms.Common.EntityTypes;
@@ -590,6 +583,26 @@ namespace Nhvr.Rcms.Common.Domain
             UserId = userId;
         }
 
+        public partial void Officer()
+        {
+            // todo: Add Officer behaviour here
+        }
+
+        public partial void Add(DateTimeOffset dateAdded, DateTimeOffset startTime, string activityType)
+        {
+            // todo: Add Add behaviour here
+        }
+
+        public partial void Update(DateTimeOffset endTime, string remark, bool? light, bool? siren, bool? urgentDutyDriving)
+        {
+            // todo: Add Update behaviour here
+        }
+
+        public partial void Delete(int id)
+        {
+            // todo: Add Delete behaviour here
+        }
+
         protected override void Apply(IDomainEvent<Guid> @event)
         {
             // todo: Apply events
@@ -633,6 +646,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string ShiftId { get; private set; }
 
         public string UserId { get; private set; }
+
+        public partial void Officer();
+
+        public partial void Add(DateTimeOffset dateAdded, DateTimeOffset startTime, string activityType);
+
+        public partial void Update(DateTimeOffset endTime, string remark, bool? light, bool? siren, bool? urgentDutyDriving);
+
+        public partial void Delete(int id);
     }
 }
 
@@ -2146,7 +2167,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ComplianceDirectionDimension
     {
-        public ComplianceDirectionDimension(int complianceActionId, int personDriverId, int personOperatorId, int organisationOperatorId, bool massLimit, bool dimensionLimit, bool unsafe, bool notSecured, string severity, bool secureLoad, bool reduceGvm, decimal reduceGvmnumber, bool adjustAxleGroup, int adjustAxleGroupNumber, int adjustAxleGroupBy, bool adjustVehicleDimension, decimal adjustVehicleDimensionLength, decimal adjustVehicleDimensionWidth, decimal adjustVehicleDimensionHeight, decimal adjustVehicleDimensionOverhang, string nominatedPlace, string condition, bool active, int systemId)
+        public ComplianceDirectionDimension(int complianceActionId, int personDriverId, int personOperatorId, int organisationOperatorId, bool massLimit, bool dimensionLimit, bool @unsafe, bool notSecured, string severity, bool secureLoad, bool reduceGvm, decimal reduceGvmnumber, bool adjustAxleGroup, int adjustAxleGroupNumber, int adjustAxleGroupBy, bool adjustVehicleDimension, decimal adjustVehicleDimensionLength, decimal adjustVehicleDimensionWidth, decimal adjustVehicleDimensionHeight, decimal adjustVehicleDimensionOverhang, string nominatedPlace, string condition, bool active, int systemId)
         {
             if(string.IsNullOrWhiteSpace(severity))
                 throw new ArgumentException("Must include a value for Severity");
@@ -2160,7 +2181,7 @@ namespace Nhvr.Rcms.Common.Domain
             OrganisationOperatorId = organisationOperatorId;
             MassLimit = massLimit;
             DimensionLimit = dimensionLimit;
-            Unsafe = unsafe;
+            @Unsafe = @unsafe;
             NotSecured = notSecured;
             Severity = severity;
             SecureLoad = secureLoad;
@@ -2210,7 +2231,7 @@ namespace Nhvr.Rcms.Common.Domain
 
         public bool DimensionLimit { get; private set; }
 
-        public bool Unsafe { get; private set; }
+        public bool @Unsafe { get; private set; }
 
         public bool NotSecured { get; private set; }
 
@@ -2881,15 +2902,15 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[65] = Domain\Event.cs
+file[65] = Domain\@Event.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    public partial class Event
+    public partial class @Event
     {
-        public Event(Guid? creationId, Guid? statusId, Guid? organisationId, Guid? reviewedUserId, DateTimeOffset? reviewedDateTime, DateTimeOffset? createDate, DateTimeOffset? completedDate, DateTimeOffset? reportedOnDate, DateTimeOffset? tookPlaceStartDate, DateTimeOffset? tookPlaceEndDate, DateTimeOffset? vehicleReleaseDate, bool? vehicleGrounded, string? operationName, string? methodOfIntercept, string? directionOfTravel, bool? light, bool? siren, bool? urgentDutyDriving, bool? complianceActionOffenceReport, bool? complianceActionOffenceReportReference, bool active, SourceSystemTypes systemId)
+        public @Event(Guid? creationId, Guid? statusId, Guid? organisationId, Guid? reviewedUserId, DateTimeOffset? reviewedDateTime, DateTimeOffset? createDate, DateTimeOffset? completedDate, DateTimeOffset? reportedOnDate, DateTimeOffset? tookPlaceStartDate, DateTimeOffset? tookPlaceEndDate, DateTimeOffset? vehicleReleaseDate, bool? vehicleGrounded, string? operationName, string? methodOfIntercept, string? directionOfTravel, bool? light, bool? siren, bool? urgentDutyDriving, bool? complianceActionOffenceReport, bool? complianceActionOffenceReportReference, bool active, SourceSystemTypes systemId)
         {
             CreationId = creationId;
             StatusId = statusId;
@@ -2922,7 +2943,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[66] = Domain\Event.generated.cs
+file[66] = Domain\@Event.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -2931,7 +2952,7 @@ file[66] = Domain\Event.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Event : BaseAggregateRoot<Event, Guid>
+    partial class @Event : BaseAggregateRoot<@Event, Guid>
     {
         public Guid? CreationId { get; private set; }
 

@@ -33,9 +33,8 @@ namespace BusinessLogicBehaviour
             }
             sb.Al($"namespace {_module.Namespace}.BusinessLogic.{_model.Name}.{_behaviour.Name}");
             sb.Al("{");
-            sb.I(1).A(Settings.SupportRegen ? $"partial record {_model.Name}{_behaviour.Name}" : $"public class {_model.Name}{_behaviour.Name}");
-
-            sb.Al($" : IRequest<{_model.Name}, ");
+            sb.I(1).A(Settings.SupportRegen ? $"partial record" : $"public class");
+            sb.Al($" {_model.Name}{_behaviour.Name}Request : IRequest<{_model.Name}, ");
 
             sb.Al("}");
 

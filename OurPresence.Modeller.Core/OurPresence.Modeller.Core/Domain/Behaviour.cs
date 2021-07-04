@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -17,14 +16,17 @@ namespace OurPresence.Modeller.Domain
             : base(name)
         { }
 
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public IList<Field> Fields { get; } = new List<Field>();
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public BehaviourRequest? Request { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public BehaviourResponse? Response { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? Event { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        [DefaultValue(false)]
-        public bool AltersDomain { get; set; }
+        [DefaultValue(BehaviourVerb.Get)]
+        public BehaviourVerb Verb { get; set; } 
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace OurPresence.Modeller.Domain
+﻿using OurPresence.Modeller.Domain.Extensions;
+
+namespace OurPresence.Modeller.Domain
 {
     public class Names
     {
         public Names(string value, string local, string stat, string display)
         {
-            Value = value;
-            LocalVariable = local;
+            Value = value.CheckKeyword();
+            LocalVariable = local.CheckKeyword();
             ModuleVariable = string.IsNullOrWhiteSpace(value) ? string.Empty : "_" + local;
             StaticVariable = stat;
             Display = display;

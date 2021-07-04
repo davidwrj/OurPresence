@@ -51,7 +51,7 @@ namespace OurPresence.Modeller.Fluent
 
         public KeyBuilder WithKey()
         {
-            var key = Fluent.Key.Create(this, Instance);
+            var key = Key.Create(this, Instance);
             return key;
         }
 
@@ -64,7 +64,7 @@ namespace OurPresence.Modeller.Fluent
 
         public RelationshipBuilder AddRelationship()
         {
-            var relation = Fluent.Relationship.Create(Build, this);
+            var relation = Relationship.Create(Build, this);
             Instance.Relationships.Add(relation.Instance);
             return relation;
         }
@@ -76,9 +76,10 @@ namespace OurPresence.Modeller.Fluent
             return index;
         }
 
-        public BehaviourBuilder<ModelBuilder> AddBehaviour(string requestName)
+        public BehaviourBuilder<ModelBuilder> AddBehaviour(string requestName, BehaviourVerb verb = BehaviourVerb.Get)
         {
             var behaviour = Behaviour<ModelBuilder>.Create(this, requestName);
+            behaviour.Instance.Verb = verb;
             Instance.Behaviours.Add(behaviour.Instance);
             return behaviour;
         }

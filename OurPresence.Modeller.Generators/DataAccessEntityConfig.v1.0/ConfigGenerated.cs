@@ -29,7 +29,7 @@ namespace EntityFrameworkClass
             sb.Al("{");
             sb.I(1).Al($"public partial class {_model.Name}Configuration : IEntityTypeConfiguration<{_model.Name}>");
             sb.I(1).Al("{");
-            sb.I(2).Al($"public void Configure(EntityTypeBuilder<{_model.Name}> builder)");
+            sb.I(2).Al($"void IEntityTypeConfiguration<Event>.Configure(EntityTypeBuilder<{_model.Name}> builder)");
             sb.I(2).Al("{");
             sb.I(3).Al($"builder.ToTable(\"{_model.Name}\");");
 

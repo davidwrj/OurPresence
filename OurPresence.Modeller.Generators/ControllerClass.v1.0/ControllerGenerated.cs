@@ -32,7 +32,7 @@ namespace ControllerClass
 
             foreach(var behaviour in _model.Behaviours)
             {
-                sb.Al($"using {_module.Namespace}.{_model.Name}.{behaviour.Name};");
+                sb.Al($"using {_module.Namespace}.{_model.Name}.BusinessLogic.{behaviour.Name};");
             }
             sb.B();
             sb.Al($"namespace {_module.Namespace}.Controllers");
@@ -60,10 +60,29 @@ namespace ControllerClass
             foreach(var behaviour in _model.Behaviours)
             {
                 sb.B();
-                sb.I(2).Al(behaviour.AltersDomain? "[HttpPost]":"[HttpGet]");
-                sb.I(2).Al($"public async Task<IActionResult> {behaviour.Name}Async([FromBody] {_model.Name}{behaviour.Name}Request {_model.Name.Singular.LocalVariable}{behaviour.Name}Request)");
+                sb.I(2).Al($"[Http{behaviour.Verb}]");
+                sb.I(2).A($"public async Task");
+                if(behaviour.Response is null)
+                {
+                    sb.A("<IActionResult>");
+                }
+                else
+                {
+                    sb.A($"<ActionResult<");
+                    if(behaviour.Response.IsCollection)
+                    {
+                        sb.A($"IEnumerable<{_model.Name}{behaviour.Name}Result>");
+                    }
+                    else
+                    {
+                        sb.A($"{_model.Name}{behaviour.Name}Result");
+                    }
+                    sb.A(">>");
+                }
+                var variable = $"{_model.Name.Singular.LocalVariable}{behaviour.Name}Request";
+                sb.A($"Async([FromBody] {_model.Name}{behaviour.Name}Request {variable})");
                 sb.I(2).Al("{");
-                sb.I(3).Al($"var result = await _mediator.Send({_model.Name.Singular.LocalVariable}{behaviour.Name}Request);");
+                sb.I(3).Al($"var result = await _mediator.Send({variable});");
                 sb.I(3).Al("return FromResult(result);");
                 sb.I(2).Al("}");
             }

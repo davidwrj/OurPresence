@@ -78,7 +78,7 @@
             ],
             "relationships": [
                 {
-                    "principalModel": "Event",
+                    "principalModel": "@Event",
                     "principalFields": [
                         "Id"
                     ],
@@ -114,7 +114,67 @@
                     "dependantType": "Many"
                 }
             ],
-            "behaviours": [],
+            "behaviours": [
+                {
+                    "fields": [],
+                    "name": "Officer"
+                },
+                {
+                    "fields": [
+                        {
+                            "dataType": "DateTimeOffset",
+                            "name": "DateAdded"
+                        },
+                        {
+                            "dataType": "DateTimeOffset",
+                            "name": "StartTime"
+                        },
+                        {
+                            "name": "ActivityType"
+                        }
+                    ],
+                    "altersDomain": true,
+                    "name": "Add"
+                },
+                {
+                    "fields": [
+                        {
+                            "dataType": "DateTimeOffset",
+                            "name": "EndTime"
+                        },
+                        {
+                            "name": "Remark"
+                        },
+                        {
+                            "dataType": "Bool",
+                            "nullable": true,
+                            "name": "Light"
+                        },
+                        {
+                            "dataType": "Bool",
+                            "nullable": true,
+                            "name": "Siren"
+                        },
+                        {
+                            "dataType": "Bool",
+                            "nullable": true,
+                            "name": "UrgentDutyDriving"
+                        }
+                    ],
+                    "altersDomain": true,
+                    "name": "Update"
+                },
+                {
+                    "fields": [
+                        {
+                            "dataType": "Int32",
+                            "name": "Id"
+                        }
+                    ],
+                    "altersDomain": true,
+                    "name": "Delete"
+                }
+            ],
             "name": "ActivityLog"
         },
         {
@@ -1579,7 +1639,7 @@
                 },
                 {
                     "dataType": "Bool",
-                    "name": "Unsafe"
+                    "name": "@Unsafe"
                 },
                 {
                     "dataType": "Bool",
@@ -2320,7 +2380,7 @@
             "indexes": [],
             "relationships": [],
             "behaviours": [],
-            "name": "Event"
+            "name": "@Event"
         },
         {
             "key": {
@@ -2501,7 +2561,7 @@
             "indexes": [],
             "relationships": [
                 {
-                    "principalModel": "Event",
+                    "principalModel": "@Event",
                     "principalFields": [
                         "Id"
                     ],
@@ -5126,7 +5186,7 @@
                         "Id"
                     ],
                     "principalType": "One",
-                    "dependantModel": "Event",
+                    "dependantModel": "@Event",
                     "dependantFields": [
                         "VehicleId"
                     ],

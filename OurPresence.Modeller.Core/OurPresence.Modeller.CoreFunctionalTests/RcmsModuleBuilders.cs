@@ -148,7 +148,55 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddRelationship().Relate("Shift", new[] { "Id" }, "ActivityLog", new[] { "ShiftId" }).Build
                 .AddRelationship().Relate("User", new[] { "Id" }, "ActivityLog", new[] { "UserId" }).Build
                 .AddIndex("IDX_ActivityItem_EndDate").AddField("EndDate").Build.Build
-                .Build;
+
+                .AddBehaviour("Officer")
+                    .AddResponse("ActivityLogOfficerResult")
+                        .IsCollection()
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                        .AddField("StartTime").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("Source").DataType(DataTypes.String).Build
+                        .AddField("ActivityType").MaxLength(128).Build
+                        .AddField("Remarks").Build
+                        .AddField("Lights").DataType(DataTypes.Bool).Build
+                        .AddField("Sirens").DataType(DataTypes.Bool).Build
+                        .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
+                        .AddField("IsEditable").DataType(DataTypes.Bool).Build
+                        .AddField("SystemGenerated").DataType(DataTypes.Bool).Build
+                        .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Build
+                    .Build
+                .Build
+
+                .AddBehaviour("Add", BehaviourVerb.Post)
+                    .AddRequest("ActivityLogAddRequest")                        
+                        .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("StartTime").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("ActivityType").DataType(DataTypes.String).Build
+                    .Build
+                    .AddResponse("ActivityLogAddResult")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                    .Build
+                .Build
+
+                .AddBehaviour("Update", BehaviourVerb.Post)
+                    .AddRequest("ActivityLogUpdateRequest")
+                        .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("Remarks").DataType(DataTypes.String).Build
+                        .AddField("Lights").DataType(DataTypes.Bool).Nullable(true).Build
+                        .AddField("Sirens").DataType(DataTypes.Bool).Nullable(true).Build
+                        .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Nullable(true).Build
+                    .Build
+                    .AddResponse("ActivityLogUpdateResult")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                    .Build
+                .Build
+
+                .AddBehaviour("Delete", BehaviourVerb.Delete)
+                    .AddRequest("ActivityLogDeleteRequest")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                    .Build
+                .Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddAddressBook(this Fluent.ModuleBuilder mb)
@@ -201,7 +249,33 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddRelationship().Relate("Person", new[] { "Id" }, "Alert", new[] { "PersonId" }).Build
                 .AddRelationship().Relate("User", new[] { "Id" }, "Alert", new[] { "UserId" }).Build
                 .AddRelationship().Relate("Vehicle", new[] { "Id" }, "Alert", new[] { "VehicleId" }).Build
-                .Build;
+
+                .AddBehaviour("Save", BehaviourVerb.Post)
+                    .AddRequest("AlertSaveRequest")
+                        .Route("")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                        .AddField("AlertLevel").DataType(DataTypes.Int32).Build
+                        .AddField("EffectiveDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("ExpiryDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("Remarks").Build
+                        .AddField("Silent").DataType(DataTypes.Bool).Build
+                        .AddField("SilentNotifyContactId").DataType(DataTypes.Int32).Build
+                        .AddField("PersonId").DataType(DataTypes.Int32).Build
+                        .AddField("VehicleId").DataType(DataTypes.Int32).Build
+                        .AddField("OrganisationId").DataType(DataTypes.Int32).Build
+                    .Build
+                    .AddResponse("AlertSaveResult")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                    .Build
+                .Build
+
+                .AddBehaviour("Delete", BehaviourVerb.Delete)
+                    .AddRequest("AlertDeleteRequest")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                        .AddField("Reason").MaxLength(128).Build
+                    .Build
+                .Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddAzureSqlMaintenanceLog(this Fluent.ModuleBuilder mb)
@@ -1630,8 +1704,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("Vehicle")
                 .WithDefaultKey()
                 .AddField("CreationId").BusinessKey(true).DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States")
-                .Nullable(true).Build
+                .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable(true).Build
                 .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build
                 .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
                 .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable(true).Build
@@ -1641,19 +1714,20 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
 
-                .AddBehaviour("Create")
-                .Raising("Created")
-                .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States")
-                .Nullable(true).Build
-                .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build
-                .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
-                .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable(true).Build
-                .AddField("EngineNumber").MaxLength(20).Nullable(true).Build
-                .AddField("ChassisNumber").MaxLength(32).Nullable(true).Build
-                .AddField("SourceVehicleId").MaxLength(64).Build
-                .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
+                .AddBehaviour("Create", BehaviourVerb.Post)
+                    .Raising("Created")
+                    .AddRequest("VehicleCreateRequest")
+                        .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable(true).Build
+                        .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build
+                        .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
+                        .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable(true).Build
+                        .AddField("EngineNumber").MaxLength(20).Nullable(true).Build
+                        .AddField("ChassisNumber").MaxLength(32).Nullable(true).Build
+                        .AddField("SourceVehicleId").MaxLength(64).Build
+                        .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
+                    .Build
                 .Build
-                .Build;
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddVehicleDetail(this Fluent.ModuleBuilder mb)

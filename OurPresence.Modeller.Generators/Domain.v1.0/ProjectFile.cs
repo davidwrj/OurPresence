@@ -36,6 +36,10 @@ namespace DomainProject
             sb.I(2).Al($"<Nullable>enable</Nullable>");
             sb.I(1).Al("</PropertyGroup>");
             sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al($"<PackageReference Include=\"CSharpFunctionalExtensions\" Version=\"{Settings.Packages.GetVersion("CSharpFunctionalExtensions", "2.17.0")}\" />");
+            sb.I(1).Al("</ItemGroup>");
+            sb.B();
             sb.Al("</Project>");
 
             var projectFile = new File(project.Name + ".csproj", sb.ToString());

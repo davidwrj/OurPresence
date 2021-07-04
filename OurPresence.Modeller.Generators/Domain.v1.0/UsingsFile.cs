@@ -24,6 +24,7 @@ namespace DomainProject
             sb.Al("global using System.Reflection;");
             sb.Al("global using System.Text.RegularExpressions;");
             sb.Al("global using System.Threading.Tasks;");
+            sb.Al("global using CSharpFunctionalExtensions;");
             return new File("usings.cs", sb.ToString());
         }
     }
