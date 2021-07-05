@@ -37,7 +37,6 @@ namespace DomainClass
             {
                 sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
             }
-            sb.B();
             sb.Al("#nullable enable");
             sb.B();
             sb.Al($"namespace {_module.Namespace}.Common.Domain");
