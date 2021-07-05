@@ -1,4 +1,4 @@
-file[0] = Mizrael.SuperSafeBank.DataAccess.csproj
+﻿file[0] = Mizrael.SuperSafeBank.DataAccess.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -80,8 +80,10 @@ file[4] = Models\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.Data.Models
 {
-    partial class Account : AuditableBase
+    partial class Account
     {
+        public int Id { get; private set; }
+
         public Guid OwnerId { get; private set; }
 
         public Money Balance { get; private set; }
@@ -98,8 +100,10 @@ file[5] = Models\Customer.generated.cs
 
 namespace Mizrael.SuperSafeBank.Data.Models
 {
-    partial class Customer : AuditableBase
+    partial class Customer
     {
+        public int Id { get; private set; }
+
         public string FirstName { get; private set; }
 
         public string LastName { get; private set; }

@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain;
 
 namespace OurPresence.Modeller.CoreFunctionalTests
 {
@@ -9,8 +12,10 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             var mb = Fluent.Module.Create("Nhvr", "Rcms[Rcms]");
 
             return mb
+                .AddAddressTypes()
                 .AddEnumStates()
                 .AddEnumSourceSystemTypes()
+                .AddOrganisationTypes()
 
                 .AddActivityLog()
                 .AddAddressBook()
@@ -66,6 +71,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddInterceptPerson()
                 .AddInterceptVehicle()
                 .AddLog()
+                .AddMapDetail()
                 .AddNoticeNumber()
                 .AddOrganisation()
                 .AddOrganisationAddress()
@@ -108,6 +114,29 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                     .AddItem("TAS", 67, "Tasmania")
                 .Build;
         }
+        private static Fluent.ModuleBuilder AddAddressTypes(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddEnumeration("AddressTypes")
+                    .AddItem("RegisteredAddress", 120)
+                    .AddItem("PostalAddress", 121)
+                    .AddItem("GaragingAddress", 122)
+                    .AddItem("NoticeAddress", 123)
+                    .AddItem("LastKnownAddress", 124)
+                .Build;
+        }
+        private static Fluent.ModuleBuilder AddOrganisationTypes(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddEnumeration("OrganisationTypes")
+                    .AddItem("Company", 130)
+                    .AddItem("IncorporatedAssociation", 131)
+                    .AddItem("GovernmentDepartment", 132)
+                    .AddItem("GovernmentBusinessEnterprise", 133)
+                    .AddItem("LocalGovernment", 134)
+                    .AddItem("Association", 139)
+                .Build;
+        }
 
         private static Fluent.ModuleBuilder AddEnumSourceSystemTypes(this Fluent.ModuleBuilder mb)
         {
@@ -131,6 +160,9 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("ActivityLog")
                 .WithDefaultKey()
+                .IsAuditable()
+                .SupportCrud(CRUDSupport.All)
+                .IsRoot()
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("ActivityType").MaxLength(128).Build
                 .AddField("EventId").Build
@@ -204,19 +236,20 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("AddressBook")
                 .WithDefaultKey()
-                .AddField("UnitType").MaxLength(128).Build
-                .AddField("UnitNumber").MaxLength(128).Build
+                .AddField("FloorNumber").MaxLength(20).Nullable(true).Build
+                .AddField("UnitType").MaxLength(128).Nullable(true).Build
+                .AddField("UnitNumber").MaxLength(128).Nullable(true).Build
                 .AddField("StreetName").MaxLength(128).Build
                 .AddField("StreetType").MaxLength(128).Build
                 .AddField("StreetSuffix").MaxLength(128).Build
-                .AddField("StreetNumberFirst").MaxLength(128).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(128).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(128).Build
-                .AddField("StreetNumberLast").MaxLength(128).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(128).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(128).Build
-                .AddField("StreetDirectional").MaxLength(128).Build
-                .AddField("PostalContainer").MaxLength(128).Build
+                .AddField("StreetNumberFirst").MaxLength(128).Nullable(true).Build
+                .AddField("StreetNumberFirstPrefix").MaxLength(128).Nullable(true).Build
+                .AddField("StreetNumberFirstSuffix").MaxLength(128).Nullable(true).Build
+                .AddField("StreetNumberLast").MaxLength(128).Nullable(true).Build
+                .AddField("StreetNumberLastPrefix").MaxLength(128).Nullable(true).Build
+                .AddField("StreetNumberLastSuffix").MaxLength(128).Nullable(true).Build
+                .AddField("StreetDirectional").MaxLength(128).Nullable(true).Build
+                .AddField("PostalContainer").MaxLength(128).Nullable(true).Build
                 .AddField("PostalCode").MaxLength(128).Build
                 .AddField("Suburb").MaxLength(128).Build
                 .AddField("Country").MaxLength(128).Build
@@ -229,6 +262,9 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("Alert")
                 .WithDefaultKey()
+                .IsAuditable()
+                .IsRoot()
+                .SupportCrud(CRUDSupport.Create | CRUDSupport.Delete)
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
                 .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
@@ -278,6 +314,15 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             .Build;
         }
 
+        private static Fluent.ModuleBuilder AddAudit(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddModel("Audit")
+                .SupportCrud(CRUDSupport.None)
+                .IsRoot()
+                .Build;
+        }
+
         private static Fluent.ModuleBuilder AddAzureSqlMaintenanceLog(this Fluent.ModuleBuilder mb)
         {
             return mb
@@ -298,6 +343,9 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("BatchProcess")
                 .WithDefaultKey()
+                .IsAuditable()
+                .IsRoot()
+                .SupportCrud(CRUDSupport.None)
                 .AddField("Url").MaxLength(128).Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
                 .AddField("StartedOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
@@ -310,6 +358,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("BatchProcessTask")
                 .WithDefaultKey()
+                .IsAuditable()
                 .AddField("TypeId").DataType(DataTypes.Int32).Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
                 .AddField("EntityId").DataType(DataTypes.Int32).Build
@@ -328,6 +377,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("BatchProcessTaskItem")
                 .WithDefaultKey()
+                .IsAuditable()
                 .AddField("TaskId").DataType(DataTypes.Int32).Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
                 .AddField("EntityId").DataType(DataTypes.Int32).Build
@@ -344,6 +394,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("ComplianceAction")
                 .WithDefaultKey()
+                .IsAuditable()
                 .AddField("TypeId").DataType(DataTypes.Int32).Build
                 .AddField("NoticeNumber").MaxLength(128).Build
                 .AddField("EventId").DataType(DataTypes.Int32).Build
@@ -366,6 +417,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("ComplianceActionImport")
                 .WithDefaultKey()
+                .IsAuditable()
                 .AddField("VehicleRegistrationStateId").DataType(DataTypes.Int32).Build
                 .AddField("VehicleRegistrationNumber").MaxLength(128).Build
                 .AddField("PersonGivenName").MaxLength(128).Build
@@ -394,6 +446,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("ComplianceActionLocation")
                 .WithDefaultKey()
+                .IsAuditable()
                 .AddField("ComplianceActionId").DataType(DataTypes.Int32).Build
                 .AddField("StateId").DataType(DataTypes.Int32).Build
                 .AddField("LocalGovernmentArea").MaxLength(128).Build
@@ -402,30 +455,37 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("CommonName").MaxLength(128).Build
                 .AddField("Remarks").MaxLength(128).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
-                .AddField("Altitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Longitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Latitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Elevation").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("FloorNumber").MaxLength(128).Build
-                .AddField("UnitType").MaxLength(128).Build
-                .AddField("UnitNumber").MaxLength(128).Build
-                .AddField("StreetName").MaxLength(128).Build
-                .AddField("StreetType").MaxLength(128).Build
-                .AddField("StreetSuffix").MaxLength(128).Build
-                .AddField("StreetNumberFirst").MaxLength(128).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(128).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(128).Build
-                .AddField("StreetNumberLast").MaxLength(128).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(128).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(128).Build
-                .AddField("StreetDirectional").MaxLength(128).Build
-                .AddField("PostalContainer").MaxLength(128).Build
-                .AddField("PostalCode").MaxLength(128).Build
-                .AddField("Suburb").MaxLength(128).Build
-                .AddField("Country").MaxLength(128).Build
-                .AddField("FullAddress").MaxLength(128).Build
+
+                .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
+
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+
+                .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
+
+                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
+                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
+                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
+                //.AddField("Country").MaxLength(128).Nullable(true).Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
 
                 .Build;
@@ -495,30 +555,35 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("CommonName").MaxLength(128).Build
                 .AddField("Remarks").MaxLength(128).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
-                .AddField("Altitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Longitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Latitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Elevation").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("FloorNumber").MaxLength(128).Build
-                .AddField("UnitType").MaxLength(128).Build
-                .AddField("UnitNumber").MaxLength(128).Build
-                .AddField("StreetName").MaxLength(128).Build
-                .AddField("StreetType").MaxLength(128).Build
-                .AddField("StreetSuffix").MaxLength(128).Build
-                .AddField("StreetNumberFirst").MaxLength(128).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(128).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(128).Build
-                .AddField("StreetNumberLast").MaxLength(128).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(128).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(128).Build
-                .AddField("StreetDirectional").MaxLength(128).Build
-                .AddField("PostalContainer").MaxLength(128).Build
-                .AddField("PostalCode").MaxLength(128).Build
-                .AddField("Suburb").MaxLength(128).Build
-                .AddField("Country").MaxLength(128).Build
-                .AddField("FullAddress").MaxLength(128).Build
+                .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
+
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+
+                .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
+
+                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
+                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
+                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
+                //.AddField("Country").MaxLength(128).Nullable(true).Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
 
                 .Build;
@@ -841,6 +906,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("Event")
                 .WithDefaultKey()
+                .IsRoot()
+                .SupportCrud(CRUDSupport.Create | CRUDSupport.Read)
                 .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
                 .AddField("StatusId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
                 .AddField("OrganisationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
@@ -866,43 +933,63 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .Build;
         }
 
-        private static Fluent.ModuleBuilder AddEventAddress(this Fluent.ModuleBuilder mb)
+        private static Fluent.ModuleBuilder AddMapDetail(this Fluent.ModuleBuilder mb)
         {
             return mb
-                .AddModel("EventAddress")
-                .WithDefaultKey()
-                .AddField("StateId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("EventAddressType").DataType(Domain.DataTypes.Object).DataTypeTypeName("AddressType").Nullable(true).Build
-                .AddField("LocalGovernmentArea").MaxLength(255).Nullable(true).Build
-                .AddField("LGAShortTitle").MaxLength(50).Nullable(true).Build
-                .AddField("Near").MaxLength(255).Nullable(true).Build
-                .AddField("CommonName").MaxLength(255).Nullable(true).Build
-                .AddField("Remarks").MaxLength(255).Nullable(true).Build
-                .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
+                .AddModel("MapDetail")
                 .AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
                 .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
                 .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
                 .AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
                 .AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
                 .AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
-                .AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                .AddField("UnitType").MaxLength(200).Nullable(true).Build
-                .AddField("UnitNumber").MaxLength(20).Nullable(true).Build
-                .AddField("StreetName").MaxLength(128).Nullable(true).Build
-                .AddField("StreetType").MaxLength(128).Nullable(true).Build
-                .AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
-                .AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
-                .AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
-                .AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
-                .AddField("PostalContainer").MaxLength(255).Nullable(true).Build
-                .AddField("PostalCode").MaxLength(20).Nullable(true).Build
-                .AddField("Suburb").MaxLength(100).Nullable(true).Build
-                .AddField("Country").MaxLength(128).Nullable(true).Build
-                .AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+                .Build;
+        }
+
+        private static Fluent.ModuleBuilder AddEventAddress(this Fluent.ModuleBuilder mb)
+        {
+            return mb
+                .AddModel("EventAddress")
+                .WithDefaultKey()
+                .AddField("StateId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
+                .AddField("EventAddressType").DataType(Domain.DataTypes.Object).DataTypeTypeName("AddressTypes").Nullable(true).Build
+                .AddField("LocalGovernmentArea").MaxLength(255).Nullable(true).Build
+                .AddField("LGAShortTitle").MaxLength(50).Nullable(true).Build
+                .AddField("Near").MaxLength(255).Nullable(true).Build
+                .AddField("CommonName").MaxLength(255).Nullable(true).Build
+                .AddField("Remarks").MaxLength(255).Nullable(true).Build
+                .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
+
+                .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
+
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+
+                .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
+
+                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
+                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
+                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
+                //.AddField("Country").MaxLength(128).Nullable(true).Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Build
 
                 .AddRelationship()
@@ -1305,7 +1392,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 
                 .Build;
         }
-        
+
         private static Fluent.ModuleBuilder AddInterceptVehicle(this Fluent.ModuleBuilder mb)
         {
             return mb
@@ -1348,6 +1435,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("NoticeNumber")
                 .WithDefaultKey()
+                .IsRoot()
                 .AddField("StateId").DataType(DataTypes.Int32).Build
                 .AddField("NoticeTypeId").DataType(DataTypes.Int32).Build
                 .AddField("Description").MaxLength(128).Build
@@ -1365,10 +1453,11 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("Organisation")
                 .WithDefaultKey()
+                .IsRoot()
                 .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
                 .AddField("Name").MaxLength(255).Build
                 .AddField("ACN").MaxLength(255).Nullable(true).Build
-                .AddField("TypeId").DataType(Domain.DataTypes.Object).DataTypeTypeName("OrganisationType").Build
+                .AddField("TypeId").DataType(Domain.DataTypes.Object).DataTypeTypeName("OrganisationTypes").Build
                 //.AddField("NevdisId").MaxLength(255).Nullable(true).Build
                 //.AddField("VicCustomerNo").MaxLength(255).Nullable(true).Build
                 //.AddField("ParentId").DataType(DataTypes.Int32).Nullable(true).Build
@@ -1376,7 +1465,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("SystemId").DataType(DataTypes.Int32).Default("30").Build
                 .Build;
         }
-        
+
         private static Fluent.ModuleBuilder AddOrganisationAddress(this Fluent.ModuleBuilder mb)
         {
             return mb
@@ -1392,31 +1481,37 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Remarks").MaxLength(128).Build
                 .AddField("StateId").DataType(DataTypes.Int32).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
-                .AddField("Altitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Longitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Latitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Elevation").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("Source").MaxLength(128).Build
-                .AddField("FloorNumber").MaxLength(128).Build
-                .AddField("UnitType").MaxLength(128).Build
-                .AddField("UnitNumber").MaxLength(128).Build
-                .AddField("StreetName").MaxLength(128).Build
-                .AddField("StreetType").MaxLength(128).Build
-                .AddField("StreetSuffix").MaxLength(128).Build
-                .AddField("StreetNumberFirst").MaxLength(128).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(128).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(128).Build
-                .AddField("StreetNumberLast").MaxLength(128).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(128).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(128).Build
-                .AddField("StreetDirectional").MaxLength(128).Build
-                .AddField("PostalContainer").MaxLength(128).Build
-                .AddField("PostalCode").MaxLength(128).Build
-                .AddField("Suburb").MaxLength(128).Build
-                .AddField("Country").MaxLength(128).Build
-                .AddField("FullAddress").MaxLength(128).Build
+                .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
+
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+
+                .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
+
+                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
+                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
+                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
+                //.AddField("Country").MaxLength(128).Nullable(true).Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
 
                 .Build;
@@ -1465,6 +1560,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("Person")
                 .WithDefaultKey()
+                .IsRoot()
                 .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
                 .AddField("GivenName").MaxLength(255).Build
                 .AddField("FamilyName").MaxLength(255).Build
@@ -1478,7 +1574,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 //.AddField("ParentId").DataType(DataTypes.Int32).Nullable(true).Build
                 .Build;
         }
-        
+
         private static Fluent.ModuleBuilder AddPersonAddress(this Fluent.ModuleBuilder mb)
         {
             return mb
@@ -1494,31 +1590,37 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("CommonName").MaxLength(128).Build
                 .AddField("Remarks").MaxLength(128).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
-                .AddField("Altitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Longitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Latitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
-                .AddField("Elevation").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("Source").MaxLength(128).Build
-                .AddField("FloorNumber").MaxLength(128).Build
-                .AddField("UnitType").MaxLength(128).Build
-                .AddField("UnitNumber").MaxLength(128).Build
-                .AddField("StreetName").MaxLength(128).Build
-                .AddField("StreetType").MaxLength(128).Build
-                .AddField("StreetSuffix").MaxLength(128).Build
-                .AddField("StreetNumberFirst").MaxLength(128).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(128).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(128).Build
-                .AddField("StreetNumberLast").MaxLength(128).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(128).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(128).Build
-                .AddField("StreetDirectional").MaxLength(128).Build
-                .AddField("PostalContainer").MaxLength(128).Build
-                .AddField("PostalCode").MaxLength(128).Build
-                .AddField("Suburb").MaxLength(128).Build
-                .AddField("Country").MaxLength(128).Build
-                .AddField("FullAddress").MaxLength(128).Build
+                .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
+
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+
+                .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
+
+                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
+                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
+                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
+                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
+                //.AddField("Country").MaxLength(128).Nullable(true).Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
 
                 .Build;
@@ -1602,7 +1704,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 
                 .Build;
         }
-        
+
         private static Fluent.ModuleBuilder AddReferenceDataAttribute(this Fluent.ModuleBuilder mb)
         {
             return mb
@@ -1650,6 +1752,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("Shift")
                 .WithDefaultKey()
+                .IsRoot()
                 .AddField("StartTime").DataType(DataTypes.Int32).Build
                 .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
                 .AddField("EstimatedEndTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
@@ -1670,12 +1773,13 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 
                 .Build;
         }
-        
+
         private static Fluent.ModuleBuilder AddUser(this Fluent.ModuleBuilder mb)
         {
             return mb
                 .AddModel("User")
                 .WithDefaultKey()
+                .IsRoot()
                 .AddField("SignInName").MaxLength(128).Build
                 .AddField("FirstName").MaxLength(128).Build
                 .AddField("Surname").MaxLength(128).Build
@@ -1703,6 +1807,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("Vehicle")
                 .WithDefaultKey()
+                .IsRoot()
                 .AddField("CreationId").BusinessKey(true).DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
                 .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable(true).Build
                 .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build

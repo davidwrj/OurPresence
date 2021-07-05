@@ -1,4 +1,4 @@
-file[0] = Domain\Account.cs
+﻿file[0] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -38,8 +38,10 @@ file[1] = Domain\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
-    partial class Account : BaseAggregateRoot<Account, Guid>
+    partial class Account
     {
+        public int Id { get; private set; }
+
         public Guid OwnerId { get; private set; }
 
         public Money Balance { get; private set; }

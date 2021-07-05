@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System.Collections.Generic;
 using OurPresence.Core.Money.Extensions;
 using OurPresence.Core.Money.Tests.Serialization;
 using FluentAssertions;

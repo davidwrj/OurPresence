@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Domain.Extensions;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
@@ -74,10 +77,10 @@ namespace DomainClass
                 sb.B();
             }
 
-            sb.I(2).Al($"protected override void Apply(IDomainEvent<Guid> @event)");
-            sb.I(2).Al("{");
-            sb.I(3).Al($"// todo: Apply events");
-            sb.I(2).Al("}");
+            //sb.I(2).Al($"protected override void Apply(IDomainEvent<Guid> @event)");
+            //sb.I(2).Al("{");
+            //sb.I(3).Al($"// todo: Apply events");
+            //sb.I(2).Al("}");
             sb.I(1).Al("}");
             sb.Al("}");
 

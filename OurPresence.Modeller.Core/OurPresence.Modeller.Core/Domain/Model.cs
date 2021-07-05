@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Interfaces;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,18 @@ using System.Linq;
 
 namespace OurPresence.Modeller.Domain
 {
+    [Flags]
+    public enum CRUDSupport
+    {
+        None = 0,
+        Create = 1,
+        Read = 2,
+        Update = 4,
+        Delete = 8,
+
+        All = 15
+    }
+
     [JsonObject(MemberSerialization.OptIn)]
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class Model : NamedElementBase, INamedElement
@@ -18,7 +33,7 @@ namespace OurPresence.Modeller.Domain
         internal void FinaliseNames()
         { }
 
-        public Model(string name) 
+        public Model(string name)
             : base(name)
         { }
 
@@ -29,8 +44,16 @@ namespace OurPresence.Modeller.Domain
         public Key Key { get; set; } = new Key();
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        [DefaultValue(true)]
-        public bool HasAudit { get; set; } = true;
+        [DefaultValue(false)]
+        public bool HasAudit { get; set; } = false;
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [DefaultValue(false)]
+        public bool IsRoot { get; set; } = false;
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [DefaultValue(CRUDSupport.All)]
+        public CRUDSupport SupportCrud { get; set; } = CRUDSupport.None;
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public List<Field> Fields { get; } = new List<Field>();

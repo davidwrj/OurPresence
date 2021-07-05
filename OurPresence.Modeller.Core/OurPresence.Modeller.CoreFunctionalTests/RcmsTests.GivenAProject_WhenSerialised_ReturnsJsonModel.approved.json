@@ -1,4 +1,4 @@
-{
+﻿{
     "company": "Nhvr",
     "project": "Rcm[Rcms]",
     "models": [
@@ -6,11 +6,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "isRoot": true,
             "fields": [
                 {
                     "default": "true",
@@ -181,18 +183,26 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "FloorNumber"
+                },
+                {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "UnitType"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "UnitNumber"
                 },
                 {
@@ -209,34 +219,42 @@
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetNumberFirst"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetNumberFirstPrefix"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetNumberFirstSuffix"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetNumberLast"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetNumberLastPrefix"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetNumberLastSuffix"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "StreetDirectional"
                 },
                 {
                     "maxLength": 128,
+                    "nullable": true,
                     "name": "PostalContainer"
                 },
                 {
@@ -265,11 +283,14 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "isRoot": true,
+            "supportCrud": "Create, Delete",
             "fields": [
                 {
                     "default": "true",
@@ -392,7 +413,7 @@
             "key": {
                 "fields": []
             },
-            "hasAudit": false,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int64",
@@ -435,11 +456,14 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "maxLength": 128,
@@ -469,11 +493,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -519,11 +545,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -572,11 +600,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -642,11 +672,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -737,11 +769,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "hasAudit": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -776,112 +810,14 @@
                     "name": "Active"
                 },
                 {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Altitude"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "MapDetail",
+                    "name": "MapDetail"
                 },
                 {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "AltitudeAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "HorizontalAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Longitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Latitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Elevation"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "FloorNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "UnitType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "UnitNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetName"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirst"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLast"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetDirectional"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalContainer"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalCode"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Suburb"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Country"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "FullAddress"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "AddressBook",
+                    "name": "Address"
                 },
                 {
                     "dataType": "DateTimeOffset",
@@ -898,11 +834,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1018,11 +955,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1074,11 +1012,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1109,112 +1048,14 @@
                     "name": "Active"
                 },
                 {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Altitude"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "MapDetail",
+                    "name": "MapDetail"
                 },
                 {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "AltitudeAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "HorizontalAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Longitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Latitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Elevation"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "FloorNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "UnitType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "UnitNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetName"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirst"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLast"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetDirectional"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalContainer"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalCode"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Suburb"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Country"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "FullAddress"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "AddressBook",
+                    "name": "Address"
                 },
                 {
                     "dataType": "DateTimeOffset",
@@ -1231,11 +1072,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1317,11 +1159,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1374,11 +1217,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1546,11 +1390,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1607,11 +1452,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1729,11 +1575,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1769,11 +1616,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1872,11 +1720,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1912,11 +1761,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -1960,11 +1810,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2022,11 +1873,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2070,11 +1922,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2144,11 +1997,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2192,11 +2046,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2220,11 +2075,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2260,11 +2116,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "Create, Read",
             "fields": [
                 {
                     "dataType": "UniqueIdentifier",
@@ -2386,11 +2244,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "UniqueIdentifier",
@@ -2399,7 +2258,7 @@
                 },
                 {
                     "dataType": "Object",
-                    "dataTypeTypeName": "AddressType",
+                    "dataTypeTypeName": "AddressTypes",
                     "nullable": true,
                     "name": "EventAddressType"
                 },
@@ -2434,124 +2293,14 @@
                     "name": "Active"
                 },
                 {
-                    "dataType": "Decimal",
-                    "nullable": true,
-                    "name": "Altitude"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "MapDetail",
+                    "name": "MapDetail"
                 },
                 {
-                    "dataType": "Decimal",
-                    "nullable": true,
-                    "name": "AltitudeAccuracy"
-                },
-                {
-                    "dataType": "Decimal",
-                    "nullable": true,
-                    "name": "HorizontalAccuracy"
-                },
-                {
-                    "dataType": "Decimal",
-                    "nullable": true,
-                    "name": "Longitude"
-                },
-                {
-                    "dataType": "Decimal",
-                    "nullable": true,
-                    "name": "Latitude"
-                },
-                {
-                    "dataType": "Decimal",
-                    "nullable": true,
-                    "name": "Elevation"
-                },
-                {
-                    "maxLength": 20,
-                    "nullable": true,
-                    "name": "FloorNumber"
-                },
-                {
-                    "maxLength": 200,
-                    "nullable": true,
-                    "name": "UnitType"
-                },
-                {
-                    "maxLength": 20,
-                    "nullable": true,
-                    "name": "UnitNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "nullable": true,
-                    "name": "StreetName"
-                },
-                {
-                    "maxLength": 128,
-                    "nullable": true,
-                    "name": "StreetType"
-                },
-                {
-                    "maxLength": 200,
-                    "nullable": true,
-                    "name": "StreetSuffix"
-                },
-                {
-                    "maxLength": 50,
-                    "nullable": true,
-                    "name": "StreetNumberFirst"
-                },
-                {
-                    "maxLength": 50,
-                    "nullable": true,
-                    "name": "StreetNumberFirstPrefix"
-                },
-                {
-                    "maxLength": 50,
-                    "nullable": true,
-                    "name": "StreetNumberFirstSuffix"
-                },
-                {
-                    "maxLength": 50,
-                    "nullable": true,
-                    "name": "StreetNumberLast"
-                },
-                {
-                    "maxLength": 50,
-                    "nullable": true,
-                    "name": "StreetNumberLastPrefix"
-                },
-                {
-                    "maxLength": 50,
-                    "nullable": true,
-                    "name": "StreetNumberLastSuffix"
-                },
-                {
-                    "maxLength": 200,
-                    "nullable": true,
-                    "name": "StreetDirectional"
-                },
-                {
-                    "maxLength": 255,
-                    "nullable": true,
-                    "name": "PostalContainer"
-                },
-                {
-                    "maxLength": 20,
-                    "nullable": true,
-                    "name": "PostalCode"
-                },
-                {
-                    "maxLength": 100,
-                    "nullable": true,
-                    "name": "Suburb"
-                },
-                {
-                    "maxLength": 128,
-                    "nullable": true,
-                    "name": "Country"
-                },
-                {
-                    "maxLength": 1500,
-                    "nullable": true,
-                    "name": "FullAddress"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "AddressBook",
+                    "name": "Address"
                 },
                 {
                     "dataType": "DateTimeOffset",
@@ -2580,11 +2329,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2824,11 +2574,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2888,11 +2639,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2946,11 +2698,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -2979,11 +2732,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3027,11 +2781,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3059,11 +2814,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3107,11 +2863,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3144,11 +2901,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3192,11 +2950,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3224,11 +2983,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3256,11 +3016,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3337,11 +3098,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3393,11 +3155,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3425,11 +3188,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3461,11 +3225,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3497,11 +3262,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3538,11 +3304,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3562,11 +3329,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3648,11 +3416,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3730,11 +3499,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3758,11 +3528,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3786,11 +3557,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3814,12 +3586,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
-            "hasAudit": false,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3894,13 +3666,57 @@
         },
         {
             "key": {
+                "fields": []
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Altitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Longitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Latitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Elevation"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "MapDetail"
+        },
+        {
+            "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -3944,11 +3760,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "UniqueIdentifier",
@@ -3966,7 +3784,7 @@
                 },
                 {
                     "dataType": "Object",
-                    "dataTypeTypeName": "OrganisationType",
+                    "dataTypeTypeName": "OrganisationTypes",
                     "name": "TypeId"
                 },
                 {
@@ -3989,11 +3807,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4036,116 +3855,18 @@
                     "name": "Active"
                 },
                 {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Altitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "AltitudeAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "HorizontalAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Longitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Latitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Elevation"
-                },
-                {
                     "maxLength": 128,
                     "name": "Source"
                 },
                 {
-                    "maxLength": 128,
-                    "name": "FloorNumber"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "MapDetail",
+                    "name": "MapDetail"
                 },
                 {
-                    "maxLength": 128,
-                    "name": "UnitType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "UnitNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetName"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirst"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLast"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetDirectional"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalContainer"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalCode"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Suburb"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Country"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "FullAddress"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "AddressBook",
+                    "name": "Address"
                 },
                 {
                     "dataType": "DateTimeOffset",
@@ -4162,11 +3883,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4207,11 +3929,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4276,11 +3999,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "UniqueIdentifier",
@@ -4334,11 +4059,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4381,116 +4107,18 @@
                     "name": "Active"
                 },
                 {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Altitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "AltitudeAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "HorizontalAccuracy"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Longitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Latitude"
-                },
-                {
-                    "precision": 2,
-                    "scale": 18,
-                    "dataType": "Decimal",
-                    "name": "Elevation"
-                },
-                {
                     "maxLength": 128,
                     "name": "Source"
                 },
                 {
-                    "maxLength": 128,
-                    "name": "FloorNumber"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "MapDetail",
+                    "name": "MapDetail"
                 },
                 {
-                    "maxLength": 128,
-                    "name": "UnitType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "UnitNumber"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetName"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetType"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirst"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberFirstSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLast"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastPrefix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetNumberLastSuffix"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "StreetDirectional"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalContainer"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "PostalCode"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Suburb"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "Country"
-                },
-                {
-                    "maxLength": 128,
-                    "name": "FullAddress"
+                    "dataType": "Object",
+                    "dataTypeTypeName": "AddressBook",
+                    "name": "Address"
                 },
                 {
                     "dataType": "DateTimeOffset",
@@ -4507,11 +4135,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4552,11 +4181,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4663,11 +4293,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4695,11 +4326,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4749,11 +4381,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4781,11 +4414,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "maxLength": 128,
@@ -4825,11 +4459,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4857,11 +4492,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4895,11 +4532,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -4923,11 +4561,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "maxLength": 128,
@@ -5015,11 +4655,13 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "isRoot": true,
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "UniqueIdentifier",
@@ -5127,11 +4769,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "maxLength": 20,
@@ -5200,11 +4843,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "precision": 2,
@@ -5265,11 +4909,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "precision": 2,
@@ -5338,11 +4983,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -5366,11 +5012,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -5394,11 +5041,12 @@
             "key": {
                 "fields": [
                     {
-                        "dataType": "UniqueIdentifier",
+                        "dataType": "Int32",
                         "name": "Id"
                     }
                 ]
             },
+            "supportCrud": "None",
             "fields": [
                 {
                     "dataType": "Int32",
@@ -5691,6 +5339,36 @@
         {
             "items": [
                 {
+                    "name": "RegisteredAddress",
+                    "display": "RegisteredAddress",
+                    "value": 120
+                },
+                {
+                    "name": "PostalAddress",
+                    "display": "PostalAddress",
+                    "value": 121
+                },
+                {
+                    "name": "GaragingAddress",
+                    "display": "GaragingAddress",
+                    "value": 122
+                },
+                {
+                    "name": "NoticeAddress",
+                    "display": "NoticeAddress",
+                    "value": 123
+                },
+                {
+                    "name": "LastKnownAddress",
+                    "display": "LastKnownAddress",
+                    "value": 124
+                }
+            ],
+            "name": "AddressType"
+        },
+        {
+            "items": [
+                {
                     "name": "ACT",
                     "display": "Australian Capitol Territory",
                     "value": 60
@@ -5787,6 +5465,41 @@
                 }
             ],
             "name": "SourceSystemType"
+        },
+        {
+            "items": [
+                {
+                    "name": "Company",
+                    "display": "Company",
+                    "value": 130
+                },
+                {
+                    "name": "IncorporatedAssociation",
+                    "display": "IncorporatedAssociation",
+                    "value": 131
+                },
+                {
+                    "name": "GovernmentDepartment",
+                    "display": "GovernmentDepartment",
+                    "value": 132
+                },
+                {
+                    "name": "GovernmentBusinessEnterprise",
+                    "display": "GovernmentBusinessEnterprise",
+                    "value": 133
+                },
+                {
+                    "name": "LocalGovernment",
+                    "display": "LocalGovernment",
+                    "value": 134
+                },
+                {
+                    "name": "Association",
+                    "display": "Association",
+                    "value": 139
+                }
+            ],
+            "name": "OrganisationType"
         }
     ],
     "requests": []

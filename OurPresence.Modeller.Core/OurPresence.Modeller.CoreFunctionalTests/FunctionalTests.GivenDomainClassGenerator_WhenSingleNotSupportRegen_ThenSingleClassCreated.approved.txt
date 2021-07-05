@@ -1,16 +1,18 @@
-file[0] = Domain\Account.cs
+﻿file[0] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
-    public class Account : BaseAggregateRoot<Account, Guid>
+    public class Account
     {
         public Account(Guid ownerId, Money balance)
         {
             OwnerId = ownerId;
             Balance = balance;
         }
+
+        public int Id { get; private set; }
 
         public Guid OwnerId { get; private set; }
 

@@ -1,4 +1,4 @@
-file[0] = Mizrael.SuperSafeBank.Common.csproj
+﻿file[0] = Mizrael.SuperSafeBank.Common.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -595,8 +595,10 @@ file[10] = Domain\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
-    partial class Account : BaseAggregateRoot<Account, Guid>
+    partial class Account
     {
+        public int Id { get; private set; }
+
         public Guid OwnerId { get; private set; }
 
         public Money Balance { get; private set; }
@@ -678,8 +680,10 @@ file[14] = Domain\Customer.generated.cs
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
-    partial class Customer : BaseAggregateRoot<Customer, Guid>
+    partial class Customer
     {
+        public int Id { get; private set; }
+
         public string FirstName { get; private set; }
 
         public string LastName { get; private set; }
