@@ -1,4 +1,4 @@
-file[0] = Nhvr.Rcms.Common.csproj
+﻿file[0] = Nhvr.Rcms.Common.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -7,6 +7,10 @@ file[0] = Nhvr.Rcms.Common.csproj
         <LangVersion>Preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CSharpFunctionalExtensions" Version="2.17.0" />
+    </ItemGroup>
 
 </Project>
 
@@ -512,18 +516,21 @@ file[6] = .filenesting.json
 }
 
 file[7] = usings.cs
+global using CSharpFunctionalExtensions;
 global using System;
 global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
 global using System.Linq;
 global using System.Text;
 global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using System.Threading.Tasks;
+global using Nhvr.Rcms.Common.Enums;
 
 file[8] = Domain\Email.cs
 using Rcms.Common.EntityTypes;
 
-namespace Rcms.Common.Domain
+namespace Nhvr.Rcms.Common.Domain
 {
     public class Email : ValueObject
     {
@@ -590,10 +597,6 @@ namespace Nhvr.Rcms.Common.Domain
             UserId = userId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -606,8 +609,10 @@ file[10] = Domain\ActivityLog.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ActivityLog : BaseAggregateRoot<ActivityLog, Guid>
+    partial class ActivityLog
     {
+        public int Id { get; private set; }
+
         public bool Active { get; private set; }
 
         public string ActivityType { get; private set; }
@@ -644,34 +649,14 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class AddressBook
     {
-        public AddressBook(string unitType, string unitNumber, string streetName, string streetType, string streetSuffix, string streetNumberFirst, string streetNumberFirstPrefix, string streetNumberFirstSuffix, string streetNumberLast, string streetNumberLastPrefix, string streetNumberLastSuffix, string streetDirectional, string postalContainer, string postalCode, string suburb, string country, string fullAddress)
+        public AddressBook(string? floorNumber, string? unitType, string? unitNumber, string streetName, string streetType, string streetSuffix, string? streetNumberFirst, string? streetNumberFirstPrefix, string? streetNumberFirstSuffix, string? streetNumberLast, string? streetNumberLastPrefix, string? streetNumberLastSuffix, string? streetDirectional, string? postalContainer, string postalCode, string suburb, string country, string fullAddress)
         {
-            if(string.IsNullOrWhiteSpace(unitType))
-                throw new ArgumentException("Must include a value for Unit Type");
-            if(string.IsNullOrWhiteSpace(unitNumber))
-                throw new ArgumentException("Must include a value for Unit Number");
             if(string.IsNullOrWhiteSpace(streetName))
                 throw new ArgumentException("Must include a value for Street Name");
             if(string.IsNullOrWhiteSpace(streetType))
                 throw new ArgumentException("Must include a value for Street Type");
             if(string.IsNullOrWhiteSpace(streetSuffix))
                 throw new ArgumentException("Must include a value for Street Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirst))
-                throw new ArgumentException("Must include a value for Street Number First");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstPrefix))
-                throw new ArgumentException("Must include a value for Street Number First Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstSuffix))
-                throw new ArgumentException("Must include a value for Street Number First Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberLast))
-                throw new ArgumentException("Must include a value for Street Number Last");
-            if(string.IsNullOrWhiteSpace(streetNumberLastPrefix))
-                throw new ArgumentException("Must include a value for Street Number Last Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberLastSuffix))
-                throw new ArgumentException("Must include a value for Street Number Last Suffix");
-            if(string.IsNullOrWhiteSpace(streetDirectional))
-                throw new ArgumentException("Must include a value for Street Directional");
-            if(string.IsNullOrWhiteSpace(postalContainer))
-                throw new ArgumentException("Must include a value for Postal Container");
             if(string.IsNullOrWhiteSpace(postalCode))
                 throw new ArgumentException("Must include a value for Postal Code");
             if(string.IsNullOrWhiteSpace(suburb))
@@ -680,6 +665,7 @@ namespace Nhvr.Rcms.Common.Domain
                 throw new ArgumentException("Must include a value for Country");
             if(string.IsNullOrWhiteSpace(fullAddress))
                 throw new ArgumentException("Must include a value for Full Address");
+            FloorNumber = floorNumber;
             UnitType = unitType;
             UnitNumber = unitNumber;
             StreetName = streetName;
@@ -699,10 +685,6 @@ namespace Nhvr.Rcms.Common.Domain
             FullAddress = fullAddress;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -715,11 +697,15 @@ file[12] = Domain\AddressBook.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class AddressBook : BaseAggregateRoot<AddressBook, Guid>
+    partial class AddressBook
     {
-        public string UnitType { get; private set; }
+        public int Id { get; private set; }
 
-        public string UnitNumber { get; private set; }
+        public string? FloorNumber { get; private set; }
+
+        public string? UnitType { get; private set; }
+
+        public string? UnitNumber { get; private set; }
 
         public string StreetName { get; private set; }
 
@@ -727,21 +713,21 @@ namespace Nhvr.Rcms.Common.Domain
 
         public string StreetSuffix { get; private set; }
 
-        public string StreetNumberFirst { get; private set; }
+        public string? StreetNumberFirst { get; private set; }
 
-        public string StreetNumberFirstPrefix { get; private set; }
+        public string? StreetNumberFirstPrefix { get; private set; }
 
-        public string StreetNumberFirstSuffix { get; private set; }
+        public string? StreetNumberFirstSuffix { get; private set; }
 
-        public string StreetNumberLast { get; private set; }
+        public string? StreetNumberLast { get; private set; }
 
-        public string StreetNumberLastPrefix { get; private set; }
+        public string? StreetNumberLastPrefix { get; private set; }
 
-        public string StreetNumberLastSuffix { get; private set; }
+        public string? StreetNumberLastSuffix { get; private set; }
 
-        public string StreetDirectional { get; private set; }
+        public string? StreetDirectional { get; private set; }
 
-        public string PostalContainer { get; private set; }
+        public string? PostalContainer { get; private set; }
 
         public string PostalCode { get; private set; }
 
@@ -786,10 +772,6 @@ namespace Nhvr.Rcms.Common.Domain
             IsManualEntry = isManualEntry;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -802,8 +784,10 @@ file[14] = Domain\Alert.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Alert : BaseAggregateRoot<Alert, Guid>
+    partial class Alert
     {
+        public int Id { get; private set; }
+
         public bool Active { get; private set; }
 
         public DateTimeOffset? EffectFrom { get; private set; }
@@ -861,10 +845,6 @@ namespace Nhvr.Rcms.Common.Domain
             StatusMessage = statusMessage;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -913,10 +893,6 @@ namespace Nhvr.Rcms.Common.Domain
             StoppedOn = stoppedOn;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -929,8 +905,10 @@ file[18] = Domain\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class BatchProcess : BaseAggregateRoot<BatchProcess, Guid>
+    partial class BatchProcess
     {
+        public int Id { get; private set; }
+
         public string Url { get; private set; }
 
         public int StatusId { get; private set; }
@@ -963,10 +941,6 @@ namespace Nhvr.Rcms.Common.Domain
             StoppedOn = stoppedOn;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -979,8 +953,10 @@ file[20] = Domain\BatchProcessTask.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class BatchProcessTask : BaseAggregateRoot<BatchProcessTask, Guid>
+    partial class BatchProcessTask
     {
+        public int Id { get; private set; }
+
         public int TypeId { get; private set; }
 
         public int StatusId { get; private set; }
@@ -1021,10 +997,6 @@ namespace Nhvr.Rcms.Common.Domain
             ResultMessage = resultMessage;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1037,8 +1009,10 @@ file[22] = Domain\BatchProcessTaskItem.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class BatchProcessTaskItem : BaseAggregateRoot<BatchProcessTaskItem, Guid>
+    partial class BatchProcessTaskItem
     {
+        public int Id { get; private set; }
+
         public int TaskId { get; private set; }
 
         public int StatusId { get; private set; }
@@ -1082,10 +1056,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1098,8 +1068,10 @@ file[24] = Domain\ComplianceAction.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceAction : BaseAggregateRoot<ComplianceAction, Guid>
+    partial class ComplianceAction
     {
+        public int Id { get; private set; }
+
         public int TypeId { get; private set; }
 
         public string NoticeNumber { get; private set; }
@@ -1181,10 +1153,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1197,8 +1165,10 @@ file[26] = Domain\ComplianceActionImport.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionImport : BaseAggregateRoot<ComplianceActionImport, Guid>
+    partial class ComplianceActionImport
     {
+        public int Id { get; private set; }
+
         public int VehicleRegistrationStateId { get; private set; }
 
         public string VehicleRegistrationNumber { get; private set; }
@@ -1247,7 +1217,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ComplianceActionLocation
     {
-        public ComplianceActionLocation(int complianceActionId, int stateId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, bool active, decimal altitude, decimal altitudeAccuracy, decimal horizontalAccuracy, decimal longitude, decimal latitude, decimal elevation, string floorNumber, string unitType, string unitNumber, string streetName, string streetType, string streetSuffix, string streetNumberFirst, string streetNumberFirstPrefix, string streetNumberFirstSuffix, string streetNumberLast, string streetNumberLastPrefix, string streetNumberLastSuffix, string streetDirectional, string postalContainer, string postalCode, string suburb, string country, string fullAddress, DateTimeOffset? dateAdded)
+        public ComplianceActionLocation(int complianceActionId, int stateId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, bool active, MapDetail mapDetail, AddressBook address, DateTimeOffset? dateAdded)
         {
             if(string.IsNullOrWhiteSpace(localGovernmentArea))
                 throw new ArgumentException("Must include a value for Local Government Area");
@@ -1259,42 +1229,6 @@ namespace Nhvr.Rcms.Common.Domain
                 throw new ArgumentException("Must include a value for Common Name");
             if(string.IsNullOrWhiteSpace(remark))
                 throw new ArgumentException("Must include a value for Remark");
-            if(string.IsNullOrWhiteSpace(floorNumber))
-                throw new ArgumentException("Must include a value for Floor Number");
-            if(string.IsNullOrWhiteSpace(unitType))
-                throw new ArgumentException("Must include a value for Unit Type");
-            if(string.IsNullOrWhiteSpace(unitNumber))
-                throw new ArgumentException("Must include a value for Unit Number");
-            if(string.IsNullOrWhiteSpace(streetName))
-                throw new ArgumentException("Must include a value for Street Name");
-            if(string.IsNullOrWhiteSpace(streetType))
-                throw new ArgumentException("Must include a value for Street Type");
-            if(string.IsNullOrWhiteSpace(streetSuffix))
-                throw new ArgumentException("Must include a value for Street Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirst))
-                throw new ArgumentException("Must include a value for Street Number First");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstPrefix))
-                throw new ArgumentException("Must include a value for Street Number First Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstSuffix))
-                throw new ArgumentException("Must include a value for Street Number First Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberLast))
-                throw new ArgumentException("Must include a value for Street Number Last");
-            if(string.IsNullOrWhiteSpace(streetNumberLastPrefix))
-                throw new ArgumentException("Must include a value for Street Number Last Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberLastSuffix))
-                throw new ArgumentException("Must include a value for Street Number Last Suffix");
-            if(string.IsNullOrWhiteSpace(streetDirectional))
-                throw new ArgumentException("Must include a value for Street Directional");
-            if(string.IsNullOrWhiteSpace(postalContainer))
-                throw new ArgumentException("Must include a value for Postal Container");
-            if(string.IsNullOrWhiteSpace(postalCode))
-                throw new ArgumentException("Must include a value for Postal Code");
-            if(string.IsNullOrWhiteSpace(suburb))
-                throw new ArgumentException("Must include a value for Suburb");
-            if(string.IsNullOrWhiteSpace(country))
-                throw new ArgumentException("Must include a value for Country");
-            if(string.IsNullOrWhiteSpace(fullAddress))
-                throw new ArgumentException("Must include a value for Full Address");
             ComplianceActionId = complianceActionId;
             StateId = stateId;
             LocalGovernmentArea = localGovernmentArea;
@@ -1303,37 +1237,11 @@ namespace Nhvr.Rcms.Common.Domain
             CommonName = commonName;
             Remark = remark;
             Active = active;
-            Altitude = altitude;
-            AltitudeAccuracy = altitudeAccuracy;
-            HorizontalAccuracy = horizontalAccuracy;
-            Longitude = longitude;
-            Latitude = latitude;
-            Elevation = elevation;
-            FloorNumber = floorNumber;
-            UnitType = unitType;
-            UnitNumber = unitNumber;
-            StreetName = streetName;
-            StreetType = streetType;
-            StreetSuffix = streetSuffix;
-            StreetNumberFirst = streetNumberFirst;
-            StreetNumberFirstPrefix = streetNumberFirstPrefix;
-            StreetNumberFirstSuffix = streetNumberFirstSuffix;
-            StreetNumberLast = streetNumberLast;
-            StreetNumberLastPrefix = streetNumberLastPrefix;
-            StreetNumberLastSuffix = streetNumberLastSuffix;
-            StreetDirectional = streetDirectional;
-            PostalContainer = postalContainer;
-            PostalCode = postalCode;
-            Suburb = suburb;
-            Country = country;
-            FullAddress = fullAddress;
+            MapDetail = mapDetail;
+            Address = address;
             DateAdded = dateAdded;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1346,8 +1254,10 @@ file[28] = Domain\ComplianceActionLocation.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionLocation : BaseAggregateRoot<ComplianceActionLocation, Guid>
+    partial class ComplianceActionLocation
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public int StateId { get; private set; }
@@ -1364,53 +1274,9 @@ namespace Nhvr.Rcms.Common.Domain
 
         public bool Active { get; private set; }
 
-        public decimal Altitude { get; private set; }
+        public MapDetail MapDetail { get; private set; }
 
-        public decimal AltitudeAccuracy { get; private set; }
-
-        public decimal HorizontalAccuracy { get; private set; }
-
-        public decimal Longitude { get; private set; }
-
-        public decimal Latitude { get; private set; }
-
-        public decimal Elevation { get; private set; }
-
-        public string FloorNumber { get; private set; }
-
-        public string UnitType { get; private set; }
-
-        public string UnitNumber { get; private set; }
-
-        public string StreetName { get; private set; }
-
-        public string StreetType { get; private set; }
-
-        public string StreetSuffix { get; private set; }
-
-        public string StreetNumberFirst { get; private set; }
-
-        public string StreetNumberFirstPrefix { get; private set; }
-
-        public string StreetNumberFirstSuffix { get; private set; }
-
-        public string StreetNumberLast { get; private set; }
-
-        public string StreetNumberLastPrefix { get; private set; }
-
-        public string StreetNumberLastSuffix { get; private set; }
-
-        public string StreetDirectional { get; private set; }
-
-        public string PostalContainer { get; private set; }
-
-        public string PostalCode { get; private set; }
-
-        public string Suburb { get; private set; }
-
-        public string Country { get; private set; }
-
-        public string FullAddress { get; private set; }
+        public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
     }
@@ -1478,10 +1344,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1494,8 +1356,10 @@ file[30] = Domain\ComplianceActionOffence.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionOffence : BaseAggregateRoot<ComplianceActionOffence, Guid>
+    partial class ComplianceActionOffence
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public string Category { get; private set; }
@@ -1570,10 +1434,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1586,8 +1446,10 @@ file[32] = Domain\ComplianceActionService.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionService : BaseAggregateRoot<ComplianceActionService, Guid>
+    partial class ComplianceActionService
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public int RegisteredAddressId { get; private set; }
@@ -1618,7 +1480,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ComplianceActionServiceAddress
     {
-        public ComplianceActionServiceAddress(int stateId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, bool active, decimal altitude, decimal altitudeAccuracy, decimal horizontalAccuracy, decimal longitude, decimal latitude, decimal elevation, string floorNumber, string unitType, string unitNumber, string streetName, string streetType, string streetSuffix, string streetNumberFirst, string streetNumberFirstPrefix, string streetNumberFirstSuffix, string streetNumberLast, string streetNumberLastPrefix, string streetNumberLastSuffix, string streetDirectional, string postalContainer, string postalCode, string suburb, string country, string fullAddress, DateTimeOffset? dateAdded)
+        public ComplianceActionServiceAddress(int stateId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, bool active, MapDetail mapDetail, AddressBook address, DateTimeOffset? dateAdded)
         {
             if(string.IsNullOrWhiteSpace(localGovernmentArea))
                 throw new ArgumentException("Must include a value for Local Government Area");
@@ -1630,42 +1492,6 @@ namespace Nhvr.Rcms.Common.Domain
                 throw new ArgumentException("Must include a value for Common Name");
             if(string.IsNullOrWhiteSpace(remark))
                 throw new ArgumentException("Must include a value for Remark");
-            if(string.IsNullOrWhiteSpace(floorNumber))
-                throw new ArgumentException("Must include a value for Floor Number");
-            if(string.IsNullOrWhiteSpace(unitType))
-                throw new ArgumentException("Must include a value for Unit Type");
-            if(string.IsNullOrWhiteSpace(unitNumber))
-                throw new ArgumentException("Must include a value for Unit Number");
-            if(string.IsNullOrWhiteSpace(streetName))
-                throw new ArgumentException("Must include a value for Street Name");
-            if(string.IsNullOrWhiteSpace(streetType))
-                throw new ArgumentException("Must include a value for Street Type");
-            if(string.IsNullOrWhiteSpace(streetSuffix))
-                throw new ArgumentException("Must include a value for Street Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirst))
-                throw new ArgumentException("Must include a value for Street Number First");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstPrefix))
-                throw new ArgumentException("Must include a value for Street Number First Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstSuffix))
-                throw new ArgumentException("Must include a value for Street Number First Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberLast))
-                throw new ArgumentException("Must include a value for Street Number Last");
-            if(string.IsNullOrWhiteSpace(streetNumberLastPrefix))
-                throw new ArgumentException("Must include a value for Street Number Last Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberLastSuffix))
-                throw new ArgumentException("Must include a value for Street Number Last Suffix");
-            if(string.IsNullOrWhiteSpace(streetDirectional))
-                throw new ArgumentException("Must include a value for Street Directional");
-            if(string.IsNullOrWhiteSpace(postalContainer))
-                throw new ArgumentException("Must include a value for Postal Container");
-            if(string.IsNullOrWhiteSpace(postalCode))
-                throw new ArgumentException("Must include a value for Postal Code");
-            if(string.IsNullOrWhiteSpace(suburb))
-                throw new ArgumentException("Must include a value for Suburb");
-            if(string.IsNullOrWhiteSpace(country))
-                throw new ArgumentException("Must include a value for Country");
-            if(string.IsNullOrWhiteSpace(fullAddress))
-                throw new ArgumentException("Must include a value for Full Address");
             StateId = stateId;
             LocalGovernmentArea = localGovernmentArea;
             LgashortTitle = lgashortTitle;
@@ -1673,37 +1499,11 @@ namespace Nhvr.Rcms.Common.Domain
             CommonName = commonName;
             Remark = remark;
             Active = active;
-            Altitude = altitude;
-            AltitudeAccuracy = altitudeAccuracy;
-            HorizontalAccuracy = horizontalAccuracy;
-            Longitude = longitude;
-            Latitude = latitude;
-            Elevation = elevation;
-            FloorNumber = floorNumber;
-            UnitType = unitType;
-            UnitNumber = unitNumber;
-            StreetName = streetName;
-            StreetType = streetType;
-            StreetSuffix = streetSuffix;
-            StreetNumberFirst = streetNumberFirst;
-            StreetNumberFirstPrefix = streetNumberFirstPrefix;
-            StreetNumberFirstSuffix = streetNumberFirstSuffix;
-            StreetNumberLast = streetNumberLast;
-            StreetNumberLastPrefix = streetNumberLastPrefix;
-            StreetNumberLastSuffix = streetNumberLastSuffix;
-            StreetDirectional = streetDirectional;
-            PostalContainer = postalContainer;
-            PostalCode = postalCode;
-            Suburb = suburb;
-            Country = country;
-            FullAddress = fullAddress;
+            MapDetail = mapDetail;
+            Address = address;
             DateAdded = dateAdded;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1716,8 +1516,10 @@ file[34] = Domain\ComplianceActionServiceAddress.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionServiceAddress : BaseAggregateRoot<ComplianceActionServiceAddress, Guid>
+    partial class ComplianceActionServiceAddress
     {
+        public int Id { get; private set; }
+
         public int StateId { get; private set; }
 
         public string LocalGovernmentArea { get; private set; }
@@ -1732,53 +1534,9 @@ namespace Nhvr.Rcms.Common.Domain
 
         public bool Active { get; private set; }
 
-        public decimal Altitude { get; private set; }
+        public MapDetail MapDetail { get; private set; }
 
-        public decimal AltitudeAccuracy { get; private set; }
-
-        public decimal HorizontalAccuracy { get; private set; }
-
-        public decimal Longitude { get; private set; }
-
-        public decimal Latitude { get; private set; }
-
-        public decimal Elevation { get; private set; }
-
-        public string FloorNumber { get; private set; }
-
-        public string UnitType { get; private set; }
-
-        public string UnitNumber { get; private set; }
-
-        public string StreetName { get; private set; }
-
-        public string StreetType { get; private set; }
-
-        public string StreetSuffix { get; private set; }
-
-        public string StreetNumberFirst { get; private set; }
-
-        public string StreetNumberFirstPrefix { get; private set; }
-
-        public string StreetNumberFirstSuffix { get; private set; }
-
-        public string StreetNumberLast { get; private set; }
-
-        public string StreetNumberLastPrefix { get; private set; }
-
-        public string StreetNumberLastSuffix { get; private set; }
-
-        public string StreetDirectional { get; private set; }
-
-        public string PostalContainer { get; private set; }
-
-        public string PostalCode { get; private set; }
-
-        public string Suburb { get; private set; }
-
-        public string Country { get; private set; }
-
-        public string FullAddress { get; private set; }
+        public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
     }
@@ -1817,10 +1575,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1833,8 +1587,10 @@ file[36] = Domain\ComplianceActionStatus.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionStatus : BaseAggregateRoot<ComplianceActionStatus, Guid>
+    partial class ComplianceActionStatus
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public int StatusId { get; private set; }
@@ -1888,10 +1644,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -1904,8 +1656,10 @@ file[38] = Domain\ComplianceActionSubComponent.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceActionSubComponent : BaseAggregateRoot<ComplianceActionSubComponent, Guid>
+    partial class ComplianceActionSubComponent
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public string Name { get; private set; }
@@ -1988,10 +1742,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2004,8 +1754,10 @@ file[40] = Domain\ComplianceDefect.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceDefect : BaseAggregateRoot<ComplianceDefect, Guid>
+    partial class ComplianceDefect
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public decimal Odometer { get; private set; }
@@ -2102,10 +1854,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2118,8 +1866,10 @@ file[42] = Domain\ComplianceDefectSubComponent.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceDefectSubComponent : BaseAggregateRoot<ComplianceDefectSubComponent, Guid>
+    partial class ComplianceDefectSubComponent
     {
+        public int Id { get; private set; }
+
         public int ComplianceDefectId { get; private set; }
 
         public string Name { get; private set; }
@@ -2146,7 +1896,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ComplianceDirectionDimension
     {
-        public ComplianceDirectionDimension(int complianceActionId, int personDriverId, int personOperatorId, int organisationOperatorId, bool massLimit, bool dimensionLimit, bool unsafe, bool notSecured, string severity, bool secureLoad, bool reduceGvm, decimal reduceGvmnumber, bool adjustAxleGroup, int adjustAxleGroupNumber, int adjustAxleGroupBy, bool adjustVehicleDimension, decimal adjustVehicleDimensionLength, decimal adjustVehicleDimensionWidth, decimal adjustVehicleDimensionHeight, decimal adjustVehicleDimensionOverhang, string nominatedPlace, string condition, bool active, int systemId)
+        public ComplianceDirectionDimension(int complianceActionId, int personDriverId, int personOperatorId, int organisationOperatorId, bool massLimit, bool dimensionLimit, bool @unsafe, bool notSecured, string severity, bool secureLoad, bool reduceGvm, decimal reduceGvmnumber, bool adjustAxleGroup, int adjustAxleGroupNumber, int adjustAxleGroupBy, bool adjustVehicleDimension, decimal adjustVehicleDimensionLength, decimal adjustVehicleDimensionWidth, decimal adjustVehicleDimensionHeight, decimal adjustVehicleDimensionOverhang, string nominatedPlace, string condition, bool active, int systemId)
         {
             if(string.IsNullOrWhiteSpace(severity))
                 throw new ArgumentException("Must include a value for Severity");
@@ -2160,7 +1910,7 @@ namespace Nhvr.Rcms.Common.Domain
             OrganisationOperatorId = organisationOperatorId;
             MassLimit = massLimit;
             DimensionLimit = dimensionLimit;
-            Unsafe = unsafe;
+            Unsafe = @unsafe;
             NotSecured = notSecured;
             Severity = severity;
             SecureLoad = secureLoad;
@@ -2180,10 +1930,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2196,8 +1942,10 @@ file[44] = Domain\ComplianceDirectionDimension.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceDirectionDimension : BaseAggregateRoot<ComplianceDirectionDimension, Guid>
+    partial class ComplianceDirectionDimension
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public int PersonDriverId { get; private set; }
@@ -2266,10 +2014,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2282,8 +2026,10 @@ file[46] = Domain\ComplianceDirectionDimensionsHardcopy.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceDirectionDimensionsHardcopy : BaseAggregateRoot<ComplianceDirectionDimensionsHardcopy, Guid>
+    partial class ComplianceDirectionDimensionsHardcopy
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public int PersonDriverId { get; private set; }
@@ -2337,10 +2083,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2353,8 +2095,10 @@ file[48] = Domain\ComplianceDirectionFatigue.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceDirectionFatigue : BaseAggregateRoot<ComplianceDirectionFatigue, Guid>
+    partial class ComplianceDirectionFatigue
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public string WorkDiaryPageNumber { get; private set; }
@@ -2425,10 +2169,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2441,8 +2181,10 @@ file[50] = Domain\ComplianceDirectionToRectify.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceDirectionToRectify : BaseAggregateRoot<ComplianceDirectionToRectify, Guid>
+    partial class ComplianceDirectionToRectify
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public string DescriptionOfBreach { get; private set; }
@@ -2481,10 +2223,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2497,8 +2235,10 @@ file[52] = Domain\ComplianceEducation.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceEducation : BaseAggregateRoot<ComplianceEducation, Guid>
+    partial class ComplianceEducation
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public string Category { get; private set; }
@@ -2547,10 +2287,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2563,8 +2299,10 @@ file[54] = Domain\ComplianceFormalCaution.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceFormalCaution : BaseAggregateRoot<ComplianceFormalCaution, Guid>
+    partial class ComplianceFormalCaution
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public decimal DetectedSpeed { get; private set; }
@@ -2611,10 +2349,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2627,8 +2361,10 @@ file[56] = Domain\ComplianceFormalWarning.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceFormalWarning : BaseAggregateRoot<ComplianceFormalWarning, Guid>
+    partial class ComplianceFormalWarning
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public bool UseTheVehicle { get; private set; }
@@ -2680,10 +2416,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2696,8 +2428,10 @@ file[58] = Domain\ComplianceInfringement.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceInfringement : BaseAggregateRoot<ComplianceInfringement, Guid>
+    partial class ComplianceInfringement
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public decimal DetectedSpeed { get; private set; }
@@ -2750,10 +2484,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2766,8 +2496,10 @@ file[60] = Domain\ComplianceOfficialWarning.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceOfficialWarning : BaseAggregateRoot<ComplianceOfficialWarning, Guid>
+    partial class ComplianceOfficialWarning
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public bool UseTheVehicle { get; private set; }
@@ -2803,10 +2535,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2819,8 +2547,10 @@ file[62] = Domain\ComplianceReportForProsecution.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceReportForProsecution : BaseAggregateRoot<ComplianceReportForProsecution, Guid>
+    partial class ComplianceReportForProsecution
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public string ReferenceNumber { get; private set; }
@@ -2849,10 +2579,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2865,8 +2591,10 @@ file[64] = Domain\ComplianceWAFormalCaution.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ComplianceWAFormalCaution : BaseAggregateRoot<ComplianceWAFormalCaution, Guid>
+    partial class ComplianceWAFormalCaution
     {
+        public int Id { get; private set; }
+
         public int ComplianceActionId { get; private set; }
 
         public bool UseTheVehicle { get; private set; }
@@ -2915,10 +2643,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -2931,8 +2655,10 @@ file[66] = Domain\Event.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Event : BaseAggregateRoot<Event, Guid>
+    partial class Event
     {
+        public int Id { get; private set; }
+
         public Guid? CreationId { get; private set; }
 
         public Guid? StatusId { get; private set; }
@@ -2987,7 +2713,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class EventAddress
     {
-        public EventAddress(Guid? stateId, AddressType eventAddressType, string? localGovernmentArea, string? lGAShortTitle, string? near, string? commonName, string? remark, bool active, decimal? altitude, decimal? altitudeAccuracy, decimal? horizontalAccuracy, decimal? longitude, decimal? latitude, decimal? elevation, string? floorNumber, string? unitType, string? unitNumber, string? streetName, string? streetType, string? streetSuffix, string? streetNumberFirst, string? streetNumberFirstPrefix, string? streetNumberFirstSuffix, string? streetNumberLast, string? streetNumberLastPrefix, string? streetNumberLastSuffix, string? streetDirectional, string? postalContainer, string? postalCode, string? suburb, string? country, string? fullAddress, DateTimeOffset dateAdded)
+        public EventAddress(Guid? stateId, AddressTypes eventAddressType, string? localGovernmentArea, string? lGAShortTitle, string? near, string? commonName, string? remark, bool active, MapDetail mapDetail, AddressBook address, DateTimeOffset dateAdded)
         {
             StateId = stateId;
             EventAddressType = eventAddressType;
@@ -2997,37 +2723,11 @@ namespace Nhvr.Rcms.Common.Domain
             CommonName = commonName;
             Remark = remark;
             Active = active;
-            Altitude = altitude;
-            AltitudeAccuracy = altitudeAccuracy;
-            HorizontalAccuracy = horizontalAccuracy;
-            Longitude = longitude;
-            Latitude = latitude;
-            Elevation = elevation;
-            FloorNumber = floorNumber;
-            UnitType = unitType;
-            UnitNumber = unitNumber;
-            StreetName = streetName;
-            StreetType = streetType;
-            StreetSuffix = streetSuffix;
-            StreetNumberFirst = streetNumberFirst;
-            StreetNumberFirstPrefix = streetNumberFirstPrefix;
-            StreetNumberFirstSuffix = streetNumberFirstSuffix;
-            StreetNumberLast = streetNumberLast;
-            StreetNumberLastPrefix = streetNumberLastPrefix;
-            StreetNumberLastSuffix = streetNumberLastSuffix;
-            StreetDirectional = streetDirectional;
-            PostalContainer = postalContainer;
-            PostalCode = postalCode;
-            Suburb = suburb;
-            Country = country;
-            FullAddress = fullAddress;
+            MapDetail = mapDetail;
+            Address = address;
             DateAdded = dateAdded;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3040,11 +2740,13 @@ file[68] = Domain\EventAddress.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventAddress : BaseAggregateRoot<EventAddress, Guid>
+    partial class EventAddress
     {
+        public int Id { get; private set; }
+
         public Guid? StateId { get; private set; }
 
-        public AddressType EventAddressType { get; private set; }
+        public AddressTypes EventAddressType { get; private set; }
 
         public string? LocalGovernmentArea { get; private set; }
 
@@ -3058,53 +2760,9 @@ namespace Nhvr.Rcms.Common.Domain
 
         public bool Active { get; private set; }
 
-        public decimal? Altitude { get; private set; }
+        public MapDetail MapDetail { get; private set; }
 
-        public decimal? AltitudeAccuracy { get; private set; }
-
-        public decimal? HorizontalAccuracy { get; private set; }
-
-        public decimal? Longitude { get; private set; }
-
-        public decimal? Latitude { get; private set; }
-
-        public decimal? Elevation { get; private set; }
-
-        public string? FloorNumber { get; private set; }
-
-        public string? UnitType { get; private set; }
-
-        public string? UnitNumber { get; private set; }
-
-        public string? StreetName { get; private set; }
-
-        public string? StreetType { get; private set; }
-
-        public string? StreetSuffix { get; private set; }
-
-        public string? StreetNumberFirst { get; private set; }
-
-        public string? StreetNumberFirstPrefix { get; private set; }
-
-        public string? StreetNumberFirstSuffix { get; private set; }
-
-        public string? StreetNumberLast { get; private set; }
-
-        public string? StreetNumberLastPrefix { get; private set; }
-
-        public string? StreetNumberLastSuffix { get; private set; }
-
-        public string? StreetDirectional { get; private set; }
-
-        public string? PostalContainer { get; private set; }
-
-        public string? PostalCode { get; private set; }
-
-        public string? Suburb { get; private set; }
-
-        public string? Country { get; private set; }
-
-        public string? FullAddress { get; private set; }
+        public AddressBook Address { get; private set; }
 
         public DateTimeOffset DateAdded { get; private set; }
     }
@@ -3217,10 +2875,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3233,8 +2887,10 @@ file[70] = Domain\EventInspection.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventInspection : BaseAggregateRoot<EventInspection, Guid>
+    partial class EventInspection
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public bool VehicleStandardsInspected { get; private set; }
@@ -3360,10 +3016,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3376,8 +3028,10 @@ file[72] = Domain\EventInspectionAxleGroup.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventInspectionAxleGroup : BaseAggregateRoot<EventInspectionAxleGroup, Guid>
+    partial class EventInspectionAxleGroup
     {
+        public int Id { get; private set; }
+
         public int EventInspectionId { get; private set; }
 
         public decimal DefaultMassAdjustment { get; private set; }
@@ -3418,10 +3072,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3434,8 +3084,10 @@ file[74] = Domain\EventInspectionAxleWeight.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventInspectionAxleWeight : BaseAggregateRoot<EventInspectionAxleWeight, Guid>
+    partial class EventInspectionAxleWeight
     {
+        public int Id { get; private set; }
+
         public int EventInspectionAxleGroupId { get; private set; }
 
         public decimal AxleOffset { get; private set; }
@@ -3472,10 +3124,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3488,8 +3136,10 @@ file[76] = Domain\EventInspectionAxleWeightPwd.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventInspectionAxleWeightPwd : BaseAggregateRoot<EventInspectionAxleWeightPwd, Guid>
+    partial class EventInspectionAxleWeightPwd
     {
+        public int Id { get; private set; }
+
         public int EventInspectionAxleWeightId { get; private set; }
 
         public string Number { get; private set; }
@@ -3518,10 +3168,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3534,8 +3180,10 @@ file[78] = Domain\EventInspectionMovement.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventInspectionMovement : BaseAggregateRoot<EventInspectionMovement, Guid>
+    partial class EventInspectionMovement
     {
+        public int Id { get; private set; }
+
         public int EventInspectionId { get; private set; }
 
         public decimal FoundWeight { get; private set; }
@@ -3570,10 +3218,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3586,8 +3230,10 @@ file[80] = Domain\EventMediaExternal.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventMediaExternal : BaseAggregateRoot<EventMediaExternal, Guid>
+    partial class EventMediaExternal
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public string Type { get; private set; }
@@ -3624,10 +3270,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3640,8 +3282,10 @@ file[82] = Domain\EventMedium.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventMedium : BaseAggregateRoot<EventMedium, Guid>
+    partial class EventMedium
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public Guid ReferenceId { get; private set; }
@@ -3679,10 +3323,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3695,8 +3335,10 @@ file[84] = Domain\EventNote.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventNote : BaseAggregateRoot<EventNote, Guid>
+    partial class EventNote
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public string TextValue { get; private set; }
@@ -3737,10 +3379,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3753,8 +3391,10 @@ file[86] = Domain\EventOfficer.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventOfficer : BaseAggregateRoot<EventOfficer, Guid>
+    partial class EventOfficer
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int UserId { get; private set; }
@@ -3789,10 +3429,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3805,8 +3441,10 @@ file[88] = Domain\EventOrganisation.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventOrganisation : BaseAggregateRoot<EventOrganisation, Guid>
+    partial class EventOrganisation
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int OrganisationId { get; private set; }
@@ -3833,10 +3471,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3849,8 +3483,10 @@ file[90] = Domain\EventPerson.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventPerson : BaseAggregateRoot<EventPerson, Guid>
+    partial class EventPerson
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int PersonId { get; private set; }
@@ -3899,10 +3535,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -3915,8 +3547,10 @@ file[92] = Domain\EventPersonDiary.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventPersonDiary : BaseAggregateRoot<EventPersonDiary, Guid>
+    partial class EventPersonDiary
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int PersonId { get; private set; }
@@ -3985,10 +3619,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4001,8 +3631,10 @@ file[94] = Domain\EventPersonFatigue.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventPersonFatigue : BaseAggregateRoot<EventPersonFatigue, Guid>
+    partial class EventPersonFatigue
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int PersonId { get; private set; }
@@ -4041,10 +3673,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4057,8 +3685,10 @@ file[96] = Domain\EventVehicle.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventVehicle : BaseAggregateRoot<EventVehicle, Guid>
+    partial class EventVehicle
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -4090,10 +3720,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4106,8 +3732,10 @@ file[98] = Domain\EventVehicleConcession.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventVehicleConcession : BaseAggregateRoot<EventVehicleConcession, Guid>
+    partial class EventVehicleConcession
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -4141,10 +3769,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4157,8 +3781,10 @@ file[100] = Domain\EventVehicleCondition.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventVehicleCondition : BaseAggregateRoot<EventVehicleCondition, Guid>
+    partial class EventVehicleCondition
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -4193,10 +3819,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4209,8 +3831,10 @@ file[102] = Domain\EventVehicleScheme.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class EventVehicleScheme : BaseAggregateRoot<EventVehicleScheme, Guid>
+    partial class EventVehicleScheme
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -4241,10 +3865,6 @@ namespace Nhvr.Rcms.Common.Domain
             InterceptNumber = interceptNumber;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4257,8 +3877,10 @@ file[104] = Domain\Intercept.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Intercept : BaseAggregateRoot<Intercept, Guid>
+    partial class Intercept
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public string InterceptNumber { get; private set; }
@@ -4312,10 +3934,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4328,8 +3946,10 @@ file[106] = Domain\InterceptImport.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class InterceptImport : BaseAggregateRoot<InterceptImport, Guid>
+    partial class InterceptImport
     {
+        public int Id { get; private set; }
+
         public int VehicleRegistrationStateId { get; private set; }
 
         public string VehicleRegistrationNumber { get; private set; }
@@ -4418,10 +4038,6 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4434,8 +4050,10 @@ file[108] = Domain\InterceptJourney.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class InterceptJourney : BaseAggregateRoot<InterceptJourney, Guid>
+    partial class InterceptJourney
     {
+        public int Id { get; private set; }
+
         public int InterceptId { get; private set; }
 
         public string IndustrySector { get; private set; }
@@ -4485,10 +4103,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4501,8 +4115,10 @@ file[110] = Domain\InterceptOrganisation.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class InterceptOrganisation : BaseAggregateRoot<InterceptOrganisation, Guid>
+    partial class InterceptOrganisation
     {
+        public int Id { get; private set; }
+
         public int InterceptId { get; private set; }
 
         public int OrganisationId { get; private set; }
@@ -4526,10 +4142,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4542,8 +4154,10 @@ file[112] = Domain\InterceptPerson.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class InterceptPerson : BaseAggregateRoot<InterceptPerson, Guid>
+    partial class InterceptPerson
     {
+        public int Id { get; private set; }
+
         public int InterceptId { get; private set; }
 
         public int PersonId { get; private set; }
@@ -4567,10 +4181,6 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4583,8 +4193,10 @@ file[114] = Domain\InterceptVehicle.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class InterceptVehicle : BaseAggregateRoot<InterceptVehicle, Guid>
+    partial class InterceptVehicle
     {
+        public int Id { get; private set; }
+
         public int InterceptId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -4639,10 +4251,6 @@ namespace Nhvr.Rcms.Common.Domain
             ClientVersion = clientVersion;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -4655,8 +4263,10 @@ file[116] = Domain\Log.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Log : BaseAggregateRoot<Log, Guid>
+    partial class Log
     {
+        public int Id { get; private set; }
+
         public int LogTypeId { get; private set; }
 
         public int LogLevelTypeId { get; private set; }
@@ -4691,7 +4301,53 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[117] = Domain\NoticeNumber.cs
+file[117] = Domain\MapDetail.cs
+// Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
+
+namespace Nhvr.Rcms.Common.Domain
+{
+    public partial class MapDetail
+    {
+        public MapDetail(decimal? altitude, decimal? altitudeAccuracy, decimal? horizontalAccuracy, decimal? longitude, decimal? latitude, decimal? elevation)
+        {
+            Altitude = altitude;
+            AltitudeAccuracy = altitudeAccuracy;
+            HorizontalAccuracy = horizontalAccuracy;
+            Longitude = longitude;
+            Latitude = latitude;
+            Elevation = elevation;
+        }
+
+    }
+}
+
+file[118] = Domain\MapDetail.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.Common.Domain
+{
+    partial class MapDetail
+    {
+        public decimal? Altitude { get; private set; }
+
+        public decimal? AltitudeAccuracy { get; private set; }
+
+        public decimal? HorizontalAccuracy { get; private set; }
+
+        public decimal? Longitude { get; private set; }
+
+        public decimal? Latitude { get; private set; }
+
+        public decimal? Elevation { get; private set; }
+    }
+}
+
+file[119] = Domain\NoticeNumber.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -4715,14 +4371,10 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[118] = Domain\NoticeNumber.generated.cs
+file[120] = Domain\NoticeNumber.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4731,8 +4383,10 @@ file[118] = Domain\NoticeNumber.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class NoticeNumber : BaseAggregateRoot<NoticeNumber, Guid>
+    partial class NoticeNumber
     {
+        public int Id { get; private set; }
+
         public int StateId { get; private set; }
 
         public int NoticeTypeId { get; private set; }
@@ -4751,7 +4405,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[119] = Domain\Organisation.cs
+file[121] = Domain\Organisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -4759,7 +4413,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class Organisation
     {
-        public Organisation(Guid? creationId, string name, string? aCN, OrganisationType typeId, bool active, int systemId)
+        public Organisation(Guid? creationId, string name, string? aCN, OrganisationTypes typeId, bool active, int systemId)
         {
             if(string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Must include a value for Name");
@@ -4771,14 +4425,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[120] = Domain\Organisation.generated.cs
+file[122] = Domain\Organisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4787,15 +4437,17 @@ file[120] = Domain\Organisation.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Organisation : BaseAggregateRoot<Organisation, Guid>
+    partial class Organisation
     {
+        public int Id { get; private set; }
+
         public Guid? CreationId { get; private set; }
 
         public string Name { get; private set; }
 
         public string? ACN { get; private set; }
 
-        public OrganisationType TypeId { get; private set; }
+        public OrganisationTypes TypeId { get; private set; }
 
         public bool Active { get; private set; }
 
@@ -4803,7 +4455,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[121] = Domain\OrganisationAddress.cs
+file[123] = Domain\OrganisationAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -4811,7 +4463,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class OrganisationAddress
     {
-        public OrganisationAddress(int organisationId, int eventId, int addressTypeId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, int stateId, bool active, decimal altitude, decimal altitudeAccuracy, decimal horizontalAccuracy, decimal longitude, decimal latitude, decimal elevation, string source, string floorNumber, string unitType, string unitNumber, string streetName, string streetType, string streetSuffix, string streetNumberFirst, string streetNumberFirstPrefix, string streetNumberFirstSuffix, string streetNumberLast, string streetNumberLastPrefix, string streetNumberLastSuffix, string streetDirectional, string postalContainer, string postalCode, string suburb, string country, string fullAddress, DateTimeOffset? dateAdded)
+        public OrganisationAddress(int organisationId, int eventId, int addressTypeId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, int stateId, bool active, string source, MapDetail mapDetail, AddressBook address, DateTimeOffset? dateAdded)
         {
             if(string.IsNullOrWhiteSpace(localGovernmentArea))
                 throw new ArgumentException("Must include a value for Local Government Area");
@@ -4825,42 +4477,6 @@ namespace Nhvr.Rcms.Common.Domain
                 throw new ArgumentException("Must include a value for Remark");
             if(string.IsNullOrWhiteSpace(source))
                 throw new ArgumentException("Must include a value for Source");
-            if(string.IsNullOrWhiteSpace(floorNumber))
-                throw new ArgumentException("Must include a value for Floor Number");
-            if(string.IsNullOrWhiteSpace(unitType))
-                throw new ArgumentException("Must include a value for Unit Type");
-            if(string.IsNullOrWhiteSpace(unitNumber))
-                throw new ArgumentException("Must include a value for Unit Number");
-            if(string.IsNullOrWhiteSpace(streetName))
-                throw new ArgumentException("Must include a value for Street Name");
-            if(string.IsNullOrWhiteSpace(streetType))
-                throw new ArgumentException("Must include a value for Street Type");
-            if(string.IsNullOrWhiteSpace(streetSuffix))
-                throw new ArgumentException("Must include a value for Street Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirst))
-                throw new ArgumentException("Must include a value for Street Number First");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstPrefix))
-                throw new ArgumentException("Must include a value for Street Number First Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstSuffix))
-                throw new ArgumentException("Must include a value for Street Number First Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberLast))
-                throw new ArgumentException("Must include a value for Street Number Last");
-            if(string.IsNullOrWhiteSpace(streetNumberLastPrefix))
-                throw new ArgumentException("Must include a value for Street Number Last Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberLastSuffix))
-                throw new ArgumentException("Must include a value for Street Number Last Suffix");
-            if(string.IsNullOrWhiteSpace(streetDirectional))
-                throw new ArgumentException("Must include a value for Street Directional");
-            if(string.IsNullOrWhiteSpace(postalContainer))
-                throw new ArgumentException("Must include a value for Postal Container");
-            if(string.IsNullOrWhiteSpace(postalCode))
-                throw new ArgumentException("Must include a value for Postal Code");
-            if(string.IsNullOrWhiteSpace(suburb))
-                throw new ArgumentException("Must include a value for Suburb");
-            if(string.IsNullOrWhiteSpace(country))
-                throw new ArgumentException("Must include a value for Country");
-            if(string.IsNullOrWhiteSpace(fullAddress))
-                throw new ArgumentException("Must include a value for Full Address");
             OrganisationId = organisationId;
             EventId = eventId;
             AddressTypeId = addressTypeId;
@@ -4871,42 +4487,16 @@ namespace Nhvr.Rcms.Common.Domain
             Remark = remark;
             StateId = stateId;
             Active = active;
-            Altitude = altitude;
-            AltitudeAccuracy = altitudeAccuracy;
-            HorizontalAccuracy = horizontalAccuracy;
-            Longitude = longitude;
-            Latitude = latitude;
-            Elevation = elevation;
             Source = source;
-            FloorNumber = floorNumber;
-            UnitType = unitType;
-            UnitNumber = unitNumber;
-            StreetName = streetName;
-            StreetType = streetType;
-            StreetSuffix = streetSuffix;
-            StreetNumberFirst = streetNumberFirst;
-            StreetNumberFirstPrefix = streetNumberFirstPrefix;
-            StreetNumberFirstSuffix = streetNumberFirstSuffix;
-            StreetNumberLast = streetNumberLast;
-            StreetNumberLastPrefix = streetNumberLastPrefix;
-            StreetNumberLastSuffix = streetNumberLastSuffix;
-            StreetDirectional = streetDirectional;
-            PostalContainer = postalContainer;
-            PostalCode = postalCode;
-            Suburb = suburb;
-            Country = country;
-            FullAddress = fullAddress;
+            MapDetail = mapDetail;
+            Address = address;
             DateAdded = dateAdded;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[122] = Domain\OrganisationAddress.generated.cs
+file[124] = Domain\OrganisationAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4915,8 +4505,10 @@ file[122] = Domain\OrganisationAddress.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class OrganisationAddress : BaseAggregateRoot<OrganisationAddress, Guid>
+    partial class OrganisationAddress
     {
+        public int Id { get; private set; }
+
         public int OrganisationId { get; private set; }
 
         public int EventId { get; private set; }
@@ -4937,61 +4529,17 @@ namespace Nhvr.Rcms.Common.Domain
 
         public bool Active { get; private set; }
 
-        public decimal Altitude { get; private set; }
-
-        public decimal AltitudeAccuracy { get; private set; }
-
-        public decimal HorizontalAccuracy { get; private set; }
-
-        public decimal Longitude { get; private set; }
-
-        public decimal Latitude { get; private set; }
-
-        public decimal Elevation { get; private set; }
-
         public string Source { get; private set; }
 
-        public string FloorNumber { get; private set; }
+        public MapDetail MapDetail { get; private set; }
 
-        public string UnitType { get; private set; }
-
-        public string UnitNumber { get; private set; }
-
-        public string StreetName { get; private set; }
-
-        public string StreetType { get; private set; }
-
-        public string StreetSuffix { get; private set; }
-
-        public string StreetNumberFirst { get; private set; }
-
-        public string StreetNumberFirstPrefix { get; private set; }
-
-        public string StreetNumberFirstSuffix { get; private set; }
-
-        public string StreetNumberLast { get; private set; }
-
-        public string StreetNumberLastPrefix { get; private set; }
-
-        public string StreetNumberLastSuffix { get; private set; }
-
-        public string StreetDirectional { get; private set; }
-
-        public string PostalContainer { get; private set; }
-
-        public string PostalCode { get; private set; }
-
-        public string Suburb { get; private set; }
-
-        public string Country { get; private set; }
-
-        public string FullAddress { get; private set; }
+        public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
     }
 }
 
-file[123] = Domain\OrganisationContact.cs
+file[125] = Domain\OrganisationContact.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5014,14 +4562,10 @@ namespace Nhvr.Rcms.Common.Domain
             Source = source;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[124] = Domain\OrganisationContact.generated.cs
+file[126] = Domain\OrganisationContact.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5030,8 +4574,10 @@ file[124] = Domain\OrganisationContact.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class OrganisationContact : BaseAggregateRoot<OrganisationContact, Guid>
+    partial class OrganisationContact
     {
+        public int Id { get; private set; }
+
         public int OrganisationId { get; private set; }
 
         public int EventId { get; private set; }
@@ -5048,7 +4594,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[125] = Domain\OrganisationDetail.cs
+file[127] = Domain\OrganisationDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5083,14 +4629,10 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[126] = Domain\OrganisationDetail.generated.cs
+file[128] = Domain\OrganisationDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5099,8 +4641,10 @@ file[126] = Domain\OrganisationDetail.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class OrganisationDetail : BaseAggregateRoot<OrganisationDetail, Guid>
+    partial class OrganisationDetail
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int OrganisationId { get; private set; }
@@ -5129,7 +4673,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[127] = Domain\Person.cs
+file[129] = Domain\Person.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5154,14 +4698,10 @@ namespace Nhvr.Rcms.Common.Domain
             SourcePersonId = sourcePersonId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[128] = Domain\Person.generated.cs
+file[130] = Domain\Person.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5170,8 +4710,10 @@ file[128] = Domain\Person.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Person : BaseAggregateRoot<Person, Guid>
+    partial class Person
     {
+        public int Id { get; private set; }
+
         public Guid? CreationId { get; private set; }
 
         public string GivenName { get; private set; }
@@ -5192,7 +4734,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[129] = Domain\PersonAddress.cs
+file[131] = Domain\PersonAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5200,7 +4742,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class PersonAddress
     {
-        public PersonAddress(int personId, int eventId, int stateId, int addressTypeId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, bool active, decimal altitude, decimal altitudeAccuracy, decimal horizontalAccuracy, decimal longitude, decimal latitude, decimal elevation, string source, string floorNumber, string unitType, string unitNumber, string streetName, string streetType, string streetSuffix, string streetNumberFirst, string streetNumberFirstPrefix, string streetNumberFirstSuffix, string streetNumberLast, string streetNumberLastPrefix, string streetNumberLastSuffix, string streetDirectional, string postalContainer, string postalCode, string suburb, string country, string fullAddress, DateTimeOffset? dateAdded)
+        public PersonAddress(int personId, int eventId, int stateId, int addressTypeId, string localGovernmentArea, string lgashortTitle, string near, string commonName, string remark, bool active, string source, MapDetail mapDetail, AddressBook address, DateTimeOffset? dateAdded)
         {
             if(string.IsNullOrWhiteSpace(localGovernmentArea))
                 throw new ArgumentException("Must include a value for Local Government Area");
@@ -5214,42 +4756,6 @@ namespace Nhvr.Rcms.Common.Domain
                 throw new ArgumentException("Must include a value for Remark");
             if(string.IsNullOrWhiteSpace(source))
                 throw new ArgumentException("Must include a value for Source");
-            if(string.IsNullOrWhiteSpace(floorNumber))
-                throw new ArgumentException("Must include a value for Floor Number");
-            if(string.IsNullOrWhiteSpace(unitType))
-                throw new ArgumentException("Must include a value for Unit Type");
-            if(string.IsNullOrWhiteSpace(unitNumber))
-                throw new ArgumentException("Must include a value for Unit Number");
-            if(string.IsNullOrWhiteSpace(streetName))
-                throw new ArgumentException("Must include a value for Street Name");
-            if(string.IsNullOrWhiteSpace(streetType))
-                throw new ArgumentException("Must include a value for Street Type");
-            if(string.IsNullOrWhiteSpace(streetSuffix))
-                throw new ArgumentException("Must include a value for Street Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirst))
-                throw new ArgumentException("Must include a value for Street Number First");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstPrefix))
-                throw new ArgumentException("Must include a value for Street Number First Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberFirstSuffix))
-                throw new ArgumentException("Must include a value for Street Number First Suffix");
-            if(string.IsNullOrWhiteSpace(streetNumberLast))
-                throw new ArgumentException("Must include a value for Street Number Last");
-            if(string.IsNullOrWhiteSpace(streetNumberLastPrefix))
-                throw new ArgumentException("Must include a value for Street Number Last Prefix");
-            if(string.IsNullOrWhiteSpace(streetNumberLastSuffix))
-                throw new ArgumentException("Must include a value for Street Number Last Suffix");
-            if(string.IsNullOrWhiteSpace(streetDirectional))
-                throw new ArgumentException("Must include a value for Street Directional");
-            if(string.IsNullOrWhiteSpace(postalContainer))
-                throw new ArgumentException("Must include a value for Postal Container");
-            if(string.IsNullOrWhiteSpace(postalCode))
-                throw new ArgumentException("Must include a value for Postal Code");
-            if(string.IsNullOrWhiteSpace(suburb))
-                throw new ArgumentException("Must include a value for Suburb");
-            if(string.IsNullOrWhiteSpace(country))
-                throw new ArgumentException("Must include a value for Country");
-            if(string.IsNullOrWhiteSpace(fullAddress))
-                throw new ArgumentException("Must include a value for Full Address");
             PersonId = personId;
             EventId = eventId;
             StateId = stateId;
@@ -5260,42 +4766,16 @@ namespace Nhvr.Rcms.Common.Domain
             CommonName = commonName;
             Remark = remark;
             Active = active;
-            Altitude = altitude;
-            AltitudeAccuracy = altitudeAccuracy;
-            HorizontalAccuracy = horizontalAccuracy;
-            Longitude = longitude;
-            Latitude = latitude;
-            Elevation = elevation;
             Source = source;
-            FloorNumber = floorNumber;
-            UnitType = unitType;
-            UnitNumber = unitNumber;
-            StreetName = streetName;
-            StreetType = streetType;
-            StreetSuffix = streetSuffix;
-            StreetNumberFirst = streetNumberFirst;
-            StreetNumberFirstPrefix = streetNumberFirstPrefix;
-            StreetNumberFirstSuffix = streetNumberFirstSuffix;
-            StreetNumberLast = streetNumberLast;
-            StreetNumberLastPrefix = streetNumberLastPrefix;
-            StreetNumberLastSuffix = streetNumberLastSuffix;
-            StreetDirectional = streetDirectional;
-            PostalContainer = postalContainer;
-            PostalCode = postalCode;
-            Suburb = suburb;
-            Country = country;
-            FullAddress = fullAddress;
+            MapDetail = mapDetail;
+            Address = address;
             DateAdded = dateAdded;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[130] = Domain\PersonAddress.generated.cs
+file[132] = Domain\PersonAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5304,8 +4784,10 @@ file[130] = Domain\PersonAddress.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class PersonAddress : BaseAggregateRoot<PersonAddress, Guid>
+    partial class PersonAddress
     {
+        public int Id { get; private set; }
+
         public int PersonId { get; private set; }
 
         public int EventId { get; private set; }
@@ -5326,61 +4808,17 @@ namespace Nhvr.Rcms.Common.Domain
 
         public bool Active { get; private set; }
 
-        public decimal Altitude { get; private set; }
-
-        public decimal AltitudeAccuracy { get; private set; }
-
-        public decimal HorizontalAccuracy { get; private set; }
-
-        public decimal Longitude { get; private set; }
-
-        public decimal Latitude { get; private set; }
-
-        public decimal Elevation { get; private set; }
-
         public string Source { get; private set; }
 
-        public string FloorNumber { get; private set; }
+        public MapDetail MapDetail { get; private set; }
 
-        public string UnitType { get; private set; }
-
-        public string UnitNumber { get; private set; }
-
-        public string StreetName { get; private set; }
-
-        public string StreetType { get; private set; }
-
-        public string StreetSuffix { get; private set; }
-
-        public string StreetNumberFirst { get; private set; }
-
-        public string StreetNumberFirstPrefix { get; private set; }
-
-        public string StreetNumberFirstSuffix { get; private set; }
-
-        public string StreetNumberLast { get; private set; }
-
-        public string StreetNumberLastPrefix { get; private set; }
-
-        public string StreetNumberLastSuffix { get; private set; }
-
-        public string StreetDirectional { get; private set; }
-
-        public string PostalContainer { get; private set; }
-
-        public string PostalCode { get; private set; }
-
-        public string Suburb { get; private set; }
-
-        public string Country { get; private set; }
-
-        public string FullAddress { get; private set; }
+        public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
     }
 }
 
-file[131] = Domain\PersonContact.cs
+file[133] = Domain\PersonContact.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5403,14 +4841,10 @@ namespace Nhvr.Rcms.Common.Domain
             Source = source;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[132] = Domain\PersonContact.generated.cs
+file[134] = Domain\PersonContact.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5419,8 +4853,10 @@ file[132] = Domain\PersonContact.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class PersonContact : BaseAggregateRoot<PersonContact, Guid>
+    partial class PersonContact
     {
+        public int Id { get; private set; }
+
         public int PersonId { get; private set; }
 
         public int EventId { get; private set; }
@@ -5437,7 +4873,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[133] = Domain\PersonDetail.cs
+file[135] = Domain\PersonDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5496,14 +4932,10 @@ namespace Nhvr.Rcms.Common.Domain
             ProfileImageUrl = profileImageUrl;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[134] = Domain\PersonDetail.generated.cs
+file[136] = Domain\PersonDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5512,8 +4944,10 @@ file[134] = Domain\PersonDetail.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class PersonDetail : BaseAggregateRoot<PersonDetail, Guid>
+    partial class PersonDetail
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int PersonId { get; private set; }
@@ -5562,7 +4996,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[135] = Domain\Postcode.cs
+file[137] = Domain\Postcode.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5584,14 +5018,10 @@ namespace Nhvr.Rcms.Common.Domain
             State = state;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[136] = Domain\Postcode.generated.cs
+file[138] = Domain\Postcode.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5600,8 +5030,10 @@ file[136] = Domain\Postcode.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Postcode : BaseAggregateRoot<Postcode, Guid>
+    partial class Postcode
     {
+        public int Id { get; private set; }
+
         public int SourceId { get; private set; }
 
         public string Postcode1 { get; private set; }
@@ -5612,7 +5044,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[137] = Domain\ReferenceDatum.cs
+file[139] = Domain\ReferenceDatum.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5639,14 +5071,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[138] = Domain\ReferenceDatum.generated.cs
+file[140] = Domain\ReferenceDatum.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5655,8 +5083,10 @@ file[138] = Domain\ReferenceDatum.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ReferenceDatum : BaseAggregateRoot<ReferenceDatum, Guid>
+    partial class ReferenceDatum
     {
+        public int Id { get; private set; }
+
         public int CategoryId { get; private set; }
 
         public string Code { get; private set; }
@@ -5677,7 +5107,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[139] = Domain\ReferenceDataAttribute.cs
+file[141] = Domain\ReferenceDataAttribute.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5697,14 +5127,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[140] = Domain\ReferenceDataAttribute.generated.cs
+file[142] = Domain\ReferenceDataAttribute.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5713,8 +5139,10 @@ file[140] = Domain\ReferenceDataAttribute.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ReferenceDataAttribute : BaseAggregateRoot<ReferenceDataAttribute, Guid>
+    partial class ReferenceDataAttribute
     {
+        public int Id { get; private set; }
+
         public int ReferenceDataId { get; private set; }
 
         public string Name { get; private set; }
@@ -5725,7 +5153,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[141] = Domain\ReferenceDataCategory.cs
+file[143] = Domain\ReferenceDataCategory.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5750,14 +5178,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemUse = systemUse;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[142] = Domain\ReferenceDataCategory.generated.cs
+file[144] = Domain\ReferenceDataCategory.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5766,8 +5190,10 @@ file[142] = Domain\ReferenceDataCategory.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ReferenceDataCategory : BaseAggregateRoot<ReferenceDataCategory, Guid>
+    partial class ReferenceDataCategory
     {
+        public int Id { get; private set; }
+
         public string Code { get; private set; }
 
         public string Name { get; private set; }
@@ -5784,7 +5210,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[143] = Domain\ReferenceDataMapping.cs
+file[145] = Domain\ReferenceDataMapping.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5802,14 +5228,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[144] = Domain\ReferenceDataMapping.generated.cs
+file[146] = Domain\ReferenceDataMapping.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5818,8 +5240,10 @@ file[144] = Domain\ReferenceDataMapping.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ReferenceDataMapping : BaseAggregateRoot<ReferenceDataMapping, Guid>
+    partial class ReferenceDataMapping
     {
+        public int Id { get; private set; }
+
         public int ReferenceDataId { get; private set; }
 
         public int ReferenceDataCategoryId { get; private set; }
@@ -5830,7 +5254,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[145] = Domain\Shift.cs
+file[147] = Domain\Shift.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5851,14 +5275,10 @@ namespace Nhvr.Rcms.Common.Domain
             Remark = remark;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[146] = Domain\Shift.generated.cs
+file[148] = Domain\Shift.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5867,8 +5287,10 @@ file[146] = Domain\Shift.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Shift : BaseAggregateRoot<Shift, Guid>
+    partial class Shift
     {
+        public int Id { get; private set; }
+
         public int StartTime { get; private set; }
 
         public DateTimeOffset? EndTime { get; private set; }
@@ -5881,7 +5303,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[147] = Domain\ShiftOfficer.cs
+file[149] = Domain\ShiftOfficer.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5896,14 +5318,10 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[148] = Domain\ShiftOfficer.generated.cs
+file[150] = Domain\ShiftOfficer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5912,8 +5330,10 @@ file[148] = Domain\ShiftOfficer.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class ShiftOfficer : BaseAggregateRoot<ShiftOfficer, Guid>
+    partial class ShiftOfficer
     {
+        public int Id { get; private set; }
+
         public int ShiftId { get; private set; }
 
         public int UserId { get; private set; }
@@ -5922,7 +5342,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[149] = Domain\User.cs
+file[151] = Domain\User.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -5970,14 +5390,10 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[150] = Domain\User.generated.cs
+file[152] = Domain\User.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5986,8 +5402,10 @@ file[150] = Domain\User.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class User : BaseAggregateRoot<User, Guid>
+    partial class User
     {
+        public int Id { get; private set; }
+
         public string SignInName { get; private set; }
 
         public string FirstName { get; private set; }
@@ -6026,7 +5444,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[151] = Domain\Vehicle.cs
+file[153] = Domain\Vehicle.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6055,14 +5473,10 @@ namespace Nhvr.Rcms.Common.Domain
             // todo: Add Create behaviour here
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[152] = Domain\Vehicle.generated.cs
+file[154] = Domain\Vehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6071,8 +5485,10 @@ file[152] = Domain\Vehicle.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class Vehicle : BaseAggregateRoot<Vehicle, Guid>
+    partial class Vehicle
     {
+        public int Id { get; private set; }
+
         public Guid? CreationId { get; private set; }
 
         public States RegistrationState { get; private set; }
@@ -6097,24 +5513,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[153] = Domain\Events\Created.cs
-namespace Nhvr.Rcms.Common.Domain.Events
-{
-    public class Created : BaseDomainEvent<Vehicle, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Created() { }
-
-        public Created(Vehicle vehicle) : base(vehicle)
-        {
-            // todo: 
-        }
-    }
-}
-
-file[154] = Domain\VehicleDetail.cs
+file[155] = Domain\VehicleDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6137,14 +5536,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[155] = Domain\VehicleDetail.generated.cs
+file[156] = Domain\VehicleDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6153,8 +5548,10 @@ file[155] = Domain\VehicleDetail.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class VehicleDetail : BaseAggregateRoot<VehicleDetail, Guid>
+    partial class VehicleDetail
     {
+        public int Id { get; private set; }
+
         public string? VehicleIdentificationNumber { get; private set; }
 
         public string? EngineNumber { get; private set; }
@@ -6175,7 +5572,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[156] = Domain\VehicleFootprint.cs
+file[157] = Domain\VehicleFootprint.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6204,14 +5601,10 @@ namespace Nhvr.Rcms.Common.Domain
             StateId = stateId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[157] = Domain\VehicleFootprint.generated.cs
+file[158] = Domain\VehicleFootprint.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6220,8 +5613,10 @@ file[157] = Domain\VehicleFootprint.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class VehicleFootprint : BaseAggregateRoot<VehicleFootprint, Guid>
+    partial class VehicleFootprint
     {
+        public int Id { get; private set; }
+
         public decimal Latitude { get; private set; }
 
         public decimal Longitude { get; private set; }
@@ -6246,7 +5641,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[158] = Domain\VehicleFootprintImport.cs
+file[159] = Domain\VehicleFootprintImport.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6283,14 +5678,10 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[159] = Domain\VehicleFootprintImport.generated.cs
+file[160] = Domain\VehicleFootprintImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6299,8 +5690,10 @@ file[159] = Domain\VehicleFootprintImport.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class VehicleFootprintImport : BaseAggregateRoot<VehicleFootprintImport, Guid>
+    partial class VehicleFootprintImport
     {
+        public int Id { get; private set; }
+
         public decimal Latitude { get; private set; }
 
         public decimal Longitude { get; private set; }
@@ -6329,7 +5722,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[160] = Domain\VehicleOrganisation.cs
+file[161] = Domain\VehicleOrganisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6344,14 +5737,10 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[161] = Domain\VehicleOrganisation.generated.cs
+file[162] = Domain\VehicleOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6360,8 +5749,10 @@ file[161] = Domain\VehicleOrganisation.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class VehicleOrganisation : BaseAggregateRoot<VehicleOrganisation, Guid>
+    partial class VehicleOrganisation
     {
+        public int Id { get; private set; }
+
         public int OrganisationId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -6370,7 +5761,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[162] = Domain\VehiclePerson.cs
+file[163] = Domain\VehiclePerson.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6385,14 +5776,10 @@ namespace Nhvr.Rcms.Common.Domain
             Active = active;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[163] = Domain\VehiclePerson.generated.cs
+file[164] = Domain\VehiclePerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6401,8 +5788,10 @@ file[163] = Domain\VehiclePerson.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class VehiclePerson : BaseAggregateRoot<VehiclePerson, Guid>
+    partial class VehiclePerson
     {
+        public int Id { get; private set; }
+
         public int PersonId { get; private set; }
 
         public int VehicleId { get; private set; }
@@ -6411,7 +5800,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[164] = Domain\WAEventInspection.cs
+file[165] = Domain\WAEventInspection.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -6555,14 +5944,10 @@ namespace Nhvr.Rcms.Common.Domain
             LoadRestraintNote = loadRestraintNote;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[165] = Domain\WAEventInspection.generated.cs
+file[166] = Domain\WAEventInspection.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6571,8 +5956,10 @@ file[165] = Domain\WAEventInspection.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class WAEventInspection : BaseAggregateRoot<WAEventInspection, Guid>
+    partial class WAEventInspection
     {
+        public int Id { get; private set; }
+
         public int EventId { get; private set; }
 
         public int WainterceptId { get; private set; }
@@ -6700,6 +6087,99 @@ namespace Nhvr.Rcms.Common.Domain
         public bool LoadRestraintPassed { get; private set; }
 
         public string LoadRestraintNote { get; private set; }
+    }
+}
+
+file[167] = Enums\AddressType.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.Common.Enums
+{
+    public enum AddressTypes
+    {
+        RegisteredAddress = 120,
+        PostalAddress = 121,
+        GaragingAddress = 122,
+        NoticeAddress = 123,
+        LastKnownAddress = 124,
+    }
+}
+
+file[168] = Enums\State.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.Common.Enums
+{
+    public enum States
+    {
+        [Display(Name = "Australian Capitol Territory")]
+        ACT = 60,
+        [Display(Name = "Western Australia")]
+        WA = 61,
+        [Display(Name = "South Australia")]
+        SA = 62,
+        [Display(Name = "Northern Territory")]
+        NT = 63,
+        [Display(Name = "Victoria")]
+        VIC = 64,
+        [Display(Name = "Queensland")]
+        QLD = 65,
+        [Display(Name = "New South Wales")]
+        NSW = 66,
+        [Display(Name = "Tasmania")]
+        TAS = 67,
+    }
+}
+
+file[169] = Enums\SourceSystemType.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.Common.Enums
+{
+    public enum SourceSystemTypes
+    {
+        RCMS = 30,
+        NHVR = 31,
+        VCOM = 32,
+        INTERCEPT = 33,
+        VICROADSNHVR = 34,
+        VICROADS = 35,
+        ASIC = 36,
+        NEVDIS = 37,
+        QLDTMR = 38,
+        NEVDISSERVICE = 39,
+    }
+}
+
+file[170] = Enums\OrganisationType.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.Common.Enums
+{
+    public enum OrganisationTypes
+    {
+        Company = 130,
+        IncorporatedAssociation = 131,
+        GovernmentDepartment = 132,
+        GovernmentBusinessEnterprise = 133,
+        LocalGovernment = 134,
+        Association = 139,
     }
 }
 

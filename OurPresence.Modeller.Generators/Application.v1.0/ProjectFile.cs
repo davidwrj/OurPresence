@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using System;
@@ -43,7 +46,7 @@ namespace ApplicationProject
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.BusinessLogic\\{_module.Company}.{_module.Project}.BusinessLogic\" />");
+            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.BusinessLogic\\{_module.Company}.{_module.Project}.BusinessLogic.csproj\" />");
             sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Common\\{_module.Company}.{_module.Project}.Common.csproj\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();

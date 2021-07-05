@@ -1,10 +1,12 @@
-﻿using FluentValidation.Results;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using FluentValidation.Results;
 using OurPresence.Modeller.Generator.Validators;
 using System.Linq;
 using OurPresence.Modeller.Interfaces;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using OurPresence.Modeller.Loaders;
 
 namespace OurPresence.Modeller.Generator
 {

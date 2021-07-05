@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
 using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
@@ -37,11 +40,6 @@ namespace DomainClass
         {
             files.AddFile((IFile)new DomainUser(Settings, _module, model).Create());
             files.AddFile((IFile)new DomainGenerated(Settings, _module, model).Create());
-            var fg = (IFileGroup)new DomainEvent(Settings, _module, model).Create();
-            foreach (var file in fg.Files)
-            {
-                files.AddFile(file);
-            }
         }
     }
 }

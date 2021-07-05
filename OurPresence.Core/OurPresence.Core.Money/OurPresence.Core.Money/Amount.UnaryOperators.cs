@@ -1,4 +1,7 @@
-﻿namespace OurPresence.Core.Money
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+namespace OurPresence.Core.Money
 {
     /// <summary>Represents Money, an amount defined in a specific Currency.</summary>
     public partial struct Amount

@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain.Extensions;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain.Extensions;
 using OurPresence.Modeller.Interfaces;
 using System.IO;
 

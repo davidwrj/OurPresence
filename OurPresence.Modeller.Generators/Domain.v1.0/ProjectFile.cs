@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using System;
@@ -35,6 +38,10 @@ namespace DomainProject
             sb.I(2).Al("<LangVersion>Preview</LangVersion>");
             sb.I(2).Al($"<Nullable>enable</Nullable>");
             sb.I(1).Al("</PropertyGroup>");
+            sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al($"<PackageReference Include=\"CSharpFunctionalExtensions\" Version=\"{Settings.Packages.GetVersion("CSharpFunctionalExtensions", "2.17.0")}\" />");
+            sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");
 

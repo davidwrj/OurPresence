@@ -1,7 +1,8 @@
-{
+﻿{
     "key": {
         "fields": []
     },
+    "supportCrud": "None",
     "fields": [
         {
             "name": "Field1"

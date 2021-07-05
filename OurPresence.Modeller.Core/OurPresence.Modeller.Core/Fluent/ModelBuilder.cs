@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain;
 using System;
 using System.ComponentModel;
 
@@ -27,15 +30,27 @@ namespace OurPresence.Modeller.Fluent
             return this;
         }
 
-        public ModelBuilder IsAuditable(bool value)
+        public ModelBuilder IsAuditable(bool value = true)
         {
             Instance.HasAudit = value;
             return this;
         }
 
+        public ModelBuilder IsRoot(bool value = true)
+        {
+            Instance.IsRoot = value;
+            return this;
+        }
+
+        public ModelBuilder SupportCrud(CRUDSupport value = CRUDSupport.All)
+        {
+            Instance.SupportCrud = value;
+            return this;
+        }
+
         public ModelBuilder WithDefaultKey()
         {
-            Instance.Key.Fields.Add(new Field("Id") { DataType = DataTypes.UniqueIdentifier, Nullable = false });
+            Instance.Key.Fields.Add(new Field("Id") { DataType = DataTypes.Int32, Nullable = false });
             return this;
         }
 

@@ -9,6 +9,7 @@
       "DomainProject.v1.0/1.0.0": {
         "dependencies": {
           "DomainClass.v1.0": "1.0.0",
+          "EnumClass.v1.0": "1.0.0",
           "OurPresence.Modeller.Core": "2.0.0"
         },
         "runtime": {
@@ -92,6 +93,16 @@
         },
         "runtime": {
           "DomainClass.v1.0.dll": {}
+        }
+      },
+      "EnumClass.v1.0/1.0.0": {
+        "dependencies": {
+          "Header.v1.0": "1.0.0",
+          "OurPresence.Modeller.Core": "2.0.0",
+          "OverrideHeader.v1.0": "1.0.0"
+        },
+        "runtime": {
+          "EnumClass.v1.0.dll": {}
         }
       },
       "Header.v1.0/1.0.0": {
@@ -210,6 +221,11 @@
       "hashPath": "system.runtime.4.3.1.nupkg.sha512"
     },
     "DomainClass.v1.0/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EnumClass.v1.0/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

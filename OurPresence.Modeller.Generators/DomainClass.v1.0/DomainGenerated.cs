@@ -1,4 +1,7 @@
-﻿using OurPresence.Modeller.Domain;
+﻿// Copyright (c)  Allan Nielsen.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Domain.Extensions;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
@@ -34,6 +37,9 @@ namespace DomainClass
             {
                 sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
             }
+            sb.B();
+            sb.Al("#nullable enable");
+            sb.B();
             sb.Al($"namespace {_module.Namespace}.Common.Domain");
             sb.Al("{");
             sb.I(1).A(Settings.SupportRegen ? $"partial class {_model.Name}" : $"public class {_model.Name}");
