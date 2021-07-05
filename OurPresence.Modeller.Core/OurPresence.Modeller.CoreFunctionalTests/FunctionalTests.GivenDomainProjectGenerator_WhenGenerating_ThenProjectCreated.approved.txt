@@ -8,6 +8,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="CSharpFunctionalExtensions" Version="2.17.0" />
+    </ItemGroup>
+
 </Project>
 
 file[1] = Entity.cs
@@ -233,7 +237,7 @@ namespace Mizrael.SuperSafeBank.Common
             yield return Value;
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return Value?.ToString();
         }
@@ -254,13 +258,9 @@ namespace Mizrael.SuperSafeBank.Common
     {
         private int? _cachedHashCode;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            var valueObject = obj as T;
-
-            return valueObject is null
-                ? false
-                : ValueObject.GetUnproxiedType(this) != ValueObject.GetUnproxiedType(obj) ? false : EqualsCore(valueObject);
+            return obj is T valueObject && ValueObject.GetUnproxiedType(this) == ValueObject.GetUnproxiedType(obj) && EqualsCore(valueObject);
         }
 
         protected abstract bool EqualsCore(T other);
@@ -271,7 +271,6 @@ namespace Mizrael.SuperSafeBank.Common
             {
                 _cachedHashCode = GetHashCodeCore();
             }
-
             return _cachedHashCode.Value;
         }
 
@@ -279,7 +278,7 @@ namespace Mizrael.SuperSafeBank.Common
 
         public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
         {
-            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+            return a is null && b is null || a is not null && b is not null && a.Equals(b);
         }
 
         public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
@@ -294,7 +293,7 @@ namespace Mizrael.SuperSafeBank.Common
 
         protected abstract IEnumerable<object> GetEqualityComponents();
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null)
             {
@@ -328,7 +327,7 @@ namespace Mizrael.SuperSafeBank.Common
             return _cachedHashCode.Value;
         }
 
-        public virtual int CompareTo(object obj)
+        public virtual int CompareTo(object? obj)
         {
             var thisType = GetUnproxiedType(this);
             var otherType = GetUnproxiedType(obj);
@@ -338,14 +337,13 @@ namespace Mizrael.SuperSafeBank.Common
                 return string.Compare(thisType.ToString(), otherType.ToString(), StringComparison.Ordinal);
             }
 
-            var other = (ValueObject)obj;
-
+            var other = obj as ValueObject;
             var components = GetEqualityComponents().ToArray();
-            var otherComponents = other.GetEqualityComponents().ToArray();
+            var otherComponents = other?.GetEqualityComponents().ToArray();
 
             for (var i = 0; i < components.Length; i++)
             {
-                var comparison = CompareComponents(components[i], otherComponents[i]);
+                var comparison = CompareComponents(components[i], otherComponents?[i]);
                 if (comparison != 0)
                 {
                     return comparison;
@@ -355,33 +353,27 @@ namespace Mizrael.SuperSafeBank.Common
             return 0;
         }
 
-        private int CompareComponents(object object1, object object2)
+        private static int CompareComponents(object? object1, object? object2)
         {
-            if (object1 is null && object2 is null)
-            {
-                return 0;
-            }
-
-            if (object1 is null)
-            {
-                return -1;
-            }
-
-            return object2 is null
+            return object1 is null && object2 is null
+                ? 0;
+                : object1 is null
+                ? -1;
+                : object2 is null
                 ? 1
                 : object1 is IComparable comparable1 && object2 is IComparable comparable2
                 ? comparable1.CompareTo(comparable2)
                 : object1.Equals(object2) ? 0 : -1;
         }
 
-        public virtual int CompareTo(ValueObject other)
+        public virtual int CompareTo(ValueObject? other)
         {
             return CompareTo(other as object);
         }
 
         public static bool operator ==(ValueObject a, ValueObject b)
         {
-            return a is null && b is null ? true : a is null || b is null ? false : a.Equals(b);
+            return a is null && b is null || a is not null && b is not null && a.Equals(b);
         }
 
         public static bool operator !=(ValueObject a, ValueObject b)
@@ -389,7 +381,7 @@ namespace Mizrael.SuperSafeBank.Common
             return !(a == b);
         }
 
-        internal static Type GetUnproxiedType(object obj)
+        internal static Type? GetUnproxiedType(object? obj)
         {
             const string EFCoreProxyPrefix = "Castle.Proxies.";
             const string NHibernateProxyPostfix = "Proxy";
@@ -512,18 +504,20 @@ file[6] = .filenesting.json
 }
 
 file[7] = usings.cs
+global using CSharpFunctionalExtensions;
 global using System;
 global using System.Collections.Generic;
+global using System.ComponentModel.DataAnnotations;
 global using System.Linq;
 global using System.Text;
 global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using System.Threading.Tasks;
+global using Mizrael.SuperSafeBank.Common.Enums;
+global using CSharpFunctionalExtensions;
 
 file[8] = Domain\Email.cs
-using Rcms.Common.EntityTypes;
-
-namespace Rcms.Common.Domain
+namespace Mizrael.SuperSafeBank.Common.Domain
 {
     public class Email : ValueObject
     {
@@ -579,10 +573,6 @@ namespace Mizrael.SuperSafeBank.Common.Domain
             // todo: Add Deposit behaviour here
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -592,6 +582,8 @@ file[10] = Domain\Account.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
@@ -609,41 +601,7 @@ namespace Mizrael.SuperSafeBank.Common.Domain
     }
 }
 
-file[11] = Domain\Events\Withdrawal.cs
-namespace Mizrael.SuperSafeBank.Common.Domain.Events
-{
-    public class Withdrawal : BaseDomainEvent<Account, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Withdrawal() { }
-
-        public Withdrawal(Account account) : base(account)
-        {
-            // todo: 
-        }
-    }
-}
-
-file[12] = Domain\Events\Deposit.cs
-namespace Mizrael.SuperSafeBank.Common.Domain.Events
-{
-    public class Deposit : BaseDomainEvent<Account, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Deposit() { }
-
-        public Deposit(Account account) : base(account)
-        {
-            // todo: 
-        }
-    }
-}
-
-file[13] = Domain\Customer.cs
+file[11] = Domain\Customer.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
@@ -664,19 +622,17 @@ namespace Mizrael.SuperSafeBank.Common.Domain
             Email = email;
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
-file[14] = Domain\Customer.generated.cs
+file[12] = Domain\Customer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {

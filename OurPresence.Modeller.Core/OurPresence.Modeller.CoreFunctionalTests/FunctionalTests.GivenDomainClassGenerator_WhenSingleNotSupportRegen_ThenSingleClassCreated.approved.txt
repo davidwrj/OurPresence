@@ -2,6 +2,8 @@
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
+#nullable enable
+
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
     public class Account
@@ -31,40 +33,6 @@ namespace Mizrael.SuperSafeBank.Common.Domain
         protected override void Apply(IDomainEvent<Guid> @event)
         {
             // todo: Apply events
-        }
-    }
-}
-
-file[1] = Domain\Events\Withdrawal.cs
-namespace Mizrael.SuperSafeBank.Common.Domain.Events
-{
-    public class Withdrawal : BaseDomainEvent<Account, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Withdrawal() { }
-
-        public Withdrawal(Account account) : base(account)
-        {
-            // todo: 
-        }
-    }
-}
-
-file[2] = Domain\Events\Deposit.cs
-namespace Mizrael.SuperSafeBank.Common.Domain.Events
-{
-    public class Deposit : BaseDomainEvent<Account, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Deposit() { }
-
-        public Deposit(Account account) : base(account)
-        {
-            // todo: 
         }
     }
 }

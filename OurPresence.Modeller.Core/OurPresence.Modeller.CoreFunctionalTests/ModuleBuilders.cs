@@ -30,20 +30,19 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .AddField("OwnerId").BusinessKey(true).DataType(Domain.DataTypes.UniqueIdentifier).Build
                 .AddField("Balance").DataType(Domain.DataTypes.Object).DataTypeTypeName("Money").Build
-                .AddBehaviour("Withdraw")
+                .AddBehaviour("Withdraw",Domain.BehaviourVerb.Post)
                     .Raising("Withdrawal")
-                    .AltersDomain()
-                    .AddField("Amount")
-                        .DataType(Domain.DataTypes.Object)
-                        .DataTypeTypeName("Money")
-                        .Build
+                    .AddRequest("AccountWithdrawRequest")
+                        .AddField("Amount").DataType(Domain.DataTypes.Object).DataTypeTypeName("Money").Build
                     .Build
-                .AddBehaviour("Deposit")
+                .Build
+                .AddBehaviour("Deposit",Domain.BehaviourVerb.Post)
                     .Raising("Deposit")
-                    .AltersDomain()
-                    .AddField("Amount")
-                        .DataType(Domain.DataTypes.Object)
-                        .DataTypeTypeName("Money")
+                    .AddRequest("AccountWithdrawRequest")
+                        .AddField("Amount")
+                            .DataType(Domain.DataTypes.Object)
+                            .DataTypeTypeName("Money")
+                            .Build
                         .Build
                     .Build
                 .Build

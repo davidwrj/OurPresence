@@ -7,7 +7,7 @@ file[0] = Account\Withdraw\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
-    partial record AccountWithdraw : IRequest<Account, 
+    partial record AccountWithdrawRequest : IRequest<Account, 
 }
 
 file[1] = Account\Deposit\Account.generated.cs
@@ -19,6 +19,6 @@ file[1] = Account\Deposit\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {
-    partial record AccountDeposit : IRequest<Account, 
+    partial record AccountDepositRequest : IRequest<Account, 
 }
 

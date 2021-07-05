@@ -65,11 +65,14 @@ namespace DomainClass
             foreach (var item in _model.Behaviours)
             {
                 sb.I(2).A($"{p}void {item.Name}(");
-                foreach (var field in item.Fields)
+                if(item.Request != null)
                 {
-                    sb.A($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
+                    foreach(var field in item.Request.Fields)
+                    {
+                        sb.A($"{field.GetDataType()} {field.Name.Singular.LocalVariable}, ");
+                    }
+                    sb.TrimEnd(", ");
                 }
-                sb.TrimEnd(", ");
                 sb.Al(")");
                 sb.I(2).Al("{");
                 sb.I(3).Al($"// todo: Add {item.Name.Singular.Display} behaviour here");

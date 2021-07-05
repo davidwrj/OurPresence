@@ -3,14 +3,12 @@ file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <Configurations>Debug;Release;DebugOnPremise;DebugAzure</Configurations>
         <RootNamespace>Mizrael.SuperSafeBank.BusinessLogic</RootNamespace>
         <LangVersion>Preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OurPresence.Core" Version="1.0.0" />
         <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
@@ -33,7 +31,7 @@ file[2] = Account\Withdraw\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
-    partial record AccountWithdraw : IRequest<Account, 
+    partial record AccountWithdrawRequest : IRequest<Account, 
 }
 
 file[3] = Account\Deposit\Account.generated.cs
@@ -45,6 +43,6 @@ file[3] = Account\Deposit\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {
-    partial record AccountDeposit : IRequest<Account, 
+    partial record AccountDepositRequest : IRequest<Account, 
 }
 

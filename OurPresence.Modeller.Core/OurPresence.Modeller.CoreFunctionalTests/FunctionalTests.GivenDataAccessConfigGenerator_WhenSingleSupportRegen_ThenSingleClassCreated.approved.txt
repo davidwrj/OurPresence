@@ -3,7 +3,7 @@ namespace Mizrael.SuperSafeBank.Data.Configurations
 {
     public partial class AccountConfiguration : IEntityTypeConfiguration<Account>
     {
-        public void Configure(EntityTypeBuilder<Account> builder)
+        void IEntityTypeConfiguration<Account>.Configure(EntityTypeBuilder<Account> builder)
         {
             builder.ToTable("Account");
             builder.Property(p => p.OwnerId)
@@ -22,6 +22,8 @@ file[1] = Models\Account.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.Data.Models
 {

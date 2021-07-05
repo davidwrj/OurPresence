@@ -22,10 +22,6 @@ namespace Mizrael.SuperSafeBank.Common.Domain
             // todo: Add Deposit behaviour here
         }
 
-        protected override void Apply(IDomainEvent<Guid> @event)
-        {
-            // todo: Apply events
-        }
     }
 }
 
@@ -35,6 +31,8 @@ file[1] = Domain\Account.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
@@ -49,40 +47,6 @@ namespace Mizrael.SuperSafeBank.Common.Domain
         public partial void Withdraw(Money amount);
 
         public partial void Deposit(Money amount);
-    }
-}
-
-file[2] = Domain\Events\Withdrawal.cs
-namespace Mizrael.SuperSafeBank.Common.Domain.Events
-{
-    public class Withdrawal : BaseDomainEvent<Account, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Withdrawal() { }
-
-        public Withdrawal(Account account) : base(account)
-        {
-            // todo: 
-        }
-    }
-}
-
-file[3] = Domain\Events\Deposit.cs
-namespace Mizrael.SuperSafeBank.Common.Domain.Events
-{
-    public class Deposit : BaseDomainEvent<Account, Guid>
-    {
-        /// <summary>
-        /// for deserialization
-        /// </summary>
-        private Deposit() { }
-
-        public Deposit(Account account) : base(account)
-        {
-            // todo: 
-        }
     }
 }
 
