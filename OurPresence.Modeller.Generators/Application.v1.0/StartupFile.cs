@@ -26,9 +26,21 @@ namespace ApplicationProject
         {
             var sb = new StringBuilder();
             var m = _module.Models.Where(m => m.Behaviours.Any()).Select(m => new { Model = m, Behaviour = m.Behaviours.First() }).FirstOrDefault();
+            Name? request=null;
+            if(m is not null)
+            {
+                if(m.Behaviour.Request is null)
+                {
+                    request = new Name($"{m.Model.Name}{m.Behaviour.Name}Request");
+                }
+                else
+                {
+                    request = m.Behaviour.Request.Name;
+                }
 
-            sb.Al($"using {_module.Namespace}.BusinessLogic.Vehicle.Search;");
-            sb.Al($"using {_module.Namespace}.BusinessLogic.Vehicle;");
+                sb.Al($"using {_module.Namespace}.BusinessLogic.{m.Model.Name};");
+                sb.Al($"using {_module.Namespace}.BusinessLogic.{m.Model.Name}.{m.Behaviour.Name};");
+            }
             sb.Al($"using {_module.Namespace}.Common.EntityTypes;");
             sb.Al($"using {_module.Namespace}.DataAccess.Rcms;");
             sb.Al($"using {_module.Namespace}.DataAccess.Nevdis;");
@@ -46,9 +58,9 @@ namespace ApplicationProject
             sb.B();
             sb.I(2).Al("public void ConfigureServices(IServiceCollection services)");
             sb.I(2).Al("{");
-            if(m != null)
+            if(request is not null)
             {
-                sb.I(3).Al($"services.AddMediatR(typeof({m.Model.Name}{m.Behaviour.Name}Request).Assembly);");
+                sb.I(3).Al($"services.AddMediatR(typeof({request}).Assembly);");
                 sb.B();
             }
             sb.I(3).Al("services.AddControllers()");
@@ -57,11 +69,11 @@ namespace ApplicationProject
             sb.I(5).Al("options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;");
             sb.I(4).Al("})");
 
-            if(m != null)
+            if(request is not null)
             {
                 sb.I(4).Al(".AddFluentValidation(options =>");
                 sb.I(4).Al("{");
-                sb.I(5).Al($"options.RegisterValidatorsFromAssemblyContaining<{m.Model.Name}{m.Behaviour.Name}RequestValidator>();");
+                sb.I(5).Al($"options.RegisterValidatorsFromAssemblyContaining<{request}Validator>();");
                 sb.I(4).Al("});");
             }
             sb.B();

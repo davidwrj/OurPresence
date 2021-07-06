@@ -52,7 +52,7 @@ namespace DomainProject
             sb.I(1).Al("}");
             sb.Al("}");
 
-            return new File("SimpleValueObject.cs", sb.ToString());
+            return new File("SimpleValueObject.cs", sb.ToString(), canOverwrite: true);
         }
     }
 }

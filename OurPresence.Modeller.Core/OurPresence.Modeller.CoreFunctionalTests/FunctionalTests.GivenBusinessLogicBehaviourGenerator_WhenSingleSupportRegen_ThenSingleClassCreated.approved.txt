@@ -7,7 +7,11 @@ file[0] = Account\Withdraw\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
-    partial record AccountWithdrawRequest : IRequest<Account, 
+    public partial record AccountWithdrawRequest : IRequest
+    {
+        public Money Amount { get;  set; }
+
+    }
 }
 
 file[1] = Account\Deposit\Account.generated.cs
@@ -19,6 +23,10 @@ file[1] = Account\Deposit\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {
-    partial record AccountDepositRequest : IRequest<Account, 
+    public partial record AccountWithdrawRequest : IRequest
+    {
+        public Money Amount { get;  set; }
+
+    }
 }
 

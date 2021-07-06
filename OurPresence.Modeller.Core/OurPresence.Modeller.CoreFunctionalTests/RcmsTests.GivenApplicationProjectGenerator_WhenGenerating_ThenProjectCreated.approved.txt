@@ -53,8 +53,8 @@ file[2] = appsettings.json
 }
 
 file[3] = Startup.cs
-using Nhvr.Rcms.BusinessLogic.Vehicle.Search;
-using Nhvr.Rcms.BusinessLogic.Vehicle;
+using Nhvr.Rcms.BusinessLogic.ActivityLog;
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Officer;
 using Nhvr.Rcms.Common.EntityTypes;
 using Nhvr.Rcms.DataAccess.Rcms;
 using Nhvr.Rcms.DataAccess.Nevdis;
@@ -130,6 +130,7 @@ namespace Nhvr.Rcms.Application
 
 file[4] = usings.generated.cs
 global using System;
+global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading.Tasks;
 global using System.Net;
@@ -250,7 +251,7 @@ namespace Nhvr.Rcms.Application
 file[8] = Controllers\ActivityLogController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class ActivityLogController : ApplicationController
+    public partial class ActivityLogController : ApplicationController
     {
         public ActivityLogController(IMediator mediator)
         {
@@ -279,25 +280,30 @@ namespace Nhvr.Rcms.Application.Controllers
         private readonly IMediator _mediator;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActivityLogOfficerResult>>>Async([FromBody] ActivityLogOfficerRequest activityLogOfficerRequest)        {
+        public async Task<IActionResult> OfficerAsync()
+        {
+            var activityLogOfficerRequest = new ActivityLogOfficerRequest();
             var result = await _mediator.Send(activityLogOfficerRequest);
             return FromResult(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ActivityLogAddResult>>Async([FromBody] ActivityLogAddRequest activityLogAddRequest)        {
+        public async Task<IActionResult> AddAsync([FromBody] ActivityLogAddRequest activityLogAddRequest)
+        {
             var result = await _mediator.Send(activityLogAddRequest);
             return FromResult(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ActivityLogUpdateResult>>Async([FromBody] ActivityLogUpdateRequest activityLogUpdateRequest)        {
+        public async Task<IActionResult> UpdateAsync([FromBody] ActivityLogUpdateRequest activityLogUpdateRequest)
+        {
             var result = await _mediator.Send(activityLogUpdateRequest);
             return FromResult(result);
         }
 
         [HttpDelete]
-        public async Task<IActionResult>Async([FromBody] ActivityLogDeleteRequest activityLogDeleteRequest)        {
+        public async Task<IActionResult> DeleteAsync([FromBody] ActivityLogDeleteRequest activityLogDeleteRequest)
+        {
             var result = await _mediator.Send(activityLogDeleteRequest);
             return FromResult(result);
         }
@@ -307,7 +313,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[10] = Controllers\AlertController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class AlertController : ApplicationController
+    public partial class AlertController : ApplicationController
     {
         public AlertController(IMediator mediator)
         {
@@ -334,13 +340,15 @@ namespace Nhvr.Rcms.Application.Controllers
         private readonly IMediator _mediator;
 
         [HttpPost]
-        public async Task<ActionResult<AlertSaveResult>>Async([FromBody] AlertSaveRequest alertSaveRequest)        {
+        public async Task<IActionResult> SaveAsync([FromBody] AlertSaveRequest alertSaveRequest)
+        {
             var result = await _mediator.Send(alertSaveRequest);
             return FromResult(result);
         }
 
         [HttpDelete]
-        public async Task<IActionResult>Async([FromBody] AlertDeleteRequest alertDeleteRequest)        {
+        public async Task<IActionResult> DeleteAsync([FromBody] AlertDeleteRequest alertDeleteRequest)
+        {
             var result = await _mediator.Send(alertDeleteRequest);
             return FromResult(result);
         }
@@ -350,7 +358,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[12] = Controllers\BatchProcessController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class BatchProcessController : ApplicationController
+    public partial class BatchProcessController : ApplicationController
     {
         public BatchProcessController(IMediator mediator)
         {
@@ -381,37 +389,49 @@ namespace Nhvr.Rcms.Application.Controllers
         private readonly IMediator _mediator;
 
         [HttpGet]
-        public async Task<IActionResult>Async([FromBody] BatchProcessSilentEmailRequest batchProcessSilentEmailRequest)        {
+        public async Task<IActionResult> SilentEmailAsync()
+        {
+            var batchProcessSilentEmailRequest = new BatchProcessSilentEmailRequest();
             var result = await _mediator.Send(batchProcessSilentEmailRequest);
             return FromResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult>Async([FromBody] BatchProcessInterceptEmailRequest batchProcessInterceptEmailRequest)        {
+        public async Task<IActionResult> InterceptEmailAsync()
+        {
+            var batchProcessInterceptEmailRequest = new BatchProcessInterceptEmailRequest();
             var result = await _mediator.Send(batchProcessInterceptEmailRequest);
             return FromResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult>Async([FromBody] BatchProcessInterceptFileRequest batchProcessInterceptFileRequest)        {
+        public async Task<IActionResult> InterceptFileAsync()
+        {
+            var batchProcessInterceptFileRequest = new BatchProcessInterceptFileRequest();
             var result = await _mediator.Send(batchProcessInterceptFileRequest);
             return FromResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult>Async([FromBody] BatchProcessFinesVicRoadRequest batchProcessFinesVicRoadRequest)        {
+        public async Task<IActionResult> FinesVicRoadAsync()
+        {
+            var batchProcessFinesVicRoadRequest = new BatchProcessFinesVicRoadRequest();
             var result = await _mediator.Send(batchProcessFinesVicRoadRequest);
             return FromResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult>Async([FromBody] BatchProcessSqlMaintenanceRequest batchProcessSqlMaintenanceRequest)        {
+        public async Task<IActionResult> SqlMaintenanceAsync()
+        {
+            var batchProcessSqlMaintenanceRequest = new BatchProcessSqlMaintenanceRequest();
             var result = await _mediator.Send(batchProcessSqlMaintenanceRequest);
             return FromResult(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult>Async([FromBody] BatchProcessTasInfringmentEmailRequest batchProcessTasInfringmentEmailRequest)        {
+        public async Task<IActionResult> TasInfringmentEmailAsync()
+        {
+            var batchProcessTasInfringmentEmailRequest = new BatchProcessTasInfringmentEmailRequest();
             var result = await _mediator.Send(batchProcessTasInfringmentEmailRequest);
             return FromResult(result);
         }
@@ -421,7 +441,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[14] = Controllers\EventController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class EventController : ApplicationController
+    public partial class EventController : ApplicationController
     {
         public EventController(IMediator mediator)
         {
@@ -450,7 +470,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[16] = Controllers\NoticeNumberController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class NoticeNumberController : ApplicationController
+    public partial class NoticeNumberController : ApplicationController
     {
         public NoticeNumberController(IMediator mediator)
         {
@@ -479,7 +499,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[18] = Controllers\OrganisationController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class OrganisationController : ApplicationController
+    public partial class OrganisationController : ApplicationController
     {
         public OrganisationController(IMediator mediator)
         {
@@ -506,14 +526,16 @@ namespace Nhvr.Rcms.Application.Controllers
         private readonly IMediator _mediator;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrganisationSearchResult>>>Async([FromBody] OrganisationSearchRequest organisationSearchRequest)        {
+        public async Task<IActionResult> SearchAsync([FromBody] OrganisationSearchRequest organisationSearchRequest)
+        {
             var result = await _mediator.Send(organisationSearchRequest);
             return FromResult(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<OrganisationIndexResult>>Async([FromBody] OrganisationIndexRequest organisationIndexRequest)        {
-            var result = await _mediator.Send(organisationIndexRequest);
+        public async Task<IActionResult> IndexAsync([FromBody] OrganisationByIdRequest organisationByIdRequest)
+        {
+            var result = await _mediator.Send(organisationByIdRequest);
             return FromResult(result);
         }
     }
@@ -522,7 +544,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[20] = Controllers\PersonController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class PersonController : ApplicationController
+    public partial class PersonController : ApplicationController
     {
         public PersonController(IMediator mediator)
         {
@@ -551,7 +573,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[22] = Controllers\ShiftController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class ShiftController : ApplicationController
+    public partial class ShiftController : ApplicationController
     {
         public ShiftController(IMediator mediator)
         {
@@ -580,7 +602,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[24] = Controllers\UserController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class UserController : ApplicationController
+    public partial class UserController : ApplicationController
     {
         public UserController(IMediator mediator)
         {
@@ -609,7 +631,7 @@ namespace Nhvr.Rcms.Application.Controllers
 file[26] = Controllers\VehicleController.cs
 namespace Nhvr.Rcms.Application.Controllers
 {
-    partial class VehicleController : ApplicationController
+    public partial class VehicleController : ApplicationController
     {
         public VehicleController(IMediator mediator)
         {
@@ -635,7 +657,8 @@ namespace Nhvr.Rcms.Application.Controllers
         private readonly IMediator _mediator;
 
         [HttpPost]
-        public async Task<IActionResult>Async([FromBody] VehicleCreateRequest vehicleCreateRequest)        {
+        public async Task<IActionResult> CreateAsync([FromBody] VehicleCreateRequest vehicleCreateRequest)
+        {
             var result = await _mediator.Send(vehicleCreateRequest);
             return FromResult(result);
         }

@@ -49,6 +49,10 @@ namespace EntityFrameworkProject
             sb.I(2).Al($"<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"{Settings.Packages.GetVersion("Swashbuckle.AspNetCore", "6.1.4")}\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al("<ProjectReference Include=\"..\\Nhvr.Rcms.Common\\Nhvr.Rcms.Common.csproj\" />");
+            sb.I(1).Al("</ItemGroup>");
+            sb.B();
             sb.Al("</Project>");
 
             var projectFile = new File(project.Name + ".csproj", sb.ToString());

@@ -130,9 +130,9 @@ namespace DomainProject
             sb.I(2).Al("private static int CompareComponents(object? object1, object? object2)");
             sb.I(2).Al("{");
             sb.I(3).Al("return object1 is null && object2 is null");
-            sb.I(4).Al("? 0;");
+            sb.I(4).Al("? 0");
             sb.I(4).Al(": object1 is null");
-            sb.I(4).Al("? -1;");
+            sb.I(4).Al("? -1");
             sb.I(4).Al(": object2 is null");
             sb.I(4).Al("? 1");
             sb.I(4).Al(": object1 is IComparable comparable1 && object2 is IComparable comparable2");
@@ -168,7 +168,7 @@ namespace DomainProject
             sb.I(1).Al("}");
             sb.Al("}");
 
-            return new File("ValueObject.cs", sb.ToString());
+            return new File("ValueObject.cs", sb.ToString(), canOverwrite: true);
         }
     }
 }

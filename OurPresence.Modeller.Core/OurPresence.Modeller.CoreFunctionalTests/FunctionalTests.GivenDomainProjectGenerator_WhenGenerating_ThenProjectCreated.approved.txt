@@ -356,9 +356,9 @@ namespace Mizrael.SuperSafeBank.Common
         private static int CompareComponents(object? object1, object? object2)
         {
             return object1 is null && object2 is null
-                ? 0;
+                ? 0
                 : object1 is null
-                ? -1;
+                ? -1
                 : object2 is null
                 ? 1
                 : object1 is IComparable comparable1 && object2 is IComparable comparable2

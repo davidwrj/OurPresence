@@ -53,8 +53,8 @@ file[2] = appsettings.json
 }
 
 file[3] = Startup.cs
-using Mizrael.SuperSafeBank.BusinessLogic.Vehicle.Search;
-using Mizrael.SuperSafeBank.BusinessLogic.Vehicle;
+using Mizrael.SuperSafeBank.BusinessLogic.Account;
+using Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw;
 using Mizrael.SuperSafeBank.Common.EntityTypes;
 using Mizrael.SuperSafeBank.DataAccess.Rcms;
 using Mizrael.SuperSafeBank.DataAccess.Nevdis;
@@ -128,12 +128,14 @@ namespace Mizrael.SuperSafeBank.Application
     }
 }
 
-file[4] = usings.cs
+file[4] = usings.generated.cs
 global using System;
+global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading.Tasks;
 global using System.Net;
 global using System.Text.Json;
+global using CSharpFunctionalExtensions;
 global using FluentValidation.AspNetCore;
 global using MediatR;
 global using Microsoft.AspNetCore.Authorization;
@@ -146,6 +148,8 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.OpenApi.Models;
+
+global using Mizrael.SuperSafeBank.Common;
 
 file[5] = ExceptionHandler.cs
 namespace Mizrael.SuperSafeBank.Application
@@ -192,13 +196,13 @@ namespace Mizrael.SuperSafeBank.Application
 {
     public class Envelope
     {
-        public object Result { get; }
-        public string ErrorCode { get; }
-        public string ErrorMessage { get; }
-        public string InvalidField { get; }
+        public object? Result { get; }
+        public string? ErrorCode { get; }
+        public string? ErrorMessage { get; }
+        public string? InvalidField { get; }
         public DateTime TimeGenerated { get; }
 
-        private Envelope(object result, Error error, string invalidField)
+        private Envelope(object? result, Error? error, string? invalidField)
         {
             Result = result;
             ErrorCode = error?.Code;
@@ -207,12 +211,12 @@ namespace Mizrael.SuperSafeBank.Application
             TimeGenerated = DateTime.UtcNow;
         }
 
-        public static Envelope Ok(object result = null)
+        public static Envelope Ok(object? result = null)
         {
             return new Envelope(result, null, null);
         }
 
-        public static Envelope Error(Error error, string invalidField)
+        public static Envelope Error(Error error, string? invalidField)
         {
             return new Envelope(null, error, invalidField);
         }
@@ -245,43 +249,40 @@ namespace Mizrael.SuperSafeBank.Application
 }
 
 file[8] = Controllers\ApplicationController.cs
-using Mizrael.SuperSafeBank.Common;
-using Mizrael.SuperSafeBank.Common.EntityTypes;
-
-namespace Mizrael.SuperSafeBank.Controllers
+namespace Mizrael.SuperSafeBank.Application.Controllers
 {
-        [ApiController]
-        public abstract class ApplicationController : ControllerBase
+    [ApiController]
+    public abstract class ApplicationController : ControllerBase
+    {
+        protected new IActionResult Ok(object? result = null)
         {
-            protected new IActionResult Ok(object result = null)
-            {
-                return new EnvelopeResult(Envelope.Ok(result), HttpStatusCode.OK);
-            }
-
-            protected IActionResult NotFound(Error error, string invalidField = null)
-            {
-                return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.NotFound);
-            }
-
-            protected IActionResult Error(Error error, string invalidField = null)
-            {
-                return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.BadRequest);
-            }
-
-            protected IActionResult FromResult(Result result)
-            {
-                return result.IsSuccess ? Ok() : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
-            }
-
-            protected IActionResult FromResult<T>(Result<T> result)
-            {
-                return result.IsSuccess ? Ok(result.Value) : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
-            }
-
-            protected IActionResult FromResult<T>(Result<T, Error> result)
-            {
-                return result.IsSuccess ? Ok(result.Value) : Error(result.Error);
-            }
+            return new EnvelopeResult(Envelope.Ok(result), HttpStatusCode.OK);
         }
+
+        protected IActionResult NotFound(Error error, string? invalidField = null)
+        {
+            return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.NotFound);
+        }
+
+        protected IActionResult Error(Error error, string? invalidField = null)
+        {
+            return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.BadRequest);
+        }
+
+        protected IActionResult FromResult(Result result)
+        {
+            return result.IsSuccess ? Ok() : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
+        }
+
+        protected IActionResult FromResult<T>(Result<T> result)
+        {
+            return result.IsSuccess ? Ok(result.Value) : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
+        }
+
+        protected IActionResult FromResult<T>(Result<T, Error> result)
+        {
+            return result.IsSuccess ? Ok(result.Value) : Error(result.Error);
+        }
+    }
 }
 

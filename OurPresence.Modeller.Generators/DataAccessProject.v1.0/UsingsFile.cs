@@ -31,6 +31,8 @@ namespace DomainProject
             sb.Al("global using System.Threading.Tasks;");
             sb.Al("global using Microsoft.EntityFrameworkCore;");
             sb.Al("global using Microsoft.EntityFrameworkCore.Metadata.Builders;");
+            sb.B();
+            sb.Al($"global using {_module.Namespace}.Common.Enums;");
             sb.Al($"global using {_module.Namespace}.Data.Models;");
             return new File("usings.cs", sb.ToString());
         }

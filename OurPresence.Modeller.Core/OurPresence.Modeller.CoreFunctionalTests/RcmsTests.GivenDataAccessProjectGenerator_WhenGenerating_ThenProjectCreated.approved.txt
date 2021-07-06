@@ -18,6 +18,10 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Nhvr.Rcms.Common\Nhvr.Rcms.Common.csproj" />
+    </ItemGroup>
+
 </Project>
 
 file[1] = usings.cs
@@ -28,6 +32,8 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+global using Nhvr.Rcms.Common.Enums;
 global using Nhvr.Rcms.Data.Models;
 
 file[2] = Configurations\ActivityLogConfiguration.cs

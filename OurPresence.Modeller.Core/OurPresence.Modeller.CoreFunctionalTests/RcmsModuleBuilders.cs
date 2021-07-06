@@ -1499,7 +1499,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                         .AddField("Name").MaxLength(255).Build
                         .AddField("ACN").MaxLength(255).Nullable().Build
                     .Build
-                    .AddResponse("OrgansiationSearchResult")
+                    .AddResponse("OrganisationSearchResult")
                         .IsCollection()
                         .AddField("Name").MaxLength(255).Build
                         .AddField("ACN").MaxLength(255).Nullable().Build
@@ -1516,7 +1516,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                         .AddField("Juro").MaxLength(255).Build
                         .AddField("IncludeSilentAlerts").DataType(DataTypes.Bool).Default("false").Nullable().Build
                     .Build
-                    .AddResponse("OrgansiationDetailResult")
+                    .AddResponse("OrganisationDetailResult")
                         .AddField("Name").MaxLength(255).Build
                         .AddField("ACN").MaxLength(255).Nullable().Build
                         .AddField("AlertLevel").DataType(DataTypes.Int32).Nullable().Build

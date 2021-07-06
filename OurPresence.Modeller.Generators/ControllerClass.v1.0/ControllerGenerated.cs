@@ -50,7 +50,7 @@ namespace ControllerClass
             {
                 sb.A(": ApplicationController");
             }
-            sb.B();            
+            sb.B();
             sb.I(1).Al("{");
             sb.I(2).Al("private readonly IMediator _mediator;");
 
@@ -68,27 +68,43 @@ namespace ControllerClass
                 sb.B();
                 sb.I(2).Al($"[Http{behaviour.Verb}]");
                 sb.I(2).A($"public async Task");
-                if(behaviour.Response is null)
-                {
+                //if(behaviour.Response is null)
+                //{
                     sb.A("<IActionResult>");
+                //}
+                //else
+                //{
+                //    sb.A($"<ActionResult<");
+                //    if(behaviour.Response.IsCollection)
+                //    {
+                //        sb.A($"IEnumerable<{behaviour.Response.Name}>");
+                //    }
+                //    else
+                //    {
+                //        sb.A($"{behaviour.Response.Name}");
+                //    }
+                //    sb.A(">>");
+                //}
+                sb.A($" {behaviour.Name}Async(");
+                if(behaviour.Request is not null)
+                {
+                    sb.A($"[FromBody] {behaviour.Request.Name} {behaviour.Request.Name.Singular.LocalVariable}");
+                }
+                sb.Al(")");
+                sb.I(2).Al("{");
+
+                Name request;
+                if(behaviour.Request is null)
+                {
+                    request = new Name($"{_model.Name}{behaviour.Name}Request");
+                    sb.I(3).Al($"var {request.Singular.LocalVariable} = new {request}();");
                 }
                 else
                 {
-                    sb.A($"<ActionResult<");
-                    if(behaviour.Response.IsCollection)
-                    {
-                        sb.A($"IEnumerable<{_model.Name}{behaviour.Name}Result>");
-                    }
-                    else
-                    {
-                        sb.A($"{_model.Name}{behaviour.Name}Result");
-                    }
-                    sb.A(">>");
+                    request = behaviour.Request.Name;
                 }
-                var variable = $"{_model.Name.Singular.LocalVariable}{behaviour.Name}Request";
-                sb.A($" {behaviour.Name}Async([FromBody] {_model.Name}{behaviour.Name}Request {variable})");
-                sb.I(2).Al("{");
-                sb.I(3).Al($"var result = await _mediator.Send({variable});");
+                sb.I(3).A($"var result = await _mediator.Send(");
+                sb.Al($"{request.Singular.LocalVariable});");
                 sb.I(3).Al("return FromResult(result);");
                 sb.I(2).Al("}");
             }

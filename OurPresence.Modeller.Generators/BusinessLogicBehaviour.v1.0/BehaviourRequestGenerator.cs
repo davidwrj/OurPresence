@@ -42,9 +42,10 @@ namespace BusinessLogicBehaviour
                 sb.A($" {_behaviour.Request.Name} : IRequest");
                 if (_behaviour.Response is not null)
                 {
+                    sb.A("<Result");
                     sb.A(_behaviour.Response.IsCollection ? "<IEnumerable" : "");
                     sb.A($"<{_behaviour.Response.Name}>");
-                    sb.A(_behaviour.Response.IsCollection ? ">" : "");
+                    sb.A(_behaviour.Response.IsCollection ? ">>" : ">");
                 }
                 sb.B();
                 sb.I(1).Al("{");
@@ -54,6 +55,23 @@ namespace BusinessLogicBehaviour
                 }
                 sb.I(1).Al("}");
             }
+            else
+            {
+                var request = new Name($"{_model.Name}{_behaviour.Name}Request");
+
+                sb.I(1).A(Settings.SupportRegen ? $"public partial record" : $"public class");
+                sb.A($" {request} : IRequest");
+                if(_behaviour.Response is not null)
+                {
+                    sb.A(_behaviour.Response.IsCollection ? "<IEnumerable" : "");
+                    sb.A($"<{_behaviour.Response.Name}>");
+                    sb.A(_behaviour.Response.IsCollection ? ">" : "");
+                }
+                sb.B();
+                sb.I(1).Al("{ }");
+                sb.B();
+            }
+
             if (_behaviour.Response is not null)
             {
                 sb.I(1).A(Settings.SupportRegen ? $"public partial record" : $"public class");

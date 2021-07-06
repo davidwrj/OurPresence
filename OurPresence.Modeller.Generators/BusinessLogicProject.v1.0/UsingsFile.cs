@@ -1,6 +1,7 @@
 ﻿// Copyright (c)  Allan Nielsen.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using OurPresence.Modeller.Domain;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using System;
@@ -10,9 +11,12 @@ namespace DomainProject
 {
     internal class UsingsFile : IGenerator
     {
-        public UsingsFile(ISettings settings)
+        private readonly Module _module;
+
+        public UsingsFile(ISettings settings, Module module)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _module = module ?? throw new ArgumentNullException(nameof(module));
         }
 
         public ISettings Settings { get; }
@@ -25,8 +29,11 @@ namespace DomainProject
             sb.Al("global using System.Linq;");
             sb.Al("global using System.Text;");
             sb.Al("global using System.Threading.Tasks;");
+            sb.Al("global using CSharpFunctionalExtensions;");
             sb.Al("global using MediatR;");
-            return new File("usings.cs", sb.ToString());
+            sb.B();
+            sb.Al($"global using {_module.Namespace}.Common.Enums;");
+            return new File("usings.cs", sb.ToString(), canOverwrite: true);
         }
     }
 }

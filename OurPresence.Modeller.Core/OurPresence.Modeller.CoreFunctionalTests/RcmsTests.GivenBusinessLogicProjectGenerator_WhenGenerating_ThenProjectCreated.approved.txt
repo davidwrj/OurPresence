@@ -12,6 +12,10 @@
         <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Nhvr.Rcms.Common\Nhvr.Rcms.Common.csproj" />
+    </ItemGroup>
+
 </Project>
 
 file[1] = usings.cs
@@ -20,7 +24,10 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
+global using CSharpFunctionalExtensions;
 global using MediatR;
+
+global using Nhvr.Rcms.Common.Enums;
 
 file[2] = ActivityLog\Officer\ActivityLog.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
@@ -31,7 +38,36 @@ file[2] = ActivityLog\Officer\ActivityLog.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Officer
 {
-    partial record ActivityLogOfficerRequest : IRequest<ActivityLog, 
+    public partial record ActivityLogOfficerRequest : IRequest<IEnumerable<ActivityLogOfficerResult>>
+    { }
+
+    public partial record ActivityLogOfficerResult
+    {
+        public int Id { get;  set; }
+
+        public DateTimeOffset StartTime { get;  set; }
+
+        public DateTimeOffset EndTime { get;  set; }
+
+        public string Source { get;  set; }
+
+        public string ActivityType { get;  set; }
+
+        public string Remark { get;  set; }
+
+        public bool Light { get;  set; }
+
+        public bool Siren { get;  set; }
+
+        public bool UrgentDutyDriving { get;  set; }
+
+        public bool IsEditable { get;  set; }
+
+        public bool SystemGenerated { get;  set; }
+
+        public DateTimeOffset DateAdded { get;  set; }
+
+    }
 }
 
 file[3] = ActivityLog\Add\ActivityLog.generated.cs
@@ -43,7 +79,20 @@ file[3] = ActivityLog\Add\ActivityLog.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Add
 {
-    partial record ActivityLogAddRequest : IRequest<ActivityLog, 
+    public partial record ActivityLogAddRequest : IRequest<Result<ActivityLogAddResult>>
+    {
+        public DateTimeOffset DateAdded { get;  set; }
+
+        public DateTimeOffset StartTime { get;  set; }
+
+        public string ActivityType { get;  set; }
+
+    }
+    public partial record ActivityLogAddResult
+    {
+        public int Id { get;  set; }
+
+    }
 }
 
 file[4] = ActivityLog\Update\ActivityLog.generated.cs
@@ -55,7 +104,24 @@ file[4] = ActivityLog\Update\ActivityLog.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Update
 {
-    partial record ActivityLogUpdateRequest : IRequest<ActivityLog, 
+    public partial record ActivityLogUpdateRequest : IRequest<Result<ActivityLogUpdateResult>>
+    {
+        public DateTimeOffset EndTime { get;  set; }
+
+        public string Remark { get;  set; }
+
+        public bool? Light { get;  set; }
+
+        public bool? Siren { get;  set; }
+
+        public bool? UrgentDutyDriving { get;  set; }
+
+    }
+    public partial record ActivityLogUpdateResult
+    {
+        public int Id { get;  set; }
+
+    }
 }
 
 file[5] = ActivityLog\Delete\ActivityLog.generated.cs
@@ -67,7 +133,11 @@ file[5] = ActivityLog\Delete\ActivityLog.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Delete
 {
-    partial record ActivityLogDeleteRequest : IRequest<ActivityLog, 
+    public partial record ActivityLogDeleteRequest : IRequest
+    {
+        public int Id { get;  set; }
+
+    }
 }
 
 file[6] = Alert\Save\Alert.generated.cs
@@ -79,7 +149,34 @@ file[6] = Alert\Save\Alert.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.Alert.Save
 {
-    partial record AlertSaveRequest : IRequest<Alert, 
+    public partial record AlertSaveRequest : IRequest<Result<AlertSaveResult>>
+    {
+        public int Id { get;  set; }
+
+        public int AlertLevel { get;  set; }
+
+        public DateTimeOffset EffectiveDate { get;  set; }
+
+        public DateTimeOffset ExpiryDate { get;  set; }
+
+        public string Remark { get;  set; }
+
+        public bool Silent { get;  set; }
+
+        public int SilentNotifyContactId { get;  set; }
+
+        public int PersonId { get;  set; }
+
+        public int VehicleId { get;  set; }
+
+        public int OrganisationId { get;  set; }
+
+    }
+    public partial record AlertSaveResult
+    {
+        public int Id { get;  set; }
+
+    }
 }
 
 file[7] = Alert\Delete\Alert.generated.cs
@@ -91,7 +188,13 @@ file[7] = Alert\Delete\Alert.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.Alert.Delete
 {
-    partial record AlertDeleteRequest : IRequest<Alert, 
+    public partial record AlertDeleteRequest : IRequest
+    {
+        public int Id { get;  set; }
+
+        public string Reason { get;  set; }
+
+    }
 }
 
 file[8] = BatchProcess\SilentEmail\BatchProcess.generated.cs
@@ -103,7 +206,9 @@ file[8] = BatchProcess\SilentEmail\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.SilentEmail
 {
-    partial record BatchProcessSilentEmailRequest : IRequest<BatchProcess, 
+    public partial record BatchProcessSilentEmailRequest : IRequest
+    { }
+
 }
 
 file[9] = BatchProcess\InterceptEmail\BatchProcess.generated.cs
@@ -115,7 +220,9 @@ file[9] = BatchProcess\InterceptEmail\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptEmail
 {
-    partial record BatchProcessInterceptEmailRequest : IRequest<BatchProcess, 
+    public partial record BatchProcessInterceptEmailRequest : IRequest
+    { }
+
 }
 
 file[10] = BatchProcess\InterceptFile\BatchProcess.generated.cs
@@ -127,7 +234,9 @@ file[10] = BatchProcess\InterceptFile\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptFile
 {
-    partial record BatchProcessInterceptFileRequest : IRequest<BatchProcess, 
+    public partial record BatchProcessInterceptFileRequest : IRequest
+    { }
+
 }
 
 file[11] = BatchProcess\FinesVicRoad\BatchProcess.generated.cs
@@ -139,7 +248,9 @@ file[11] = BatchProcess\FinesVicRoad\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.FinesVicRoad
 {
-    partial record BatchProcessFinesVicRoadRequest : IRequest<BatchProcess, 
+    public partial record BatchProcessFinesVicRoadRequest : IRequest
+    { }
+
 }
 
 file[12] = BatchProcess\SqlMaintenance\BatchProcess.generated.cs
@@ -151,7 +262,9 @@ file[12] = BatchProcess\SqlMaintenance\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.SqlMaintenance
 {
-    partial record BatchProcessSqlMaintenanceRequest : IRequest<BatchProcess, 
+    public partial record BatchProcessSqlMaintenanceRequest : IRequest
+    { }
+
 }
 
 file[13] = BatchProcess\TasInfringmentEmail\BatchProcess.generated.cs
@@ -163,7 +276,9 @@ file[13] = BatchProcess\TasInfringmentEmail\BatchProcess.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.TasInfringmentEmail
 {
-    partial record BatchProcessTasInfringmentEmailRequest : IRequest<BatchProcess, 
+    public partial record BatchProcessTasInfringmentEmailRequest : IRequest
+    { }
+
 }
 
 file[14] = Organisation\Search\Organisation.generated.cs
@@ -175,7 +290,30 @@ file[14] = Organisation\Search\Organisation.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Search
 {
-    partial record OrganisationSearchRequest : IRequest<Organisation, 
+    public partial record OrganisationSearchRequest : IRequest<Result<IEnumerable<OrganisationSearchResult>>>
+    {
+        public string Name { get;  set; }
+
+        public string? ACN { get;  set; }
+
+    }
+    public partial record OrganisationSearchResult
+    {
+        public string Name { get;  set; }
+
+        public string? ACN { get;  set; }
+
+        public int? AlertLevel { get;  set; }
+
+        public int? AssociatedAlertLevel { get;  set; }
+
+        public string Source { get;  set; }
+
+        public string Type { get;  set; }
+
+        public string Status { get;  set; }
+
+    }
 }
 
 file[15] = Organisation\Index\Organisation.generated.cs
@@ -187,7 +325,32 @@ file[15] = Organisation\Index\Organisation.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Index
 {
-    partial record OrganisationIndexRequest : IRequest<Organisation, 
+    public partial record OrganisationByIdRequest : IRequest<Result<OrganisationDetailResult>>
+    {
+        public string Id { get;  set; }
+
+        public string Juro { get;  set; }
+
+        public bool? IncludeSilentAlert { get;  set; }
+
+    }
+    public partial record OrganisationDetailResult
+    {
+        public string Name { get;  set; }
+
+        public string? ACN { get;  set; }
+
+        public int? AlertLevel { get;  set; }
+
+        public int? AssociatedAlertLevel { get;  set; }
+
+        public string Source { get;  set; }
+
+        public string Type { get;  set; }
+
+        public string Status { get;  set; }
+
+    }
 }
 
 file[16] = Vehicle\Create\Vehicle.generated.cs
@@ -199,6 +362,24 @@ file[16] = Vehicle\Create\Vehicle.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.Vehicle.Create
 {
-    partial record VehicleCreateRequest : IRequest<Vehicle, 
+    public partial record VehicleCreateRequest : IRequest
+    {
+        public States RegistrationState { get;  set; }
+
+        public string? RegistrationNumber { get;  set; }
+
+        public bool IsNationalRegistration { get;  set; }
+
+        public string? VehicleIdentificationNumber { get;  set; }
+
+        public string? EngineNumber { get;  set; }
+
+        public string? ChassisNumber { get;  set; }
+
+        public string SourceVehicleId { get;  set; }
+
+        public SourceSystemTypes SystemId { get;  set; }
+
+    }
 }
 

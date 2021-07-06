@@ -12,6 +12,10 @@ file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
         <PackageReference Include="MediatR" Version="9.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Nhvr.Rcms.Common\Nhvr.Rcms.Common.csproj" />
+    </ItemGroup>
+
 </Project>
 
 file[1] = usings.cs
@@ -20,7 +24,10 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
+global using CSharpFunctionalExtensions;
 global using MediatR;
+
+global using Mizrael.SuperSafeBank.Common.Enums;
 
 file[2] = Account\Withdraw\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
@@ -31,7 +38,11 @@ file[2] = Account\Withdraw\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
-    partial record AccountWithdrawRequest : IRequest<Account, 
+    public partial record AccountWithdrawRequest : IRequest
+    {
+        public Money Amount { get;  set; }
+
+    }
 }
 
 file[3] = Account\Deposit\Account.generated.cs
@@ -43,6 +54,10 @@ file[3] = Account\Deposit\Account.generated.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {
-    partial record AccountDepositRequest : IRequest<Account, 
+    public partial record AccountWithdrawRequest : IRequest
+    {
+        public Money Amount { get;  set; }
+
+    }
 }
 

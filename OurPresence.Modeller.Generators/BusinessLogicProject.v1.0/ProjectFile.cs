@@ -43,6 +43,10 @@ namespace BusinessLogicProject
             sb.I(2).Al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.Packages.GetVersion("MediatR", "9.0.0")}\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al("<ProjectReference Include=\"..\\Nhvr.Rcms.Common\\Nhvr.Rcms.Common.csproj\" />");
+            sb.I(1).Al("</ItemGroup>");
+            sb.B();
             sb.Al("</Project>");
 
             files.AddFile(new File(project.Name + ".csproj", sb.ToString()));

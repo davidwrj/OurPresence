@@ -4,7 +4,11 @@ file[0] = Account\Withdraw\Account.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
-    public class AccountWithdrawRequest : IRequest<Account, 
+    public class AccountWithdrawRequest : IRequest
+    {
+        public Money Amount { get;  set; }
+
+    }
 }
 
 file[1] = Account\Deposit\Account.cs
@@ -13,6 +17,10 @@ file[1] = Account\Deposit\Account.cs
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {
-    public class AccountDepositRequest : IRequest<Account, 
+    public class AccountWithdrawRequest : IRequest
+    {
+        public Money Amount { get;  set; }
+
+    }
 }
 
