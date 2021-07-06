@@ -1,4 +1,4 @@
-file[0] = Nhvr.Rcms.Common.csproj
+﻿file[0] = Nhvr.Rcms.Common.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -557,18 +557,12 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ActivityLog
     {
-        public ActivityLog(bool active, string activityType, string eventId, bool isManualEntry, DateTimeOffset? startDate, DateTimeOffset? endDate, DateTimeOffset? dateAdded, bool light, bool siren, bool urgentDutyDriving, string remark, string shiftId, string userId)
+        public ActivityLog(bool active, string activityType, int eventId, bool isManualEntry, DateTimeOffset? startDate, DateTimeOffset? endDate, DateTimeOffset? dateAdded, bool light, bool siren, bool urgentDutyDriving, string remark, int shiftId, int userId)
         {
             if(string.IsNullOrWhiteSpace(activityType))
                 throw new ArgumentException("Must include a value for Activity Type");
-            if(string.IsNullOrWhiteSpace(eventId))
-                throw new ArgumentException("Must include a value for Event Id");
             if(string.IsNullOrWhiteSpace(remark))
                 throw new ArgumentException("Must include a value for Remark");
-            if(string.IsNullOrWhiteSpace(shiftId))
-                throw new ArgumentException("Must include a value for Shift Id");
-            if(string.IsNullOrWhiteSpace(userId))
-                throw new ArgumentException("Must include a value for User Id");
             Active = active;
             ActivityType = activityType;
             EventId = eventId;
@@ -626,7 +620,7 @@ namespace Nhvr.Rcms.Common.Domain
 
         public string ActivityType { get; private set; }
 
-        public string EventId { get; private set; }
+        public int EventId { get; private set; }
 
         public bool IsManualEntry { get; private set; }
 
@@ -644,9 +638,9 @@ namespace Nhvr.Rcms.Common.Domain
 
         public string Remark { get; private set; }
 
-        public string ShiftId { get; private set; }
+        public int ShiftId { get; private set; }
 
-        public string UserId { get; private set; }
+        public int UserId { get; private set; }
 
         public partial void Officer();
 
@@ -855,22 +849,18 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[15] = Domain\AzureSqlmaintenanceLog.cs
+file[15] = Domain\AzureSqlMaintenanceLog.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    public partial class AzureSqlmaintenanceLog
+    public partial class AzureSqlMaintenanceLog
     {
-        public AzureSqlmaintenanceLog(long id, DateTimeOffset? operationTime, string command, string extraInfo, DateTimeOffset? startTime, DateTimeOffset? endTime, string statusMessage)
+        public AzureSqlMaintenanceLog(long id, DateTimeOffset? operationTime, string command, string? extraInfo, DateTimeOffset? startTime, DateTimeOffset? endTime, string? statusMessage)
         {
             if(string.IsNullOrWhiteSpace(command))
                 throw new ArgumentException("Must include a value for Command");
-            if(string.IsNullOrWhiteSpace(extraInfo))
-                throw new ArgumentException("Must include a value for Extra Info");
-            if(string.IsNullOrWhiteSpace(statusMessage))
-                throw new ArgumentException("Must include a value for Status Message");
             Id = id;
             OperationTime = operationTime;
             Command = command;
@@ -883,7 +873,7 @@ namespace Nhvr.Rcms.Common.Domain
     }
 }
 
-file[16] = Domain\AzureSqlmaintenanceLog.generated.cs
+file[16] = Domain\AzureSqlMaintenanceLog.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -894,7 +884,7 @@ file[16] = Domain\AzureSqlmaintenanceLog.generated.cs
 
 namespace Nhvr.Rcms.Common.Domain
 {
-    partial class AzureSqlmaintenanceLog
+    partial class AzureSqlMaintenanceLog
     {
         public long Id { get; private set; }
 
@@ -902,13 +892,13 @@ namespace Nhvr.Rcms.Common.Domain
 
         public string Command { get; private set; }
 
-        public string ExtraInfo { get; private set; }
+        public string? ExtraInfo { get; private set; }
 
         public DateTimeOffset? StartTime { get; private set; }
 
         public DateTimeOffset? EndTime { get; private set; }
 
-        public string StatusMessage { get; private set; }
+        public string? StatusMessage { get; private set; }
     }
 }
 
@@ -928,6 +918,36 @@ namespace Nhvr.Rcms.Common.Domain
             StatusId = statusId;
             StartedOn = startedOn;
             StoppedOn = stoppedOn;
+        }
+
+        public partial void SilentEmail()
+        {
+            // todo: Add Silent Email behaviour here
+        }
+
+        public partial void InterceptEmail()
+        {
+            // todo: Add Intercept Email behaviour here
+        }
+
+        public partial void InterceptFile()
+        {
+            // todo: Add Intercept File behaviour here
+        }
+
+        public partial void FinesVicRoad()
+        {
+            // todo: Add Fines Vic Road behaviour here
+        }
+
+        public partial void SqlMaintenance()
+        {
+            // todo: Add Sql Maintenance behaviour here
+        }
+
+        public partial void TasInfringmentEmail()
+        {
+            // todo: Add Tas Infringment Email behaviour here
         }
 
     }
@@ -955,6 +975,18 @@ namespace Nhvr.Rcms.Common.Domain
         public DateTimeOffset? StartedOn { get; private set; }
 
         public DateTimeOffset? StoppedOn { get; private set; }
+
+        public partial void SilentEmail();
+
+        public partial void InterceptEmail();
+
+        public partial void InterceptFile();
+
+        public partial void FinesVicRoad();
+
+        public partial void SqlMaintenance();
+
+        public partial void TasInfringmentEmail();
     }
 }
 
@@ -1078,12 +1110,8 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ComplianceAction
     {
-        public ComplianceAction(int typeId, string noticeNumber, int eventId, int mediaId, int vehicleId, int personId, int organisationId, DateTimeOffset? dateIssued, DateTimeOffset? noticeIssuedDate, int stateId, string juroEntry, bool active, int systemId)
+        public ComplianceAction(int typeId, string? noticeNumber, int eventId, int? mediaId, int? vehicleId, int? personId, int? organisationId, DateTimeOffset dateIssued, DateTimeOffset? noticeIssuedDate, int? stateId, string? juroEntry, bool active, int systemId)
         {
-            if(string.IsNullOrWhiteSpace(noticeNumber))
-                throw new ArgumentException("Must include a value for Notice Number");
-            if(string.IsNullOrWhiteSpace(juroEntry))
-                throw new ArgumentException("Must include a value for Juro Entry");
             TypeId = typeId;
             NoticeNumber = noticeNumber;
             EventId = eventId;
@@ -1119,25 +1147,25 @@ namespace Nhvr.Rcms.Common.Domain
 
         public int TypeId { get; private set; }
 
-        public string NoticeNumber { get; private set; }
+        public string? NoticeNumber { get; private set; }
 
         public int EventId { get; private set; }
 
-        public int MediaId { get; private set; }
+        public int? MediaId { get; private set; }
 
-        public int VehicleId { get; private set; }
+        public int? VehicleId { get; private set; }
 
-        public int PersonId { get; private set; }
+        public int? PersonId { get; private set; }
 
-        public int OrganisationId { get; private set; }
+        public int? OrganisationId { get; private set; }
 
-        public DateTimeOffset? DateIssued { get; private set; }
+        public DateTimeOffset DateIssued { get; private set; }
 
         public DateTimeOffset? NoticeIssuedDate { get; private set; }
 
-        public int StateId { get; private set; }
+        public int? StateId { get; private set; }
 
-        public string JuroEntry { get; private set; }
+        public string? JuroEntry { get; private set; }
 
         public bool Active { get; private set; }
 
@@ -1153,7 +1181,7 @@ namespace Nhvr.Rcms.Common.Domain
 {
     public partial class ComplianceActionImport
     {
-        public ComplianceActionImport(int vehicleRegistrationStateId, string vehicleRegistrationNumber, string personGivenName, string personFamilyName, DateTimeOffset? personDateOfBirth, string personLicenceNumber, int personLicenceStateId, string organisationAcn, string organisationIncorporatedNumber, int typeId, DateTimeOffset? dateIssued, DateTimeOffset? dateCleared, string noticeNumber, string line1, string line2, string line3, string line4, bool active, int systemId)
+        public ComplianceActionImport(int vehicleRegistrationStateId, string vehicleRegistrationNumber, string personGivenName, string personFamilyName, DateTimeOffset? personDateOfBirth, string personLicenceNumber, int personLicenceStateId, string organisationAcn, string organisationIncorporatedNumber, int typeId, DateTimeOffset dateIssued, DateTimeOffset? dateCleared, string noticeNumber, string line1, string line2, string line3, string line4, bool active, int systemId)
         {
             if(string.IsNullOrWhiteSpace(vehicleRegistrationNumber))
                 throw new ArgumentException("Must include a value for Vehicle Registration Number");
@@ -1236,7 +1264,7 @@ namespace Nhvr.Rcms.Common.Domain
 
         public int TypeId { get; private set; }
 
-        public DateTimeOffset? DateIssued { get; private set; }
+        public DateTimeOffset DateIssued { get; private set; }
 
         public DateTimeOffset? DateCleared { get; private set; }
 
@@ -4566,6 +4594,16 @@ namespace Nhvr.Rcms.Common.Domain
             SystemId = systemId;
         }
 
+        public partial void Search(string name, string? aCN)
+        {
+            // todo: Add Search behaviour here
+        }
+
+        public partial void Index(string id, string juro, bool? includeSilentAlert)
+        {
+            // todo: Add Index behaviour here
+        }
+
     }
 }
 
@@ -4595,6 +4633,10 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+        public partial void Search(string name, string? aCN);
+
+        public partial void Index(string id, string juro, bool? includeSilentAlert);
     }
 }
 

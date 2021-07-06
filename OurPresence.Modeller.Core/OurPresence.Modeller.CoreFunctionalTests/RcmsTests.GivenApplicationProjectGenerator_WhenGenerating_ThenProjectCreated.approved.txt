@@ -1,0 +1,682 @@
+﻿file[0] = Nhvr.Rcms.Application.csproj
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Nhvr.Rcms.Application</RootNamespace>
+        <LangVersion>Preview</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Nhvr.Rcms.BusinessLogic\Nhvr.Rcms.BusinessLogic.csproj" />
+        <ProjectReference Include="..\Nhvr.Rcms.Common\Nhvr.Rcms.Common.csproj" />
+    </ItemGroup>
+
+</Project>
+
+file[1] = Program.cs
+namespace Nhvr.Rcms.Application
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
+}
+
+file[2] = appsettings.json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*"
+}
+
+file[3] = Startup.cs
+using Nhvr.Rcms.BusinessLogic.Vehicle.Search;
+using Nhvr.Rcms.BusinessLogic.Vehicle;
+using Nhvr.Rcms.Common.EntityTypes;
+using Nhvr.Rcms.DataAccess.Rcms;
+using Nhvr.Rcms.DataAccess.Nevdis;
+
+namespace Nhvr.Rcms.Application
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(ActivityLogOfficerRequest).Assembly);
+
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;
+                })
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblyContaining<ActivityLogOfficerRequestValidator>();
+                });
+
+            //todo: Add your service registrations here
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Nhvr Rcm", Version = "v1" });
+            });
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nhvr Rcm v1"));
+            }
+
+            app.UseMiddleware<ExceptionHandler>();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
+
+    public class ModelStateValidator
+    {
+        public static IActionResult ValidateModelState(ActionContext context)
+        {
+            (string fieldName, ModelStateEntry entry) = context.ModelState.First(x => x.Value.Errors.Count > 0);
+            string errorSerialized = entry.Errors.First().ErrorMessage;
+
+            Error error = Error.Deserialize(errorSerialized);
+            Envelope envelope = Envelope.Error(error, fieldName);
+            var envelopeResult = new EnvelopeResult(envelope, HttpStatusCode.BadRequest);
+
+            return envelopeResult;
+        }
+    }
+}
+
+file[4] = usings.generated.cs
+global using System;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using System.Net;
+global using System.Text.Json;
+global using CSharpFunctionalExtensions;
+global using FluentValidation.AspNetCore;
+global using MediatR;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.ModelBinding;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.OpenApi.Models;
+
+global using Nhvr.Rcms.Common;
+
+file[5] = ExceptionHandler.cs
+namespace Nhvr.Rcms.Application
+{
+    public sealed class ExceptionHandler
+    {
+        private readonly RequestDelegate _next;
+        private readonly IWebHostEnvironment _env;
+
+        public ExceptionHandler(RequestDelegate next, IWebHostEnvironment env)
+        {
+            _next = next;
+            _env = env;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                await HandleException(context, ex);
+            }
+        }
+
+        private Task HandleException(HttpContext context, Exception exception)
+        {
+            string errorMessage = _env.IsProduction() ? "Internal server error" : "Exception: " + exception.Message;
+            Error error = Errors.General.InternalServerError(errorMessage);
+            Envelope envelope = Envelope.Error(error, null);
+            string result = JsonSerializer.Serialize(envelope);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            return context.Response.WriteAsync(result);
+        }
+    }
+}
+
+file[6] = Envelop.cs
+namespace Nhvr.Rcms.Application
+{
+    public class Envelope
+    {
+        public object? Result { get; }
+        public string? ErrorCode { get; }
+        public string? ErrorMessage { get; }
+        public string? InvalidField { get; }
+        public DateTime TimeGenerated { get; }
+
+        private Envelope(object? result, Error? error, string? invalidField)
+        {
+            Result = result;
+            ErrorCode = error?.Code;
+            ErrorMessage = error?.Message;
+            InvalidField = invalidField;
+            TimeGenerated = DateTime.UtcNow;
+        }
+
+        public static Envelope Ok(object? result = null)
+        {
+            return new Envelope(result, null, null);
+        }
+
+        public static Envelope Error(Error error, string? invalidField)
+        {
+            return new Envelope(null, error, invalidField);
+        }
+    }
+}
+
+file[7] = EnvelopResult.cs
+namespace Nhvr.Rcms.Application
+{
+    public sealed class EnvelopeResult : IActionResult
+    {
+        private readonly Envelope _envelope;
+        private readonly int _statusCode;
+
+        public EnvelopeResult(Envelope envelope, HttpStatusCode statusCode)
+        {
+            _statusCode = (int)statusCode;
+            _envelope = envelope;
+        }
+
+        public Task ExecuteResultAsync(ActionContext context)
+        {
+            var objectResult = new ObjectResult(_envelope)
+            {
+                StatusCode = _statusCode
+            };
+            return objectResult.ExecuteResultAsync(context);
+        }
+    }
+}
+
+file[8] = Controllers\ActivityLogController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class ActivityLogController : ApplicationController
+    {
+        public ActivityLogController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[9] = Controllers\ActivityLogController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Officer;
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Add;
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Update;
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Delete;
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class ActivityLogController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ActivityLogOfficerResult>>>Async([FromBody] ActivityLogOfficerRequest activityLogOfficerRequest)        {
+            var result = await _mediator.Send(activityLogOfficerRequest);
+            return FromResult(result);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ActivityLogAddResult>>Async([FromBody] ActivityLogAddRequest activityLogAddRequest)        {
+            var result = await _mediator.Send(activityLogAddRequest);
+            return FromResult(result);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ActivityLogUpdateResult>>Async([FromBody] ActivityLogUpdateRequest activityLogUpdateRequest)        {
+            var result = await _mediator.Send(activityLogUpdateRequest);
+            return FromResult(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult>Async([FromBody] ActivityLogDeleteRequest activityLogDeleteRequest)        {
+            var result = await _mediator.Send(activityLogDeleteRequest);
+            return FromResult(result);
+        }
+    }
+}
+
+file[10] = Controllers\AlertController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class AlertController : ApplicationController
+    {
+        public AlertController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[11] = Controllers\AlertController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Nhvr.Rcms.BusinessLogic.Alert.Save;
+using Nhvr.Rcms.BusinessLogic.Alert.Delete;
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class AlertController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpPost]
+        public async Task<ActionResult<AlertSaveResult>>Async([FromBody] AlertSaveRequest alertSaveRequest)        {
+            var result = await _mediator.Send(alertSaveRequest);
+            return FromResult(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult>Async([FromBody] AlertDeleteRequest alertDeleteRequest)        {
+            var result = await _mediator.Send(alertDeleteRequest);
+            return FromResult(result);
+        }
+    }
+}
+
+file[12] = Controllers\BatchProcessController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class BatchProcessController : ApplicationController
+    {
+        public BatchProcessController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[13] = Controllers\BatchProcessController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Nhvr.Rcms.BusinessLogic.BatchProcess.SilentEmail;
+using Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptEmail;
+using Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptFile;
+using Nhvr.Rcms.BusinessLogic.BatchProcess.FinesVicRoad;
+using Nhvr.Rcms.BusinessLogic.BatchProcess.SqlMaintenance;
+using Nhvr.Rcms.BusinessLogic.BatchProcess.TasInfringmentEmail;
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class BatchProcessController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpGet]
+        public async Task<IActionResult>Async([FromBody] BatchProcessSilentEmailRequest batchProcessSilentEmailRequest)        {
+            var result = await _mediator.Send(batchProcessSilentEmailRequest);
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult>Async([FromBody] BatchProcessInterceptEmailRequest batchProcessInterceptEmailRequest)        {
+            var result = await _mediator.Send(batchProcessInterceptEmailRequest);
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult>Async([FromBody] BatchProcessInterceptFileRequest batchProcessInterceptFileRequest)        {
+            var result = await _mediator.Send(batchProcessInterceptFileRequest);
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult>Async([FromBody] BatchProcessFinesVicRoadRequest batchProcessFinesVicRoadRequest)        {
+            var result = await _mediator.Send(batchProcessFinesVicRoadRequest);
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult>Async([FromBody] BatchProcessSqlMaintenanceRequest batchProcessSqlMaintenanceRequest)        {
+            var result = await _mediator.Send(batchProcessSqlMaintenanceRequest);
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult>Async([FromBody] BatchProcessTasInfringmentEmailRequest batchProcessTasInfringmentEmailRequest)        {
+            var result = await _mediator.Send(batchProcessTasInfringmentEmailRequest);
+            return FromResult(result);
+        }
+    }
+}
+
+file[14] = Controllers\EventController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class EventController : ApplicationController
+    {
+        public EventController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[15] = Controllers\EventController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class EventController
+    {
+        private readonly IMediator _mediator;
+    }
+}
+
+file[16] = Controllers\NoticeNumberController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class NoticeNumberController : ApplicationController
+    {
+        public NoticeNumberController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[17] = Controllers\NoticeNumberController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class NoticeNumberController
+    {
+        private readonly IMediator _mediator;
+    }
+}
+
+file[18] = Controllers\OrganisationController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class OrganisationController : ApplicationController
+    {
+        public OrganisationController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[19] = Controllers\OrganisationController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Nhvr.Rcms.BusinessLogic.Organisation.Search;
+using Nhvr.Rcms.BusinessLogic.Organisation.Index;
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class OrganisationController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrganisationSearchResult>>>Async([FromBody] OrganisationSearchRequest organisationSearchRequest)        {
+            var result = await _mediator.Send(organisationSearchRequest);
+            return FromResult(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<OrganisationIndexResult>>Async([FromBody] OrganisationIndexRequest organisationIndexRequest)        {
+            var result = await _mediator.Send(organisationIndexRequest);
+            return FromResult(result);
+        }
+    }
+}
+
+file[20] = Controllers\PersonController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class PersonController : ApplicationController
+    {
+        public PersonController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[21] = Controllers\PersonController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class PersonController
+    {
+        private readonly IMediator _mediator;
+    }
+}
+
+file[22] = Controllers\ShiftController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class ShiftController : ApplicationController
+    {
+        public ShiftController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[23] = Controllers\ShiftController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class ShiftController
+    {
+        private readonly IMediator _mediator;
+    }
+}
+
+file[24] = Controllers\UserController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class UserController : ApplicationController
+    {
+        public UserController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[25] = Controllers\UserController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class UserController
+    {
+        private readonly IMediator _mediator;
+    }
+}
+
+file[26] = Controllers\VehicleController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    partial class VehicleController : ApplicationController
+    {
+        public VehicleController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+    }
+}
+
+file[27] = Controllers\VehicleController.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+using Nhvr.Rcms.BusinessLogic.Vehicle.Create;
+
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    partial class VehicleController
+    {
+        private readonly IMediator _mediator;
+
+        [HttpPost]
+        public async Task<IActionResult>Async([FromBody] VehicleCreateRequest vehicleCreateRequest)        {
+            var result = await _mediator.Send(vehicleCreateRequest);
+            return FromResult(result);
+        }
+    }
+}
+
+file[28] = Controllers\ApplicationController.cs
+namespace Nhvr.Rcms.Application.Controllers
+{
+    [ApiController]
+    public abstract class ApplicationController : ControllerBase
+    {
+        protected new IActionResult Ok(object? result = null)
+        {
+            return new EnvelopeResult(Envelope.Ok(result), HttpStatusCode.OK);
+        }
+
+        protected IActionResult NotFound(Error error, string? invalidField = null)
+        {
+            return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.NotFound);
+        }
+
+        protected IActionResult Error(Error error, string? invalidField = null)
+        {
+            return new EnvelopeResult(Envelope.Error(error, invalidField), HttpStatusCode.BadRequest);
+        }
+
+        protected IActionResult FromResult(Result result)
+        {
+            return result.IsSuccess ? Ok() : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
+        }
+
+        protected IActionResult FromResult<T>(Result<T> result)
+        {
+            return result.IsSuccess ? Ok(result.Value) : Error(Errors.General.InternalServerError(GetType().Name), result.Error);
+        }
+
+        protected IActionResult FromResult<T>(Result<T, Error> result)
+        {
+            return result.IsSuccess ? Ok(result.Value) : Error(result.Error);
+        }
+    }
+}
+

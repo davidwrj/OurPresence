@@ -38,10 +38,10 @@ namespace ControllerClass
 
             foreach(var behaviour in _model.Behaviours)
             {
-                sb.Al($"using {_module.Namespace}.{_model.Name}.BusinessLogic.{behaviour.Name};");
+                sb.Al($"using {_module.Namespace}.BusinessLogic.{_model.Name}.{behaviour.Name};");
             }
             sb.B();
-            sb.Al($"namespace {_module.Namespace}.Controllers");
+            sb.Al($"namespace {_module.Namespace}.Application.Controllers");
             sb.Al("{");
             sb.I(1).Al("[Route(\"api/[controller]/[action]\")]");
             sb.I(1).A(Settings.SupportRegen ? "partial" : "public");
@@ -86,7 +86,7 @@ namespace ControllerClass
                     sb.A(">>");
                 }
                 var variable = $"{_model.Name.Singular.LocalVariable}{behaviour.Name}Request";
-                sb.A($"Async([FromBody] {_model.Name}{behaviour.Name}Request {variable})");
+                sb.A($" {behaviour.Name}Async([FromBody] {_model.Name}{behaviour.Name}Request {variable})");
                 sb.I(2).Al("{");
                 sb.I(3).Al($"var result = await _mediator.Send({variable});");
                 sb.I(3).Al("return FromResult(result);");

@@ -29,6 +29,54 @@ namespace OurPresence.Modeller.CoreFunctionalTests
         }
 
         [Fact]
+        public void GivenApplicationProjectGenerator_WhenGenerating_ThenProjectCreated()
+        {
+            var packageService = Substitute.For<IPackageService>();
+            var settings = Substitute.For<ISettings>();
+            settings.SupportRegen.Returns(true);
+            var packages = new Packages(packageService, settings);
+            settings.Packages.Returns(packages);
+            var module = RcmsModuleBuilders.CreateProject();
+
+            var c = new ApplicationProject.Generator(settings, module);
+
+            IProject output = c.Create() as IProject;
+            Approvals.VerifyAll(output.FileGroups.SelectMany(f => f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
+        }
+
+        [Fact]
+        public void GivenBusinessLogicProjectGenerator_WhenGenerating_ThenProjectCreated()
+        {
+            var packageService = Substitute.For<IPackageService>();
+            var settings = Substitute.For<ISettings>();
+            settings.SupportRegen.Returns(true);
+            var packages = new Packages(packageService, settings);
+            settings.Packages.Returns(packages);
+            var module = RcmsModuleBuilders.CreateProject();
+
+            var c = new BusinessLogicProject.Generator(settings, module);
+
+            IProject output = c.Create() as IProject;
+            Approvals.VerifyAll(output.FileGroups.SelectMany(f => f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
+        }
+
+        [Fact]
+        public void GivenDataAccessProjectGenerator_WhenGenerating_ThenProjectCreated()
+        {
+            var packageService = Substitute.For<IPackageService>();
+            var settings = Substitute.For<ISettings>();
+            settings.SupportRegen.Returns(true);
+            var packages = new Packages(packageService, settings);
+            settings.Packages.Returns(packages);
+            var module = RcmsModuleBuilders.CreateProject();
+
+            var c = new EntityFrameworkProject.Generator(settings, module);
+
+            IProject output = c.Create() as IProject;
+            Approvals.VerifyAll(output.FileGroups.SelectMany(f => f.Files), "file", f => $"{f.FullName}\r\n{f.Content}");
+        }
+
+        [Fact]
         public void GivenAProject_WhenSerialised_ReturnsJsonModel()
         {
             var module = RcmsModuleBuilders.CreateProject();

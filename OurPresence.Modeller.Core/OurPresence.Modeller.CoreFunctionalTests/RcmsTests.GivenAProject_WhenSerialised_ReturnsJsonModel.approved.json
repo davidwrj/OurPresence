@@ -24,6 +24,7 @@
                     "name": "ActivityType"
                 },
                 {
+                    "dataType": "Int32",
                     "name": "EventId"
                 },
                 {
@@ -62,9 +63,11 @@
                     "name": "Remark"
                 },
                 {
+                    "dataType": "Int32",
                     "name": "ShiftId"
                 },
                 {
+                    "dataType": "Int32",
                     "name": "UserId"
                 }
             ],
@@ -277,12 +280,12 @@
                     "name": "FloorNumber"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 200,
                     "nullable": true,
                     "name": "UnitType"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 20,
                     "nullable": true,
                     "name": "UnitNumber"
                 },
@@ -295,55 +298,55 @@
                     "name": "StreetType"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 200,
                     "name": "StreetSuffix"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 50,
                     "nullable": true,
                     "name": "StreetNumberFirst"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 50,
                     "nullable": true,
                     "name": "StreetNumberFirstPrefix"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 50,
                     "nullable": true,
                     "name": "StreetNumberFirstSuffix"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 50,
                     "nullable": true,
                     "name": "StreetNumberLast"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 50,
                     "nullable": true,
                     "name": "StreetNumberLastPrefix"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 50,
                     "nullable": true,
                     "name": "StreetNumberLastSuffix"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 200,
                     "nullable": true,
                     "name": "StreetDirectional"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 255,
                     "nullable": true,
                     "name": "PostalContainer"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 20,
                     "name": "PostalCode"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 100,
                     "name": "Suburb"
                 },
                 {
@@ -351,7 +354,7 @@
                     "name": "Country"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 1500,
                     "name": "FullAddress"
                 }
             ],
@@ -397,10 +400,10 @@
                     "name": "Title"
                 },
                 {
+                    "maxLength": 1000,
                     "name": "Remark"
                 },
                 {
-                    "maxLength": 128,
                     "name": "ReasonForDeletion"
                 },
                 {
@@ -432,6 +435,7 @@
                     "name": "SystemId"
                 },
                 {
+                    "default": "true",
                     "dataType": "Bool",
                     "name": "IsManualEntry"
                 }
@@ -583,11 +587,12 @@
                     "name": "OperationTime"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 4000,
                     "name": "Command"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 4000,
+                    "nullable": true,
                     "name": "ExtraInfo"
                 },
                 {
@@ -601,14 +606,15 @@
                     "name": "EndTime"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 1000,
+                    "nullable": true,
                     "name": "StatusMessage"
                 }
             ],
             "indexes": [],
             "relationships": [],
             "behaviours": [],
-            "name": "AzureSqlmaintenanceLog"
+            "name": "AzureSqlMaintenanceLog"
         },
         {
             "key": {
@@ -624,7 +630,6 @@
             "supportCrud": "None",
             "fields": [
                 {
-                    "maxLength": 128,
                     "name": "Url"
                 },
                 {
@@ -644,7 +649,26 @@
             ],
             "indexes": [],
             "relationships": [],
-            "behaviours": [],
+            "behaviours": [
+                {
+                    "name": "SilentEmail"
+                },
+                {
+                    "name": "InterceptEmail"
+                },
+                {
+                    "name": "InterceptFile"
+                },
+                {
+                    "name": "FinesVicRoad"
+                },
+                {
+                    "name": "SqlMaintenance"
+                },
+                {
+                    "name": "TasInfringmentEmail"
+                }
+            ],
             "name": "BatchProcess"
         },
         {
@@ -680,7 +704,6 @@
                     "name": "BatchProcessId"
                 },
                 {
-                    "maxLength": 128,
                     "name": "ResultMessage"
                 },
                 {
@@ -728,11 +751,9 @@
                     "name": "EntityTypeId"
                 },
                 {
-                    "maxLength": 128,
                     "name": "Reference"
                 },
                 {
-                    "maxLength": 128,
                     "name": "ResultMessage"
                 }
             ],
@@ -771,7 +792,8 @@
                     "name": "TypeId"
                 },
                 {
-                    "maxLength": 128,
+                    "maxLength": 64,
+                    "nullable": true,
                     "name": "NoticeNumber"
                 },
                 {
@@ -780,23 +802,26 @@
                 },
                 {
                     "dataType": "Int32",
+                    "nullable": true,
                     "name": "MediaId"
                 },
                 {
                     "dataType": "Int32",
+                    "nullable": true,
                     "name": "VehicleId"
                 },
                 {
                     "dataType": "Int32",
+                    "nullable": true,
                     "name": "PersonId"
                 },
                 {
                     "dataType": "Int32",
+                    "nullable": true,
                     "name": "OrganisationId"
                 },
                 {
                     "dataType": "DateTimeOffset",
-                    "nullable": true,
                     "name": "DateIssued"
                 },
                 {
@@ -806,17 +831,20 @@
                 },
                 {
                     "dataType": "Int32",
+                    "nullable": true,
                     "name": "StateId"
                 },
                 {
-                    "maxLength": 128,
+                    "nullable": true,
                     "name": "JuroEntry"
                 },
                 {
+                    "default": "true",
                     "dataType": "Bool",
                     "name": "Active"
                 },
                 {
+                    "default": "30",
                     "dataType": "Int32",
                     "name": "SystemId"
                 }
@@ -881,7 +909,6 @@
                 },
                 {
                     "dataType": "DateTimeOffset",
-                    "nullable": true,
                     "name": "DateIssued"
                 },
                 {
@@ -3958,7 +3985,122 @@
             ],
             "indexes": [],
             "relationships": [],
-            "behaviours": [],
+            "behaviours": [
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "maxLength": 255,
+                                "name": "Name"
+                            },
+                            {
+                                "maxLength": 255,
+                                "nullable": true,
+                                "name": "ACN"
+                            }
+                        ],
+                        "route": "organisationsearchrequest",
+                        "name": "OrganisationSearchRequest"
+                    },
+                    "response": {
+                        "isCollection": true,
+                        "fields": [
+                            {
+                                "maxLength": 255,
+                                "name": "Name"
+                            },
+                            {
+                                "maxLength": 255,
+                                "nullable": true,
+                                "name": "ACN"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AlertLevel"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AssociatedAlertLevel"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Source"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Type"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Status"
+                            }
+                        ],
+                        "name": "OrgansiationSearchResult"
+                    },
+                    "name": "Search"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "maxLength": 255,
+                                "name": "Id"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Juro"
+                            },
+                            {
+                                "default": "false",
+                                "dataType": "Bool",
+                                "nullable": true,
+                                "name": "IncludeSilentAlert"
+                            }
+                        ],
+                        "route": "organisationbyidrequest",
+                        "name": "OrganisationByIdRequest"
+                    },
+                    "response": {
+                        "fields": [
+                            {
+                                "maxLength": 255,
+                                "name": "Name"
+                            },
+                            {
+                                "maxLength": 255,
+                                "nullable": true,
+                                "name": "ACN"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AlertLevel"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AssociatedAlertLevel"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Source"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Type"
+                            },
+                            {
+                                "maxLength": 255,
+                                "name": "Status"
+                            }
+                        ],
+                        "name": "OrgansiationDetailResult"
+                    },
+                    "name": "Index"
+                }
+            ],
             "name": "Organisation"
         },
         {

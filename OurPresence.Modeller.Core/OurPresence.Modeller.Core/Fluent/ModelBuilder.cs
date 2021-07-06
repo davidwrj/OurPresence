@@ -91,9 +91,9 @@ namespace OurPresence.Modeller.Fluent
             return index;
         }
 
-        public BehaviourBuilder<ModelBuilder> AddBehaviour(string requestName, BehaviourVerb verb = BehaviourVerb.Get)
+        public BehaviourBuilder<ModelBuilder> AddBehaviour(string behaviourName, BehaviourVerb verb = BehaviourVerb.Get)
         {
-            var behaviour = Behaviour<ModelBuilder>.Create(this, requestName);
+            var behaviour = Behaviour<ModelBuilder>.Create(this, behaviourName);
             behaviour.Instance.Verb = verb;
             Instance.Behaviours.Add(behaviour.Instance);
             return behaviour;

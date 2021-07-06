@@ -36,9 +36,35 @@ namespace BusinessLogicBehaviour
             }
             sb.Al($"namespace {_module.Namespace}.BusinessLogic.{_model.Name}.{_behaviour.Name}");
             sb.Al("{");
-            sb.I(1).A(Settings.SupportRegen ? $"partial record" : $"public class");
-            sb.Al($" {_model.Name}{_behaviour.Name}Request : IRequest<{_model.Name}, ");
-
+            if (_behaviour.Request is not null)
+            {
+                sb.I(1).A(Settings.SupportRegen ? $"public partial record" : $"public class");
+                sb.A($" {_behaviour.Request.Name} : IRequest");
+                if (_behaviour.Response is not null)
+                {
+                    sb.A(_behaviour.Response.IsCollection ? "<IEnumerable" : "");
+                    sb.A($"<{_behaviour.Response.Name}>");
+                    sb.A(_behaviour.Response.IsCollection ? ">" : "");
+                }
+                sb.B();
+                sb.I(1).Al("{");
+                foreach (var field in _behaviour.Request.Fields)
+                {
+                    sb.Al(((ISnippet)new Property.Generator(field).Create()).Content);
+                }
+                sb.I(1).Al("}");
+            }
+            if (_behaviour.Response is not null)
+            {
+                sb.I(1).A(Settings.SupportRegen ? $"public partial record" : $"public class");
+                sb.Al($" {_behaviour.Response.Name}");
+                sb.I(1).Al("{");
+                foreach (var field in _behaviour.Response.Fields)
+                {
+                    sb.Al(((ISnippet)new Property.Generator(field).Create()).Content);
+                }
+                sb.I(1).Al("}");
+            }
             sb.Al("}");
 
             var filename = _model.Name.ToString();

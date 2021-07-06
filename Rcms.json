@@ -116,7 +116,148 @@
                     "dependantType": "Many"
                 }
             ],
-            "behaviours": [],
+            "behaviours": [
+                {
+                    "response": {
+                        "isCollection": true,
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            },
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "StartTime"
+                            },
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "EndTime"
+                            },
+                            {
+                                "name": "Source"
+                            },
+                            {
+                                "maxLength": 128,
+                                "name": "ActivityType"
+                            },
+                            {
+                                "name": "Remark"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "Light"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "Siren"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "UrgentDutyDriving"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "IsEditable"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "SystemGenerated"
+                            },
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "DateAdded"
+                            }
+                        ],
+                        "name": "ActivityLogOfficerResult"
+                    },
+                    "name": "Officer"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "DateAdded"
+                            },
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "StartTime"
+                            },
+                            {
+                                "name": "ActivityType"
+                            }
+                        ],
+                        "route": "activitylogaddrequest",
+                        "name": "ActivityLogAddRequest"
+                    },
+                    "response": {
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            }
+                        ],
+                        "name": "ActivityLogAddResult"
+                    },
+                    "verb": "Post",
+                    "name": "Add"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "EndTime"
+                            },
+                            {
+                                "name": "Remark"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "nullable": true,
+                                "name": "Light"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "nullable": true,
+                                "name": "Siren"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "nullable": true,
+                                "name": "UrgentDutyDriving"
+                            }
+                        ],
+                        "route": "activitylogupdaterequest",
+                        "name": "ActivityLogUpdateRequest"
+                    },
+                    "response": {
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            }
+                        ],
+                        "name": "ActivityLogUpdateResult"
+                    },
+                    "verb": "Post",
+                    "name": "Update"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            }
+                        ],
+                        "route": "activitylogdeleterequest",
+                        "name": "ActivityLogDeleteRequest"
+                    },
+                    "verb": "Delete",
+                    "name": "Delete"
+                }
+            ],
             "name": "ActivityLog"
         },
         {
@@ -346,7 +487,84 @@
                     "dependantType": "Many"
                 }
             ],
-            "behaviours": [],
+            "behaviours": [
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "name": "AlertLevel"
+                            },
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "EffectiveDate"
+                            },
+                            {
+                                "dataType": "DateTimeOffset",
+                                "name": "ExpiryDate"
+                            },
+                            {
+                                "name": "Remark"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "Silent"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "name": "SilentNotifyContactId"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "name": "PersonId"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "name": "VehicleId"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "name": "OrganisationId"
+                            }
+                        ],
+                        "route": "",
+                        "name": "AlertSaveRequest"
+                    },
+                    "response": {
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            }
+                        ],
+                        "name": "AlertSaveResult"
+                    },
+                    "verb": "Post",
+                    "name": "Save"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "dataType": "Int32",
+                                "name": "Id"
+                            },
+                            {
+                                "maxLength": 128,
+                                "name": "Reason"
+                            }
+                        ],
+                        "route": "alertdeleterequest",
+                        "name": "AlertDeleteRequest"
+                    },
+                    "verb": "Delete",
+                    "name": "Delete"
+                }
+            ],
             "name": "Alert"
         },
         {
@@ -4658,48 +4876,53 @@
             "relationships": [],
             "behaviours": [
                 {
-                    "fields": [
-                        {
-                            "dataType": "Object",
-                            "dataTypeTypeName": "States",
-                            "nullable": true,
-                            "name": "RegistrationState"
-                        },
-                        {
-                            "maxLength": 10,
-                            "nullable": true,
-                            "name": "RegistrationNumber"
-                        },
-                        {
-                            "dataType": "Bool",
-                            "name": "IsNationalRegistration"
-                        },
-                        {
-                            "maxLength": 20,
-                            "nullable": true,
-                            "name": "VehicleIdentificationNumber"
-                        },
-                        {
-                            "maxLength": 20,
-                            "nullable": true,
-                            "name": "EngineNumber"
-                        },
-                        {
-                            "maxLength": 32,
-                            "nullable": true,
-                            "name": "ChassisNumber"
-                        },
-                        {
-                            "maxLength": 64,
-                            "name": "SourceVehicleId"
-                        },
-                        {
-                            "dataType": "Object",
-                            "dataTypeTypeName": "SourceSystemTypes",
-                            "name": "SystemId"
-                        }
-                    ],
+                    "request": {
+                        "fields": [
+                            {
+                                "dataType": "Object",
+                                "dataTypeTypeName": "States",
+                                "nullable": true,
+                                "name": "RegistrationState"
+                            },
+                            {
+                                "maxLength": 10,
+                                "nullable": true,
+                                "name": "RegistrationNumber"
+                            },
+                            {
+                                "dataType": "Bool",
+                                "name": "IsNationalRegistration"
+                            },
+                            {
+                                "maxLength": 20,
+                                "nullable": true,
+                                "name": "VehicleIdentificationNumber"
+                            },
+                            {
+                                "maxLength": 20,
+                                "nullable": true,
+                                "name": "EngineNumber"
+                            },
+                            {
+                                "maxLength": 32,
+                                "nullable": true,
+                                "name": "ChassisNumber"
+                            },
+                            {
+                                "maxLength": 64,
+                                "name": "SourceVehicleId"
+                            },
+                            {
+                                "dataType": "Object",
+                                "dataTypeTypeName": "SourceSystemTypes",
+                                "name": "SystemId"
+                            }
+                        ],
+                        "route": "vehiclecreaterequest",
+                        "name": "VehicleCreateRequest"
+                    },
                     "event": "Created",
+                    "verb": "Post",
                     "name": "Create"
                 }
             ],

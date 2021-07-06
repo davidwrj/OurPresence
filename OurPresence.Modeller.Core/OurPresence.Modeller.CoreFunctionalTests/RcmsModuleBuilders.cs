@@ -165,21 +165,31 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .IsRoot()
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("ActivityType").MaxLength(128).Build
-                .AddField("EventId").Build
+                .AddField("EventId").DataType(DataTypes.Int32).Build
                 .AddField("IsManualEntry").DataType(DataTypes.Bool).Default("true").Build
-                .AddField("StartDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("EndDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("StartDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("EndDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Lights").DataType(DataTypes.Bool).Build
                 .AddField("Sirens").DataType(DataTypes.Bool).Build
                 .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
                 .AddField("Remarks").Build
-                .AddField("ShiftId").Build
-                .AddField("UserId").Build
-                .AddRelationship().Relate("Event", new[] { "Id" }, "ActivityLog", new[] { "EventId" }).Build
-                .AddRelationship().Relate("Shift", new[] { "Id" }, "ActivityLog", new[] { "ShiftId" }).Build
-                .AddRelationship().Relate("User", new[] { "Id" }, "ActivityLog", new[] { "UserId" }).Build
-                .AddIndex("IDX_ActivityItem_EndDate").AddField("EndDate").Build.Build
+                .AddField("ShiftId").DataType(DataTypes.Int32).Build
+                .AddField("UserId").DataType(DataTypes.Int32).Build
+
+                .AddRelationship()
+                    .Relate("Event", new[] { "Id" }, "ActivityLog", new[] { "EventId" })
+                .Build
+                .AddRelationship()
+                    .Relate("Shift", new[] { "Id" }, "ActivityLog", new[] { "ShiftId" })
+                .Build
+                .AddRelationship()
+                    .Relate("User", new[] { "Id" }, "ActivityLog", new[] { "UserId" })
+                .Build
+
+                .AddIndex("IDX_ActivityItem_EndDate")
+                    .AddField("EndDate").Build
+                .Build
 
                 .AddBehaviour("Officer")
                     .AddResponse("ActivityLogOfficerResult")
@@ -214,9 +224,9 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                     .AddRequest("ActivityLogUpdateRequest")
                         .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Build
                         .AddField("Remarks").DataType(DataTypes.String).Build
-                        .AddField("Lights").DataType(DataTypes.Bool).Nullable(true).Build
-                        .AddField("Sirens").DataType(DataTypes.Bool).Nullable(true).Build
-                        .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Nullable(true).Build
+                        .AddField("Lights").DataType(DataTypes.Bool).Nullable().Build
+                        .AddField("Sirens").DataType(DataTypes.Bool).Nullable().Build
+                        .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Nullable().Build
                     .Build
                     .AddResponse("ActivityLogUpdateResult")
                         .AddField("Id").DataType(DataTypes.Int32).Build
@@ -236,25 +246,25 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("AddressBook")
                 .WithDefaultKey()
-                .AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                .AddField("UnitType").MaxLength(128).Nullable(true).Build
-                .AddField("UnitNumber").MaxLength(128).Nullable(true).Build
+                .AddField("FloorNumber").MaxLength(20).Nullable().Build
+                .AddField("UnitType").MaxLength(200).Nullable().Build
+                .AddField("UnitNumber").MaxLength(20).Nullable().Build
                 .AddField("StreetName").MaxLength(128).Build
                 .AddField("StreetType").MaxLength(128).Build
-                .AddField("StreetSuffix").MaxLength(128).Build
-                .AddField("StreetNumberFirst").MaxLength(128).Nullable(true).Build
-                .AddField("StreetNumberFirstPrefix").MaxLength(128).Nullable(true).Build
-                .AddField("StreetNumberFirstSuffix").MaxLength(128).Nullable(true).Build
-                .AddField("StreetNumberLast").MaxLength(128).Nullable(true).Build
-                .AddField("StreetNumberLastPrefix").MaxLength(128).Nullable(true).Build
-                .AddField("StreetNumberLastSuffix").MaxLength(128).Nullable(true).Build
-                .AddField("StreetDirectional").MaxLength(128).Nullable(true).Build
-                .AddField("PostalContainer").MaxLength(128).Nullable(true).Build
-                .AddField("PostalCode").MaxLength(128).Build
-                .AddField("Suburb").MaxLength(128).Build
+                .AddField("StreetSuffix").MaxLength(200).Build
+                .AddField("StreetNumberFirst").MaxLength(50).Nullable().Build
+                .AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable().Build
+                .AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable().Build
+                .AddField("StreetNumberLast").MaxLength(50).Nullable().Build
+                .AddField("StreetNumberLastPrefix").MaxLength(50).Nullable().Build
+                .AddField("StreetNumberLastSuffix").MaxLength(50).Nullable().Build
+                .AddField("StreetDirectional").MaxLength(200).Nullable().Build
+                .AddField("PostalContainer").MaxLength(255).Nullable().Build
+                .AddField("PostalCode").MaxLength(20).Build
+                .AddField("Suburb").MaxLength(100).Build
                 .AddField("Country").MaxLength(128).Build
-                .AddField("FullAddress").MaxLength(128).Build
-                .Build;
+                .AddField("FullAddress").MaxLength(1500).Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddAlert(this Fluent.ModuleBuilder mb)
@@ -266,12 +276,12 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .IsRoot()
                 .SupportCrud(CRUDSupport.Create | CRUDSupport.Delete)
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
-                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Level").DataType(DataTypes.Int32).Build
                 .AddField("Title").MaxLength(128).Build
-                .AddField("Remarks").Build
-                .AddField("ReasonForDeletion").MaxLength(128).Build
+                .AddField("Remarks").MaxLength(1000).Build
+                .AddField("ReasonForDeletion").Build
                 .AddField("Silent").DataType(DataTypes.Bool).Build
                 .AddField("SilentNotifyContactId").DataType(DataTypes.Int32).Build
                 .AddField("PersonId").DataType(DataTypes.Int32).Build
@@ -279,7 +289,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("OrganisationId").DataType(DataTypes.Int32).Build
                 .AddField("UserId").DataType(DataTypes.Int32).Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Build
-                .AddField("IsManualEntry").DataType(DataTypes.Bool).Build
+                .AddField("IsManualEntry").DataType(DataTypes.Bool).Default("true").Build
 
                 .AddRelationship().Relate("Organisation", new[] { "Id" }, "Alert", new[] { "OrganisationId" }).Build
                 .AddRelationship().Relate("Person", new[] { "Id" }, "Alert", new[] { "PersonId" }).Build
@@ -320,22 +330,22 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("Audit")
                 .SupportCrud(CRUDSupport.None)
                 .IsRoot()
-                .Build;
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddAzureSqlMaintenanceLog(this Fluent.ModuleBuilder mb)
         {
             return mb
-                .AddModel("AzureSqlmaintenanceLog")
+                .AddModel("AzureSqlMaintenanceLog")
                 .IsAuditable(false)
                 .AddField("Id").DataType(DataTypes.Int64).Build
-                .AddField("OperationTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("Command").MaxLength(128).Build
-                .AddField("ExtraInfo").MaxLength(128).Build
-                .AddField("StartTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("StatusMessage").MaxLength(128).Build
-                .Build;
+                .AddField("OperationTime").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("Command").MaxLength(4000).Build
+                .AddField("ExtraInfo").MaxLength(4000).Nullable().Build
+                .AddField("StartTime").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("StatusMessage").MaxLength(1000).Nullable().Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddBatchProcess(this Fluent.ModuleBuilder mb)
@@ -346,11 +356,29 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .IsAuditable()
                 .IsRoot()
                 .SupportCrud(CRUDSupport.None)
-                .AddField("Url").MaxLength(128).Build
+                .AddField("Url").Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
-                .AddField("StartedOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("StoppedOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .Build;
+                .AddField("StartedOn").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("StoppedOn").DataType(DataTypes.DateTimeOffset).Nullable().Build
+
+                .AddBehaviour("silent-emails")
+                .Build
+
+                .AddBehaviour("intercept-emails")
+                .Build
+
+                .AddBehaviour("intercept_files")
+                .Build
+
+                .AddBehaviour("fines_vic_roads")
+                .Build
+
+                .AddBehaviour("sql-maintenance")
+                .Build
+
+                .AddBehaviour("tas-infringment-email")
+                .Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddBatchProcessTask(this Fluent.ModuleBuilder mb)
@@ -359,14 +387,15 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("BatchProcessTask")
                 .WithDefaultKey()
                 .IsAuditable()
+                .SupportCrud(CRUDSupport.None)
                 .AddField("TypeId").DataType(DataTypes.Int32).Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
                 .AddField("EntityId").DataType(DataTypes.Int32).Build
                 .AddField("EntityTypeId").DataType(DataTypes.Int32).Build
                 .AddField("BatchProcessId").DataType(DataTypes.Int32).Build
-                .AddField("ResultMessage").MaxLength(128).Build
-                .AddField("StartedOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("StoppedOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("ResultMessage").Build
+                .AddField("StartedOn").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("StoppedOn").DataType(DataTypes.DateTimeOffset).Nullable().Build
 
                 //.AddRelationship().Relate("", new[] { "Id" }, "", new[] { "Id" }).Build
                 .Build;
@@ -378,12 +407,13 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("BatchProcessTaskItem")
                 .WithDefaultKey()
                 .IsAuditable()
+                .SupportCrud(CRUDSupport.None)
                 .AddField("TaskId").DataType(DataTypes.Int32).Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
                 .AddField("EntityId").DataType(DataTypes.Int32).Build
                 .AddField("EntityTypeId").DataType(DataTypes.Int32).Build
-                .AddField("Reference").MaxLength(128).Build
-                .AddField("ResultMessage").MaxLength(128).Build
+                .AddField("Reference").Build
+                .AddField("ResultMessage").Build
 
                 .AddRelationship().Relate("", new[] { "Id" }, "", new[] { "Id" }).Build
                 .Build;
@@ -396,18 +426,18 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .IsAuditable()
                 .AddField("TypeId").DataType(DataTypes.Int32).Build
-                .AddField("NoticeNumber").MaxLength(128).Build
+                .AddField("NoticeNumber").MaxLength(64).Nullable().Build
                 .AddField("EventId").DataType(DataTypes.Int32).Build
-                .AddField("MediaId").DataType(DataTypes.Int32).Build
-                .AddField("VehicleId").DataType(DataTypes.Int32).Build
-                .AddField("PersonId").DataType(DataTypes.Int32).Build
-                .AddField("OrganisationId").DataType(DataTypes.Int32).Build
-                .AddField("DateIssued").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("NoticeIssuedDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("StateId").DataType(DataTypes.Int32).Build
-                .AddField("JuroEntry").MaxLength(128).Build
-                .AddField("Active").DataType(DataTypes.Bool).Build
-                .AddField("SystemId").DataType(DataTypes.Int32).Build
+                .AddField("MediaId").DataType(DataTypes.Int32).Nullable().Build
+                .AddField("VehicleId").DataType(DataTypes.Int32).Nullable().Build
+                .AddField("PersonId").DataType(DataTypes.Int32).Nullable().Build
+                .AddField("OrganisationId").DataType(DataTypes.Int32).Nullable().Build
+                .AddField("DateIssued").DataType(DataTypes.DateTimeOffset).Build
+                .AddField("NoticeIssuedDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("StateId").DataType(DataTypes.Int32).Nullable().Build
+                .AddField("JuroEntry").Nullable().Build
+                .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
+                .AddField("SystemId").DataType(DataTypes.Int32).Default("30").Build
 
                 .Build;
         }
@@ -422,14 +452,14 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("VehicleRegistrationNumber").MaxLength(128).Build
                 .AddField("PersonGivenName").MaxLength(128).Build
                 .AddField("PersonFamilyName").MaxLength(128).Build
-                .AddField("PersonDateOfBirth").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("PersonDateOfBirth").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("PersonLicenceNumber").MaxLength(128).Build
                 .AddField("PersonLicenceStateId").DataType(DataTypes.Int32).Build
                 .AddField("OrganisationAcn").MaxLength(128).Build
                 .AddField("OrganisationIncorporatedNumber").MaxLength(128).Build
                 .AddField("TypeId").DataType(DataTypes.Int32).Build
-                .AddField("DateIssued").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("DateCleared").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateIssued").DataType(DataTypes.DateTimeOffset).Build
+                .AddField("DateCleared").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("NoticeNumber").MaxLength(128).Build
                 .AddField("Line1").MaxLength(128).Build
                 .AddField("Line2").MaxLength(128).Build
@@ -458,35 +488,35 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 
                 .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
 
-                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable().Build
 
                 .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
 
-                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
-                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
-                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
-                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
-                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
-                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
-                //.AddField("Country").MaxLength(128).Nullable(true).Build
-                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+                //.AddField("FloorNumber").MaxLength(20).Nullable().Build
+                //.AddField("UnitType").MaxLength(200).Nullable().Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable().Build
+                //.AddField("StreetName").MaxLength(128).Nullable().Build
+                //.AddField("StreetType").MaxLength(128).Nullable().Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable().Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable().Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable().Build
+                //.AddField("PostalCode").MaxLength(20).Nullable().Build
+                //.AddField("Suburb").MaxLength(100).Nullable().Build
+                //.AddField("Country").MaxLength(128).Nullable().Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable().Build
 
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
 
                 .Build;
         }
@@ -498,8 +528,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .AddField("ComplianceActionId").DataType(DataTypes.Int32).Build
                 .AddField("Category").MaxLength(128).Build
-                .AddField("EffectiveDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("ExpiryDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EffectiveDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("ExpiryDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("ShortTitle").MaxLength(128).Build
                 .AddField("Title").MaxLength(128).Build
                 .AddField("SortOrder").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
@@ -557,34 +587,34 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
 
-                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable().Build
 
                 .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
 
-                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
-                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
-                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
-                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
-                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
-                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
-                //.AddField("Country").MaxLength(128).Nullable(true).Build
-                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                //.AddField("FloorNumber").MaxLength(20).Nullable().Build
+                //.AddField("UnitType").MaxLength(200).Nullable().Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable().Build
+                //.AddField("StreetName").MaxLength(128).Nullable().Build
+                //.AddField("StreetType").MaxLength(128).Nullable().Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable().Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable().Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable().Build
+                //.AddField("PostalCode").MaxLength(20).Nullable().Build
+                //.AddField("Suburb").MaxLength(100).Nullable().Build
+                //.AddField("Country").MaxLength(128).Nullable().Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable().Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
 
                 .Build;
         }
@@ -597,7 +627,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("ComplianceActionId").DataType(DataTypes.Int32).Build
                 .AddField("StatusId").DataType(DataTypes.Int32).Build
                 .AddField("Reason").MaxLength(128).Build
-                .AddField("RecordedDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("RecordedDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("ToProceedOffence").MaxLength(128).Build
                 .AddField("GivenName").MaxLength(128).Build
                 .AddField("FamilyName").MaxLength(128).Build
@@ -641,7 +671,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("RoadWorthyRequired").DataType(DataTypes.Bool).Build
                 .AddField("ConditionOfUse").MaxLength(128).Build
                 .AddField("NoticeToBeCleared").MaxLength(128).Build
-                .AddField("VehicleNotUsed").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("VehicleNotUsed").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("VehicleNotUsedDays").DataType(DataTypes.Int32).Build
                 .AddField("VehicleNotUsedHours").DataType(DataTypes.Int32).Build
                 .AddField("InspectionType").MaxLength(128).Build
@@ -755,12 +785,12 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("WorkReducedHours").DataType(DataTypes.Int32).Build
                 .AddField("WorkReducedMinutes").DataType(DataTypes.Int32).Build
                 .AddField("ContinuousRest").DataType(DataTypes.Bool).Build
-                .AddField("ContinuousRestFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("ContinuousRestTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("ContinuousRestFrom").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("ContinuousRestTo").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("RestOrBreak").DataType(DataTypes.Bool).Build
                 .AddField("RestOrBreakHours").DataType(DataTypes.Int32).Build
                 .AddField("RestOrBreakMinutes").DataType(DataTypes.Int32).Build
-                .AddField("RestOrBreakCommencing").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("RestOrBreakCommencing").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Build
 
@@ -908,26 +938,26 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .IsRoot()
                 .SupportCrud(CRUDSupport.Create | CRUDSupport.Read)
-                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("StatusId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("OrganisationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("ReviewedUserId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("ReviewedDateTime").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("CreateDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("CompletedDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("ReportedOnDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("TookPlaceStartDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("TookPlaceEndDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("VehicleReleaseDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("VehicleGrounded").DataType(Domain.DataTypes.Bool).Nullable(true).Build
-                .AddField("OperationName").MaxLength(255).Nullable(true).Build
-                .AddField("MethodOfIntercept").MaxLength(255).Nullable(true).Build
-                .AddField("DirectionOfTravel").MaxLength(255).Nullable(true).Build
-                .AddField("Lights").DataType(Domain.DataTypes.Bool).Nullable(true).Build
-                .AddField("Sirens").DataType(Domain.DataTypes.Bool).Nullable(true).Build
-                .AddField("UrgentDutyDriving").DataType(Domain.DataTypes.Bool).Nullable(true).Build
-                .AddField("ComplianceActionOffenceReport").DataType(Domain.DataTypes.Bool).Nullable(true).Build
-                .AddField("ComplianceActionOffenceReportReference").DataType(Domain.DataTypes.Bool).Nullable(true).Build
+                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("StatusId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("OrganisationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("ReviewedUserId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("ReviewedDateTime").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("CreateDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("CompletedDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("ReportedOnDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("TookPlaceStartDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("TookPlaceEndDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("VehicleReleaseDate").DataType(Domain.DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("VehicleGrounded").DataType(Domain.DataTypes.Bool).Nullable().Build
+                .AddField("OperationName").MaxLength(255).Nullable().Build
+                .AddField("MethodOfIntercept").MaxLength(255).Nullable().Build
+                .AddField("DirectionOfTravel").MaxLength(255).Nullable().Build
+                .AddField("Lights").DataType(Domain.DataTypes.Bool).Nullable().Build
+                .AddField("Sirens").DataType(Domain.DataTypes.Bool).Nullable().Build
+                .AddField("UrgentDutyDriving").DataType(Domain.DataTypes.Bool).Nullable().Build
+                .AddField("ComplianceActionOffenceReport").DataType(Domain.DataTypes.Bool).Nullable().Build
+                .AddField("ComplianceActionOffenceReportReference").DataType(Domain.DataTypes.Bool).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
                 .Build;
@@ -937,12 +967,12 @@ namespace OurPresence.Modeller.CoreFunctionalTests
         {
             return mb
                 .AddModel("MapDetail")
-                .AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                .AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                .AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                .AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+                .AddField("Altitude").DataType(DataTypes.Decimal).Nullable().Build
+                .AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                .AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                .AddField("Longitude").DataType(DataTypes.Decimal).Nullable().Build
+                .AddField("Latitude").DataType(DataTypes.Decimal).Nullable().Build
+                .AddField("Elevation").DataType(DataTypes.Decimal).Nullable().Build
                 .Build;
         }
 
@@ -951,44 +981,44 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("EventAddress")
                 .WithDefaultKey()
-                .AddField("StateId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("EventAddressType").DataType(Domain.DataTypes.Object).DataTypeTypeName("AddressTypes").Nullable(true).Build
-                .AddField("LocalGovernmentArea").MaxLength(255).Nullable(true).Build
-                .AddField("LGAShortTitle").MaxLength(50).Nullable(true).Build
-                .AddField("Near").MaxLength(255).Nullable(true).Build
-                .AddField("CommonName").MaxLength(255).Nullable(true).Build
-                .AddField("Remarks").MaxLength(255).Nullable(true).Build
+                .AddField("StateId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("EventAddressType").DataType(Domain.DataTypes.Object).DataTypeTypeName("AddressTypes").Nullable().Build
+                .AddField("LocalGovernmentArea").MaxLength(255).Nullable().Build
+                .AddField("LGAShortTitle").MaxLength(50).Nullable().Build
+                .AddField("Near").MaxLength(255).Nullable().Build
+                .AddField("CommonName").MaxLength(255).Nullable().Build
+                .AddField("Remarks").MaxLength(255).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
 
                 .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
 
-                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable().Build
 
                 .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
 
-                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
-                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
-                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
-                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
-                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
-                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
-                //.AddField("Country").MaxLength(128).Nullable(true).Build
-                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+                //.AddField("FloorNumber").MaxLength(20).Nullable().Build
+                //.AddField("UnitType").MaxLength(200).Nullable().Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable().Build
+                //.AddField("StreetName").MaxLength(128).Nullable().Build
+                //.AddField("StreetType").MaxLength(128).Nullable().Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable().Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable().Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable().Build
+                //.AddField("PostalCode").MaxLength(20).Nullable().Build
+                //.AddField("Suburb").MaxLength(100).Nullable().Build
+                //.AddField("Country").MaxLength(128).Nullable().Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable().Build
 
                 .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Build
 
@@ -1037,8 +1067,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("WeighingDataPercentageOfAllowed").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("WeighingDataPermits").MaxLength(128).Build
                 .AddField("WeighBridgeName").MaxLength(128).Build
-                .AddField("WeighBridgeExpiry").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("WeighBridgeConfigureDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("WeighBridgeExpiry").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("WeighBridgeConfigureDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("WeighBridgeLocation").MaxLength(128).Build
                 .AddField("DimensionsInspected").DataType(DataTypes.Bool).Build
                 .AddField("DimensionsPassed").DataType(DataTypes.Bool).Build
@@ -1099,7 +1129,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .AddField("EventInspectionAxleWeightId").DataType(DataTypes.Int32).Build
                 .AddField("Number").MaxLength(128).Build
-                .AddField("Expiry").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("Expiry").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
 
                 .Build;
@@ -1157,7 +1187,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .AddField("EventId").DataType(DataTypes.Int32).Build
                 .AddField("TextValue").MaxLength(128).Build
-                .AddField("RecordedDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("RecordedDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Build
 
@@ -1224,7 +1254,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("BookNumber").MaxLength(128).Build
                 .AddField("PageNumber").MaxLength(128).Build
                 .AddField("StateId").DataType(DataTypes.Int32).Build
-                .AddField("IssueDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("IssueDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("ElectronicId").MaxLength(128).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Build
@@ -1301,7 +1331,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("VehicleId").DataType(DataTypes.Int32).Build
                 .AddField("Module").MaxLength(128).Build
                 .AddField("Number").MaxLength(128).Build
-                .AddField("ExpiryDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("ExpiryDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
 
                 .Build;
@@ -1327,13 +1357,13 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("VehicleRegistrationNumber").MaxLength(128).Build
                 .AddField("PersonGivenName").MaxLength(128).Build
                 .AddField("PersonFamilyName").MaxLength(128).Build
-                .AddField("PersonDateOfBirth").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("PersonDateOfBirth").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("PersonLicenceNumber").MaxLength(128).Build
                 .AddField("PersonLicenceStateId").DataType(DataTypes.Int32).Build
                 .AddField("OrganisationAcn").MaxLength(128).Build
                 .AddField("OrganisationIncorporatedNumber").MaxLength(128).Build
                 .AddField("InterceptNumber").MaxLength(128).Build
-                .AddField("DateIssued").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateIssued").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("StateId").DataType(DataTypes.Int32).Build
                 .AddField("VehicleInfo").MaxLength(128).Build
                 .AddField("NoticesDescription").MaxLength(128).Build
@@ -1417,7 +1447,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("SignInName").MaxLength(128).Build
                 .AddField("OrganisationId").DataType(DataTypes.Int32).Build
                 .AddField("Source").MaxLength(128).Build
-                .AddField("EventDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EventDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("DeviceId").MaxLength(128).Build
                 .AddField("Message").MaxLength(128).Build
                 .AddField("Exception").MaxLength(128).Build
@@ -1454,16 +1484,49 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("Organisation")
                 .WithDefaultKey()
                 .IsRoot()
-                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
+                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
                 .AddField("Name").MaxLength(255).Build
-                .AddField("ACN").MaxLength(255).Nullable(true).Build
+                .AddField("ACN").MaxLength(255).Nullable().Build
                 .AddField("TypeId").DataType(Domain.DataTypes.Object).DataTypeTypeName("OrganisationTypes").Build
-                //.AddField("NevdisId").MaxLength(255).Nullable(true).Build
-                //.AddField("VicCustomerNo").MaxLength(255).Nullable(true).Build
-                //.AddField("ParentId").DataType(DataTypes.Int32).Nullable(true).Build
+                //.AddField("NevdisId").MaxLength(255).Nullable().Build
+                //.AddField("VicCustomerNo").MaxLength(255).Nullable().Build
+                //.AddField("ParentId").DataType(DataTypes.Int32).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Default("30").Build
-                .Build;
+
+                .AddBehaviour("search")                    
+                    .AddRequest("OrganisationSearchRequest")
+                        .AddField("Name").MaxLength(255).Build
+                        .AddField("ACN").MaxLength(255).Nullable().Build
+                    .Build
+                    .AddResponse("OrgansiationSearchResult")
+                        .IsCollection()
+                        .AddField("Name").MaxLength(255).Build
+                        .AddField("ACN").MaxLength(255).Nullable().Build
+                        .AddField("AlertLevel").DataType(DataTypes.Int32).Nullable().Build
+                        .AddField("AssociatedAlertLevel").DataType(DataTypes.Int32).Nullable().Build
+                        .AddField("Source").MaxLength(255).Build
+                        .AddField("Type").MaxLength(255).Build
+                        .AddField("Status").MaxLength(255).Build
+                    .Build
+                .Build
+                .AddBehaviour("index")
+                    .AddRequest("OrganisationByIdRequest")
+                        .AddField("Id").MaxLength(255).Build
+                        .AddField("Juro").MaxLength(255).Build
+                        .AddField("IncludeSilentAlerts").DataType(DataTypes.Bool).Default("false").Nullable().Build
+                    .Build
+                    .AddResponse("OrgansiationDetailResult")
+                        .AddField("Name").MaxLength(255).Build
+                        .AddField("ACN").MaxLength(255).Nullable().Build
+                        .AddField("AlertLevel").DataType(DataTypes.Int32).Nullable().Build
+                        .AddField("AssociatedAlertLevel").DataType(DataTypes.Int32).Nullable().Build
+                        .AddField("Source").MaxLength(255).Build
+                        .AddField("Type").MaxLength(255).Build
+                        .AddField("Status").MaxLength(255).Build
+                    .Build
+                .Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddOrganisationAddress(this Fluent.ModuleBuilder mb)
@@ -1484,35 +1547,35 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Source").MaxLength(128).Build
                 .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
 
-                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable().Build
 
                 .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
 
-                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
-                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
-                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
-                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
-                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
-                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
-                //.AddField("Country").MaxLength(128).Nullable(true).Build
-                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+                //.AddField("FloorNumber").MaxLength(20).Nullable().Build
+                //.AddField("UnitType").MaxLength(200).Nullable().Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable().Build
+                //.AddField("StreetName").MaxLength(128).Nullable().Build
+                //.AddField("StreetType").MaxLength(128).Nullable().Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable().Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable().Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable().Build
+                //.AddField("PostalCode").MaxLength(20).Nullable().Build
+                //.AddField("Suburb").MaxLength(100).Nullable().Build
+                //.AddField("Country").MaxLength(128).Nullable().Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable().Build
 
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
 
                 .Build;
         }
@@ -1526,7 +1589,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("EventId").DataType(DataTypes.Int32).Build
                 .AddField("ContactTypeId").DataType(DataTypes.Int32).Build
                 .AddField("ContactValue").MaxLength(128).Build
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("Source").MaxLength(128).Build
 
@@ -1546,7 +1609,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("TypeId").DataType(DataTypes.Int32).Build
                 .AddField("StateId").DataType(DataTypes.Int32).Build
                 .AddField("Status").MaxLength(128).Build
-                .AddField("DateOfRegistration").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateOfRegistration").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("AlertLevel").DataType(DataTypes.Int32).Build
                 .AddField("AssociatedAlertLevel").DataType(DataTypes.Int32).Build
                 .AddField("Source").MaxLength(128).Build
@@ -1561,17 +1624,17 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("Person")
                 .WithDefaultKey()
                 .IsRoot()
-                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
+                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
                 .AddField("GivenName").MaxLength(255).Build
                 .AddField("FamilyName").MaxLength(255).Build
                 .AddField("DateOfBirth").DataType(DataTypes.DateTimeOffset).Build
-                .AddField("LicenceNumber").MaxLength(255).Nullable(true).Build
+                .AddField("LicenceNumber").MaxLength(255).Nullable().Build
                 .AddField("LicenceState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Default("30").Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
-                .AddField("SourcePersonId").MaxLength(64).Nullable(true).Build
-                //.AddField("NevdisId").MaxLength(255).Nullable(true).Build
-                //.AddField("ParentId").DataType(DataTypes.Int32).Nullable(true).Build
+                .AddField("SourcePersonId").MaxLength(64).Nullable().Build
+                //.AddField("NevdisId").MaxLength(255).Nullable().Build
+                //.AddField("ParentId").DataType(DataTypes.Int32).Nullable().Build
                 .Build;
         }
 
@@ -1593,35 +1656,35 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Source").MaxLength(128).Build
                 .AddField("MapDetail").DataType(DataTypes.Object).DataTypeTypeName("MapDetail").Build
 
-                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable(true).Build
-                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable(true).Build
+                //.AddField("Altitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("AltitudeAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("HorizontalAccuracy").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Longitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Latitude").DataType(DataTypes.Decimal).Nullable().Build
+                //.AddField("Elevation").DataType(DataTypes.Decimal).Nullable().Build
 
                 .AddField("Address").DataType(DataTypes.Object).DataTypeTypeName("AddressBook").Build
 
-                //.AddField("FloorNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("UnitType").MaxLength(200).Nullable(true).Build
-                //.AddField("UnitNumber").MaxLength(20).Nullable(true).Build
-                //.AddField("StreetName").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetType").MaxLength(128).Nullable(true).Build
-                //.AddField("StreetSuffix").MaxLength(200).Nullable(true).Build
-                //.AddField("StreetNumberFirst").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLast").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable(true).Build
-                //.AddField("StreetDirectional").MaxLength(200).Nullable(true).Build
-                //.AddField("PostalContainer").MaxLength(255).Nullable(true).Build
-                //.AddField("PostalCode").MaxLength(20).Nullable(true).Build
-                //.AddField("Suburb").MaxLength(100).Nullable(true).Build
-                //.AddField("Country").MaxLength(128).Nullable(true).Build
-                //.AddField("FullAddress").MaxLength(1500).Nullable(true).Build
+                //.AddField("FloorNumber").MaxLength(20).Nullable().Build
+                //.AddField("UnitType").MaxLength(200).Nullable().Build
+                //.AddField("UnitNumber").MaxLength(20).Nullable().Build
+                //.AddField("StreetName").MaxLength(128).Nullable().Build
+                //.AddField("StreetType").MaxLength(128).Nullable().Build
+                //.AddField("StreetSuffix").MaxLength(200).Nullable().Build
+                //.AddField("StreetNumberFirst").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberFirstSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLast").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastPrefix").MaxLength(50).Nullable().Build
+                //.AddField("StreetNumberLastSuffix").MaxLength(50).Nullable().Build
+                //.AddField("StreetDirectional").MaxLength(200).Nullable().Build
+                //.AddField("PostalContainer").MaxLength(255).Nullable().Build
+                //.AddField("PostalCode").MaxLength(20).Nullable().Build
+                //.AddField("Suburb").MaxLength(100).Nullable().Build
+                //.AddField("Country").MaxLength(128).Nullable().Build
+                //.AddField("FullAddress").MaxLength(1500).Nullable().Build
 
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
 
                 .Build;
         }
@@ -1635,7 +1698,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("EventId").DataType(DataTypes.Int32).Build
                 .AddField("ContactTypeId").DataType(DataTypes.Int32).Build
                 .AddField("ContactValue").MaxLength(128).Build
-                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateAdded").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("Source").MaxLength(128).Build
 
@@ -1651,7 +1714,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("PersonId").DataType(DataTypes.Int32).Build
                 .AddField("GivenName").MaxLength(128).Build
                 .AddField("FamilyName").MaxLength(128).Build
-                .AddField("DateOfBirth").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("DateOfBirth").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("MiddleNames").MaxLength(128).Build
                 .AddField("Gender").MaxLength(128).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
@@ -1663,8 +1726,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("LicenceClasses").MaxLength(128).Build
                 .AddField("LicenceConditions").MaxLength(128).Build
                 .AddField("LicenceProduced").DataType(DataTypes.Bool).Build
-                .AddField("LicenceEffective").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("LicenceExpiry").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("LicenceEffective").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("LicenceExpiry").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("LicenceStatus").MaxLength(128).Build
                 .AddField("LicenceStateId").DataType(DataTypes.Int32).Build
                 .AddField("InternationalLicence").DataType(DataTypes.Bool).Build
@@ -1696,8 +1759,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Code").MaxLength(128).Build
                 .AddField("Name").MaxLength(128).Build
                 .AddField("Description").MaxLength(128).Build
-                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("SortOrder").DataType(DataTypes.Int32).Build
                 .AddField("Active").DataType(DataTypes.Bool).Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Build
@@ -1754,8 +1817,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .WithDefaultKey()
                 .IsRoot()
                 .AddField("StartTime").DataType(DataTypes.Int32).Build
-                .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("EstimatedEndTime").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EndTime").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("EstimatedEndTime").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("Operation").MaxLength(128).Build
                 .AddField("Remarks").MaxLength(128).Build
 
@@ -1786,13 +1849,13 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("UserOrganisation").DataType(DataTypes.Int32).Build
                 .AddField("PrimaryRole").MaxLength(128).Build
                 .AddField("ActingRole").MaxLength(128).Build
-                .AddField("ActingFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("ActingTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("ActingFrom").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("ActingTo").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("IsAdmin").DataType(DataTypes.Bool).Build
                 .AddField("ManageBasicManifest").DataType(DataTypes.Bool).Build
                 .AddField("ManageAdvancedManifest").DataType(DataTypes.Bool).Build
-                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("EffectFrom").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("EffectTo").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("AuthorityNumber").MaxLength(128).Build
                 .AddField("HomeStation").MaxLength(128).Build
                 .AddField("Region").MaxLength(128).Build
@@ -1808,13 +1871,13 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("Vehicle")
                 .WithDefaultKey()
                 .IsRoot()
-                .AddField("CreationId").BusinessKey(true).DataType(Domain.DataTypes.UniqueIdentifier).Nullable(true).Build
-                .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable(true).Build
-                .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build
+                .AddField("CreationId").BusinessKey(true).DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable().Build
+                .AddField("RegistrationNumber").MaxLength(10).Nullable().Build
                 .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
-                .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable(true).Build
-                .AddField("EngineNumber").MaxLength(20).Nullable(true).Build
-                .AddField("ChassisNumber").MaxLength(32).Nullable(true).Build
+                .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable().Build
+                .AddField("EngineNumber").MaxLength(20).Nullable().Build
+                .AddField("ChassisNumber").MaxLength(32).Nullable().Build
                 .AddField("SourceVehicleId").MaxLength(64).Build
                 .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
@@ -1822,12 +1885,12 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddBehaviour("Create", BehaviourVerb.Post)
                     .Raising("Created")
                     .AddRequest("VehicleCreateRequest")
-                        .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable(true).Build
-                        .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build
+                        .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States").Nullable().Build
+                        .AddField("RegistrationNumber").MaxLength(10).Nullable().Build
                         .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
-                        .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable(true).Build
-                        .AddField("EngineNumber").MaxLength(20).Nullable(true).Build
-                        .AddField("ChassisNumber").MaxLength(32).Nullable(true).Build
+                        .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable().Build
+                        .AddField("EngineNumber").MaxLength(20).Nullable().Build
+                        .AddField("ChassisNumber").MaxLength(32).Nullable().Build
                         .AddField("SourceVehicleId").MaxLength(64).Build
                         .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
                     .Build
@@ -1840,13 +1903,13 @@ namespace OurPresence.Modeller.CoreFunctionalTests
             return mb
                 .AddModel("VehicleDetail")
                 .WithDefaultKey()
-                .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable(true).Build
-                .AddField("EngineNumber").MaxLength(20).Nullable(true).Build
-                .AddField("ChassisNumber").MaxLength(32).Nullable(true).Build
+                .AddField("VehicleIdentificationNumber").MaxLength(20).Nullable().Build
+                .AddField("EngineNumber").MaxLength(20).Nullable().Build
+                .AddField("ChassisNumber").MaxLength(32).Nullable().Build
                 .AddField("RegistrationState").DataType(Domain.DataTypes.Object).DataTypeTypeName("States")
-                .Nullable(true).Build
-                .AddField("RegistrationNumber").MaxLength(10).Nullable(true).Build
-                .AddField("RegistrationStatus").MaxLength(64).Nullable(true).Build
+                .Nullable().Build
+                .AddField("RegistrationNumber").MaxLength(10).Nullable().Build
+                .AddField("RegistrationStatus").MaxLength(64).Nullable().Build
                 .AddField("IsNationalRegistration").DataType(DataTypes.Bool).Build
                 .AddField("SourceVehicleId").MaxLength(64).Build
                 .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
@@ -1862,7 +1925,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Latitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("Longitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("Direction").MaxLength(128).Build
-                .AddField("SampleTakenOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("SampleTakenOn").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("EventId").DataType(DataTypes.Int32).Build
                 .AddField("VehicleId").DataType(DataTypes.Int32).Build
                 .AddField("SourceType").MaxLength(128).Build
@@ -1882,7 +1945,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("Latitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("Longitude").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("Direction").MaxLength(128).Build
-                .AddField("SampleTakenOn").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("SampleTakenOn").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("StateId").DataType(DataTypes.Int32).Build
                 .AddField("FullAddress").MaxLength(128).Build
                 .AddField("VehicleRegistrationStateId").DataType(DataTypes.Int32).Build
@@ -1975,8 +2038,8 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("WeighingDataPercentageOfAllowed").DataType(DataTypes.Decimal).Precision(2).Scale(18).Build
                 .AddField("WeighingDataPermits").MaxLength(128).Build
                 .AddField("WeighBridgeName").MaxLength(128).Build
-                .AddField("WeighBridgeExpiry").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
-                .AddField("WeighBridgeConfigureDate").DataType(DataTypes.DateTimeOffset).Nullable(true).Build
+                .AddField("WeighBridgeExpiry").DataType(DataTypes.DateTimeOffset).Nullable().Build
+                .AddField("WeighBridgeConfigureDate").DataType(DataTypes.DateTimeOffset).Nullable().Build
                 .AddField("WeighBridgeLocation").MaxLength(128).Build
                 .AddField("DimensionsInspected").DataType(DataTypes.Bool).Build
                 .AddField("DimensionsPassed").DataType(DataTypes.Bool).Build

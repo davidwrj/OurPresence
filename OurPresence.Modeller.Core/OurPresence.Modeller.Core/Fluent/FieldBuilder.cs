@@ -12,7 +12,7 @@ namespace OurPresence.Modeller.Fluent
     {
         public FieldBuilder(T builder, Field field)
         {
-            Build = builder ;
+            Build = builder;
             Instance = field ?? throw new ArgumentNullException(nameof(field));
         }
 
@@ -44,7 +44,7 @@ namespace OurPresence.Modeller.Fluent
             return this;
         }
 
-        public FieldBuilder<T> Nullable(bool value)
+        public FieldBuilder<T> Nullable(bool value = true)
         {
             Instance.Nullable = value;
             return this;

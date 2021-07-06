@@ -1,0 +1,204 @@
+﻿file[0] = Nhvr.Rcms.BusinessLogic.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Nhvr.Rcms.BusinessLogic</RootNamespace>
+        <LangVersion>Preview</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="9.0.0" />
+    </ItemGroup>
+
+</Project>
+
+file[1] = usings.cs
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using MediatR;
+
+file[2] = ActivityLog\Officer\ActivityLog.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Officer
+{
+    partial record ActivityLogOfficerRequest : IRequest<ActivityLog, 
+}
+
+file[3] = ActivityLog\Add\ActivityLog.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Add
+{
+    partial record ActivityLogAddRequest : IRequest<ActivityLog, 
+}
+
+file[4] = ActivityLog\Update\ActivityLog.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Update
+{
+    partial record ActivityLogUpdateRequest : IRequest<ActivityLog, 
+}
+
+file[5] = ActivityLog\Delete\ActivityLog.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Delete
+{
+    partial record ActivityLogDeleteRequest : IRequest<ActivityLog, 
+}
+
+file[6] = Alert\Save\Alert.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.Alert.Save
+{
+    partial record AlertSaveRequest : IRequest<Alert, 
+}
+
+file[7] = Alert\Delete\Alert.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.Alert.Delete
+{
+    partial record AlertDeleteRequest : IRequest<Alert, 
+}
+
+file[8] = BatchProcess\SilentEmail\BatchProcess.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.BatchProcess.SilentEmail
+{
+    partial record BatchProcessSilentEmailRequest : IRequest<BatchProcess, 
+}
+
+file[9] = BatchProcess\InterceptEmail\BatchProcess.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptEmail
+{
+    partial record BatchProcessInterceptEmailRequest : IRequest<BatchProcess, 
+}
+
+file[10] = BatchProcess\InterceptFile\BatchProcess.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptFile
+{
+    partial record BatchProcessInterceptFileRequest : IRequest<BatchProcess, 
+}
+
+file[11] = BatchProcess\FinesVicRoad\BatchProcess.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.BatchProcess.FinesVicRoad
+{
+    partial record BatchProcessFinesVicRoadRequest : IRequest<BatchProcess, 
+}
+
+file[12] = BatchProcess\SqlMaintenance\BatchProcess.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.BatchProcess.SqlMaintenance
+{
+    partial record BatchProcessSqlMaintenanceRequest : IRequest<BatchProcess, 
+}
+
+file[13] = BatchProcess\TasInfringmentEmail\BatchProcess.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.BatchProcess.TasInfringmentEmail
+{
+    partial record BatchProcessTasInfringmentEmailRequest : IRequest<BatchProcess, 
+}
+
+file[14] = Organisation\Search\Organisation.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.Organisation.Search
+{
+    partial record OrganisationSearchRequest : IRequest<Organisation, 
+}
+
+file[15] = Organisation\Index\Organisation.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.Organisation.Index
+{
+    partial record OrganisationIndexRequest : IRequest<Organisation, 
+}
+
+file[16] = Vehicle\Create\Vehicle.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+namespace Nhvr.Rcms.BusinessLogic.Vehicle.Create
+{
+    partial record VehicleCreateRequest : IRequest<Vehicle, 
+}
+

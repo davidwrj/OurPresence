@@ -29,13 +29,13 @@ namespace ApplicationProject
             sb.I(1).Al("public class Envelope");
             sb.I(1).Al("{");
 
-            sb.I(2).Al("public object Result { get; }");
-            sb.I(2).Al("public string ErrorCode { get; }");
-            sb.I(2).Al("public string ErrorMessage { get; }");
-            sb.I(2).Al("public string InvalidField { get; }");
+            sb.I(2).Al("public object? Result { get; }");
+            sb.I(2).Al("public string? ErrorCode { get; }");
+            sb.I(2).Al("public string? ErrorMessage { get; }");
+            sb.I(2).Al("public string? InvalidField { get; }");
             sb.I(2).Al("public DateTime TimeGenerated { get; }");
             sb.B();
-            sb.I(2).Al("private Envelope(object result, Error error, string invalidField)");
+            sb.I(2).Al("private Envelope(object? result, Error? error, string? invalidField)");
             sb.I(2).Al("{");
             sb.I(2).Al("    Result = result;");
             sb.I(2).Al("    ErrorCode = error?.Code;");
@@ -44,12 +44,12 @@ namespace ApplicationProject
             sb.I(2).Al("    TimeGenerated = DateTime.UtcNow;");
             sb.I(2).Al("}");
             sb.B();
-            sb.I(2).Al("public static Envelope Ok(object result = null)");
+            sb.I(2).Al("public static Envelope Ok(object? result = null)");
             sb.I(2).Al("{");
             sb.I(2).Al("    return new Envelope(result, null, null);");
             sb.I(2).Al("}");
             sb.B();
-            sb.I(2).Al("public static Envelope Error(Error error, string invalidField)");
+            sb.I(2).Al("public static Envelope Error(Error error, string? invalidField)");
             sb.I(2).Al("{");
             sb.I(2).Al("    return new Envelope(null, error, invalidField);");
             sb.I(2).Al("}");

@@ -128,7 +128,7 @@ namespace Property
         private (string prop, string set, string get) SetScopes()
         {
             if (_setScope == _getScope)
-                return (_getScope.ToString(), "", "");
+                return (GetScope(GetValue(_getScope)), "", "");
 
             var g = GetValue(_getScope);
             var s = GetValue(_setScope);
