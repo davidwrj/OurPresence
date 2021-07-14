@@ -31,6 +31,22 @@ namespace OurPresence.Modeller.Generator.Outputs
                 var groupPath = string.IsNullOrWhiteSpace(fg.Name) ? p : System.IO.Path.Combine(p, fg.Name);
                 foreach (var file in fg.Files)
                 {
+                    if(!string.IsNullOrWhiteSpace(file.Path))
+                    {
+                        var dirs = file.Path.Split(System.IO.Path.DirectorySeparatorChar);
+                        if(dirs.Length >= 1)
+                        {
+                            var pos = groupPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+                            if (pos >= 0)
+                            {
+                                var lastDir = groupPath.Substring(pos + 1);
+                                if(dirs[0] == lastDir)
+                                {
+                                    file.Path=file.Path.Substring(lastDir.Length).Trim(System.IO.Path.DirectorySeparatorChar);
+                                }
+                            }
+                        }
+                    }
                     var filePath = (string.IsNullOrWhiteSpace(file.Path) || groupPath.Contains(file.Path)) ? groupPath : System.IO.Path.Combine(groupPath, file.Path);
                     file.Path = filePath;
 

@@ -21,7 +21,7 @@ namespace CoreProjects
 
         public override IEnumerable<Type> SubGenerators => new Collection<Type>()
         {
-            typeof(ControllerClass.Generator)
+            typeof(CoreProjects.Generator)
         };
     }
 }
