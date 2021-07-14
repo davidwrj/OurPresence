@@ -29,12 +29,10 @@ namespace DomainProject
             sb.Al("global using System.Collections.Generic;");
             sb.Al("global using System.ComponentModel.DataAnnotations;");
             sb.Al("global using System.Linq;");
-            sb.Al("global using System.Text;");
             sb.Al("global using System.Reflection;");
             sb.Al("global using System.Text.RegularExpressions;");
             sb.Al("global using System.Threading.Tasks;");
             sb.Al($"global using {_module.Namespace}.Common.Enums;");
-            sb.Al("global using CSharpFunctionalExtensions;");
             return new File("usings.cs", sb.ToString());
         }
     }

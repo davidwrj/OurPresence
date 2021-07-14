@@ -86,7 +86,7 @@ namespace DomainProject
             sb.I(3).Al("public static Error ValueIsRequired() =>");
             sb.I(4).Al("new Error(\"value.is.required\", \"Value is required\");");
             sb.B();
-            sb.I(3).Al("public static Error InvalidLength(string name = null)");
+            sb.I(3).Al("public static Error InvalidLength(string? name = default)");
             sb.I(3).Al("{");
             sb.I(4).Al("var label = name == null ? \" \" : \" \" + name + \" \";");
             sb.I(4).Al("return new Error(\"invalid.string.length\", $\"Invalid{label}length\");");

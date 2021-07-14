@@ -50,7 +50,7 @@ namespace EntityFrameworkProject
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al("<ProjectReference Include=\"..\\Nhvr.Rcms.Common\\Nhvr.Rcms.Common.csproj\" />");
+            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Common\\{_module.Company}.{_module.Project}.Common.csproj\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");

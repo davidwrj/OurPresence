@@ -108,7 +108,7 @@ namespace DomainProject
             sb.B();
             sb.I(3).Al("if (thisType != otherType)");
             sb.I(3).Al("{");
-            sb.I(4).Al("return string.Compare(thisType.ToString(), otherType.ToString(), StringComparison.Ordinal);");
+            sb.I(4).Al("return string.Compare(thisType?.ToString(), otherType?.ToString(), StringComparison.Ordinal);");
             sb.I(3).Al("}");
             sb.B();
             sb.I(3).Al("var other = obj as ValueObject;");
@@ -159,6 +159,8 @@ namespace DomainProject
             sb.I(2).Al("{");
             sb.I(3).Al("const string EFCoreProxyPrefix = \"Castle.Proxies.\";");
             sb.I(3).Al("const string NHibernateProxyPostfix = \"Proxy\";");
+            sb.B();
+            sb.I(3).Al("if (obj is null) return null;");
             sb.B();
             sb.I(3).Al("var type = obj.GetType();");
             sb.I(3).Al("var typeString = type.ToString();");

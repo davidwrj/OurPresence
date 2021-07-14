@@ -27,6 +27,9 @@ namespace OverwriteHeader
             sb.Al($"// {new string('-', 80)}");
             sb.Al("// WARNING: This file will be overwritten if re-generation is triggered.");
             sb.Al($"// {new string('-', 80)}");
+            sb.B();
+            sb.Al("#nullable enable");
+
             return new Snippet(sb.ToString());
         }
     }

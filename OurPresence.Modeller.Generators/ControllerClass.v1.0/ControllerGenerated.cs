@@ -67,25 +67,7 @@ namespace ControllerClass
             {
                 sb.B();
                 sb.I(2).Al($"[Http{behaviour.Verb}]");
-                sb.I(2).A($"public async Task");
-                //if(behaviour.Response is null)
-                //{
-                    sb.A("<IActionResult>");
-                //}
-                //else
-                //{
-                //    sb.A($"<ActionResult<");
-                //    if(behaviour.Response.IsCollection)
-                //    {
-                //        sb.A($"IEnumerable<{behaviour.Response.Name}>");
-                //    }
-                //    else
-                //    {
-                //        sb.A($"{behaviour.Response.Name}");
-                //    }
-                //    sb.A(">>");
-                //}
-                sb.A($" {behaviour.Name}Async(");
+                sb.I(2).A($"public async Task<IActionResult> {behaviour.Name}Async(");
                 if(behaviour.Request is not null)
                 {
                     sb.A($"[FromBody] {behaviour.Request.Name} {behaviour.Request.Name.Singular.LocalVariable}");
@@ -93,19 +75,28 @@ namespace ControllerClass
                 sb.Al(")");
                 sb.I(2).Al("{");
 
-                Name request;
+                var request = behaviour.Request is null ?
+                    new Name($"{_model.Name}{behaviour.Name}Request") :
+                    behaviour.Request.Name;
+
                 if(behaviour.Request is null)
                 {
-                    request = new Name($"{_model.Name}{behaviour.Name}Request");
                     sb.I(3).Al($"var {request.Singular.LocalVariable} = new {request}();");
-                }
-                else
-                {
-                    request = behaviour.Request.Name;
                 }
                 sb.I(3).A($"var result = await _mediator.Send(");
                 sb.Al($"{request.Singular.LocalVariable});");
-                sb.I(3).Al("return FromResult(result);");
+                if (behaviour.Response is not null)
+                {
+                    sb.I(3).A("return FromResult");
+                    sb.A(behaviour.Response.IsCollection ? "<IEnumerable" : "");
+                    sb.A($"<{behaviour.Response.Name}>");
+                    sb.A(behaviour.Response.IsCollection ? ">" : "");
+                    sb.Al("(result);");
+                }
+                else
+                {
+                    sb.I(3).Al("return NoContent();");
+                }
                 sb.I(2).Al("}");
             }
 

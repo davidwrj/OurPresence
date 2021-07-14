@@ -37,8 +37,6 @@ namespace DomainClass
             {
                 sb.Al(((ISnippet)new Header.Generator(Settings, new GeneratorDetails()).Create()).Content);
             }
-            sb.Al("#nullable enable");
-            sb.B();
             sb.Al($"namespace {_module.Namespace}.Common.Domain");
             sb.Al("{");
             sb.I(1).A(Settings.SupportRegen ? $"partial class {_model.Name}" : $"public class {_model.Name}");

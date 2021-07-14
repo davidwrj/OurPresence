@@ -37,7 +37,7 @@ namespace DomainProject
             sb.B();
             sb.I(2).Al("protected override IEnumerable<object> GetEqualityComponents()");
             sb.I(2).Al("{");
-            sb.I(3).Al("yield return Value;");
+            sb.I(3).Al("yield return Value is null ? new List<object>() : Value;");
             sb.I(2).Al("}");
             sb.B();
             sb.I(2).Al("public override string? ToString()");
@@ -45,9 +45,9 @@ namespace DomainProject
             sb.I(3).Al("return Value?.ToString();");
             sb.I(2).Al("}");
             sb.B();
-            sb.I(2).Al("public static implicit operator T(SimpleValueObject<T> valueObject)");
+            sb.I(2).Al("public static implicit operator T?(SimpleValueObject<T> valueObject)");
             sb.I(2).Al("{");
-            sb.I(3).Al("return valueObject == null ? default : valueObject.Value;");
+            sb.I(3).Al("return valueObject is null ? default : valueObject.Value;");
             sb.I(2).Al("}");
             sb.I(1).Al("}");
             sb.Al("}");

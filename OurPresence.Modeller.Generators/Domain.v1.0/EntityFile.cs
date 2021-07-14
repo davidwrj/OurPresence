@@ -39,7 +39,7 @@ namespace DomainProject
             sb.I(3).Al("Id = id;");
             sb.I(2).Al("}");
             sb.B();
-            sb.I(2).Al("public override bool Equals(object obj)");
+            sb.I(2).Al("public override bool Equals(object? obj)");
             sb.I(2).Al("{");
             sb.I(3).Al("if (!(obj is Entity<TId> other))");
             sb.I(3).Al("{");
@@ -68,7 +68,7 @@ namespace DomainProject
             sb.B();
             sb.I(2).Al("public override int GetHashCode()");
             sb.I(2).Al("{");
-            sb.I(3).Al("return (ValueObject.GetUnproxiedType(this).ToString() + Id).GetHashCode();");
+            sb.I(3).Al("return (ValueObject.GetUnproxiedType(this)?.ToString() + Id).GetHashCode();");
             sb.I(2).Al("}");
             sb.I(1).Al("}");
             sb.B();

@@ -1484,46 +1484,58 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddModel("Organisation")
                 .WithDefaultKey()
                 .IsRoot()
-                .AddField("CreationId").DataType(Domain.DataTypes.UniqueIdentifier).Nullable().Build
+                .AddField("CreationId").DataType(DataTypes.UniqueIdentifier).Nullable().Build
                 .AddField("Name").MaxLength(255).Build
-                .AddField("ACN").MaxLength(255).Nullable().Build
-                .AddField("TypeId").DataType(Domain.DataTypes.Object).DataTypeTypeName("OrganisationTypes").Build
-                //.AddField("NevdisId").MaxLength(255).Nullable().Build
-                //.AddField("VicCustomerNo").MaxLength(255).Nullable().Build
-                //.AddField("ParentId").DataType(DataTypes.Int32).Nullable().Build
+                .AddField("ACN").MaxLength(255).BusinessKey(true).Build
+                .AddField("TypeId").DataType(DataTypes.Object).DataTypeTypeName("OrganisationTypes").Build
+                .AddField("NevdisId").MaxLength(255).Nullable().Build
+                .AddField("VicCustomerNo").MaxLength(255).Nullable().Build
+                .AddField("ParentId").DataType(DataTypes.Int32).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("SystemId").DataType(DataTypes.Int32).Default("30").Build
 
                 .AddBehaviour("search")                    
                     .AddRequest("OrganisationSearchRequest")
-                        .AddField("Name").MaxLength(255).Build
-                        .AddField("ACN").MaxLength(255).Nullable().Build
+                        .AddField("Name").Nullable().Build
+                        .AddField("ACN").Build
                     .Build
                     .AddResponse("OrganisationSearchResult")
                         .IsCollection()
-                        .AddField("Name").MaxLength(255).Build
-                        .AddField("ACN").MaxLength(255).Nullable().Build
+                        .AddField("Name").Nullable().Build
+                        .AddField("ACN").Build
                         .AddField("AlertLevel").DataType(DataTypes.Int32).Nullable().Build
                         .AddField("AssociatedAlertLevel").DataType(DataTypes.Int32).Nullable().Build
-                        .AddField("Source").MaxLength(255).Build
-                        .AddField("Type").MaxLength(255).Build
-                        .AddField("Status").MaxLength(255).Build
+                        .AddField("Source").Build
+                        .AddField("Type").Build
+                        .AddField("Status").Build
+                        .AddField("Addresses").DataType(DataTypes.Object).DataTypeTypeName("IEnumerable<Address>").Build
                     .Build
                 .Build
                 .AddBehaviour("index")
                     .AddRequest("OrganisationByIdRequest")
-                        .AddField("Id").MaxLength(255).Build
-                        .AddField("Juro").MaxLength(255).Build
-                        .AddField("IncludeSilentAlerts").DataType(DataTypes.Bool).Default("false").Nullable().Build
+                        .AddField("Id").Build
+                        .AddField("Juro").Build
+                        .AddField("IncludeSilentAlerts").DataType(DataTypes.Bool).Default("false").Build
                     .Build
                     .AddResponse("OrganisationDetailResult")
-                        .AddField("Name").MaxLength(255).Build
-                        .AddField("ACN").MaxLength(255).Nullable().Build
+                        .AddField("Name").Build
+                        .AddField("ACN").Build
                         .AddField("AlertLevel").DataType(DataTypes.Int32).Nullable().Build
                         .AddField("AssociatedAlertLevel").DataType(DataTypes.Int32).Nullable().Build
-                        .AddField("Source").MaxLength(255).Build
-                        .AddField("Type").MaxLength(255).Build
-                        .AddField("Status").MaxLength(255).Build
+                        .AddField("Source").Build
+                        .AddField("Type").Build
+                        .AddField("Status").Build
+                    .Build
+                .Build
+                .AddBehaviour("save")
+                    .AddRequest("OrganisationSaveRequest")
+                        .AddField("Name").Build
+                        .AddField("ACN").Build
+                        .AddField("TypeId").DataType(DataTypes.Object).DataTypeTypeName("OrganisationTypes").Build
+                        .AddField("CreationId").DataType(DataTypes.UniqueIdentifier).Nullable().Build
+                    .Build
+                    .AddResponse("OrganisationSaveResult")
+                        .AddField("Id").Build
                     .Build
                 .Build
             .Build;
