@@ -40,7 +40,11 @@ namespace DomainProject
             sb.I(1).Al("</PropertyGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<PackageReference Include=\"CSharpFunctionalExtensions\" Version=\"{Settings.Packages.GetVersion("CSharpFunctionalExtensions", "2.17.0")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"CSharpFunctionalExtensions\" Version=\"{Settings.Packages.GetVersion("CSharpFunctionalExtensions", "2.18.0")}\" />");
+            sb.I(1).Al("</ItemGroup>");
+            sb.B();
+            sb.I(1).Al("<ItemGroup>");
+            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Core\\{_module.Company}.{_module.Project}.Core.csproj\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");

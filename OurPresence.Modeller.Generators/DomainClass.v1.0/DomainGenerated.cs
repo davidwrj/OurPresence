@@ -26,9 +26,8 @@ namespace DomainClass
         public IOutput Create()
         {
             var bk = _model.HasBusinessKey();
-            var isEntity = _model.IsEntity();
-
             var sb = new StringBuilder();
+
             if (Settings.SupportRegen)
             {
                 sb.Al(((ISnippet)new OverwriteHeader.Generator(Settings, new GeneratorDetails()).Create()).Content);
@@ -41,16 +40,20 @@ namespace DomainClass
             sb.Al("{");
             sb.I(1).A(Settings.SupportRegen ? $"partial class {_model.Name}" : $"public class {_model.Name}");
             var entity = string.Empty;
-            if (isEntity)
+            if (_model.IsRoot)
             {
-                entity += $" : BaseAggregateRoot<{_model.Name}, ";
-                if(_model.Key.Fields.Count==1)
+                entity += $" : Aggregate";
+                if (_model.Key.Fields.Count == 1)
                 {
-                    entity += $"{_model.Key.Fields.First().GetDataType()}>";
+                    var field = _model.Key.Fields.First();
+                    if (field.DataType != DataTypes.UniqueIdentifier)
+                    {
+                        entity += $"<{field.GetDataType()}>";
+                    }
                 }
-                else
+                else if (_model.Key.Fields.Count > 1)
                 {
-                    entity += "{ ";
+                    entity += "<{ ";
                     foreach (var item in _model.Key.Fields)
                     {
                         entity += item.GetDataType() + ",";
@@ -86,12 +89,13 @@ namespace DomainClass
                 sb.B();
             }
 
-            foreach (var item in _model.Key.Fields)
+            if (!_model.IsRoot)
             {
-                if (isEntity && item.Name.ToString() == "Id")
-                    continue;
-                var property = (ISnippet)new Property.Generator(item, setScope: Property.PropertyScope.Private).Create();
-                sb.Al(property.Content);
+                foreach (var item in _model.Key.Fields)
+                {
+                    var property = (ISnippet)new Property.Generator(item, setScope: Property.PropertyScope.Private).Create();
+                    sb.Al(property.Content);
+                }
             }
             foreach (var item in _model.Fields)
             {

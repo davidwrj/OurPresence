@@ -30,6 +30,7 @@ namespace DomainProject
             sb.Al("global using System.Text;");
             sb.Al("global using System.Threading.Tasks;");
             sb.Al("global using CSharpFunctionalExtensions;");
+            sb.Al("global using FluentValidation;");
             sb.Al("global using MediatR;");
             sb.B();
             sb.Al($"global using {_module.Namespace}.Common.Enums;");

@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     </ItemGroup>
@@ -53,11 +53,8 @@ file[2] = appsettings.json
 }
 
 file[3] = Startup.cs
-using Mizrael.SuperSafeBank.BusinessLogic.Account;
 using Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw;
-using Mizrael.SuperSafeBank.Common.EntityTypes;
-using Mizrael.SuperSafeBank.DataAccess.Rcms;
-using Mizrael.SuperSafeBank.DataAccess.Nevdis;
+using Mizrael.SuperSafeBank.BusinessLogic.Account.Validators;
 
 namespace Mizrael.SuperSafeBank.Application
 {

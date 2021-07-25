@@ -1,4 +1,4 @@
-file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
+﻿file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -10,10 +10,12 @@ file[0] = Mizrael.SuperSafeBank.BusinessLogic.csproj
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="9.0.0" />
+        <PackageReference Include="CSharpFunctionalExtensions" Version="2.18.0" />
+        <PackageReference Include="FluentValidation" Version="10.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Nhvr.Rcms.Common\Nhvr.Rcms.Common.csproj" />
+        <ProjectReference Include="..\Mizrael.SuperSafeBank.Common\Mizrael.SuperSafeBank.Common.csproj" />
     </ItemGroup>
 
 </Project>
@@ -25,6 +27,7 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using CSharpFunctionalExtensions;
+global using FluentValidation;
 global using MediatR;
 
 global using Mizrael.SuperSafeBank.Common.Enums;
@@ -35,6 +38,8 @@ file[2] = Account\Withdraw\Account.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
@@ -51,6 +56,8 @@ file[3] = Account\Deposit\Account.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {

@@ -18,8 +18,6 @@ file[1] = Models\Account.cs
 // Created using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-#nullable enable
-
 namespace Mizrael.SuperSafeBank.Data.Models
 {
     public class Account

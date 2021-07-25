@@ -23,5 +23,9 @@ namespace OurPresence.Modeller.Domain
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public IList<Field> Fields { get; } = new List<Field>();
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [DefaultValue(false)]
+        public bool IsFileStream { get; set; }
     }
 }

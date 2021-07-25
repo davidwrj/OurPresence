@@ -32,7 +32,8 @@ namespace DomainProject
             sb.Al("global using System.Reflection;");
             sb.Al("global using System.Text.RegularExpressions;");
             sb.Al("global using System.Threading.Tasks;");
-            sb.Al($"global using {_module.Namespace}.Common.Enums;");
+            sb.Al($"global using {_module.Company}.{_module.Project}.Common.Enums;");
+            sb.Al($"global using {_module.Company}.{_module.Project}.Core.Aggregates;");
             return new File("usings.cs", sb.ToString());
         }
     }

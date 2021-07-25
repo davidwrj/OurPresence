@@ -192,7 +192,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .Build
 
                 .AddBehaviour("Officer")
-                    .AddResponse("ActivityLogOfficerResult")
+                    .AddResponse("ActivityLogResult")
                         .IsCollection()
                         .AddField("Id").DataType(DataTypes.Int32).Build
                         .AddField("StartTime").DataType(DataTypes.DateTimeOffset).Build
@@ -960,7 +960,125 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                 .AddField("ComplianceActionOffenceReportReference").DataType(Domain.DataTypes.Bool).Nullable().Build
                 .AddField("Active").DataType(DataTypes.Bool).Default("true").Build
                 .AddField("SystemId").DataType(Domain.DataTypes.Object).DataTypeTypeName("SourceSystemTypes").Build
-                .Build;
+
+                .AddBehaviour("Search", BehaviourVerb.Post)
+                    .AddRequest("EventSearchRequest")
+                        .AddField("ToDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("FromDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("HomeLocation").DataType(DataTypes.String).Build
+                        .AddField("Team").DataType(DataTypes.String).Build
+                        .AddField("MyOrganisation").DataType(DataTypes.Bool).Build
+                        .AddField("InterceptNumber").DataType(DataTypes.String).Build
+                        .AddField("NoticeNumber").DataType(DataTypes.String).Build
+                        .AddField("Registration").DataType(DataTypes.String).Build
+                        .AddField("VIN").DataType(DataTypes.String).Build
+                        .AddField("ChassisNumber").DataType(DataTypes.String).Build
+                        .AddField("StateID").DataType(DataTypes.Int32).Build
+                        .AddField("NoticeType").DataType(DataTypes.String).Build
+                        .AddField("LicenceNumber").DataType(DataTypes.String).Build
+                        .AddField("FirstName").DataType(DataTypes.String).Build
+                        .AddField("LastName").DataType(DataTypes.String).Build
+                        .AddField("DOB").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("OrganisationName").DataType(DataTypes.String).Build
+                        .AddField("ACN").DataType(DataTypes.String).Build
+                        .AddField("OfficerID").DataType(DataTypes.String).Build
+                        .AddField("OfficerLastName").DataType(DataTypes.String).Build
+                        .AddField("HasActions").DataType(DataTypes.Bool).Build
+                    .Build
+                    .AddResponse("EventSearchResult")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                        .AddField("Number").DataType(DataTypes.String).Build
+                        .AddField("OccuredDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("VehicleInfo").DataType(DataTypes.String).Build
+                        .AddField("Description").DataType(DataTypes.String).Build
+                        .AddField("HasNotices").DataType(DataTypes.Bool).Build
+                        .AddField("State").DataType(DataTypes.String).Build
+                        .AddField("Source").DataType(DataTypes.String).Build
+                        .AddField("Status").DataType(DataTypes.String).Build
+                        .AddField("IsHistorical").DataType(DataTypes.Bool).Build
+                    .Build
+                .Build
+                .AddBehaviour("Summary", BehaviourVerb.Post)
+                    .AddRequest("EventSummaryRequest")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                    .Build
+                    .AddResponse("EventSummaryResult")
+                        .IsFileStream()
+                    .Build
+                .Build
+                .AddBehaviour("Save", BehaviourVerb.Post)
+                    .AddRequest("EventSaveRequest")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                        .AddField("Status").DataType(DataTypes.String).Build
+                        .AddField("CreationID").DataType(DataTypes.UniqueIdentifier).Build
+                        .AddField("OrganisationID").DataType(DataTypes.Int32).Build
+                        .AddField("ReviewedDateTime").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("ReportedOnDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("TookPlaceStartDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("TookPlaceEndDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("CreateDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("CompletedDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("MethodOfIntercept").DataType(DataTypes.String).Build
+                        .AddField("DirectionOfTravel").DataType(DataTypes.String).Build
+                        .AddField("OperationName").DataType(DataTypes.String).Build
+                        .AddField("Notes").DataType(DataTypes.Object).DataTypeTypeName("Note").Build
+                        .AddField("Lights").DataType(DataTypes.Bool).Build
+                        .AddField("Sirens").DataType(DataTypes.Bool).Build
+                        .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
+                        .AddField("VehicleReleaseDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("VehicleGrounded").DataType(DataTypes.Bool).Build
+                        .AddField("Locations").DataType(DataTypes.Object).DataTypeTypeName("List<Location>").Build
+                        .AddField("Officers").DataType(DataTypes.Object).DataTypeTypeName("List<Officer>").Build
+                        .AddField("Persons").DataType(DataTypes.Object).DataTypeTypeName("List<Person>").Build
+                        .AddField("Vehicles").DataType(DataTypes.Object).DataTypeTypeName("List<Vehicle>").Build
+                        .AddField("Organisations").DataType(DataTypes.Object).DataTypeTypeName("List<Organisation>").Build
+                        .AddField("MediaReferences").DataType(DataTypes.Object).DataTypeTypeName("List<MediaReference>").Build
+                        .AddField("Media").DataType(DataTypes.Object).DataTypeTypeName("List<MediaDetail>").Build
+                        .AddField("Intercept").DataType(DataTypes.Object).DataTypeTypeName("InterceptDetail").Build
+                        .AddField("WAIntercept").DataType(DataTypes.Object).DataTypeTypeName("WAInterceptDetail").Build
+                    .Build
+                    .AddResponse("EventSaveResult")
+
+                    .Build
+                .Build
+                .AddBehaviour("Index", BehaviourVerb.Post)
+                    .AddRequest("EventDetailRequest")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                    .Build
+                    .AddResponse("EventDetailResult")
+                        .AddField("Id").DataType(DataTypes.Int32).Build
+                        .AddField("Source").DataType(DataTypes.String).Build
+                        .AddField("Status").DataType(DataTypes.String).Build
+                        .AddField("OrganisationID").DataType(DataTypes.Int32).Build
+                        .AddField("ReviewedUser").DataType(DataTypes.String).Build
+                        .AddField("ReviewedDateTime").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("ReportedOnDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("TookPlaceStartDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("TookPlaceEndDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("CreateDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("CompletedDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("SystemTimestamp").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("MethodOfIntercept").DataType(DataTypes.String).Build
+                        .AddField("DirectionOfTravel").DataType(DataTypes.String).Build
+                        .AddField("OperationName").DataType(DataTypes.String).Build
+                        .AddField("Notes").DataType(DataTypes.Object).DataTypeTypeName("List<Note>").Build
+                        .AddField("Lights").DataType(DataTypes.Bool).Build
+                        .AddField("Sirens").DataType(DataTypes.Bool).Build
+                        .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
+                        .AddField("VehicleReleaseDate").DataType(DataTypes.DateTimeOffset).Build
+                        .AddField("VehicleGrounded").DataType(DataTypes.Bool).Build
+                        .AddField("Locations").DataType(DataTypes.Object).DataTypeTypeName("List<Location>").Build
+                        .AddField("Officers").DataType(DataTypes.Object).DataTypeTypeName("List<Officer>").Build
+                        .AddField("Persons").DataType(DataTypes.Object).DataTypeTypeName("List<Person>").Build
+                        .AddField("Vehicles").DataType(DataTypes.Object).DataTypeTypeName("List<Vehicle>").Build
+                        .AddField("Organisations").DataType(DataTypes.Object).DataTypeTypeName("List<Organisation>").Build
+                        .AddField("MediaReferences").DataType(DataTypes.Object).DataTypeTypeName("List<MediaReference>").Build
+                        .AddField("Media").DataType(DataTypes.Object).DataTypeTypeName("List<MediaDetail>").Build
+                        .AddField("Intercept").DataType(DataTypes.Object).DataTypeTypeName("InterceptDetail").Build
+                        .AddField("WAIntercept").DataType(DataTypes.Object).DataTypeTypeName("WAInterceptDetail").Build
+                    .Build
+                .Build
+            .Build;
         }
 
         private static Fluent.ModuleBuilder AddMapDetail(this Fluent.ModuleBuilder mb)

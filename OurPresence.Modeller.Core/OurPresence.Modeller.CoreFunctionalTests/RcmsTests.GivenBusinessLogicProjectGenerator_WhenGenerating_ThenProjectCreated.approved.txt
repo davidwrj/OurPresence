@@ -10,6 +10,8 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="9.0.0" />
+        <PackageReference Include="CSharpFunctionalExtensions" Version="2.18.0" />
+        <PackageReference Include="FluentValidation" Version="10.3.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,6 +27,7 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using CSharpFunctionalExtensions;
+global using FluentValidation;
 global using MediatR;
 
 global using Nhvr.Rcms.Common.Enums;
@@ -36,12 +39,14 @@ file[2] = ActivityLog\Officer\ActivityLog.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Officer
 {
-    public partial record ActivityLogOfficerRequest : IRequest<IEnumerable<ActivityLogOfficerResult>>
-    { }
-
-    public partial record ActivityLogOfficerResult
+    public partial record ActivityLogOfficerRequest : IRequest<Result<IEnumerable<ActivityLogResult>>>
+    {
+    }
+    public partial record ActivityLogResult
     {
         public int Id { get;  set; }
 
@@ -77,6 +82,8 @@ file[3] = ActivityLog\Add\ActivityLog.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Add
 {
     public partial record ActivityLogAddRequest : IRequest<Result<ActivityLogAddResult>>
@@ -101,6 +108,8 @@ file[4] = ActivityLog\Update\ActivityLog.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Update
 {
@@ -131,6 +140,8 @@ file[5] = ActivityLog\Delete\ActivityLog.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Delete
 {
     public partial record ActivityLogDeleteRequest : IRequest
@@ -146,6 +157,8 @@ file[6] = Alert\Save\Alert.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Nhvr.Rcms.BusinessLogic.Alert.Save
 {
@@ -186,6 +199,8 @@ file[7] = Alert\Delete\Alert.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.Alert.Delete
 {
     public partial record AlertDeleteRequest : IRequest
@@ -204,11 +219,13 @@ file[8] = BatchProcess\SilentEmail\BatchProcess.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.SilentEmail
 {
     public partial record BatchProcessSilentEmailRequest : IRequest
-    { }
-
+    {
+    }
 }
 
 file[9] = BatchProcess\InterceptEmail\BatchProcess.generated.cs
@@ -218,11 +235,13 @@ file[9] = BatchProcess\InterceptEmail\BatchProcess.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptEmail
 {
     public partial record BatchProcessInterceptEmailRequest : IRequest
-    { }
-
+    {
+    }
 }
 
 file[10] = BatchProcess\InterceptFile\BatchProcess.generated.cs
@@ -232,11 +251,13 @@ file[10] = BatchProcess\InterceptFile\BatchProcess.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptFile
 {
     public partial record BatchProcessInterceptFileRequest : IRequest
-    { }
-
+    {
+    }
 }
 
 file[11] = BatchProcess\FinesVicRoad\BatchProcess.generated.cs
@@ -246,11 +267,13 @@ file[11] = BatchProcess\FinesVicRoad\BatchProcess.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.FinesVicRoad
 {
     public partial record BatchProcessFinesVicRoadRequest : IRequest
-    { }
-
+    {
+    }
 }
 
 file[12] = BatchProcess\SqlMaintenance\BatchProcess.generated.cs
@@ -260,11 +283,13 @@ file[12] = BatchProcess\SqlMaintenance\BatchProcess.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.SqlMaintenance
 {
     public partial record BatchProcessSqlMaintenanceRequest : IRequest
-    { }
-
+    {
+    }
 }
 
 file[13] = BatchProcess\TasInfringmentEmail\BatchProcess.generated.cs
@@ -274,34 +299,296 @@ file[13] = BatchProcess\TasInfringmentEmail\BatchProcess.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.BatchProcess.TasInfringmentEmail
 {
     public partial record BatchProcessTasInfringmentEmailRequest : IRequest
-    { }
-
+    {
+    }
 }
 
-file[14] = Organisation\Search\Organisation.generated.cs
+file[14] = Event\Search\Event.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Search
+{
+    public partial record EventSearchRequest : IRequest<Result<EventSearchResult>>
+    {
+        public DateTimeOffset ToDate { get;  set; }
+
+        public DateTimeOffset FromDate { get;  set; }
+
+        public string HomeLocation { get;  set; }
+
+        public string Team { get;  set; }
+
+        public bool MyOrganisation { get;  set; }
+
+        public string InterceptNumber { get;  set; }
+
+        public string NoticeNumber { get;  set; }
+
+        public string Registration { get;  set; }
+
+        public string VIN { get;  set; }
+
+        public string ChassisNumber { get;  set; }
+
+        public int StateID { get;  set; }
+
+        public string NoticeType { get;  set; }
+
+        public string LicenceNumber { get;  set; }
+
+        public string FirstName { get;  set; }
+
+        public string LastName { get;  set; }
+
+        public DateTimeOffset DOB { get;  set; }
+
+        public string OrganisationName { get;  set; }
+
+        public string ACN { get;  set; }
+
+        public string OfficerID { get;  set; }
+
+        public string OfficerLastName { get;  set; }
+
+        public bool HasAction { get;  set; }
+
+    }
+    public partial record EventSearchResult
+    {
+        public int Id { get;  set; }
+
+        public string Number { get;  set; }
+
+        public DateTimeOffset OccuredDate { get;  set; }
+
+        public string VehicleInfo { get;  set; }
+
+        public string Description { get;  set; }
+
+        public bool HasNotice { get;  set; }
+
+        public string State { get;  set; }
+
+        public string Source { get;  set; }
+
+        public string Status { get;  set; }
+
+        public bool IsHistorical { get;  set; }
+
+    }
+}
+
+file[15] = Event\Summary\Event.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Summary
+{
+    public partial record EventSummaryRequest : IRequest<Result<EventSearchResult>>
+    {
+        public int Id { get;  set; }
+
+    }
+    public partial record EventSearchResult
+    {
+    }
+}
+
+file[16] = Event\Save\Event.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Save
+{
+    public partial record EventSaveRequest : IRequest<Result<EventSaveResult>>
+    {
+        public int Id { get;  set; }
+
+        public string Status { get;  set; }
+
+        public Guid CreationID { get;  set; }
+
+        public int OrganisationID { get;  set; }
+
+        public DateTimeOffset ReviewedDateTime { get;  set; }
+
+        public DateTimeOffset ReportedOnDate { get;  set; }
+
+        public DateTimeOffset TookPlaceStartDate { get;  set; }
+
+        public DateTimeOffset TookPlaceEndDate { get;  set; }
+
+        public DateTimeOffset CreateDate { get;  set; }
+
+        public DateTimeOffset CompletedDate { get;  set; }
+
+        public string MethodOfIntercept { get;  set; }
+
+        public string DirectionOfTravel { get;  set; }
+
+        public string OperationName { get;  set; }
+
+        public Note Note { get;  set; }
+
+        public bool Light { get;  set; }
+
+        public bool Siren { get;  set; }
+
+        public bool UrgentDutyDriving { get;  set; }
+
+        public DateTimeOffset VehicleReleaseDate { get;  set; }
+
+        public bool VehicleGrounded { get;  set; }
+
+        public List<Location> Location { get;  set; }
+
+        public List<Officer> Officer { get;  set; }
+
+        public List<Person> Person { get;  set; }
+
+        public List<Vehicle> Vehicle { get;  set; }
+
+        public List<Organisation> Organisation { get;  set; }
+
+        public List<MediaReference> MediaReference { get;  set; }
+
+        public List<MediaDetail> Medium { get;  set; }
+
+        public InterceptDetail Intercept { get;  set; }
+
+        public WAInterceptDetail WAIntercept { get;  set; }
+
+    }
+    public partial record EventSaveResult
+    {
+    }
+}
+
+file[17] = Event\Index\Event.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Index
+{
+    public partial record EventDetailRequest : IRequest<Result<EventDetailResult>>
+    {
+        public int Id { get;  set; }
+
+    }
+    public partial record EventDetailResult
+    {
+        public int Id { get;  set; }
+
+        public string Source { get;  set; }
+
+        public string Status { get;  set; }
+
+        public int OrganisationID { get;  set; }
+
+        public string ReviewedUser { get;  set; }
+
+        public DateTimeOffset ReviewedDateTime { get;  set; }
+
+        public DateTimeOffset ReportedOnDate { get;  set; }
+
+        public DateTimeOffset TookPlaceStartDate { get;  set; }
+
+        public DateTimeOffset TookPlaceEndDate { get;  set; }
+
+        public DateTimeOffset CreateDate { get;  set; }
+
+        public DateTimeOffset CompletedDate { get;  set; }
+
+        public DateTimeOffset SystemTimestamp { get;  set; }
+
+        public string MethodOfIntercept { get;  set; }
+
+        public string DirectionOfTravel { get;  set; }
+
+        public string OperationName { get;  set; }
+
+        public List<Note> Note { get;  set; }
+
+        public bool Light { get;  set; }
+
+        public bool Siren { get;  set; }
+
+        public bool UrgentDutyDriving { get;  set; }
+
+        public DateTimeOffset VehicleReleaseDate { get;  set; }
+
+        public bool VehicleGrounded { get;  set; }
+
+        public List<Location> Location { get;  set; }
+
+        public List<Officer> Officer { get;  set; }
+
+        public List<Person> Person { get;  set; }
+
+        public List<Vehicle> Vehicle { get;  set; }
+
+        public List<Organisation> Organisation { get;  set; }
+
+        public List<MediaReference> MediaReference { get;  set; }
+
+        public List<MediaDetail> Medium { get;  set; }
+
+        public InterceptDetail Intercept { get;  set; }
+
+        public WAInterceptDetail WAIntercept { get;  set; }
+
+    }
+}
+
+file[18] = Organisation\Search\Organisation.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Search
 {
     public partial record OrganisationSearchRequest : IRequest<Result<IEnumerable<OrganisationSearchResult>>>
     {
-        public string Name { get;  set; }
+        public string? Name { get;  set; }
 
-        public string? ACN { get;  set; }
+        public string ACN { get;  set; }
 
     }
     public partial record OrganisationSearchResult
     {
-        public string Name { get;  set; }
+        public string? Name { get;  set; }
 
-        public string? ACN { get;  set; }
+        public string ACN { get;  set; }
 
         public int? AlertLevel { get;  set; }
 
@@ -313,15 +600,19 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Search
 
         public string Status { get;  set; }
 
+        public IEnumerable<Address> Address { get;  set; }
+
     }
 }
 
-file[15] = Organisation\Index\Organisation.generated.cs
+file[19] = Organisation\Index\Organisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Index
 {
@@ -331,14 +622,14 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Index
 
         public string Juro { get;  set; }
 
-        public bool? IncludeSilentAlert { get;  set; }
+        public bool IncludeSilentAlert { get;  set; }
 
     }
     public partial record OrganisationDetailResult
     {
         public string Name { get;  set; }
 
-        public string? ACN { get;  set; }
+        public string ACN { get;  set; }
 
         public int? AlertLevel { get;  set; }
 
@@ -353,12 +644,43 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Index
     }
 }
 
-file[16] = Vehicle\Create\Vehicle.generated.cs
+file[20] = Organisation\Save\Organisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Organisation.Save
+{
+    public partial record OrganisationSaveRequest : IRequest<Result<OrganisationSaveResult>>
+    {
+        public string Name { get;  set; }
+
+        public string ACN { get;  set; }
+
+        public OrganisationTypes TypeId { get;  set; }
+
+        public Guid? CreationId { get;  set; }
+
+    }
+    public partial record OrganisationSaveResult
+    {
+        public string Id { get;  set; }
+
+    }
+}
+
+file[21] = Vehicle\Create\Vehicle.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Nhvr.Rcms.BusinessLogic.Vehicle.Create
 {
@@ -380,6 +702,336 @@ namespace Nhvr.Rcms.BusinessLogic.Vehicle.Create
 
         public SourceSystemTypes SystemId { get;  set; }
 
+    }
+}
+
+file[22] = ActivityLog\Validators\ActivityLogAddRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
+{
+    public partial record ActivityLogAddRequestValidator : AbstractValidator<Common.Domain.ActivityLog>
+    {
+        public ActivityLogAddRequestValidator()
+        {
+            RuleFor(p => p.DateAdded).NotNull();
+            RuleFor(p => p.StartTime).NotNull();
+            RuleFor(p => p.ActivityType).NotNull();
+        }
+    }
+}
+
+file[23] = ActivityLog\Validators\ActivityLogUpdateRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
+{
+    public partial record ActivityLogUpdateRequestValidator : AbstractValidator<Common.Domain.ActivityLog>
+    {
+        public ActivityLogUpdateRequestValidator()
+        {
+            RuleFor(p => p.EndTime).NotNull();
+            RuleFor(p => p.Remark).NotNull();
+        }
+    }
+}
+
+file[24] = ActivityLog\Validators\ActivityLogDeleteRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
+{
+    public partial record ActivityLogDeleteRequestValidator : AbstractValidator<Common.Domain.ActivityLog>
+    {
+        public ActivityLogDeleteRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+        }
+    }
+}
+
+file[25] = Alert\Validators\AlertSaveRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Alert.Validators
+{
+    public partial record AlertSaveRequestValidator : AbstractValidator<Common.Domain.Alert>
+    {
+        public AlertSaveRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+            RuleFor(p => p.AlertLevel).NotNull();
+            RuleFor(p => p.EffectiveDate).NotNull();
+            RuleFor(p => p.ExpiryDate).NotNull();
+            RuleFor(p => p.Remark).NotNull();
+            RuleFor(p => p.Silent).NotNull();
+            RuleFor(p => p.SilentNotifyContactId).NotNull();
+            RuleFor(p => p.PersonId).NotNull();
+            RuleFor(p => p.VehicleId).NotNull();
+            RuleFor(p => p.OrganisationId).NotNull();
+        }
+    }
+}
+
+file[26] = Alert\Validators\AlertDeleteRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Alert.Validators
+{
+    public partial record AlertDeleteRequestValidator : AbstractValidator<Common.Domain.Alert>
+    {
+        public AlertDeleteRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+            RuleFor(p => p.Reason).NotNull().MaximumLength(128);
+        }
+    }
+}
+
+file[27] = Event\Validators\EventSearchRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Validators
+{
+    public partial record EventSearchRequestValidator : AbstractValidator<Common.Domain.Event>
+    {
+        public EventSearchRequestValidator()
+        {
+            RuleFor(p => p.ToDate).NotNull();
+            RuleFor(p => p.FromDate).NotNull();
+            RuleFor(p => p.HomeLocation).NotNull();
+            RuleFor(p => p.Team).NotNull();
+            RuleFor(p => p.MyOrganisation).NotNull();
+            RuleFor(p => p.InterceptNumber).NotNull();
+            RuleFor(p => p.NoticeNumber).NotNull();
+            RuleFor(p => p.Registration).NotNull();
+            RuleFor(p => p.VIN).NotNull();
+            RuleFor(p => p.ChassisNumber).NotNull();
+            RuleFor(p => p.StateID).NotNull();
+            RuleFor(p => p.NoticeType).NotNull();
+            RuleFor(p => p.LicenceNumber).NotNull();
+            RuleFor(p => p.FirstName).NotNull();
+            RuleFor(p => p.LastName).NotNull();
+            RuleFor(p => p.DOB).NotNull();
+            RuleFor(p => p.OrganisationName).NotNull();
+            RuleFor(p => p.ACN).NotNull();
+            RuleFor(p => p.OfficerID).NotNull();
+            RuleFor(p => p.OfficerLastName).NotNull();
+            RuleFor(p => p.HasAction).NotNull();
+        }
+    }
+}
+
+file[28] = Event\Validators\EventSummaryRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Validators
+{
+    public partial record EventSummaryRequestValidator : AbstractValidator<Common.Domain.Event>
+    {
+        public EventSummaryRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+        }
+    }
+}
+
+file[29] = Event\Validators\EventSaveRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Validators
+{
+    public partial record EventSaveRequestValidator : AbstractValidator<Common.Domain.Event>
+    {
+        public EventSaveRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+            RuleFor(p => p.Status).NotNull();
+            RuleFor(p => p.CreationID).NotNull();
+            RuleFor(p => p.OrganisationID).NotNull();
+            RuleFor(p => p.ReviewedDateTime).NotNull();
+            RuleFor(p => p.ReportedOnDate).NotNull();
+            RuleFor(p => p.TookPlaceStartDate).NotNull();
+            RuleFor(p => p.TookPlaceEndDate).NotNull();
+            RuleFor(p => p.CreateDate).NotNull();
+            RuleFor(p => p.CompletedDate).NotNull();
+            RuleFor(p => p.MethodOfIntercept).NotNull();
+            RuleFor(p => p.DirectionOfTravel).NotNull();
+            RuleFor(p => p.OperationName).NotNull();
+            RuleFor(p => p.Note).NotNull();
+            RuleFor(p => p.Light).NotNull();
+            RuleFor(p => p.Siren).NotNull();
+            RuleFor(p => p.UrgentDutyDriving).NotNull();
+            RuleFor(p => p.VehicleReleaseDate).NotNull();
+            RuleFor(p => p.VehicleGrounded).NotNull();
+            RuleFor(p => p.Location).NotNull();
+            RuleFor(p => p.Officer).NotNull();
+            RuleFor(p => p.Person).NotNull();
+            RuleFor(p => p.Vehicle).NotNull();
+            RuleFor(p => p.Organisation).NotNull();
+            RuleFor(p => p.MediaReference).NotNull();
+            RuleFor(p => p.Medium).NotNull();
+            RuleFor(p => p.Intercept).NotNull();
+            RuleFor(p => p.WAIntercept).NotNull();
+        }
+    }
+}
+
+file[30] = Event\Validators\EventDetailRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Event.Validators
+{
+    public partial record EventDetailRequestValidator : AbstractValidator<Common.Domain.Event>
+    {
+        public EventDetailRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+        }
+    }
+}
+
+file[31] = Organisation\Validators\OrganisationSearchRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
+{
+    public partial record OrganisationSearchRequestValidator : AbstractValidator<Common.Domain.Organisation>
+    {
+        public OrganisationSearchRequestValidator()
+        {
+            RuleFor(p => p.ACN).NotNull();
+        }
+    }
+}
+
+file[32] = Organisation\Validators\OrganisationByIdRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
+{
+    public partial record OrganisationByIdRequestValidator : AbstractValidator<Common.Domain.Organisation>
+    {
+        public OrganisationByIdRequestValidator()
+        {
+            RuleFor(p => p.Id).NotNull();
+            RuleFor(p => p.Juro).NotNull();
+            RuleFor(p => p.IncludeSilentAlert).NotNull();
+        }
+    }
+}
+
+file[33] = Organisation\Validators\OrganisationSaveRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
+{
+    public partial record OrganisationSaveRequestValidator : AbstractValidator<Common.Domain.Organisation>
+    {
+        public OrganisationSaveRequestValidator()
+        {
+            RuleFor(p => p.Name).NotNull();
+            RuleFor(p => p.ACN).NotNull();
+            RuleFor(p => p.TypeId).NotNull();
+        }
+    }
+}
+
+file[34] = Vehicle\Validators\VehicleCreateRequestValidator.generated.cs
+// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+
+// --------------------------------------------------------------------------------
+// WARNING: This file will be overwritten if re-generation is triggered.
+// --------------------------------------------------------------------------------
+
+#nullable enable
+
+namespace Nhvr.Rcms.BusinessLogic.Vehicle.Validators
+{
+    public partial record VehicleCreateRequestValidator : AbstractValidator<Common.Domain.Vehicle>
+    {
+        public VehicleCreateRequestValidator()
+        {
+            RuleFor(p => p.RegistrationNumber).MaximumLength(10);
+            RuleFor(p => p.IsNationalRegistration).NotNull();
+            RuleFor(p => p.VehicleIdentificationNumber).MaximumLength(20);
+            RuleFor(p => p.EngineNumber).MaximumLength(20);
+            RuleFor(p => p.ChassisNumber).MaximumLength(32);
+            RuleFor(p => p.SourceVehicleId).NotNull().MaximumLength(64);
+            RuleFor(p => p.SystemId).NotNull();
+        }
     }
 }
 

@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     </ItemGroup>
@@ -55,9 +55,6 @@ file[2] = appsettings.json
 file[3] = Startup.cs
 using Nhvr.Rcms.BusinessLogic.ActivityLog;
 using Nhvr.Rcms.BusinessLogic.ActivityLog.Officer;
-using Nhvr.Rcms.Common.EntityTypes;
-using Nhvr.Rcms.DataAccess.Rcms;
-using Nhvr.Rcms.DataAccess.Nevdis;
 
 namespace Nhvr.Rcms.Application
 {
@@ -267,6 +264,8 @@ file[9] = Controllers\ActivityLogController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 using Nhvr.Rcms.BusinessLogic.ActivityLog.Officer;
 using Nhvr.Rcms.BusinessLogic.ActivityLog.Add;
 using Nhvr.Rcms.BusinessLogic.ActivityLog.Update;
@@ -284,28 +283,28 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var activityLogOfficerRequest = new ActivityLogOfficerRequest();
             var result = await _mediator.Send(activityLogOfficerRequest);
-            return FromResult(result);
+            return FromResult<IEnumerable<ActivityLogResult>>(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ActivityLogAddRequest activityLogAddRequest)
         {
             var result = await _mediator.Send(activityLogAddRequest);
-            return FromResult(result);
+            return FromResult<ActivityLogAddResult>(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateAsync([FromBody] ActivityLogUpdateRequest activityLogUpdateRequest)
         {
             var result = await _mediator.Send(activityLogUpdateRequest);
-            return FromResult(result);
+            return FromResult<ActivityLogUpdateResult>(result);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync([FromBody] ActivityLogDeleteRequest activityLogDeleteRequest)
         {
             var result = await _mediator.Send(activityLogDeleteRequest);
-            return FromResult(result);
+            return NoContent();
         }
     }
 }
@@ -329,6 +328,8 @@ file[11] = Controllers\AlertController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 using Nhvr.Rcms.BusinessLogic.Alert.Save;
 using Nhvr.Rcms.BusinessLogic.Alert.Delete;
 
@@ -343,14 +344,14 @@ namespace Nhvr.Rcms.Application.Controllers
         public async Task<IActionResult> SaveAsync([FromBody] AlertSaveRequest alertSaveRequest)
         {
             var result = await _mediator.Send(alertSaveRequest);
-            return FromResult(result);
+            return FromResult<AlertSaveResult>(result);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync([FromBody] AlertDeleteRequest alertDeleteRequest)
         {
             var result = await _mediator.Send(alertDeleteRequest);
-            return FromResult(result);
+            return NoContent();
         }
     }
 }
@@ -374,6 +375,8 @@ file[13] = Controllers\BatchProcessController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 using Nhvr.Rcms.BusinessLogic.BatchProcess.SilentEmail;
 using Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptEmail;
 using Nhvr.Rcms.BusinessLogic.BatchProcess.InterceptFile;
@@ -393,7 +396,7 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var batchProcessSilentEmailRequest = new BatchProcessSilentEmailRequest();
             var result = await _mediator.Send(batchProcessSilentEmailRequest);
-            return FromResult(result);
+            return NoContent();
         }
 
         [HttpGet]
@@ -401,7 +404,7 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var batchProcessInterceptEmailRequest = new BatchProcessInterceptEmailRequest();
             var result = await _mediator.Send(batchProcessInterceptEmailRequest);
-            return FromResult(result);
+            return NoContent();
         }
 
         [HttpGet]
@@ -409,7 +412,7 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var batchProcessInterceptFileRequest = new BatchProcessInterceptFileRequest();
             var result = await _mediator.Send(batchProcessInterceptFileRequest);
-            return FromResult(result);
+            return NoContent();
         }
 
         [HttpGet]
@@ -417,7 +420,7 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var batchProcessFinesVicRoadRequest = new BatchProcessFinesVicRoadRequest();
             var result = await _mediator.Send(batchProcessFinesVicRoadRequest);
-            return FromResult(result);
+            return NoContent();
         }
 
         [HttpGet]
@@ -425,7 +428,7 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var batchProcessSqlMaintenanceRequest = new BatchProcessSqlMaintenanceRequest();
             var result = await _mediator.Send(batchProcessSqlMaintenanceRequest);
-            return FromResult(result);
+            return NoContent();
         }
 
         [HttpGet]
@@ -433,7 +436,7 @@ namespace Nhvr.Rcms.Application.Controllers
         {
             var batchProcessTasInfringmentEmailRequest = new BatchProcessTasInfringmentEmailRequest();
             var result = await _mediator.Send(batchProcessTasInfringmentEmailRequest);
-            return FromResult(result);
+            return NoContent();
         }
     }
 }
@@ -457,6 +460,12 @@ file[15] = Controllers\EventController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
+using Nhvr.Rcms.BusinessLogic.Event.Search;
+using Nhvr.Rcms.BusinessLogic.Event.Summary;
+using Nhvr.Rcms.BusinessLogic.Event.Save;
+using Nhvr.Rcms.BusinessLogic.Event.Index;
 
 namespace Nhvr.Rcms.Application.Controllers
 {
@@ -464,6 +473,34 @@ namespace Nhvr.Rcms.Application.Controllers
     partial class EventController
     {
         private readonly IMediator _mediator;
+
+        [HttpPost]
+        public async Task<IActionResult> SearchAsync([FromBody] EventSearchRequest eventSearchRequest)
+        {
+            var result = await _mediator.Send(eventSearchRequest);
+            return FromResult<EventSearchResult>(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SummaryAsync([FromBody] EventSummaryRequest eventSummaryRequest)
+        {
+            var result = await _mediator.Send(eventSummaryRequest);
+            return FromResult<EventSearchResult>(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAsync([FromBody] EventSaveRequest eventSaveRequest)
+        {
+            var result = await _mediator.Send(eventSaveRequest);
+            return FromResult<EventSaveResult>(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> IndexAsync([FromBody] EventDetailRequest eventDetailRequest)
+        {
+            var result = await _mediator.Send(eventDetailRequest);
+            return FromResult<EventDetailResult>(result);
+        }
     }
 }
 
@@ -485,6 +522,8 @@ file[17] = Controllers\NoticeNumberController.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 
 namespace Nhvr.Rcms.Application.Controllers
@@ -515,8 +554,11 @@ file[19] = Controllers\OrganisationController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 using Nhvr.Rcms.BusinessLogic.Organisation.Search;
 using Nhvr.Rcms.BusinessLogic.Organisation.Index;
+using Nhvr.Rcms.BusinessLogic.Organisation.Save;
 
 namespace Nhvr.Rcms.Application.Controllers
 {
@@ -529,14 +571,21 @@ namespace Nhvr.Rcms.Application.Controllers
         public async Task<IActionResult> SearchAsync([FromBody] OrganisationSearchRequest organisationSearchRequest)
         {
             var result = await _mediator.Send(organisationSearchRequest);
-            return FromResult(result);
+            return FromResult<IEnumerable<OrganisationSearchResult>>(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> IndexAsync([FromBody] OrganisationByIdRequest organisationByIdRequest)
         {
             var result = await _mediator.Send(organisationByIdRequest);
-            return FromResult(result);
+            return FromResult<OrganisationDetailResult>(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SaveAsync([FromBody] OrganisationSaveRequest organisationSaveRequest)
+        {
+            var result = await _mediator.Send(organisationSaveRequest);
+            return FromResult<OrganisationSaveResult>(result);
         }
     }
 }
@@ -559,6 +608,8 @@ file[21] = Controllers\PersonController.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 
 namespace Nhvr.Rcms.Application.Controllers
@@ -589,6 +640,8 @@ file[23] = Controllers\ShiftController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 
 namespace Nhvr.Rcms.Application.Controllers
 {
@@ -617,6 +670,8 @@ file[25] = Controllers\UserController.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 
 namespace Nhvr.Rcms.Application.Controllers
@@ -647,6 +702,8 @@ file[27] = Controllers\VehicleController.generated.cs
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
 
+#nullable enable
+
 using Nhvr.Rcms.BusinessLogic.Vehicle.Create;
 
 namespace Nhvr.Rcms.Application.Controllers
@@ -660,7 +717,7 @@ namespace Nhvr.Rcms.Application.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] VehicleCreateRequest vehicleCreateRequest)
         {
             var result = await _mediator.Send(vehicleCreateRequest);
-            return FromResult(result);
+            return NoContent();
         }
     }
 }

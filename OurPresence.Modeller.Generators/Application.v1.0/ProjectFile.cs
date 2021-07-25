@@ -40,7 +40,7 @@ namespace ApplicationProject
             sb.I(1).Al("</PropertyGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<PackageReference Include=\"FluentValidation.AspNetCore\" Version=\"{Settings.Packages.GetVersion("FluentValidation.AspNetCore", "10.2.3")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"FluentValidation.AspNetCore\" Version=\"{Settings.Packages.GetVersion("FluentValidation.AspNetCore", "10.3.0")}\" />");
             sb.I(2).Al($"<PackageReference Include=\"MediatR.Extensions.Microsoft.DependencyInjection\" Version=\"{Settings.Packages.GetVersion("MediatR.Extensions.Microsoft.DependencyInjection", "9.0.0")}\" />");
             sb.I(2).Al($"<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"{Settings.Packages.GetVersion("Swashbuckle.AspNetCore", "6.1.4")}\" />");
             sb.I(1).Al("</ItemGroup>");

@@ -9,7 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CSharpFunctionalExtensions" Version="2.17.0" />
+        <PackageReference Include="CSharpFunctionalExtensions" Version="2.18.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Mizrael.SuperSafeBank.Core\Mizrael.SuperSafeBank.Core.csproj" />
     </ItemGroup>
 
 </Project>
@@ -30,7 +34,7 @@ namespace Mizrael.SuperSafeBank.Common
             Id = id;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (!(obj is Entity<TId> other))
             {
@@ -59,7 +63,7 @@ namespace Mizrael.SuperSafeBank.Common
 
         public override int GetHashCode()
         {
-            return (ValueObject.GetUnproxiedType(this).ToString() + Id).GetHashCode();
+            return (ValueObject.GetUnproxiedType(this)?.ToString() + Id).GetHashCode();
         }
     }
 
@@ -121,14 +125,14 @@ namespace Mizrael.SuperSafeBank.Common
             return !(b == a);
         }
 
-        public static Maybe<TEnumeration> FromId(TId id)
+        public static Maybe<TEnumeration?> FromId(TId id)
         {
             return EnumerationsById.ContainsKey(id)
                 ? EnumerationsById[id]
                 : null;
         }
 
-        public static Maybe<TEnumeration> FromName(string name)
+        public static Maybe<TEnumeration?> FromName(string name)
         {
             return EnumerationsByName.ContainsKey(name)
                 ? EnumerationsByName[name]
@@ -140,14 +144,14 @@ namespace Mizrael.SuperSafeBank.Common
             yield return Id;
         }
 
-        private static TEnumeration[] GetEnumerations()
+        private static TEnumeration?[] GetEnumerations()
         {
             var enumerationType = typeof(TEnumeration);
 
             return enumerationType
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
                 .Where(info => info.FieldType == typeof(TEnumeration))
-                .Select(info => (TEnumeration)info.GetValue(null))
+                .Select(info => (TEnumeration?)info.GetValue(null))
                 .ToArray();
         }
     }
@@ -191,7 +195,7 @@ namespace Mizrael.SuperSafeBank.Common
             return !(b == a);
         }
 
-        public static Maybe<TEnumeration> FromId(string id)
+        public static Maybe<TEnumeration?> FromId(string id)
         {
             return Enumerations.ContainsKey(id)
                 ? Enumerations[id]
@@ -207,14 +211,14 @@ namespace Mizrael.SuperSafeBank.Common
             yield return Id;
         }
 
-        private static TEnumeration[] GetEnumerations()
+        private static TEnumeration?[] GetEnumerations()
         {
             var enumerationType = typeof(TEnumeration);
 
             return enumerationType
                 .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
                 .Where(info => info.FieldType == typeof(TEnumeration))
-                .Select(info => (TEnumeration)info.GetValue(null))
+                .Select(info => (TEnumeration?)info.GetValue(null))
                 .ToArray();
         }
     }
@@ -234,7 +238,7 @@ namespace Mizrael.SuperSafeBank.Common
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Value;
+            yield return Value is null ? new List<object>() : Value;
         }
 
         public override string? ToString()
@@ -242,9 +246,9 @@ namespace Mizrael.SuperSafeBank.Common
             return Value?.ToString();
         }
 
-        public static implicit operator T(SimpleValueObject<T> valueObject)
+        public static implicit operator T?(SimpleValueObject<T> valueObject)
         {
-            return valueObject == null ? default : valueObject.Value;
+            return valueObject is null ? default : valueObject.Value;
         }
     }
 }
@@ -334,7 +338,7 @@ namespace Mizrael.SuperSafeBank.Common
 
             if (thisType != otherType)
             {
-                return string.Compare(thisType.ToString(), otherType.ToString(), StringComparison.Ordinal);
+                return string.Compare(thisType?.ToString(), otherType?.ToString(), StringComparison.Ordinal);
             }
 
             var other = obj as ValueObject;
@@ -385,6 +389,8 @@ namespace Mizrael.SuperSafeBank.Common
         {
             const string EFCoreProxyPrefix = "Castle.Proxies.";
             const string NHibernateProxyPostfix = "Proxy";
+
+            if (obj is null) return null;
 
             var type = obj.GetType();
             var typeString = type.ToString();
@@ -457,7 +463,7 @@ namespace Mizrael.SuperSafeBank.Common
             public static Error ValueIsRequired() =>
                 new Error("value.is.required", "Value is required");
 
-            public static Error InvalidLength(string name = null)
+            public static Error InvalidLength(string? name = default)
             {
                 var label = name == null ? " " : " " + name + " ";
                 return new Error("invalid.string.length", $"Invalid{label}length");
@@ -509,12 +515,11 @@ global using System;
 global using System.Collections.Generic;
 global using System.ComponentModel.DataAnnotations;
 global using System.Linq;
-global using System.Text;
 global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using System.Threading.Tasks;
 global using Mizrael.SuperSafeBank.Common.Enums;
-global using CSharpFunctionalExtensions;
+global using Mizrael.SuperSafeBank.Core.Aggregates;
 
 file[8] = Domain\Email.cs
 namespace Mizrael.SuperSafeBank.Common.Domain

@@ -23,6 +23,12 @@ namespace OurPresence.Modeller.Fluent
             return field;
         }
 
+        public BehaviourResponseBuilder<TBuilder> IsFileStream()
+        {
+            Instance.IsFileStream = true;
+            return this;
+        }
+
         public BehaviourResponseBuilder<TBuilder> IsCollection()
         {
             Instance.IsCollection = true;

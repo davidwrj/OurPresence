@@ -14,7 +14,7 @@ namespace OurPresence.Modeller.Loaders
         {
             if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException($"Package file '{filePath}' does not exist.");
+                return new List<IPackage>();
             }
 
             string packages;
@@ -23,7 +23,7 @@ namespace OurPresence.Modeller.Loaders
                 packages = reader.ReadToEnd();
             }
             var data = packages.FromJson<IEnumerable<Domain.Package>>();
-            return data;
+            return data is null ? new List<IPackage>() : data;
         }
 
         public bool TryLoad(string filePath, out IEnumerable<IPackage> packages)

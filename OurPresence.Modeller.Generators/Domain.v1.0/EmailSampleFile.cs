@@ -39,7 +39,7 @@ namespace DomainProject
             sb.I(2).Al("{");
             sb.I(3).Al("if (string.IsNullOrWhiteSpace(input))");
             sb.I(3).Al("{");
-            sb.I(3).Al("    return Errors.General.ValueIsRequired();");
+            sb.I(4).Al("return Errors.General.ValueIsRequired();");
             sb.I(3).Al("}");
             sb.B();
             sb.I(3).Al("var email = input.Trim();");

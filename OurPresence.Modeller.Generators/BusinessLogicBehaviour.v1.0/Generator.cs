@@ -28,10 +28,12 @@ namespace BusinessLogicBehaviour
             if(_model is null)
             {
                 _module.Models.ForEach(m => m.Behaviours.ForEach(b => files.AddFile((IFile)new BehaviourRequestGenerator(Settings, _module, m, b).Create())));
+                _module.Models.ForEach(m => m.Behaviours.ForEach(b => files.AddFile((IFile)new ValidatorFile(Settings, _module, m, b).Create())));
             }
             else
             {
                 _model.Behaviours.ForEach(b => files.AddFile((IFile)new BehaviourRequestGenerator(Settings, _module, _model, b).Create()));
+                _model.Behaviours.ForEach(b => files.AddFile((IFile)new ValidatorFile(Settings, _module, _model, b).Create()));
             }
             return files;
         }

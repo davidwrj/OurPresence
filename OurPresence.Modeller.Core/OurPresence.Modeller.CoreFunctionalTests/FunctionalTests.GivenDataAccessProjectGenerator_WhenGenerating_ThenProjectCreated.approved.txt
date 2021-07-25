@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Nhvr.Rcms.Common\Nhvr.Rcms.Common.csproj" />
+        <ProjectReference Include="..\Mizrael.SuperSafeBank.Common\Mizrael.SuperSafeBank.Common.csproj" />
     </ItemGroup>
 
 </Project>
@@ -31,12 +31,98 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.Configuration;
 
 global using Mizrael.SuperSafeBank.Common.Enums;
 global using Mizrael.SuperSafeBank.Data.Models;
 
-file[2] = Configurations\AccountConfiguration.cs
+file[2] = Storage\Configuration.generated.cs
+namespace Mizrael.SuperSafeBank.Common.Enums
+{
+    internal static class Configuration
+    {
+        public static IServiceCollection AddProductServices(this IServiceCollection services)
+            => services
+                .AddCommandHandler<RegisterProduct, HandleRegisterProduct>(s =>
+                {
+                    var dbContext = s.GetRequiredService<WarehouseDBContext>();
+                    return new HandleRegisterProduct(dbContext.AddAndSave, dbContext.ProductWithSKUExists);
+                })
+                .AddQueryHandler<GetProducts, IReadOnlyList<ProductListItem>, HandleGetProducts>(s =>
+                {
+                    var dbContext = s.GetRequiredService<WarehouseDBContext>();
+                    return new HandleGetProducts(dbContext.Set<Product>().AsNoTracking());
+                })
+                .AddQueryHandler<GetProductDetails, ProductDetails?, HandleGetProductDetails>(s =>
+                {
+                    var dbContext = s.GetRequiredService<WarehouseDBContext>();
+                    return new HandleGetProductDetails(dbContext.Set<Product>().AsNoTracking());
+                });
+    
+    
+        public static IEndpointRouteBuilder UseProductsEndpoints(this IEndpointRouteBuilder endpoints) =>
+            endpoints
+                .UseRegisterProductEndpoint()
+                .UseGetProductsEndpoint()
+                .UseGetProductDetailsEndpoint();
+    
+        public static void SetupProductsModel(this ModelBuilder modelBuilder)
+            => modelBuilder.Entity<Product>()
+                .OwnsOne(p => p.Sku);
+    }
+}
+
+file[3] = Storage\SuperSafeBankDbContext.generated.cs
+namespace Mizrael.SuperSafeBank.Common.Enums
+{
+    public class SuperSafeBankDBContext: DbContext
+    {
+        public SuperSafeBankDBContext(DbContextOptions<SuperSafeBankDBContext> options)
+            : base(options)
+        {
+    
+        }
+    
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SetupProductsModel();
+        }
+    }
+    
+    public class SuperSafeBankDBContextFactory: IDesignTimeDbContextFactory<SuperSafeBankDBContext>
+    {
+        public SuperSafeBankDBContext CreateDbContext(params string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<SuperSafeBankDBContext>();
+    
+            if (optionsBuilder.IsConfigured)
+                return new SuperSafeBankDBContext(optionsBuilder.Options);
+    
+            //Called by parameterless ctor Usually Migrations
+            var environmentName = Environment.GetEnvironmentVariable("EnvironmentName") ?? "Development";
+    
+            var connectionString =
+                new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: false)
+                    .AddEnvironmentVariables()
+                    .Build()
+                    .GetConnectionString("SuperSafeBankDB");
+    
+            optionsBuilder.UseNpgsql(connectionString);
+    
+            return new SuperSafeBankDBContext(optionsBuilder.Options);
+        }
+    
+        public static SuperSafeBankDBContext Create()
+            => new SuperSafeBankDBContextFactory().CreateDbContext();
+    }
+}
+
+file[4] = Configurations\AccountConfiguration.cs
 namespace Mizrael.SuperSafeBank.Data.Configurations
 {
     public partial class AccountConfiguration : IEntityTypeConfiguration<Account>
@@ -54,7 +140,7 @@ namespace Mizrael.SuperSafeBank.Data.Configurations
     }
 }
 
-file[3] = Configurations\CustomerConfiguration.cs
+file[5] = Configurations\CustomerConfiguration.cs
 namespace Mizrael.SuperSafeBank.Data.Configurations
 {
     public partial class CustomerConfiguration : IEntityTypeConfiguration<Customer>
@@ -77,7 +163,7 @@ namespace Mizrael.SuperSafeBank.Data.Configurations
     }
 }
 
-file[4] = Models\Account.generated.cs
+file[6] = Models\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -99,7 +185,7 @@ namespace Mizrael.SuperSafeBank.Data.Models
     }
 }
 
-file[5] = Models\Customer.generated.cs
+file[7] = Models\Customer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------

@@ -1,9 +1,11 @@
-file[0] = Account\Withdraw\Account.generated.cs
+﻿file[0] = Account\Withdraw\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
 
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Withdraw
 {
@@ -20,6 +22,8 @@ file[1] = Account\Deposit\Account.generated.cs
 // --------------------------------------------------------------------------------
 // WARNING: This file will be overwritten if re-generation is triggered.
 // --------------------------------------------------------------------------------
+
+#nullable enable
 
 namespace Mizrael.SuperSafeBank.BusinessLogic.Account.Deposit
 {

@@ -2,8 +2,6 @@
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
 // NOTE: This file cannot be overwritten when regenerated
 
-#nullable enable
-
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
     public class Account

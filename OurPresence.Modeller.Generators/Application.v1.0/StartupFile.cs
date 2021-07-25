@@ -25,25 +25,15 @@ namespace ApplicationProject
         public IOutput Create()
         {
             var sb = new StringBuilder();
-            var m = _module.Models.Where(m => m.Behaviours.Any()).Select(m => new { Model = m, Behaviour = m.Behaviours.First() }).FirstOrDefault();
+            var m = _module.Models.Where(m => m.Behaviours.Any(b=>b.Request is not null)).Select(m => new { Model = m, Behaviour = m.Behaviours.First(b => b.Request is not null) }).FirstOrDefault();
             Name? request=null;
             if(m is not null)
             {
-                if(m.Behaviour.Request is null)
-                {
-                    request = new Name($"{m.Model.Name}{m.Behaviour.Name}Request");
-                }
-                else
-                {
-                    request = m.Behaviour.Request.Name;
-                }
+                request = m.Behaviour.Request.Name;
 
-                sb.Al($"using {_module.Namespace}.BusinessLogic.{m.Model.Name};");
                 sb.Al($"using {_module.Namespace}.BusinessLogic.{m.Model.Name}.{m.Behaviour.Name};");
+                sb.Al($"using {_module.Namespace}.BusinessLogic.{m.Model.Name}.Validators;");
             }
-            sb.Al($"using {_module.Namespace}.Common.EntityTypes;");
-            sb.Al($"using {_module.Namespace}.DataAccess.Rcms;");
-            sb.Al($"using {_module.Namespace}.DataAccess.Nevdis;");
             sb.B();
             sb.Al($"namespace {_module.Namespace}.Application");
             sb.Al("{");

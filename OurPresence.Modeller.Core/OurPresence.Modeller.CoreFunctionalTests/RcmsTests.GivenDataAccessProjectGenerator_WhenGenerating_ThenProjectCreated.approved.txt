@@ -31,12 +31,98 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.Configuration;
 
 global using Nhvr.Rcms.Common.Enums;
 global using Nhvr.Rcms.Data.Models;
 
-file[2] = Configurations\ActivityLogConfiguration.cs
+file[2] = Storage\Configuration.generated.cs
+namespace Nhvr.Rcms.Common.Enums
+{
+    internal static class Configuration
+    {
+        public static IServiceCollection AddProductServices(this IServiceCollection services)
+            => services
+                .AddCommandHandler<RegisterProduct, HandleRegisterProduct>(s =>
+                {
+                    var dbContext = s.GetRequiredService<WarehouseDBContext>();
+                    return new HandleRegisterProduct(dbContext.AddAndSave, dbContext.ProductWithSKUExists);
+                })
+                .AddQueryHandler<GetProducts, IReadOnlyList<ProductListItem>, HandleGetProducts>(s =>
+                {
+                    var dbContext = s.GetRequiredService<WarehouseDBContext>();
+                    return new HandleGetProducts(dbContext.Set<Product>().AsNoTracking());
+                })
+                .AddQueryHandler<GetProductDetails, ProductDetails?, HandleGetProductDetails>(s =>
+                {
+                    var dbContext = s.GetRequiredService<WarehouseDBContext>();
+                    return new HandleGetProductDetails(dbContext.Set<Product>().AsNoTracking());
+                });
+    
+    
+        public static IEndpointRouteBuilder UseProductsEndpoints(this IEndpointRouteBuilder endpoints) =>
+            endpoints
+                .UseRegisterProductEndpoint()
+                .UseGetProductsEndpoint()
+                .UseGetProductDetailsEndpoint();
+    
+        public static void SetupProductsModel(this ModelBuilder modelBuilder)
+            => modelBuilder.Entity<Product>()
+                .OwnsOne(p => p.Sku);
+    }
+}
+
+file[3] = Storage\RcmsDbContext.generated.cs
+namespace Nhvr.Rcms.Common.Enums
+{
+    public class RcmsDBContext: DbContext
+    {
+        public RcmsDBContext(DbContextOptions<RcmsDBContext> options)
+            : base(options)
+        {
+    
+        }
+    
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SetupProductsModel();
+        }
+    }
+    
+    public class RcmsDBContextFactory: IDesignTimeDbContextFactory<RcmsDBContext>
+    {
+        public RcmsDBContext CreateDbContext(params string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<RcmsDBContext>();
+    
+            if (optionsBuilder.IsConfigured)
+                return new RcmsDBContext(optionsBuilder.Options);
+    
+            //Called by parameterless ctor Usually Migrations
+            var environmentName = Environment.GetEnvironmentVariable("EnvironmentName") ?? "Development";
+    
+            var connectionString =
+                new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: false)
+                    .AddEnvironmentVariables()
+                    .Build()
+                    .GetConnectionString("RcmsDB");
+    
+            optionsBuilder.UseNpgsql(connectionString);
+    
+            return new RcmsDBContext(optionsBuilder.Options);
+        }
+    
+        public static RcmsDBContext Create()
+            => new RcmsDBContextFactory().CreateDbContext();
+    }
+}
+
+file[4] = Configurations\ActivityLogConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ActivityLogConfiguration : IEntityTypeConfiguration<ActivityLog>
@@ -76,7 +162,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[3] = Configurations\AddressBookConfiguration.cs
+file[5] = Configurations\AddressBookConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class AddressBookConfiguration : IEntityTypeConfiguration<AddressBook>
@@ -133,7 +219,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[4] = Configurations\AlertConfiguration.cs
+file[6] = Configurations\AlertConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class AlertConfiguration : IEntityTypeConfiguration<Alert>
@@ -179,7 +265,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[5] = Configurations\AzureSqlMaintenanceLogConfiguration.cs
+file[7] = Configurations\AzureSqlMaintenanceLogConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class AzureSqlMaintenanceLogConfiguration : IEntityTypeConfiguration<AzureSqlMaintenanceLog>
@@ -205,7 +291,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[6] = Configurations\BatchProcessConfiguration.cs
+file[8] = Configurations\BatchProcessConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class BatchProcessConfiguration : IEntityTypeConfiguration<BatchProcess>
@@ -225,7 +311,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[7] = Configurations\BatchProcessTaskConfiguration.cs
+file[9] = Configurations\BatchProcessTaskConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class BatchProcessTaskConfiguration : IEntityTypeConfiguration<BatchProcessTask>
@@ -253,7 +339,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[8] = Configurations\BatchProcessTaskItemConfiguration.cs
+file[10] = Configurations\BatchProcessTaskItemConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class BatchProcessTaskItemConfiguration : IEntityTypeConfiguration<BatchProcessTaskItem>
@@ -279,7 +365,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[9] = Configurations\ComplianceActionConfiguration.cs
+file[11] = Configurations\ComplianceActionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionConfiguration : IEntityTypeConfiguration<ComplianceAction>
@@ -314,7 +400,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[10] = Configurations\ComplianceActionImportConfiguration.cs
+file[12] = Configurations\ComplianceActionImportConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionImportConfiguration : IEntityTypeConfiguration<ComplianceActionImport>
@@ -375,7 +461,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[11] = Configurations\ComplianceActionLocationConfiguration.cs
+file[13] = Configurations\ComplianceActionLocationConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionLocationConfiguration : IEntityTypeConfiguration<ComplianceActionLocation>
@@ -415,7 +501,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[12] = Configurations\ComplianceActionOffenceConfiguration.cs
+file[14] = Configurations\ComplianceActionOffenceConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionOffenceConfiguration : IEntityTypeConfiguration<ComplianceActionOffence>
@@ -488,7 +574,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[13] = Configurations\ComplianceActionServiceConfiguration.cs
+file[15] = Configurations\ComplianceActionServiceConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionServiceConfiguration : IEntityTypeConfiguration<ComplianceActionService>
@@ -523,7 +609,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[14] = Configurations\ComplianceActionServiceAddressConfiguration.cs
+file[16] = Configurations\ComplianceActionServiceAddressConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionServiceAddressConfiguration : IEntityTypeConfiguration<ComplianceActionServiceAddress>
@@ -561,7 +647,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[15] = Configurations\ComplianceActionStatusConfiguration.cs
+file[17] = Configurations\ComplianceActionStatusConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionStatusConfiguration : IEntityTypeConfiguration<ComplianceActionStatus>
@@ -601,7 +687,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[16] = Configurations\ComplianceActionSubComponentConfiguration.cs
+file[18] = Configurations\ComplianceActionSubComponentConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceActionSubComponentConfiguration : IEntityTypeConfiguration<ComplianceActionSubComponent>
@@ -634,7 +720,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[17] = Configurations\ComplianceDefectConfiguration.cs
+file[19] = Configurations\ComplianceDefectConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceDefectConfiguration : IEntityTypeConfiguration<ComplianceDefect>
@@ -722,7 +808,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[18] = Configurations\ComplianceDefectSubComponentConfiguration.cs
+file[20] = Configurations\ComplianceDefectSubComponentConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceDefectSubComponentConfiguration : IEntityTypeConfiguration<ComplianceDefectSubComponent>
@@ -757,7 +843,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[19] = Configurations\ComplianceDirectionDimensionConfiguration.cs
+file[21] = Configurations\ComplianceDirectionDimensionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceDirectionDimensionConfiguration : IEntityTypeConfiguration<ComplianceDirectionDimension>
@@ -822,7 +908,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[20] = Configurations\ComplianceDirectionDimensionsHardcopyConfiguration.cs
+file[22] = Configurations\ComplianceDirectionDimensionsHardcopyConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceDirectionDimensionsHardcopyConfiguration : IEntityTypeConfiguration<ComplianceDirectionDimensionsHardcopy>
@@ -848,7 +934,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[21] = Configurations\ComplianceDirectionFatigueConfiguration.cs
+file[23] = Configurations\ComplianceDirectionFatigueConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceDirectionFatigueConfiguration : IEntityTypeConfiguration<ComplianceDirectionFatigue>
@@ -904,7 +990,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[22] = Configurations\ComplianceDirectionToRectifyConfiguration.cs
+file[24] = Configurations\ComplianceDirectionToRectifyConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceDirectionToRectifyConfiguration : IEntityTypeConfiguration<ComplianceDirectionToRectify>
@@ -934,7 +1020,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[23] = Configurations\ComplianceEducationConfiguration.cs
+file[25] = Configurations\ComplianceEducationConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceEducationConfiguration : IEntityTypeConfiguration<ComplianceEducation>
@@ -966,7 +1052,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[24] = Configurations\ComplianceFormalCautionConfiguration.cs
+file[26] = Configurations\ComplianceFormalCautionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceFormalCautionConfiguration : IEntityTypeConfiguration<ComplianceFormalCaution>
@@ -1004,7 +1090,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[25] = Configurations\ComplianceFormalWarningConfiguration.cs
+file[27] = Configurations\ComplianceFormalWarningConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceFormalWarningConfiguration : IEntityTypeConfiguration<ComplianceFormalWarning>
@@ -1036,7 +1122,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[26] = Configurations\ComplianceInfringementConfiguration.cs
+file[28] = Configurations\ComplianceInfringementConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceInfringementConfiguration : IEntityTypeConfiguration<ComplianceInfringement>
@@ -1080,7 +1166,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[27] = Configurations\ComplianceOfficialWarningConfiguration.cs
+file[29] = Configurations\ComplianceOfficialWarningConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceOfficialWarningConfiguration : IEntityTypeConfiguration<ComplianceOfficialWarning>
@@ -1112,7 +1198,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[28] = Configurations\ComplianceReportForProsecutionConfiguration.cs
+file[30] = Configurations\ComplianceReportForProsecutionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceReportForProsecutionConfiguration : IEntityTypeConfiguration<ComplianceReportForProsecution>
@@ -1133,7 +1219,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[29] = Configurations\ComplianceWAFormalCautionConfiguration.cs
+file[31] = Configurations\ComplianceWAFormalCautionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ComplianceWAFormalCautionConfiguration : IEntityTypeConfiguration<ComplianceWAFormalCaution>
@@ -1160,7 +1246,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[30] = Configurations\EventConfiguration.cs
+file[32] = Configurations\EventConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventConfiguration : IEntityTypeConfiguration<Event>
@@ -1202,7 +1288,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[31] = Configurations\EventAddressConfiguration.cs
+file[33] = Configurations\EventAddressConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventAddressConfiguration : IEntityTypeConfiguration<EventAddress>
@@ -1237,7 +1323,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[32] = Configurations\EventInspectionConfiguration.cs
+file[34] = Configurations\EventInspectionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventInspectionConfiguration : IEntityTypeConfiguration<EventInspection>
@@ -1373,7 +1459,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[33] = Configurations\EventInspectionAxleGroupConfiguration.cs
+file[35] = Configurations\EventInspectionAxleGroupConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventInspectionAxleGroupConfiguration : IEntityTypeConfiguration<EventInspectionAxleGroup>
@@ -1405,7 +1491,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[34] = Configurations\EventInspectionAxleWeightConfiguration.cs
+file[36] = Configurations\EventInspectionAxleWeightConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventInspectionAxleWeightConfiguration : IEntityTypeConfiguration<EventInspectionAxleWeight>
@@ -1435,7 +1521,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[35] = Configurations\EventInspectionAxleWeightPwdConfiguration.cs
+file[37] = Configurations\EventInspectionAxleWeightPwdConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventInspectionAxleWeightPwdConfiguration : IEntityTypeConfiguration<EventInspectionAxleWeightPwd>
@@ -1457,7 +1543,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[36] = Configurations\EventInspectionMovementConfiguration.cs
+file[38] = Configurations\EventInspectionMovementConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventInspectionMovementConfiguration : IEntityTypeConfiguration<EventInspectionMovement>
@@ -1483,7 +1569,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[37] = Configurations\EventMediaExternalConfiguration.cs
+file[39] = Configurations\EventMediaExternalConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventMediaExternalConfiguration : IEntityTypeConfiguration<EventMediaExternal>
@@ -1507,7 +1593,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[38] = Configurations\EventMediumConfiguration.cs
+file[40] = Configurations\EventMediumConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventMediumConfiguration : IEntityTypeConfiguration<EventMedium>
@@ -1540,7 +1626,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[39] = Configurations\EventNoteConfiguration.cs
+file[41] = Configurations\EventNoteConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventNoteConfiguration : IEntityTypeConfiguration<EventNote>
@@ -1564,7 +1650,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[40] = Configurations\EventOfficerConfiguration.cs
+file[42] = Configurations\EventOfficerConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventOfficerConfiguration : IEntityTypeConfiguration<EventOfficer>
@@ -1598,7 +1684,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[41] = Configurations\EventOrganisationConfiguration.cs
+file[43] = Configurations\EventOrganisationConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventOrganisationConfiguration : IEntityTypeConfiguration<EventOrganisation>
@@ -1620,7 +1706,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[42] = Configurations\EventPersonConfiguration.cs
+file[44] = Configurations\EventPersonConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventPersonConfiguration : IEntityTypeConfiguration<EventPerson>
@@ -1642,7 +1728,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[43] = Configurations\EventPersonDiaryConfiguration.cs
+file[45] = Configurations\EventPersonDiaryConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventPersonDiaryConfiguration : IEntityTypeConfiguration<EventPersonDiary>
@@ -1692,7 +1778,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[44] = Configurations\EventPersonFatigueConfiguration.cs
+file[46] = Configurations\EventPersonFatigueConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventPersonFatigueConfiguration : IEntityTypeConfiguration<EventPersonFatigue>
@@ -1732,7 +1818,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[45] = Configurations\EventVehicleConfiguration.cs
+file[47] = Configurations\EventVehicleConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventVehicleConfiguration : IEntityTypeConfiguration<EventVehicle>
@@ -1754,7 +1840,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[46] = Configurations\EventVehicleConcessionConfiguration.cs
+file[48] = Configurations\EventVehicleConcessionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventVehicleConcessionConfiguration : IEntityTypeConfiguration<EventVehicleConcession>
@@ -1780,7 +1866,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[47] = Configurations\EventVehicleConditionConfiguration.cs
+file[49] = Configurations\EventVehicleConditionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventVehicleConditionConfiguration : IEntityTypeConfiguration<EventVehicleCondition>
@@ -1806,7 +1892,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[48] = Configurations\EventVehicleSchemeConfiguration.cs
+file[50] = Configurations\EventVehicleSchemeConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class EventVehicleSchemeConfiguration : IEntityTypeConfiguration<EventVehicleScheme>
@@ -1833,7 +1919,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[49] = Configurations\InterceptConfiguration.cs
+file[51] = Configurations\InterceptConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class InterceptConfiguration : IEntityTypeConfiguration<Intercept>
@@ -1852,7 +1938,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[50] = Configurations\InterceptImportConfiguration.cs
+file[52] = Configurations\InterceptImportConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class InterceptImportConfiguration : IEntityTypeConfiguration<InterceptImport>
@@ -1907,7 +1993,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[51] = Configurations\InterceptJourneyConfiguration.cs
+file[53] = Configurations\InterceptJourneyConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class InterceptJourneyConfiguration : IEntityTypeConfiguration<InterceptJourney>
@@ -1965,7 +2051,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[52] = Configurations\InterceptOrganisationConfiguration.cs
+file[54] = Configurations\InterceptOrganisationConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class InterceptOrganisationConfiguration : IEntityTypeConfiguration<InterceptOrganisation>
@@ -1985,7 +2071,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[53] = Configurations\InterceptPersonConfiguration.cs
+file[55] = Configurations\InterceptPersonConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class InterceptPersonConfiguration : IEntityTypeConfiguration<InterceptPerson>
@@ -2005,7 +2091,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[54] = Configurations\InterceptVehicleConfiguration.cs
+file[56] = Configurations\InterceptVehicleConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class InterceptVehicleConfiguration : IEntityTypeConfiguration<InterceptVehicle>
@@ -2025,7 +2111,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[55] = Configurations\LogConfiguration.cs
+file[57] = Configurations\LogConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class LogConfiguration : IEntityTypeConfiguration<Log>
@@ -2079,7 +2165,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[56] = Configurations\MapDetailConfiguration.cs
+file[58] = Configurations\MapDetailConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class MapDetailConfiguration : IEntityTypeConfiguration<MapDetail>
@@ -2099,7 +2185,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[57] = Configurations\NoticeNumberConfiguration.cs
+file[59] = Configurations\NoticeNumberConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class NoticeNumberConfiguration : IEntityTypeConfiguration<NoticeNumber>
@@ -2131,7 +2217,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[58] = Configurations\OrganisationConfiguration.cs
+file[60] = Configurations\OrganisationConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class OrganisationConfiguration : IEntityTypeConfiguration<Organisation>
@@ -2144,22 +2230,28 @@ namespace Nhvr.Rcms.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(255);
             builder.Property(p => p.ACN)
+                .IsRequired()
                 .HasMaxLength(255);
             builder.Property(p => p.TypeId)
                 .IsRequired();
+            builder.Property(p => p.NevdisId)
+                .HasMaxLength(255);
+            builder.Property(p => p.VicCustomerNo)
+                .HasMaxLength(255);
+            builder.Property(p => p.ParentId);
             builder.Property(p => p.Active)
                 .IsRequired()
                 .HasDefaultValueSql("true");
             builder.Property(p => p.SystemId)
                 .IsRequired()
                 .HasDefaultValueSql("30");
-            OnConfigurePartial(builder);
+            builder.HasIndex(i => i.ACN)                .IsUnique()                .IsClustered();             OnConfigurePartial(builder);
         }
         partial void OnConfigurePartial(EntityTypeBuilder<Organisation> builder);
     }
 }
 
-file[59] = Configurations\OrganisationAddressConfiguration.cs
+file[61] = Configurations\OrganisationAddressConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class OrganisationAddressConfiguration : IEntityTypeConfiguration<OrganisationAddress>
@@ -2206,7 +2298,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[60] = Configurations\OrganisationContactConfiguration.cs
+file[62] = Configurations\OrganisationContactConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class OrganisationContactConfiguration : IEntityTypeConfiguration<OrganisationContact>
@@ -2235,7 +2327,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[61] = Configurations\OrganisationDetailConfiguration.cs
+file[63] = Configurations\OrganisationDetailConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class OrganisationDetailConfiguration : IEntityTypeConfiguration<OrganisationDetail>
@@ -2279,7 +2371,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[62] = Configurations\PersonConfiguration.cs
+file[64] = Configurations\PersonConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class PersonConfiguration : IEntityTypeConfiguration<Person>
@@ -2314,7 +2406,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[63] = Configurations\PersonAddressConfiguration.cs
+file[65] = Configurations\PersonAddressConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class PersonAddressConfiguration : IEntityTypeConfiguration<PersonAddress>
@@ -2361,7 +2453,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[64] = Configurations\PersonContactConfiguration.cs
+file[66] = Configurations\PersonContactConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class PersonContactConfiguration : IEntityTypeConfiguration<PersonContact>
@@ -2390,7 +2482,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[65] = Configurations\PersonDetailConfiguration.cs
+file[67] = Configurations\PersonDetailConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class PersonDetailConfiguration : IEntityTypeConfiguration<PersonDetail>
@@ -2459,7 +2551,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[66] = Configurations\PostcodeConfiguration.cs
+file[68] = Configurations\PostcodeConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class PostcodeConfiguration : IEntityTypeConfiguration<Postcode>
@@ -2484,7 +2576,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[67] = Configurations\ReferenceDatumConfiguration.cs
+file[69] = Configurations\ReferenceDatumConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ReferenceDatumConfiguration : IEntityTypeConfiguration<ReferenceDatum>
@@ -2517,7 +2609,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[68] = Configurations\ReferenceDataAttributeConfiguration.cs
+file[70] = Configurations\ReferenceDataAttributeConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ReferenceDataAttributeConfiguration : IEntityTypeConfiguration<ReferenceDataAttribute>
@@ -2541,7 +2633,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[69] = Configurations\ReferenceDataCategoryConfiguration.cs
+file[71] = Configurations\ReferenceDataCategoryConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ReferenceDataCategoryConfiguration : IEntityTypeConfiguration<ReferenceDataCategory>
@@ -2572,7 +2664,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[70] = Configurations\ReferenceDataMappingConfiguration.cs
+file[72] = Configurations\ReferenceDataMappingConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ReferenceDataMappingConfiguration : IEntityTypeConfiguration<ReferenceDataMapping>
@@ -2595,7 +2687,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[71] = Configurations\ShiftConfiguration.cs
+file[73] = Configurations\ShiftConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ShiftConfiguration : IEntityTypeConfiguration<Shift>
@@ -2619,7 +2711,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[72] = Configurations\ShiftOfficerConfiguration.cs
+file[74] = Configurations\ShiftOfficerConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class ShiftOfficerConfiguration : IEntityTypeConfiguration<ShiftOfficer>
@@ -2639,7 +2731,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[73] = Configurations\UserConfiguration.cs
+file[75] = Configurations\UserConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class UserConfiguration : IEntityTypeConfiguration<User>
@@ -2694,7 +2786,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[74] = Configurations\VehicleConfiguration.cs
+file[76] = Configurations\VehicleConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class VehicleConfiguration : IEntityTypeConfiguration<Vehicle>
@@ -2728,7 +2820,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[75] = Configurations\VehicleDetailConfiguration.cs
+file[77] = Configurations\VehicleDetailConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class VehicleDetailConfiguration : IEntityTypeConfiguration<VehicleDetail>
@@ -2760,7 +2852,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[76] = Configurations\VehicleFootprintConfiguration.cs
+file[78] = Configurations\VehicleFootprintConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class VehicleFootprintConfiguration : IEntityTypeConfiguration<VehicleFootprint>
@@ -2798,7 +2890,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[77] = Configurations\VehicleFootprintImportConfiguration.cs
+file[79] = Configurations\VehicleFootprintImportConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class VehicleFootprintImportConfiguration : IEntityTypeConfiguration<VehicleFootprintImport>
@@ -2843,7 +2935,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[78] = Configurations\VehicleOrganisationConfiguration.cs
+file[80] = Configurations\VehicleOrganisationConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class VehicleOrganisationConfiguration : IEntityTypeConfiguration<VehicleOrganisation>
@@ -2863,7 +2955,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[79] = Configurations\VehiclePersonConfiguration.cs
+file[81] = Configurations\VehiclePersonConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class VehiclePersonConfiguration : IEntityTypeConfiguration<VehiclePerson>
@@ -2883,7 +2975,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[80] = Configurations\WAEventInspectionConfiguration.cs
+file[82] = Configurations\WAEventInspectionConfiguration.cs
 namespace Nhvr.Rcms.Data.Configurations
 {
     public partial class WAEventInspectionConfiguration : IEntityTypeConfiguration<WAEventInspection>
@@ -3057,7 +3149,7 @@ namespace Nhvr.Rcms.Data.Configurations
     }
 }
 
-file[81] = Models\ActivityLog.generated.cs
+file[83] = Models\ActivityLog.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3101,7 +3193,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[82] = Models\AddressBook.generated.cs
+file[84] = Models\AddressBook.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3155,7 +3247,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[83] = Models\Alert.generated.cs
+file[85] = Models\Alert.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3203,7 +3295,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[84] = Models\AzureSqlMaintenanceLog.generated.cs
+file[86] = Models\AzureSqlMaintenanceLog.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3233,7 +3325,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[85] = Models\BatchProcess.generated.cs
+file[87] = Models\BatchProcess.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3259,7 +3351,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[86] = Models\BatchProcessTask.generated.cs
+file[88] = Models\BatchProcessTask.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3293,7 +3385,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[87] = Models\BatchProcessTaskItem.generated.cs
+file[89] = Models\BatchProcessTaskItem.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3323,7 +3415,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[88] = Models\ComplianceAction.generated.cs
+file[90] = Models\ComplianceAction.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3367,7 +3459,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[89] = Models\ComplianceActionImport.generated.cs
+file[91] = Models\ComplianceActionImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3423,7 +3515,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[90] = Models\ComplianceActionLocation.generated.cs
+file[92] = Models\ComplianceActionLocation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3463,7 +3555,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[91] = Models\ComplianceActionOffence.generated.cs
+file[93] = Models\ComplianceActionOffence.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3529,7 +3621,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[92] = Models\ComplianceActionService.generated.cs
+file[94] = Models\ComplianceActionService.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3567,7 +3659,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[93] = Models\ComplianceActionServiceAddress.generated.cs
+file[95] = Models\ComplianceActionServiceAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3605,7 +3697,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[94] = Models\ComplianceActionStatus.generated.cs
+file[96] = Models\ComplianceActionStatus.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3645,7 +3737,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[95] = Models\ComplianceActionSubComponent.generated.cs
+file[97] = Models\ComplianceActionSubComponent.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3677,7 +3769,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[96] = Models\ComplianceDefect.generated.cs
+file[98] = Models\ComplianceDefect.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3759,7 +3851,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[97] = Models\ComplianceDefectSubComponent.generated.cs
+file[99] = Models\ComplianceDefectSubComponent.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3793,7 +3885,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[98] = Models\ComplianceDirectionDimension.generated.cs
+file[100] = Models\ComplianceDirectionDimension.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3859,7 +3951,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[99] = Models\ComplianceDirectionDimensionsHardcopy.generated.cs
+file[101] = Models\ComplianceDirectionDimensionsHardcopy.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3889,7 +3981,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[100] = Models\ComplianceDirectionFatigue.generated.cs
+file[102] = Models\ComplianceDirectionFatigue.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3949,7 +4041,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[101] = Models\ComplianceDirectionToRectify.generated.cs
+file[103] = Models\ComplianceDirectionToRectify.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -3979,7 +4071,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[102] = Models\ComplianceEducation.generated.cs
+file[104] = Models\ComplianceEducation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4013,7 +4105,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[103] = Models\ComplianceFormalCaution.generated.cs
+file[105] = Models\ComplianceFormalCaution.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4051,7 +4143,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[104] = Models\ComplianceFormalWarning.generated.cs
+file[106] = Models\ComplianceFormalWarning.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4085,7 +4177,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[105] = Models\ComplianceInfringement.generated.cs
+file[107] = Models\ComplianceInfringement.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4129,7 +4221,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[106] = Models\ComplianceOfficialWarning.generated.cs
+file[108] = Models\ComplianceOfficialWarning.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4163,7 +4255,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[107] = Models\ComplianceReportForProsecution.generated.cs
+file[109] = Models\ComplianceReportForProsecution.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4187,7 +4279,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[108] = Models\ComplianceWAFormalCaution.generated.cs
+file[110] = Models\ComplianceWAFormalCaution.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4217,7 +4309,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[109] = Models\Event.generated.cs
+file[111] = Models\Event.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4279,7 +4371,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[110] = Models\EventAddress.generated.cs
+file[112] = Models\EventAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4319,7 +4411,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[111] = Models\EventInspection.generated.cs
+file[113] = Models\EventInspection.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4439,7 +4531,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[112] = Models\EventInspectionAxleGroup.generated.cs
+file[114] = Models\EventInspectionAxleGroup.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4475,7 +4567,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[113] = Models\EventInspectionAxleWeight.generated.cs
+file[115] = Models\EventInspectionAxleWeight.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4509,7 +4601,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[114] = Models\EventInspectionAxleWeightPwd.generated.cs
+file[116] = Models\EventInspectionAxleWeightPwd.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4535,7 +4627,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[115] = Models\EventInspectionMovement.generated.cs
+file[117] = Models\EventInspectionMovement.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4565,7 +4657,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[116] = Models\EventMediaExternal.generated.cs
+file[118] = Models\EventMediaExternal.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4591,7 +4683,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[117] = Models\EventMedium.generated.cs
+file[119] = Models\EventMedium.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4625,7 +4717,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[118] = Models\EventNote.generated.cs
+file[120] = Models\EventNote.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4653,7 +4745,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[119] = Models\EventOfficer.generated.cs
+file[121] = Models\EventOfficer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4687,7 +4779,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[120] = Models\EventOrganisation.generated.cs
+file[122] = Models\EventOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4713,7 +4805,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[121] = Models\EventPerson.generated.cs
+file[123] = Models\EventPerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4739,7 +4831,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[122] = Models\EventPersonDiary.generated.cs
+file[124] = Models\EventPersonDiary.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4789,7 +4881,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[123] = Models\EventPersonFatigue.generated.cs
+file[125] = Models\EventPersonFatigue.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4827,7 +4919,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[124] = Models\EventVehicle.generated.cs
+file[126] = Models\EventVehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4853,7 +4945,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[125] = Models\EventVehicleConcession.generated.cs
+file[127] = Models\EventVehicleConcession.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4881,7 +4973,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[126] = Models\EventVehicleCondition.generated.cs
+file[128] = Models\EventVehicleCondition.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4909,7 +5001,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[127] = Models\EventVehicleScheme.generated.cs
+file[129] = Models\EventVehicleScheme.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4939,7 +5031,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[128] = Models\Intercept.generated.cs
+file[130] = Models\Intercept.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -4961,7 +5053,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[129] = Models\InterceptImport.generated.cs
+file[131] = Models\InterceptImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5013,7 +5105,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[130] = Models\InterceptJourney.generated.cs
+file[132] = Models\InterceptJourney.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5063,7 +5155,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[131] = Models\InterceptOrganisation.generated.cs
+file[133] = Models\InterceptOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5087,7 +5179,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[132] = Models\InterceptPerson.generated.cs
+file[134] = Models\InterceptPerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5111,7 +5203,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[133] = Models\InterceptVehicle.generated.cs
+file[135] = Models\InterceptVehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5135,7 +5227,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[134] = Models\Log.generated.cs
+file[136] = Models\Log.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5185,7 +5277,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[135] = Models\MapDetail.generated.cs
+file[137] = Models\MapDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5213,7 +5305,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[136] = Models\NoticeNumber.generated.cs
+file[138] = Models\NoticeNumber.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5247,7 +5339,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[137] = Models\Organisation.generated.cs
+file[139] = Models\Organisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5266,9 +5358,15 @@ namespace Nhvr.Rcms.Data.Models
 
         public string Name { get; private set; }
 
-        public string? ACN { get; private set; }
+        public string ACN { get; private set; }
 
         public OrganisationTypes TypeId { get; private set; }
+
+        public string? NevdisId { get; private set; }
+
+        public string? VicCustomerNo { get; private set; }
+
+        public int? ParentId { get; private set; }
 
         public bool Active { get; private set; }
 
@@ -5277,7 +5375,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[138] = Models\OrganisationAddress.generated.cs
+file[140] = Models\OrganisationAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5323,7 +5421,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[139] = Models\OrganisationContact.generated.cs
+file[141] = Models\OrganisationContact.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5355,7 +5453,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[140] = Models\OrganisationDetail.generated.cs
+file[142] = Models\OrganisationDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5399,7 +5497,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[141] = Models\Person.generated.cs
+file[143] = Models\Person.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5435,7 +5533,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[142] = Models\PersonAddress.generated.cs
+file[144] = Models\PersonAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5481,7 +5579,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[143] = Models\PersonContact.generated.cs
+file[145] = Models\PersonContact.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5513,7 +5611,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[144] = Models\PersonDetail.generated.cs
+file[146] = Models\PersonDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5577,7 +5675,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[145] = Models\Postcode.generated.cs
+file[147] = Models\Postcode.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5603,7 +5701,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[146] = Models\ReferenceDatum.generated.cs
+file[148] = Models\ReferenceDatum.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5639,7 +5737,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[147] = Models\ReferenceDataAttribute.generated.cs
+file[149] = Models\ReferenceDataAttribute.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5665,7 +5763,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[148] = Models\ReferenceDataCategory.generated.cs
+file[150] = Models\ReferenceDataCategory.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5697,7 +5795,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[149] = Models\ReferenceDataMapping.generated.cs
+file[151] = Models\ReferenceDataMapping.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5723,7 +5821,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[150] = Models\Shift.generated.cs
+file[152] = Models\Shift.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5751,7 +5849,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[151] = Models\ShiftOfficer.generated.cs
+file[153] = Models\ShiftOfficer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5775,7 +5873,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[152] = Models\User.generated.cs
+file[154] = Models\User.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5829,7 +5927,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[153] = Models\Vehicle.generated.cs
+file[155] = Models\Vehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5867,7 +5965,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[154] = Models\VehicleDetail.generated.cs
+file[156] = Models\VehicleDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5903,7 +6001,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[155] = Models\VehicleFootprint.generated.cs
+file[157] = Models\VehicleFootprint.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5943,7 +6041,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[156] = Models\VehicleFootprintImport.generated.cs
+file[158] = Models\VehicleFootprintImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -5987,7 +6085,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[157] = Models\VehicleOrganisation.generated.cs
+file[159] = Models\VehicleOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6011,7 +6109,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[158] = Models\VehiclePerson.generated.cs
+file[160] = Models\VehiclePerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
@@ -6035,7 +6133,7 @@ namespace Nhvr.Rcms.Data.Models
     }
 }
 
-file[159] = Models\WAEventInspection.generated.cs
+file[161] = Models\WAEventInspection.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
