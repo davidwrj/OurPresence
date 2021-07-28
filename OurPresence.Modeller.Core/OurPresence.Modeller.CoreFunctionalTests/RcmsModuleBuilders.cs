@@ -1021,21 +1021,21 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                         .AddField("MethodOfIntercept").DataType(DataTypes.String).Build
                         .AddField("DirectionOfTravel").DataType(DataTypes.String).Build
                         .AddField("OperationName").DataType(DataTypes.String).Build
-                        .AddField("Notes").DataType(DataTypes.Object).DataTypeTypeName("Note").Build
+                        //.AddField("Notes").DataType(DataTypes.Object).DataTypeTypeName("Note").Build
                         .AddField("Lights").DataType(DataTypes.Bool).Build
                         .AddField("Sirens").DataType(DataTypes.Bool).Build
                         .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
                         .AddField("VehicleReleaseDate").DataType(DataTypes.DateTimeOffset).Build
                         .AddField("VehicleGrounded").DataType(DataTypes.Bool).Build
-                        .AddField("Locations").DataType(DataTypes.Object).DataTypeTypeName("List<Location>").Build
-                        .AddField("Officers").DataType(DataTypes.Object).DataTypeTypeName("List<Officer>").Build
-                        .AddField("Persons").DataType(DataTypes.Object).DataTypeTypeName("List<Person>").Build
-                        .AddField("Vehicles").DataType(DataTypes.Object).DataTypeTypeName("List<Vehicle>").Build
-                        .AddField("Organisations").DataType(DataTypes.Object).DataTypeTypeName("List<Organisation>").Build
-                        .AddField("MediaReferences").DataType(DataTypes.Object).DataTypeTypeName("List<MediaReference>").Build
-                        .AddField("Media").DataType(DataTypes.Object).DataTypeTypeName("List<MediaDetail>").Build
-                        .AddField("Intercept").DataType(DataTypes.Object).DataTypeTypeName("InterceptDetail").Build
-                        .AddField("WAIntercept").DataType(DataTypes.Object).DataTypeTypeName("WAInterceptDetail").Build
+                        //.AddField("Locations").DataType(DataTypes.Object).DataTypeTypeName("List<Location>").Build
+                        //.AddField("Officers").DataType(DataTypes.Object).DataTypeTypeName("List<Officer>").Build
+                        //.AddField("Persons").DataType(DataTypes.Object).DataTypeTypeName("List<Person>").Build
+                        //.AddField("Vehicles").DataType(DataTypes.Object).DataTypeTypeName("List<Vehicle>").Build
+                        //.AddField("Organisations").DataType(DataTypes.Object).DataTypeTypeName("List<Organisation>").Build
+                        //.AddField("MediaReferences").DataType(DataTypes.Object).DataTypeTypeName("List<MediaReference>").Build
+                        //.AddField("Media").DataType(DataTypes.Object).DataTypeTypeName("List<MediaDetail>").Build
+                        //.AddField("Intercept").DataType(DataTypes.Object).DataTypeTypeName("InterceptDetail").Build
+                        //.AddField("WAIntercept").DataType(DataTypes.Object).DataTypeTypeName("WAInterceptDetail").Build
                     .Build
                     .AddResponse("EventSaveResult")
 
@@ -1061,21 +1061,21 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                         .AddField("MethodOfIntercept").DataType(DataTypes.String).Build
                         .AddField("DirectionOfTravel").DataType(DataTypes.String).Build
                         .AddField("OperationName").DataType(DataTypes.String).Build
-                        .AddField("Notes").DataType(DataTypes.Object).DataTypeTypeName("List<Note>").Build
+                        //.AddField("Notes").DataType(DataTypes.Object).DataTypeTypeName("List<Note>").Build
                         .AddField("Lights").DataType(DataTypes.Bool).Build
                         .AddField("Sirens").DataType(DataTypes.Bool).Build
                         .AddField("UrgentDutyDriving").DataType(DataTypes.Bool).Build
                         .AddField("VehicleReleaseDate").DataType(DataTypes.DateTimeOffset).Build
                         .AddField("VehicleGrounded").DataType(DataTypes.Bool).Build
-                        .AddField("Locations").DataType(DataTypes.Object).DataTypeTypeName("List<Location>").Build
-                        .AddField("Officers").DataType(DataTypes.Object).DataTypeTypeName("List<Officer>").Build
-                        .AddField("Persons").DataType(DataTypes.Object).DataTypeTypeName("List<Person>").Build
-                        .AddField("Vehicles").DataType(DataTypes.Object).DataTypeTypeName("List<Vehicle>").Build
-                        .AddField("Organisations").DataType(DataTypes.Object).DataTypeTypeName("List<Organisation>").Build
-                        .AddField("MediaReferences").DataType(DataTypes.Object).DataTypeTypeName("List<MediaReference>").Build
-                        .AddField("Media").DataType(DataTypes.Object).DataTypeTypeName("List<MediaDetail>").Build
-                        .AddField("Intercept").DataType(DataTypes.Object).DataTypeTypeName("InterceptDetail").Build
-                        .AddField("WAIntercept").DataType(DataTypes.Object).DataTypeTypeName("WAInterceptDetail").Build
+                        //.AddField("Locations").DataType(DataTypes.Object).DataTypeTypeName("List<Location>").Build
+                        //.AddField("Officers").DataType(DataTypes.Object).DataTypeTypeName("List<Officer>").Build
+                        //.AddField("Persons").DataType(DataTypes.Object).DataTypeTypeName("List<Person>").Build
+                        //.AddField("Vehicles").DataType(DataTypes.Object).DataTypeTypeName("List<Vehicle>").Build
+                        //.AddField("Organisations").DataType(DataTypes.Object).DataTypeTypeName("List<Organisation>").Build
+                        //.AddField("MediaReferences").DataType(DataTypes.Object).DataTypeTypeName("List<MediaReference>").Build
+                        //.AddField("Media").DataType(DataTypes.Object).DataTypeTypeName("List<MediaDetail>").Build
+                        //.AddField("Intercept").DataType(DataTypes.Object).DataTypeTypeName("InterceptDetail").Build
+                        //.AddField("WAIntercept").DataType(DataTypes.Object).DataTypeTypeName("WAInterceptDetail").Build
                     .Build
                 .Build
             .Build;
@@ -1626,7 +1626,7 @@ namespace OurPresence.Modeller.CoreFunctionalTests
                         .AddField("Source").Build
                         .AddField("Type").Build
                         .AddField("Status").Build
-                        .AddField("Addresses").DataType(DataTypes.Object).DataTypeTypeName("IEnumerable<Address>").Build
+                        //.AddField("Addresses").DataType(DataTypes.Object).DataTypeTypeName("IEnumerable<Address>").Build
                     .Build
                 .Build
                 .AddBehaviour("index")

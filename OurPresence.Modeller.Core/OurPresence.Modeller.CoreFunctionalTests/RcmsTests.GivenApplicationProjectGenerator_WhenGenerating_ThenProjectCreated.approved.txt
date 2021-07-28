@@ -53,8 +53,8 @@ file[2] = appsettings.json
 }
 
 file[3] = Startup.cs
-using Nhvr.Rcms.BusinessLogic.ActivityLog;
-using Nhvr.Rcms.BusinessLogic.ActivityLog.Officer;
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Add;
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Validators;
 
 namespace Nhvr.Rcms.Application
 {
@@ -69,7 +69,7 @@ namespace Nhvr.Rcms.Application
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(ActivityLogOfficerRequest).Assembly);
+            services.AddMediatR(typeof(ActivityLogAddRequest).Assembly);
 
             services.AddControllers()
                 .ConfigureApiBehaviorOptions(options =>
@@ -78,7 +78,7 @@ namespace Nhvr.Rcms.Application
                 })
                 .AddFluentValidation(options =>
                 {
-                    options.RegisterValidatorsFromAssemblyContaining<ActivityLogOfficerRequestValidator>();
+                    options.RegisterValidatorsFromAssemblyContaining<ActivityLogAddRequestValidator>();
                 });
 
             //todo: Add your service registrations here
@@ -485,7 +485,7 @@ namespace Nhvr.Rcms.Application.Controllers
         public async Task<IActionResult> SummaryAsync([FromBody] EventSummaryRequest eventSummaryRequest)
         {
             var result = await _mediator.Send(eventSummaryRequest);
-            return FromResult<EventSearchResult>(result);
+            return FromResult<EventSummaryResult>(result);
         }
 
         [HttpPost]

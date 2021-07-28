@@ -400,12 +400,12 @@ file[15] = Event\Summary\Event.generated.cs
 
 namespace Nhvr.Rcms.BusinessLogic.Event.Summary
 {
-    public partial record EventSummaryRequest : IRequest<Result<EventSearchResult>>
+    public partial record EventSummaryRequest : IRequest<Result<EventSummaryResult>>
     {
         public int Id { get;  set; }
 
     }
-    public partial record EventSearchResult
+    public partial record EventSummaryResult
     {
     }
 }
@@ -449,8 +449,6 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Save
 
         public string OperationName { get;  set; }
 
-        public Note Note { get;  set; }
-
         public bool Light { get;  set; }
 
         public bool Siren { get;  set; }
@@ -460,24 +458,6 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Save
         public DateTimeOffset VehicleReleaseDate { get;  set; }
 
         public bool VehicleGrounded { get;  set; }
-
-        public List<Location> Location { get;  set; }
-
-        public List<Officer> Officer { get;  set; }
-
-        public List<Person> Person { get;  set; }
-
-        public List<Vehicle> Vehicle { get;  set; }
-
-        public List<Organisation> Organisation { get;  set; }
-
-        public List<MediaReference> MediaReference { get;  set; }
-
-        public List<MediaDetail> Medium { get;  set; }
-
-        public InterceptDetail Intercept { get;  set; }
-
-        public WAInterceptDetail WAIntercept { get;  set; }
 
     }
     public partial record EventSaveResult
@@ -533,8 +513,6 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Index
 
         public string OperationName { get;  set; }
 
-        public List<Note> Note { get;  set; }
-
         public bool Light { get;  set; }
 
         public bool Siren { get;  set; }
@@ -544,24 +522,6 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Index
         public DateTimeOffset VehicleReleaseDate { get;  set; }
 
         public bool VehicleGrounded { get;  set; }
-
-        public List<Location> Location { get;  set; }
-
-        public List<Officer> Officer { get;  set; }
-
-        public List<Person> Person { get;  set; }
-
-        public List<Vehicle> Vehicle { get;  set; }
-
-        public List<Organisation> Organisation { get;  set; }
-
-        public List<MediaReference> MediaReference { get;  set; }
-
-        public List<MediaDetail> Medium { get;  set; }
-
-        public InterceptDetail Intercept { get;  set; }
-
-        public WAInterceptDetail WAIntercept { get;  set; }
 
     }
 }
@@ -599,8 +559,6 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Search
         public string Type { get;  set; }
 
         public string Status { get;  set; }
-
-        public IEnumerable<Address> Address { get;  set; }
 
     }
 }
@@ -705,18 +663,15 @@ namespace Nhvr.Rcms.BusinessLogic.Vehicle.Create
     }
 }
 
-file[22] = ActivityLog\Validators\ActivityLogAddRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[22] = ActivityLog\Validators\ActivityLogAddRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Add;
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
 {
-    public partial record ActivityLogAddRequestValidator : AbstractValidator<Common.Domain.ActivityLog>
+    public class ActivityLogAddRequestValidator : AbstractValidator<ActivityLogAddRequest>
     {
         public ActivityLogAddRequestValidator()
         {
@@ -727,18 +682,15 @@ namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
     }
 }
 
-file[23] = ActivityLog\Validators\ActivityLogUpdateRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[23] = ActivityLog\Validators\ActivityLogUpdateRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Update;
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
 {
-    public partial record ActivityLogUpdateRequestValidator : AbstractValidator<Common.Domain.ActivityLog>
+    public class ActivityLogUpdateRequestValidator : AbstractValidator<ActivityLogUpdateRequest>
     {
         public ActivityLogUpdateRequestValidator()
         {
@@ -748,18 +700,15 @@ namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
     }
 }
 
-file[24] = ActivityLog\Validators\ActivityLogDeleteRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[24] = ActivityLog\Validators\ActivityLogDeleteRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.ActivityLog.Delete;
 
 namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
 {
-    public partial record ActivityLogDeleteRequestValidator : AbstractValidator<Common.Domain.ActivityLog>
+    public class ActivityLogDeleteRequestValidator : AbstractValidator<ActivityLogDeleteRequest>
     {
         public ActivityLogDeleteRequestValidator()
         {
@@ -768,18 +717,15 @@ namespace Nhvr.Rcms.BusinessLogic.ActivityLog.Validators
     }
 }
 
-file[25] = Alert\Validators\AlertSaveRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[25] = Alert\Validators\AlertSaveRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Alert.Save;
 
 namespace Nhvr.Rcms.BusinessLogic.Alert.Validators
 {
-    public partial record AlertSaveRequestValidator : AbstractValidator<Common.Domain.Alert>
+    public class AlertSaveRequestValidator : AbstractValidator<AlertSaveRequest>
     {
         public AlertSaveRequestValidator()
         {
@@ -797,18 +743,15 @@ namespace Nhvr.Rcms.BusinessLogic.Alert.Validators
     }
 }
 
-file[26] = Alert\Validators\AlertDeleteRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[26] = Alert\Validators\AlertDeleteRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Alert.Delete;
 
 namespace Nhvr.Rcms.BusinessLogic.Alert.Validators
 {
-    public partial record AlertDeleteRequestValidator : AbstractValidator<Common.Domain.Alert>
+    public class AlertDeleteRequestValidator : AbstractValidator<AlertDeleteRequest>
     {
         public AlertDeleteRequestValidator()
         {
@@ -818,18 +761,15 @@ namespace Nhvr.Rcms.BusinessLogic.Alert.Validators
     }
 }
 
-file[27] = Event\Validators\EventSearchRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[27] = Event\Validators\EventSearchRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Event.Search;
 
 namespace Nhvr.Rcms.BusinessLogic.Event.Validators
 {
-    public partial record EventSearchRequestValidator : AbstractValidator<Common.Domain.Event>
+    public class EventSearchRequestValidator : AbstractValidator<EventSearchRequest>
     {
         public EventSearchRequestValidator()
         {
@@ -858,18 +798,15 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Validators
     }
 }
 
-file[28] = Event\Validators\EventSummaryRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[28] = Event\Validators\EventSummaryRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Event.Summary;
 
 namespace Nhvr.Rcms.BusinessLogic.Event.Validators
 {
-    public partial record EventSummaryRequestValidator : AbstractValidator<Common.Domain.Event>
+    public class EventSummaryRequestValidator : AbstractValidator<EventSummaryRequest>
     {
         public EventSummaryRequestValidator()
         {
@@ -878,18 +815,15 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Validators
     }
 }
 
-file[29] = Event\Validators\EventSaveRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[29] = Event\Validators\EventSaveRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Event.Save;
 
 namespace Nhvr.Rcms.BusinessLogic.Event.Validators
 {
-    public partial record EventSaveRequestValidator : AbstractValidator<Common.Domain.Event>
+    public class EventSaveRequestValidator : AbstractValidator<EventSaveRequest>
     {
         public EventSaveRequestValidator()
         {
@@ -906,37 +840,24 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Validators
             RuleFor(p => p.MethodOfIntercept).NotNull();
             RuleFor(p => p.DirectionOfTravel).NotNull();
             RuleFor(p => p.OperationName).NotNull();
-            RuleFor(p => p.Note).NotNull();
             RuleFor(p => p.Light).NotNull();
             RuleFor(p => p.Siren).NotNull();
             RuleFor(p => p.UrgentDutyDriving).NotNull();
             RuleFor(p => p.VehicleReleaseDate).NotNull();
             RuleFor(p => p.VehicleGrounded).NotNull();
-            RuleFor(p => p.Location).NotNull();
-            RuleFor(p => p.Officer).NotNull();
-            RuleFor(p => p.Person).NotNull();
-            RuleFor(p => p.Vehicle).NotNull();
-            RuleFor(p => p.Organisation).NotNull();
-            RuleFor(p => p.MediaReference).NotNull();
-            RuleFor(p => p.Medium).NotNull();
-            RuleFor(p => p.Intercept).NotNull();
-            RuleFor(p => p.WAIntercept).NotNull();
         }
     }
 }
 
-file[30] = Event\Validators\EventDetailRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[30] = Event\Validators\EventDetailRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Event.Index;
 
 namespace Nhvr.Rcms.BusinessLogic.Event.Validators
 {
-    public partial record EventDetailRequestValidator : AbstractValidator<Common.Domain.Event>
+    public class EventDetailRequestValidator : AbstractValidator<EventDetailRequest>
     {
         public EventDetailRequestValidator()
         {
@@ -945,18 +866,15 @@ namespace Nhvr.Rcms.BusinessLogic.Event.Validators
     }
 }
 
-file[31] = Organisation\Validators\OrganisationSearchRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[31] = Organisation\Validators\OrganisationSearchRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Organisation.Search;
 
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
 {
-    public partial record OrganisationSearchRequestValidator : AbstractValidator<Common.Domain.Organisation>
+    public class OrganisationSearchRequestValidator : AbstractValidator<OrganisationSearchRequest>
     {
         public OrganisationSearchRequestValidator()
         {
@@ -965,18 +883,15 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
     }
 }
 
-file[32] = Organisation\Validators\OrganisationByIdRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[32] = Organisation\Validators\OrganisationByIdRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Organisation.Index;
 
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
 {
-    public partial record OrganisationByIdRequestValidator : AbstractValidator<Common.Domain.Organisation>
+    public class OrganisationByIdRequestValidator : AbstractValidator<OrganisationByIdRequest>
     {
         public OrganisationByIdRequestValidator()
         {
@@ -987,18 +902,15 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
     }
 }
 
-file[33] = Organisation\Validators\OrganisationSaveRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[33] = Organisation\Validators\OrganisationSaveRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Organisation.Save;
 
 namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
 {
-    public partial record OrganisationSaveRequestValidator : AbstractValidator<Common.Domain.Organisation>
+    public class OrganisationSaveRequestValidator : AbstractValidator<OrganisationSaveRequest>
     {
         public OrganisationSaveRequestValidator()
         {
@@ -1009,18 +921,15 @@ namespace Nhvr.Rcms.BusinessLogic.Organisation.Validators
     }
 }
 
-file[34] = Vehicle\Validators\VehicleCreateRequestValidator.generated.cs
-// Auto-generated using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+file[34] = Vehicle\Validators\VehicleCreateRequestValidator.cs
+// Created using OurPresence.Modeller template 'Business Logic Behaviour' version 1.0.0
+// NOTE: This file cannot be overwritten when regenerated
 
-// --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
-// --------------------------------------------------------------------------------
-
-#nullable enable
+using Nhvr.Rcms.BusinessLogic.Vehicle.Create;
 
 namespace Nhvr.Rcms.BusinessLogic.Vehicle.Validators
 {
-    public partial record VehicleCreateRequestValidator : AbstractValidator<Common.Domain.Vehicle>
+    public class VehicleCreateRequestValidator : AbstractValidator<VehicleCreateRequest>
     {
         public VehicleCreateRequestValidator()
         {

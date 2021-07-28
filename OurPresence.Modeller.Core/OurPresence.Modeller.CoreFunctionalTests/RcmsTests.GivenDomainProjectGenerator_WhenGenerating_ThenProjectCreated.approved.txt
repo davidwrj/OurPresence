@@ -2765,7 +2765,7 @@ namespace Nhvr.Rcms.Common.Domain
             // todo: Add Summary behaviour here
         }
 
-        public partial void Save(int id, string status, Guid creationID, int organisationID, DateTimeOffset reviewedDateTime, DateTimeOffset reportedOnDate, DateTimeOffset tookPlaceStartDate, DateTimeOffset tookPlaceEndDate, DateTimeOffset createDate, DateTimeOffset completedDate, string methodOfIntercept, string directionOfTravel, string operationName, Note note, bool light, bool siren, bool urgentDutyDriving, DateTimeOffset vehicleReleaseDate, bool vehicleGrounded, List<Location> location, List<Officer> officer, List<Person> person, List<Vehicle> vehicle, List<Organisation> organisation, List<MediaReference> mediaReference, List<MediaDetail> medium, InterceptDetail intercept, WAInterceptDetail wAIntercept)
+        public partial void Save(int id, string status, Guid creationID, int organisationID, DateTimeOffset reviewedDateTime, DateTimeOffset reportedOnDate, DateTimeOffset tookPlaceStartDate, DateTimeOffset tookPlaceEndDate, DateTimeOffset createDate, DateTimeOffset completedDate, string methodOfIntercept, string directionOfTravel, string operationName, bool light, bool siren, bool urgentDutyDriving, DateTimeOffset vehicleReleaseDate, bool vehicleGrounded)
         {
             // todo: Add Save behaviour here
         }
@@ -2839,7 +2839,7 @@ namespace Nhvr.Rcms.Common.Domain
 
         public partial void Summary(int id);
 
-        public partial void Save(int id, string status, Guid creationID, int organisationID, DateTimeOffset reviewedDateTime, DateTimeOffset reportedOnDate, DateTimeOffset tookPlaceStartDate, DateTimeOffset tookPlaceEndDate, DateTimeOffset createDate, DateTimeOffset completedDate, string methodOfIntercept, string directionOfTravel, string operationName, Note note, bool light, bool siren, bool urgentDutyDriving, DateTimeOffset vehicleReleaseDate, bool vehicleGrounded, List<Location> location, List<Officer> officer, List<Person> person, List<Vehicle> vehicle, List<Organisation> organisation, List<MediaReference> mediaReference, List<MediaDetail> medium, InterceptDetail intercept, WAInterceptDetail wAIntercept);
+        public partial void Save(int id, string status, Guid creationID, int organisationID, DateTimeOffset reviewedDateTime, DateTimeOffset reportedOnDate, DateTimeOffset tookPlaceStartDate, DateTimeOffset tookPlaceEndDate, DateTimeOffset createDate, DateTimeOffset completedDate, string methodOfIntercept, string directionOfTravel, string operationName, bool light, bool siren, bool urgentDutyDriving, DateTimeOffset vehicleReleaseDate, bool vehicleGrounded);
 
         public partial void Index(int id);
     }
