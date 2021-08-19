@@ -261,7 +261,7 @@ file[9] = Controllers\ActivityLogController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -325,7 +325,7 @@ file[11] = Controllers\AlertController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -372,7 +372,7 @@ file[13] = Controllers\BatchProcessController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -457,7 +457,7 @@ file[15] = Controllers\EventController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -520,7 +520,7 @@ file[17] = Controllers\NoticeNumberController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -551,7 +551,7 @@ file[19] = Controllers\OrganisationController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -606,7 +606,7 @@ file[21] = Controllers\PersonController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -637,7 +637,7 @@ file[23] = Controllers\ShiftController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -668,7 +668,7 @@ file[25] = Controllers\UserController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -699,7 +699,7 @@ file[27] = Controllers\VehicleController.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Controller Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable

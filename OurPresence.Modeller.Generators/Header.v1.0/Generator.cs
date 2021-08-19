@@ -23,7 +23,7 @@ namespace Header
         {
             var sb = new System.Text.StringBuilder();
             sb.Al($"// Created using OurPresence.Modeller template '{_metadata.Name}' version {_metadata.Version}");
-            sb.Al($"// NOTE: This file cannot be overwritten when regenerated");
+            sb.Al($"// NOTE: This file will not be overwritten when regenerated");
             return new Snippet(sb.ToString());
         }
     }

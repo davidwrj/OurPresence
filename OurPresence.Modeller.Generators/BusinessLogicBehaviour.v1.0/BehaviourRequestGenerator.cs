@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using OurPresence.Modeller.Domain;
+using OurPresence.Modeller.Domain.Extensions;
 using OurPresence.Modeller.Generator;
 using OurPresence.Modeller.Interfaces;
 using System;
@@ -36,12 +37,25 @@ namespace BusinessLogicBehaviour
             }
             sb.Al($"namespace {_module.Namespace}.BusinessLogic.{_model.Name}.{_behaviour.Name}");
             sb.Al("{");
+
+            
+
+            // Request
             var request = _behaviour.Request is null ?
             new Name($"{_model.Name}{_behaviour.Name}Request") :
             _behaviour.Request.Name;
 
-            sb.I(1).A(Settings.SupportRegen ? $"public partial record" : $"public class");
-            sb.A($" {request} : IRequest");
+            sb.I(1).A($"public partial record {request}(");
+            if (_behaviour.Request is not null)
+            {
+                foreach (var field in _behaviour.Request.Fields)
+                {
+                    sb.A($"{field.GetDataType(true)} {field.Name}, ");
+                }
+                sb.TrimEnd(", ");
+            }
+            sb.Al(")");
+            sb.I(2).A(": IQuery");
             if (_behaviour.Response is not null)
             {
                 sb.A("<Result");
@@ -50,30 +64,35 @@ namespace BusinessLogicBehaviour
                 sb.A(_behaviour.Response.IsCollection ? ">>" : ">");
             }
             sb.B();
-            sb.I(1).Al("{");
-            if (_behaviour.Request is not null)
-            {
-                foreach (var field in _behaviour.Request.Fields)
-                {
-                    sb.Al(((ISnippet)new Property.Generator(field).Create()).Content);
-                }
-            }
-            sb.I(1).Al("}");
+            sb.I(1).Al("{ }");
+            sb.B();
 
+            if (!Settings.SupportRegen)
+            {
+                // Handler
+                sb.I(1).Al($"public class {_behaviour.Name} : IQueryHandler<{request}, {_behaviour.Response.Name}>");
+                sb.I(1).Al("{");
+                sb.I(2).Al($"public async Task<int> Handle({request} request, CancellationToken cancellationToken)");
+                sb.I(2).Al("{");
+                sb.I(2).Al("}");
+                sb.I(1).Al("}");
+            }
+
+            // Response
             if (_behaviour.Response is not null)
             {
-                sb.I(1).A(Settings.SupportRegen ? $"public partial record" : $"public class");
-                sb.Al($" {_behaviour.Response.Name}");
-                sb.I(1).Al("{");
+                sb.I(1).A($"public partial record {_behaviour.Response.Name}(");
                 foreach (var field in _behaviour.Response.Fields)
                 {
-                    sb.Al(((ISnippet)new Property.Generator(field).Create()).Content);
+                    sb.A($"{field.GetDataType()} {field.Name}, ");
                 }
-                sb.I(1).Al("}");
+                sb.TrimEnd(", ");
+                sb.Al(")");
+                sb.I(1).Al("{ }");
             }
             sb.Al("}");
 
-            var filename = _model.Name.ToString();
+            var filename = $"{_model.Name}{_behaviour.Name}";
             if (Settings.SupportRegen)
             {
                 filename += ".generated";

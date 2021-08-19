@@ -39,7 +39,7 @@ namespace DomainClass
         private void AddModelFiles(FileGroup files, Model model)
         {
             files.AddFile((IFile)new DomainUser(Settings, _module, model).Create());
-            files.AddFile((IFile)new DomainGenerated(Settings, _module, model).Create());
+            files.AddFile((IFile)new DomainGenerated(Settings, _module, model).Create());            
         }
     }
 }

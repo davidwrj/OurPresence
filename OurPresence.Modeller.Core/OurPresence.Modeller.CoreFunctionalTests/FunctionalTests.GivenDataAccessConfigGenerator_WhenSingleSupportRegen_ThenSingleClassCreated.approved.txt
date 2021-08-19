@@ -20,7 +20,7 @@ file[1] = Models\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable

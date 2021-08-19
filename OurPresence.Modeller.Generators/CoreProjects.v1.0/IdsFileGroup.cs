@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Ids");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Ids");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Ids");
             sb.Al("{");
             sb.I(1).Al("public interface IIdGenerator");
             sb.I(1).Al("{");
@@ -36,7 +36,7 @@ namespace CoreProjects
             group.AddFile(new File("IIdGenerator.cs", sb.ToString(), canOverwrite: true));
 
             sb.Clear();
-            sb.Al($"namespace {_module.Namespace}.Core.Ids");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Ids");
             sb.Al("{");
             sb.I(1).Al("public class NulloIdGenerator : IIdGenerator");
             sb.I(1).Al("{");

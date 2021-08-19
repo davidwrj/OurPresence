@@ -13,7 +13,7 @@ namespace CoreProjects
         public GeneratorDetails() : base("1.0.0")
         { }
 
-        public override string Name => "Core Projects";
+        public override string Name => "Core Project";
 
         public override string Description => "Build the Core projects";
 

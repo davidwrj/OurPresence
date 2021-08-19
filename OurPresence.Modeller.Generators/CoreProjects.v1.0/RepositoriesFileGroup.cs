@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Repositories");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Repositories");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Repositories");
             sb.Al("{");
             sb.I(1).Al("public interface IRepository<T> where T : IAggregate");
             sb.I(1).Al("{");
@@ -39,7 +39,7 @@ namespace CoreProjects
             group.AddFile(new File("IRepository.cs", sb.ToString(), canOverwrite: true));
 
             sb.Clear();
-            sb.Al($"namespace {_module.Namespace}.Core.Ids");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Ids");
             sb.Al("{");
             sb.I(1).Al("public static class RepositoryExtensions");
             sb.I(1).Al("{");

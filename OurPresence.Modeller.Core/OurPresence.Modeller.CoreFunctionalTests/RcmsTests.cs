@@ -85,5 +85,15 @@ namespace OurPresence.Modeller.CoreFunctionalTests
 
             Approvals.VerifyJson(json);
         }
+
+        [Fact]
+        public void GivenAProjectFeature_WhenSerialised_ReturnsJsonModel()
+        {
+            var module = RcmsOrganisationModuleBuilders.CreateProject();
+
+            var json = module.ToJson();
+
+            Approvals.VerifyJson(json);
+        }
     }
 }

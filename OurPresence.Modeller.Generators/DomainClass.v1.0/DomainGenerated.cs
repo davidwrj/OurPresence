@@ -143,10 +143,11 @@ namespace DomainClass
                 sb.I(2).Al("{");
                 sb.I(3).Al($"// todo: Apply events");
                 sb.I(2).Al("}");
+                sb.B();
             }
 
-            sb.TrimEnd(Environment.NewLine);
-            sb.B();
+            ISnippet snippet = (ISnippet)new DomainRelationship(Settings, _module, _model).Create();
+            sb.AppendLine(snippet.Content);
 
             sb.I(1).Al("}");
             sb.Al("}");

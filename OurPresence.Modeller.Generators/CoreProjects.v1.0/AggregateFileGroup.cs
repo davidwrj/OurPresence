@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Aggregates");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Aggregates");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Aggregates");
             sb.Al("{");
             sb.I(1).Al("public abstract class Aggregate: Aggregate<Guid>, IAggregate");
             sb.I(1).Al("{ }");
@@ -61,7 +61,7 @@ namespace CoreProjects
             group.AddFile(new File("Aggregate.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Aggregates");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Aggregates");
             sb.Al("{");
             sb.I(1).Al("public interface IAggregate: IAggregate<Guid>");
             sb.B();

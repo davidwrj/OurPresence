@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Commands");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Commands");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Commands");
             sb.Al("{");
             sb.I(1).Al("public interface ICommand: IRequest { }");
             sb.Al("}");
@@ -34,7 +34,7 @@ namespace CoreProjects
             group.AddFile(new File("ICommand.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Commands");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Commands");
             sb.Al("{");
             sb.I(1).Al("public interface ICommandBus");
             sb.I(1).Al("{");
@@ -45,7 +45,7 @@ namespace CoreProjects
             group.AddFile(new File("ICommandBus.cs", sb.ToString(), canOverwrite:true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Commands");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Commands");
             sb.Al("{");
             sb.I(1).Al("public interface ICommandHandler<in T>: IRequestHandler<T>");
             sb.I(2).Al("where T : ICommand");
@@ -55,7 +55,7 @@ namespace CoreProjects
             group.AddFile(new File("ICommandHandler.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Commands");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Commands");
             sb.Al("{");
             sb.I(1).Al("public class CommandBus: ICommandBus");
             sb.I(1).Al("{");

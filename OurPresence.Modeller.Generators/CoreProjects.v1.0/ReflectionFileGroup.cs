@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Reflections");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Reflections");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Reflections");
             sb.Al("{");
             sb.I(1).Al("public static class TypeProvider");
             sb.I(1).Al("{");

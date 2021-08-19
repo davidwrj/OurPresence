@@ -25,7 +25,7 @@ namespace DomainProject
         {
             var sb = new StringBuilder();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Exceptions");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core");
             sb.Al("{");
             sb.I(1).Al("public static class Config");
             sb.I(1).Al("{");

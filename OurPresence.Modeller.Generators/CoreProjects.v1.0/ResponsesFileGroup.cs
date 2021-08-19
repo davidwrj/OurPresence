@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Responses");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Responses");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Responses");
             sb.Al("{");
             sb.I(1).Al("public class PagedListResponse<T>");
             sb.I(1).Al("{");

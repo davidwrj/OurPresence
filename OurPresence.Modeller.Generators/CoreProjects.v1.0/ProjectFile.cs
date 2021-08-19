@@ -23,7 +23,7 @@ namespace CoreProjects
 
         public IOutput Create()
         {
-            var projectName = _module.Namespace+ ".Core";
+            var projectName = $"{_module.Company}.{_module.Project}.Core";
             var project = (IProject)new Project(projectName) { Path = System.IO.Path.Combine("src", projectName) };
 
             var files = new FileGroup();
@@ -41,10 +41,11 @@ namespace CoreProjects
             sb.I(1).Al("</PropertyGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<PackageReference Include=\"FluentAssertions\" Version=\"{Settings.Packages.GetVersion("FluentAssertions", "5.10.3")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"FluentAssertions\" Version=\"{Settings.Packages.GetVersion("FluentAssertions", "6.0.0")}\" />");
             sb.I(2).Al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.Packages.GetVersion("MediatR", "9.0.0")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"Microsoft.AspNetCore.Mvc.Core\" Version=\"{Settings.Packages.GetVersion("Microsoft.AspNetCore.Mvc.Core", "2.2.5")}\" />");
             sb.I(2).Al($"<PackageReference Include=\"Microsoft.Extensions.DependencyInjection.Abstractions\" Version=\"{Settings.Packages.GetVersion("Microsoft.Extensions.DependencyInjection.Abstractions", "5.0.0")}\" />");
-            sb.I(2).Al($"<PackageReference Include=\"RestSharp\" Version=\"{Settings.Packages.GetVersion("RestSharp", "106.11.7")}\" />");
+            sb.I(2).Al($"<PackageReference Include=\"RestSharp\" Version=\"{Settings.Packages.GetVersion("RestSharp", "106.12.0")}\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");

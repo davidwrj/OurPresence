@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Exceptions");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Exceptions");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Exceptions");
             sb.Al("{");
             sb.I(1).Al("public class AggregateNotFoundException : Exception");
             sb.I(1).Al("{");

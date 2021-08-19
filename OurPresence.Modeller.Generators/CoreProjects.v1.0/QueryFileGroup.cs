@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Queries");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public interface IQuery<out TResponse>: IRequest<TResponse>");
             sb.I(1).Al("{ }");
@@ -35,7 +35,7 @@ namespace CoreProjects
             group.AddFile(new File("IQuery.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public interface IQueryBus");
             sb.I(1).Al("{");
@@ -46,7 +46,7 @@ namespace CoreProjects
             group.AddFile(new File("IQueryBus.cs", sb.ToString(), canOverwrite:true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public interface IQueryHandler<in TQuery, TResponse>: IRequestHandler<TQuery, TResponse>");
             sb.I(2).Al("where TQuery : IQuery<TResponse>");
@@ -56,7 +56,7 @@ namespace CoreProjects
             group.AddFile(new File("IQueryHandler.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public class QueryBus: IQueryBus");
             sb.I(1).Al("{");

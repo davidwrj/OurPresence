@@ -29,10 +29,12 @@ namespace DomainProject
             sb.Al("global using System.Linq;");
             sb.Al("global using System.Text;");
             sb.Al("global using System.Threading.Tasks;");
+            sb.Al("global using Microsoft.AspNetCore.Routing;");
             sb.Al("global using Microsoft.EntityFrameworkCore;");
             sb.Al("global using Microsoft.EntityFrameworkCore.Design;");
             sb.Al("global using Microsoft.EntityFrameworkCore.Metadata.Builders;");
             sb.Al("global using Microsoft.Extensions.Configuration;");
+            sb.Al("global using Microsoft.Extensions.DependencyInjection;");
             sb.B();
             sb.Al($"global using {_module.Namespace}.Common.Enums;");
             sb.Al($"global using {_module.Namespace}.Data.Models;");

@@ -28,6 +28,7 @@ namespace CoreProjects
             project.FileGroups.First().AddFile((IFile)new ConfigFile(Settings, _module).Create());
 
             project.AddFileGroup((IFileGroup)new AggregateFileGroup(Settings, _module).Create());
+            project.AddFileGroup((IFileGroup)new BaseAsyncEndpointGroup(Settings, _module).Create());
             project.AddFileGroup((IFileGroup)new CommandFileGroup(Settings, _module).Create());
             project.AddFileGroup((IFileGroup)new EventsFileGroup(Settings, _module).Create());
             project.AddFileGroup((IFileGroup)new ExceptionsFileGroup(Settings, _module).Create());

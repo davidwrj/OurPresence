@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Subscriptions");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Subscriptions");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Subscriptions");
             sb.Al("{");
             sb.I(1).Al("public class InMemorySubscriptionCheckpointRepository: ISubscriptionCheckpointRepository");
             sb.I(1).Al("{");
@@ -47,7 +47,7 @@ namespace CoreProjects
             group.AddFile(new File("InMemorySubscriptionCheckpointRepository.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Subscriptions");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Subscriptions");
             sb.Al("{");
             sb.I(1).Al("public interface ISubscriptionCheckpointRepository");
             sb.I(1).Al("{");

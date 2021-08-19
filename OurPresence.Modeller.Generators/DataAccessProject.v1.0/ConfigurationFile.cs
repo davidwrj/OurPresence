@@ -32,18 +32,18 @@ namespace EntityFrameworkProject
             sb.I(3).Al("=> services");
             sb.I(4).Al(".AddCommandHandler<RegisterProduct, HandleRegisterProduct>(s =>");
             sb.I(4).Al("{");
-            sb.I(4).Al("    var dbContext = s.GetRequiredService<WarehouseDBContext>();");
-            sb.I(4).Al("    return new HandleRegisterProduct(dbContext.AddAndSave, dbContext.ProductWithSKUExists);");
+            sb.I(5).Al("var dbContext = s.GetRequiredService<WarehouseDBContext>();");
+            sb.I(5).Al("return new HandleRegisterProduct(dbContext.AddAndSave, dbContext.ProductWithSKUExists);");
             sb.I(4).Al("})");
             sb.I(4).Al(".AddQueryHandler<GetProducts, IReadOnlyList<ProductListItem>, HandleGetProducts>(s =>");
             sb.I(4).Al("{");
-            sb.I(4).Al("    var dbContext = s.GetRequiredService<WarehouseDBContext>();");
-            sb.I(4).Al("    return new HandleGetProducts(dbContext.Set<Product>().AsNoTracking());");
+            sb.I(5).Al("var dbContext = s.GetRequiredService<WarehouseDBContext>();");
+            sb.I(5).Al("return new HandleGetProducts(dbContext.Set<Product>().AsNoTracking());");
             sb.I(4).Al("})");
             sb.I(4).Al(".AddQueryHandler<GetProductDetails, ProductDetails?, HandleGetProductDetails>(s =>");
             sb.I(4).Al("{");
-            sb.I(4).Al("    var dbContext = s.GetRequiredService<WarehouseDBContext>();");
-            sb.I(4).Al("    return new HandleGetProductDetails(dbContext.Set<Product>().AsNoTracking());");
+            sb.I(5).Al("var dbContext = s.GetRequiredService<WarehouseDBContext>();");
+            sb.I(5).Al("return new HandleGetProductDetails(dbContext.Set<Product>().AsNoTracking());");
             sb.I(4).Al("});");
             sb.I(1).Al("");
             sb.I(1).Al("");
@@ -57,9 +57,7 @@ namespace EntityFrameworkProject
             sb.I(3).Al("=> modelBuilder.Entity<Product>()");
             sb.I(4).Al(".OwnsOne(p => p.Sku);");
             sb.I(1).Al("}");
-
             sb.Al("}");
-
 
             var filename = "Configuration";
             if (Settings.SupportRegen)

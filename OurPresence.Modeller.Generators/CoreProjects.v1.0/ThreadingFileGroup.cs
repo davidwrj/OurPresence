@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Threading");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Threading");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Threading");
             sb.Al("{");
             sb.I(1).Al("public static class NoSynchronizationContextScope");
             sb.I(1).Al("{");

@@ -1,6 +1,6 @@
 ﻿file[0] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
@@ -32,6 +32,8 @@ namespace Mizrael.SuperSafeBank.Common.Domain
         {
             // todo: Apply events
         }
+
+
     }
 }
 

@@ -518,8 +518,8 @@ global using System.Linq;
 global using System.Reflection;
 global using System.Text.RegularExpressions;
 global using System.Threading.Tasks;
-global using Nhvr.Rcms.Common.Enums;
 global using Nhvr.Rcms.Core.Aggregates;
+global using Nhvr.Rcms.Common.Enums;
 
 file[8] = Domain\Email.cs
 namespace Nhvr.Rcms.Common.Domain
@@ -556,7 +556,7 @@ namespace Nhvr.Rcms.Common.Domain
 
 file[9] = Domain\ActivityLog.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -610,7 +610,7 @@ file[10] = Domain\ActivityLog.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -652,12 +652,18 @@ namespace Nhvr.Rcms.Common.Domain
         public partial void Update(DateTimeOffset endTime, string remark, bool? light, bool? siren, bool? urgentDutyDriving);
 
         public partial void Delete(int id);
+
+        public IList<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
+
+        public IList<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
+
+        public IList<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
     }
 }
 
 file[11] = Domain\AddressBook.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -706,7 +712,7 @@ file[12] = Domain\AddressBook.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -752,12 +758,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Country { get; private set; }
 
         public string FullAddress { get; private set; }
+
+
     }
 }
 
 file[13] = Domain\Alert.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -805,7 +813,7 @@ file[14] = Domain\Alert.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -847,12 +855,20 @@ namespace Nhvr.Rcms.Common.Domain
         public partial void Save(int id, int alertLevel, DateTimeOffset effectiveDate, DateTimeOffset expiryDate, string remark, bool silent, int silentNotifyContactId, int personId, int vehicleId, int organisationId);
 
         public partial void Delete(int id, string reason);
+
+        public IList<Alert> Alerts { get; set; } = new List<Alert>();
+
+        public IList<Alert> Alerts { get; set; } = new List<Alert>();
+
+        public IList<Alert> Alerts { get; set; } = new List<Alert>();
+
+        public IList<Alert> Alerts { get; set; } = new List<Alert>();
     }
 }
 
 file[15] = Domain\AzureSqlMaintenanceLog.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -878,7 +894,7 @@ file[16] = Domain\AzureSqlMaintenanceLog.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -900,12 +916,14 @@ namespace Nhvr.Rcms.Common.Domain
         public DateTimeOffset? EndTime { get; private set; }
 
         public string? StatusMessage { get; private set; }
+
+
     }
 }
 
 file[17] = Domain\BatchProcess.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -958,7 +976,7 @@ file[18] = Domain\BatchProcess.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -986,12 +1004,14 @@ namespace Nhvr.Rcms.Common.Domain
         public partial void SqlMaintenance();
 
         public partial void TasInfringmentEmail();
+
+
     }
 }
 
 file[19] = Domain\BatchProcessTask.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1018,7 +1038,7 @@ file[20] = Domain\BatchProcessTask.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1044,12 +1064,14 @@ namespace Nhvr.Rcms.Common.Domain
         public DateTimeOffset? StartedOn { get; private set; }
 
         public DateTimeOffset? StoppedOn { get; private set; }
+
+
     }
 }
 
 file[21] = Domain\BatchProcessTaskItem.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1076,7 +1098,7 @@ file[22] = Domain\BatchProcessTaskItem.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1098,12 +1120,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Reference { get; private set; }
 
         public string ResultMessage { get; private set; }
+
+        public IList<>  { get; set; } = new List<>();
     }
 }
 
 file[23] = Domain\ComplianceAction.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1133,7 +1157,7 @@ file[24] = Domain\ComplianceAction.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1169,12 +1193,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[25] = Domain\ComplianceActionImport.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1232,7 +1258,7 @@ file[26] = Domain\ComplianceActionImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1280,12 +1306,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[27] = Domain\ComplianceActionLocation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1323,7 +1351,7 @@ file[28] = Domain\ComplianceActionLocation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1355,12 +1383,14 @@ namespace Nhvr.Rcms.Common.Domain
         public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
+
+
     }
 }
 
 file[29] = Domain\ComplianceActionOffence.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1427,7 +1457,7 @@ file[30] = Domain\ComplianceActionOffence.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1485,12 +1515,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[31] = Domain\ComplianceActionService.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1519,7 +1551,7 @@ file[32] = Domain\ComplianceActionService.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1549,12 +1581,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[33] = Domain\ComplianceActionServiceAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1591,7 +1625,7 @@ file[34] = Domain\ComplianceActionServiceAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1621,12 +1655,14 @@ namespace Nhvr.Rcms.Common.Domain
         public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
+
+
     }
 }
 
 file[35] = Domain\ComplianceActionStatus.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1664,7 +1700,7 @@ file[36] = Domain\ComplianceActionStatus.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1696,12 +1732,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[37] = Domain\ComplianceActionSubComponent.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1735,7 +1773,7 @@ file[38] = Domain\ComplianceActionSubComponent.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1759,12 +1797,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Information { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[39] = Domain\ComplianceDefect.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1835,7 +1875,7 @@ file[40] = Domain\ComplianceDefect.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1909,12 +1949,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+        public IList<ComplianceDefectSubComponent> ComplianceDefectSubComponents { get; set; } = new List<ComplianceDefectSubComponent>();
     }
 }
 
 file[41] = Domain\ComplianceDefectSubComponent.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -1949,7 +1991,7 @@ file[42] = Domain\ComplianceDefectSubComponent.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -1975,12 +2017,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+        public IList<ComplianceDefectSubComponent> ComplianceDefectSubComponents { get; set; } = new List<ComplianceDefectSubComponent>();
     }
 }
 
 file[43] = Domain\ComplianceDirectionDimension.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2027,7 +2071,7 @@ file[44] = Domain\ComplianceDirectionDimension.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2085,12 +2129,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[45] = Domain\ComplianceDirectionDimensionsHardcopy.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2113,7 +2159,7 @@ file[46] = Domain\ComplianceDirectionDimensionsHardcopy.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2135,12 +2181,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[47] = Domain\ComplianceDirectionFatigue.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2184,7 +2232,7 @@ file[48] = Domain\ComplianceDirectionFatigue.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2236,12 +2284,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[49] = Domain\ComplianceDirectionToRectify.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2272,7 +2322,7 @@ file[50] = Domain\ComplianceDirectionToRectify.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2294,12 +2344,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string MovementCondition { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[51] = Domain\ComplianceEducation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2328,7 +2380,7 @@ file[52] = Domain\ComplianceEducation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2354,12 +2406,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[53] = Domain\ComplianceFormalCaution.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2394,7 +2448,7 @@ file[54] = Domain\ComplianceFormalCaution.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2424,12 +2478,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[55] = Domain\ComplianceFormalWarning.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2458,7 +2514,7 @@ file[56] = Domain\ComplianceFormalWarning.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2484,12 +2540,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[57] = Domain\ComplianceInfringement.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2527,7 +2585,7 @@ file[58] = Domain\ComplianceInfringement.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2563,12 +2621,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[59] = Domain\ComplianceOfficialWarning.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2597,7 +2657,7 @@ file[60] = Domain\ComplianceOfficialWarning.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2623,12 +2683,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[61] = Domain\ComplianceReportForProsecution.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2650,7 +2712,7 @@ file[62] = Domain\ComplianceReportForProsecution.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2666,12 +2728,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string ReferenceNumber { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[63] = Domain\ComplianceWAFormalCaution.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2696,7 +2760,7 @@ file[64] = Domain\ComplianceWAFormalCaution.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2718,12 +2782,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Description { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[65] = Domain\Event.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2782,7 +2848,7 @@ file[66] = Domain\Event.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2842,12 +2908,14 @@ namespace Nhvr.Rcms.Common.Domain
         public partial void Save(int id, string status, Guid creationID, int organisationID, DateTimeOffset reviewedDateTime, DateTimeOffset reportedOnDate, DateTimeOffset tookPlaceStartDate, DateTimeOffset tookPlaceEndDate, DateTimeOffset createDate, DateTimeOffset completedDate, string methodOfIntercept, string directionOfTravel, string operationName, bool light, bool siren, bool urgentDutyDriving, DateTimeOffset vehicleReleaseDate, bool vehicleGrounded);
 
         public partial void Index(int id);
+
+
     }
 }
 
 file[67] = Domain\EventAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -2875,7 +2943,7 @@ file[68] = Domain\EventAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -2907,12 +2975,14 @@ namespace Nhvr.Rcms.Common.Domain
         public AddressBook Address { get; private set; }
 
         public DateTimeOffset DateAdded { get; private set; }
+
+        public IList<EventAddress> EventAddresses { get; set; } = new List<EventAddress>();
     }
 }
 
 file[69] = Domain\EventInspection.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3024,7 +3094,7 @@ file[70] = Domain\EventInspection.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3136,12 +3206,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string LoadRestraintNote { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[71] = Domain\EventInspectionAxleGroup.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3167,7 +3239,7 @@ file[72] = Domain\EventInspectionAxleGroup.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3195,12 +3267,14 @@ namespace Nhvr.Rcms.Common.Domain
         public decimal DefaultAllowedWeight { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[73] = Domain\EventInspectionAxleWeight.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3225,7 +3299,7 @@ file[74] = Domain\EventInspectionAxleWeight.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3251,12 +3325,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool IsCustom { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[75] = Domain\EventInspectionAxleWeightPwd.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3279,7 +3355,7 @@ file[76] = Domain\EventInspectionAxleWeightPwd.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3297,12 +3373,14 @@ namespace Nhvr.Rcms.Common.Domain
         public DateTimeOffset? Expiry { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[77] = Domain\EventInspectionMovement.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3325,7 +3403,7 @@ file[78] = Domain\EventInspectionMovement.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3347,12 +3425,14 @@ namespace Nhvr.Rcms.Common.Domain
         public decimal AllowedWeight { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[79] = Domain\EventMediaExternal.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3377,7 +3457,7 @@ file[80] = Domain\EventMediaExternal.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3395,12 +3475,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Uri { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[81] = Domain\EventMedium.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3431,7 +3513,7 @@ file[82] = Domain\EventMedium.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3457,12 +3539,14 @@ namespace Nhvr.Rcms.Common.Domain
         public Guid ThumbnailReferenceId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[83] = Domain\EventNote.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3486,7 +3570,7 @@ file[84] = Domain\EventNote.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3506,12 +3590,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[85] = Domain\EventOfficer.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3544,7 +3630,7 @@ file[86] = Domain\EventOfficer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3570,12 +3656,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Surname { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[87] = Domain\EventOrganisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3596,7 +3684,7 @@ file[88] = Domain\EventOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3614,12 +3702,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int EventOrganisationTypeId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[89] = Domain\EventPerson.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3640,7 +3730,7 @@ file[90] = Domain\EventPerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3658,12 +3748,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int EventPersonTypeId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[91] = Domain\EventPersonDiary.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3706,7 +3798,7 @@ file[92] = Domain\EventPersonDiary.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3748,12 +3840,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[93] = Domain\EventPersonFatigue.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3792,7 +3886,7 @@ file[94] = Domain\EventPersonFatigue.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3822,12 +3916,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Scheduler { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[95] = Domain\EventVehicle.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3848,7 +3944,7 @@ file[96] = Domain\EventVehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3866,12 +3962,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int EventVehicleTypeId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[97] = Domain\EventVehicleConcession.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3897,7 +3995,7 @@ file[98] = Domain\EventVehicleConcession.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3917,12 +4015,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Description { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[99] = Domain\EventVehicleCondition.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -3948,7 +4048,7 @@ file[100] = Domain\EventVehicleCondition.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -3968,12 +4068,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Description { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[101] = Domain\EventVehicleScheme.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4000,7 +4102,7 @@ file[102] = Domain\EventVehicleScheme.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4022,12 +4124,14 @@ namespace Nhvr.Rcms.Common.Domain
         public DateTimeOffset? ExpiryDate { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[103] = Domain\Intercept.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4048,7 +4152,7 @@ file[104] = Domain\Intercept.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4062,12 +4166,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int EventId { get; private set; }
 
         public string InterceptNumber { get; private set; }
+
+
     }
 }
 
 file[105] = Domain\InterceptImport.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4119,7 +4225,7 @@ file[106] = Domain\InterceptImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4163,12 +4269,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[107] = Domain\InterceptJourney.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4225,7 +4333,7 @@ file[108] = Domain\InterceptJourney.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4267,12 +4375,14 @@ namespace Nhvr.Rcms.Common.Domain
         public decimal Odometer { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[109] = Domain\InterceptOrganisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4292,7 +4402,7 @@ file[110] = Domain\InterceptOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4308,12 +4418,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int OrganisationId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[111] = Domain\InterceptPerson.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4333,7 +4445,7 @@ file[112] = Domain\InterceptPerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4349,12 +4461,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int PersonId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[113] = Domain\InterceptVehicle.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4374,7 +4488,7 @@ file[114] = Domain\InterceptVehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4390,12 +4504,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int VehicleId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[115] = Domain\Log.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4446,7 +4562,7 @@ file[116] = Domain\Log.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4488,12 +4604,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int Duration { get; private set; }
 
         public string ClientVersion { get; private set; }
+
+
     }
 }
 
 file[117] = Domain\MapDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4516,7 +4634,7 @@ file[118] = Domain\MapDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4536,12 +4654,14 @@ namespace Nhvr.Rcms.Common.Domain
         public decimal? Latitude { get; private set; }
 
         public decimal? Elevation { get; private set; }
+
+
     }
 }
 
 file[119] = Domain\NoticeNumber.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4570,7 +4690,7 @@ file[120] = Domain\NoticeNumber.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4594,12 +4714,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int PerCallAllocation { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[121] = Domain\Organisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4644,7 +4766,7 @@ file[122] = Domain\Organisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4676,12 +4798,14 @@ namespace Nhvr.Rcms.Common.Domain
         public partial void Index(string id, string juro, bool includeSilentAlert);
 
         public partial void Save(string name, string aCN, OrganisationTypes typeId, Guid? creationId);
+
+
     }
 }
 
 file[123] = Domain\OrganisationAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4724,7 +4848,7 @@ file[124] = Domain\OrganisationAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4762,12 +4886,14 @@ namespace Nhvr.Rcms.Common.Domain
         public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
+
+
     }
 }
 
 file[125] = Domain\OrganisationContact.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4795,7 +4921,7 @@ file[126] = Domain\OrganisationContact.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4819,12 +4945,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public string Source { get; private set; }
+
+
     }
 }
 
 file[127] = Domain\OrganisationDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4864,7 +4992,7 @@ file[128] = Domain\OrganisationDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4900,12 +5028,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Source { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[129] = Domain\Person.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -4935,7 +5065,7 @@ file[130] = Domain\Person.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -4961,12 +5091,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public string? SourcePersonId { get; private set; }
+
+
     }
 }
 
 file[131] = Domain\PersonAddress.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5009,7 +5141,7 @@ file[132] = Domain\PersonAddress.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5047,12 +5179,14 @@ namespace Nhvr.Rcms.Common.Domain
         public AddressBook Address { get; private set; }
 
         public DateTimeOffset? DateAdded { get; private set; }
+
+
     }
 }
 
 file[133] = Domain\PersonContact.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5080,7 +5214,7 @@ file[134] = Domain\PersonContact.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5104,12 +5238,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public string Source { get; private set; }
+
+
     }
 }
 
 file[135] = Domain\PersonDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5173,7 +5309,7 @@ file[136] = Domain\PersonDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5229,12 +5365,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Jurisdiction { get; private set; }
 
         public string ProfileImageUrl { get; private set; }
+
+
     }
 }
 
 file[137] = Domain\Postcode.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5261,7 +5399,7 @@ file[138] = Domain\Postcode.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5279,12 +5417,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Locality { get; private set; }
 
         public string State { get; private set; }
+
+
     }
 }
 
 file[139] = Domain\ReferenceDatum.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5316,7 +5456,7 @@ file[140] = Domain\ReferenceDatum.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5344,12 +5484,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[141] = Domain\ReferenceDataAttribute.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5374,7 +5516,7 @@ file[142] = Domain\ReferenceDataAttribute.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5392,12 +5534,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Value { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[143] = Domain\ReferenceDataCategory.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5427,7 +5571,7 @@ file[144] = Domain\ReferenceDataCategory.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5451,12 +5595,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int SystemId { get; private set; }
 
         public bool SystemUse { get; private set; }
+
+
     }
 }
 
 file[145] = Domain\ReferenceDataMapping.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5479,7 +5625,7 @@ file[146] = Domain\ReferenceDataMapping.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5497,12 +5643,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string SourceValue { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[147] = Domain\Shift.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5528,7 +5676,7 @@ file[148] = Domain\Shift.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5546,12 +5694,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Operation { get; private set; }
 
         public string Remark { get; private set; }
+
+
     }
 }
 
 file[149] = Domain\ShiftOfficer.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5571,7 +5721,7 @@ file[150] = Domain\ShiftOfficer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5587,12 +5737,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int UserId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[151] = Domain\User.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5645,7 +5797,7 @@ file[152] = Domain\User.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5689,12 +5841,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string Team { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[153] = Domain\Vehicle.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5728,7 +5882,7 @@ file[154] = Domain\Vehicle.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5758,12 +5912,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public partial void Create(States registrationState, string? registrationNumber, bool isNationalRegistration, string? vehicleIdentificationNumber, string? engineNumber, string? chassisNumber, string sourceVehicleId, SourceSystemTypes systemId);
+
+
     }
 }
 
 file[155] = Domain\VehicleDetail.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5791,7 +5947,7 @@ file[156] = Domain\VehicleDetail.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5819,12 +5975,14 @@ namespace Nhvr.Rcms.Common.Domain
         public string SourceVehicleId { get; private set; }
 
         public SourceSystemTypes SystemId { get; private set; }
+
+        public IList<Event> Events { get; set; } = new List<Event>();
     }
 }
 
 file[157] = Domain\VehicleFootprint.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5858,7 +6016,7 @@ file[158] = Domain\VehicleFootprint.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5890,12 +6048,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int SystemId { get; private set; }
 
         public int StateId { get; private set; }
+
+
     }
 }
 
 file[159] = Domain\VehicleFootprintImport.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5937,7 +6097,7 @@ file[160] = Domain\VehicleFootprintImport.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -5973,12 +6133,14 @@ namespace Nhvr.Rcms.Common.Domain
         public bool Active { get; private set; }
 
         public int SystemId { get; private set; }
+
+
     }
 }
 
 file[161] = Domain\VehicleOrganisation.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -5998,7 +6160,7 @@ file[162] = Domain\VehicleOrganisation.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -6014,12 +6176,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int VehicleId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[163] = Domain\VehiclePerson.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -6039,7 +6203,7 @@ file[164] = Domain\VehiclePerson.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -6055,12 +6219,14 @@ namespace Nhvr.Rcms.Common.Domain
         public int VehicleId { get; private set; }
 
         public bool Active { get; private set; }
+
+
     }
 }
 
 file[165] = Domain\WAEventInspection.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Nhvr.Rcms.Common.Domain
 {
@@ -6209,7 +6375,7 @@ file[166] = Domain\WAEventInspection.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -6347,6 +6513,8 @@ namespace Nhvr.Rcms.Common.Domain
         public bool LoadRestraintPassed { get; private set; }
 
         public string LoadRestraintNote { get; private set; }
+
+
     }
 }
 
@@ -6354,7 +6522,7 @@ file[167] = Enums\AddressType.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -6375,7 +6543,7 @@ file[168] = Enums\State.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -6407,7 +6575,7 @@ file[169] = Enums\SourceSystemType.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -6433,7 +6601,7 @@ file[170] = Enums\OrganisationType.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Enum Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable

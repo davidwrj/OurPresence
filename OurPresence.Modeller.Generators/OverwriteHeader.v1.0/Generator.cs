@@ -25,7 +25,7 @@ namespace OverwriteHeader
             sb.Al($"// Auto-generated using OurPresence.Modeller template '{_metadata.Name}' version {_metadata.Version}");
             sb.B();
             sb.Al($"// {new string('-', 80)}");
-            sb.Al("// WARNING: This file will be overwritten if re-generation is triggered.");
+            sb.Al("// WARNING: This file will be overwritten if regenerated.");
             sb.Al($"// {new string('-', 80)}");
             sb.B();
             sb.Al("#nullable enable");

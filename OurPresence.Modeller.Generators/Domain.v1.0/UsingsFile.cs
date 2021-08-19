@@ -32,8 +32,15 @@ namespace DomainProject
             sb.Al("global using System.Reflection;");
             sb.Al("global using System.Text.RegularExpressions;");
             sb.Al("global using System.Threading.Tasks;");
-            sb.Al($"global using {_module.Company}.{_module.Project}.Common.Enums;");
             sb.Al($"global using {_module.Company}.{_module.Project}.Core.Aggregates;");
+            if (string.IsNullOrEmpty(_module.Feature?.Value))
+            {
+                sb.Al($"global using {_module.Company}.{_module.Project}.Common.Enums;");
+            }
+            else
+            {
+                sb.Al($"global using {_module.Company}.{_module.Project}.{_module.Feature}.Common.Enums;");
+            }
             return new File("usings.cs", sb.ToString());
         }
     }

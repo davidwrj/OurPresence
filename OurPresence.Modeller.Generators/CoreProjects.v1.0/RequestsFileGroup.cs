@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Requests");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Requests");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Requests");
             sb.Al("{");
             sb.I(1).Al("public interface IExternalCommandBus");
             sb.I(1).Al("{");

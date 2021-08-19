@@ -1,6 +1,6 @@
 ﻿file[0] = Domain\Account.cs
 // Created using OurPresence.Modeller template 'Domain Class' version 1.0.0
-// NOTE: This file cannot be overwritten when regenerated
+// NOTE: This file will not be overwritten when regenerated
 
 namespace Mizrael.SuperSafeBank.Common.Domain
 {
@@ -29,7 +29,7 @@ file[1] = Domain\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Domain Class' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -47,6 +47,8 @@ namespace Mizrael.SuperSafeBank.Common.Domain
         public partial void Withdraw(Money amount);
 
         public partial void Deposit(Money amount);
+
+
     }
 }
 

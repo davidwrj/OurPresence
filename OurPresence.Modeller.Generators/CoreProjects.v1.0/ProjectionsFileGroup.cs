@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Projections");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Projections");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Projections");
             sb.Al("{");
             sb.I(1).Al("public interface IProjection");
             sb.I(1).Al("{");

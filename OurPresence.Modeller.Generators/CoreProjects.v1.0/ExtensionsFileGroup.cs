@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Extensions");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Extensions");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Extensions");
             sb.Al("{");
             sb.I(1).Al("public static class ListExtensions");
             sb.I(1).Al("{");

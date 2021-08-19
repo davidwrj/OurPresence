@@ -26,7 +26,7 @@ namespace CoreProjects
             var group = new FileGroup("Events");
 
             var sb = new StringBuilder();
-            sb.Al($"namespace {_module.Namespace}.Core.Events.External");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Events.External");
             sb.Al("{");
             sb.I(1).Al("public interface IExternalEventProducer");
             sb.I(1).Al("{");
@@ -37,7 +37,7 @@ namespace CoreProjects
             group.AddFile(new File("IExternalEventProducer.cs", sb.ToString(), path: "External", canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Events.External");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Events.External");
             sb.Al("{");
             sb.I(1).Al("public interface IExternalEventConsumer");
             sb.I(1).Al("{");
@@ -48,7 +48,7 @@ namespace CoreProjects
             group.AddFile(new File("IExternalEventConsumer.cs", sb.ToString(), path: "External", canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Events.External");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Events.External");
             sb.Al("{");
             sb.I(1).Al("public class NulloExternalEventProducer : IExternalEventProducer");
             sb.I(1).Al("{");
@@ -62,7 +62,7 @@ namespace CoreProjects
             group.AddFile(new File("NulloExternalEventProducer.cs", sb.ToString(), path: "External", canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Events");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Events");
             sb.Al("{");
             sb.I(1).Al("public interface IEvent: INotification");
             sb.I(1).Al("{ }");
@@ -71,7 +71,7 @@ namespace CoreProjects
             group.AddFile(new File("IEvent.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Events");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Events");
             sb.Al("{");
             sb.I(1).Al("public interface IExternalEvent: IEvent");
             sb.I(1).Al("{ }");
@@ -80,7 +80,7 @@ namespace CoreProjects
             group.AddFile(new File("IExternalEvent.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public interface IEventBus");
             sb.I(1).Al("{");
@@ -91,7 +91,7 @@ namespace CoreProjects
             group.AddFile(new File("IEventBus.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public interface IEventHandler<in TEvent>: INotificationHandler<TEvent>");
             sb.I(2).Al("where TEvent : IEvent");
@@ -101,7 +101,7 @@ namespace CoreProjects
             group.AddFile(new File("IEventHandler.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public class EventBus: IEventBus");
             sb.I(1).Al("{");
@@ -128,7 +128,7 @@ namespace CoreProjects
             group.AddFile(new File("EventBus.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public class EventTypeMapper");
             sb.I(1).Al("{");
@@ -172,7 +172,7 @@ namespace CoreProjects
             group.AddFile(new File("EventTypeMapper.cs", sb.ToString(), canOverwrite: true));
             sb.Clear();
 
-            sb.Al($"namespace {_module.Namespace}.Core.Queries");
+            sb.Al($"namespace {_module.Company}.{_module.Project}.Core.Queries");
             sb.Al("{");
             sb.I(1).Al("public class StreamNameMapper");
             sb.I(1).Al("{");

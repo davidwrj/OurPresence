@@ -30,10 +30,12 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
+global using Microsoft.AspNetCore.Routing;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Design;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
 
 global using Mizrael.SuperSafeBank.Common.Enums;
 global using Mizrael.SuperSafeBank.Data.Models;
@@ -167,7 +169,7 @@ file[6] = Models\Account.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable
@@ -189,7 +191,7 @@ file[7] = Models\Customer.generated.cs
 // Auto-generated using OurPresence.Modeller template 'Entity Framework Entity classes' version 1.0.0
 
 // --------------------------------------------------------------------------------
-// WARNING: This file will be overwritten if re-generation is triggered.
+// WARNING: This file will be overwritten if regenerated.
 // --------------------------------------------------------------------------------
 
 #nullable enable

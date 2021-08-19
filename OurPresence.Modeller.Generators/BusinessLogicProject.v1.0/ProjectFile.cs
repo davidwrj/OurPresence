@@ -40,13 +40,19 @@ namespace BusinessLogicProject
             sb.I(1).Al("</PropertyGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<PackageReference Include=\"MediatR\" Version=\"{Settings.Packages.GetVersion("MediatR", "9.0.0")}\" />");
             sb.I(2).Al($"<PackageReference Include=\"CSharpFunctionalExtensions\" Version=\"{Settings.Packages.GetVersion("CSharpFunctionalExtensions", "2.18.0")}\" />");
             sb.I(2).Al($"<PackageReference Include=\"FluentValidation\" Version=\"{Settings.Packages.GetVersion("FluentValidation", "10.3.0")}\" />");
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.I(1).Al("<ItemGroup>");
-            sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Common\\{_module.Company}.{_module.Project}.Common.csproj\" />");
+            if (string.IsNullOrEmpty(_module.Feature?.Value))
+            {
+                sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.Common\\{_module.Company}.{_module.Project}.Common.csproj\" />");
+            }
+            else
+            {
+                sb.I(2).Al($"<ProjectReference Include=\"..\\{_module.Company}.{_module.Project}.{_module.Feature}.Common\\{_module.Company}.{_module.Project}.{_module.Feature}.Common.csproj\" />");
+            }
             sb.I(1).Al("</ItemGroup>");
             sb.B();
             sb.Al("</Project>");
