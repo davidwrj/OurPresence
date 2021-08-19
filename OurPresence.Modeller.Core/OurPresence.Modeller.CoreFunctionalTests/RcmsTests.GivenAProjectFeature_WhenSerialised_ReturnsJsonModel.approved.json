@@ -1,0 +1,643 @@
+﻿{
+    "company": "Nhvr",
+    "project": "Rcm[Rcms]",
+    "feature": "Organisation",
+    "models": [
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "isRoot": true,
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "UniqueIdentifier",
+                    "nullable": true,
+                    "name": "CreationId"
+                },
+                {
+                    "maxLength": 255,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 255,
+                    "businessKey": true,
+                    "name": "ACN"
+                },
+                {
+                    "dataType": "Object",
+                    "dataTypeTypeName": "OrganisationTypes",
+                    "name": "TypeId"
+                },
+                {
+                    "default": "true",
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "default": "30",
+                    "dataType": "Int32",
+                    "name": "SystemId"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "Organisation",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "OrganisationKey",
+                    "dependantFields": [
+                        "OrganisationId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "Organisation",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "OrganisationAddress",
+                    "dependantFields": [
+                        "OrganisationId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "Organisation",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "OrganisationContact",
+                    "dependantFields": [
+                        "OrganisationId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "nullable": true,
+                                "name": "Name"
+                            },
+                            {
+                                "name": "ACN"
+                            }
+                        ],
+                        "route": "organisationsearchrequest",
+                        "name": "OrganisationSearchRequest"
+                    },
+                    "response": {
+                        "isCollection": true,
+                        "fields": [
+                            {
+                                "nullable": true,
+                                "name": "Name"
+                            },
+                            {
+                                "name": "ACN"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AlertLevel"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AssociatedAlertLevel"
+                            },
+                            {
+                                "name": "Source"
+                            },
+                            {
+                                "name": "Type"
+                            },
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "name": "OrganisationSearchResult"
+                    },
+                    "name": "Search"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "name": "Id"
+                            },
+                            {
+                                "name": "Juro"
+                            },
+                            {
+                                "default": "false",
+                                "dataType": "Bool",
+                                "name": "IncludeSilentAlert"
+                            }
+                        ],
+                        "route": "organisationbyidrequest",
+                        "name": "OrganisationByIdRequest"
+                    },
+                    "response": {
+                        "fields": [
+                            {
+                                "name": "Name"
+                            },
+                            {
+                                "name": "ACN"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AlertLevel"
+                            },
+                            {
+                                "dataType": "Int32",
+                                "nullable": true,
+                                "name": "AssociatedAlertLevel"
+                            },
+                            {
+                                "name": "Source"
+                            },
+                            {
+                                "name": "Type"
+                            },
+                            {
+                                "name": "Status"
+                            }
+                        ],
+                        "name": "OrganisationDetailResult"
+                    },
+                    "name": "Index"
+                },
+                {
+                    "request": {
+                        "fields": [
+                            {
+                                "name": "Name"
+                            },
+                            {
+                                "name": "ACN"
+                            },
+                            {
+                                "dataType": "Object",
+                                "dataTypeTypeName": "OrganisationTypes",
+                                "name": "TypeId"
+                            },
+                            {
+                                "dataType": "UniqueIdentifier",
+                                "nullable": true,
+                                "name": "CreationId"
+                            }
+                        ],
+                        "route": "organisationsaverequest",
+                        "name": "OrganisationSaveRequest"
+                    },
+                    "response": {
+                        "fields": [
+                            {
+                                "name": "Id"
+                            }
+                        ],
+                        "name": "OrganisationSaveResult"
+                    },
+                    "name": "Save"
+                }
+            ],
+            "name": "Organisation"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "maxLength": 255,
+                    "name": "Key"
+                },
+                {
+                    "maxLength": 255,
+                    "name": "Value"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "OrganisationKey"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "FloorNumber"
+                },
+                {
+                    "maxLength": 200,
+                    "nullable": true,
+                    "name": "UnitType"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "UnitNumber"
+                },
+                {
+                    "maxLength": 128,
+                    "nullable": true,
+                    "name": "StreetName"
+                },
+                {
+                    "maxLength": 128,
+                    "nullable": true,
+                    "name": "StreetType"
+                },
+                {
+                    "maxLength": 200,
+                    "nullable": true,
+                    "name": "StreetSuffix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberFirst"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberFirstPrefix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberFirstSuffix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberLast"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberLastPrefix"
+                },
+                {
+                    "maxLength": 50,
+                    "nullable": true,
+                    "name": "StreetNumberLastSuffix"
+                },
+                {
+                    "maxLength": 200,
+                    "nullable": true,
+                    "name": "StreetDirectional"
+                },
+                {
+                    "maxLength": 255,
+                    "nullable": true,
+                    "name": "PostalContainer"
+                },
+                {
+                    "maxLength": 20,
+                    "nullable": true,
+                    "name": "PostalCode"
+                },
+                {
+                    "maxLength": 100,
+                    "nullable": true,
+                    "name": "Suburb"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "nullable": true,
+                    "name": "Country"
+                },
+                {
+                    "maxLength": 1500,
+                    "nullable": true,
+                    "name": "FullAddress"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "AddressBook"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Altitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "AltitudeAccuracy"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "HorizontalAccuracy"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Longitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Latitude"
+                },
+                {
+                    "dataType": "Decimal",
+                    "nullable": true,
+                    "name": "Elevation"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "MapDetail"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AddressTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LocalGovernmentArea"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "LgaShortTitle"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Near"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "CommonName"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Remark"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                }
+            ],
+            "indexes": [],
+            "relationships": [
+                {
+                    "principalModel": "OrganisationAddress",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "AddressBook",
+                    "dependantFields": [
+                        "OrganisationAddressId"
+                    ],
+                    "dependantType": "Many"
+                },
+                {
+                    "principalModel": "OrganisationAddress",
+                    "principalFields": [
+                        "Id"
+                    ],
+                    "principalType": "One",
+                    "dependantModel": "MapDetail",
+                    "dependantFields": [
+                        "OrganisationAddressId"
+                    ],
+                    "dependantType": "Many"
+                }
+            ],
+            "behaviours": [],
+            "name": "OrganisationAddress"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "ContactTypeId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "ContactValue"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateAdded"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "OrganisationContact"
+        },
+        {
+            "key": {
+                "fields": [
+                    {
+                        "dataType": "Int32",
+                        "name": "Id"
+                    }
+                ]
+            },
+            "supportCrud": "None",
+            "fields": [
+                {
+                    "dataType": "Int32",
+                    "name": "EventId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "OrganisationId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Name"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Acn"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "IncorporatedNumber"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "TypeId"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "StateId"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Status"
+                },
+                {
+                    "dataType": "DateTimeOffset",
+                    "nullable": true,
+                    "name": "DateOfRegistration"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AlertLevel"
+                },
+                {
+                    "dataType": "Int32",
+                    "name": "AssociatedAlertLevel"
+                },
+                {
+                    "maxLength": 128,
+                    "name": "Source"
+                },
+                {
+                    "dataType": "Bool",
+                    "name": "Active"
+                }
+            ],
+            "indexes": [],
+            "relationships": [],
+            "behaviours": [],
+            "name": "OrganisationDetail"
+        }
+    ],
+    "enumerations": [
+        {
+            "items": [
+                {
+                    "name": "Company",
+                    "display": "Company",
+                    "value": 130
+                },
+                {
+                    "name": "IncorporatedAssociation",
+                    "display": "IncorporatedAssociation",
+                    "value": 131
+                },
+                {
+                    "name": "GovernmentDepartment",
+                    "display": "GovernmentDepartment",
+                    "value": 132
+                },
+                {
+                    "name": "GovernmentBusinessEnterprise",
+                    "display": "GovernmentBusinessEnterprise",
+                    "value": 133
+                },
+                {
+                    "name": "LocalGovernment",
+                    "display": "LocalGovernment",
+                    "value": 134
+                },
+                {
+                    "name": "Association",
+                    "display": "Association",
+                    "value": 139
+                }
+            ],
+            "name": "OrganisationType"
+        }
+    ],
+    "requests": []
+}
